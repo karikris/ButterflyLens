@@ -54,6 +54,18 @@ python3 scripts/crosswalk_butterfly_taxonomy.py build-crosswalk \
 python3 scripts/crosswalk_butterfly_taxonomy.py build-conflicts \
   --crosswalk data/packs/australian_butterflies/v1/crosswalk.jsonl \
   --output-dir data/packs/australian_butterflies/v1
+
+# Explicit live acquisition; default tests never run this command.
+python3 scripts/build_butterfly_names.py acquire-ala-profiles \
+  --crosswalk data/packs/australian_butterflies/v1/crosswalk.jsonl \
+  --output data/packs/australian_butterflies/v1/sources/ala_species_profiles.json \
+  --workers 4
+
+python3 scripts/build_butterfly_names.py build-scientific \
+  --taxa data/packs/australian_butterflies/v1/taxa.jsonl \
+  --crosswalk data/packs/australian_butterflies/v1/crosswalk.jsonl \
+  --profiles data/packs/australian_butterflies/v1/sources/ala_species_profiles.json \
+  --output-dir data/packs/australian_butterflies/v1
 ```
 
 Default tests make no provider calls. They validate the checked-in snapshot,
@@ -85,6 +97,14 @@ checksums, hierarchy, rank policy, and stable ButterflyLens keys.
   It retains the provider candidate and source receipts, withholds the provider
   ID from the usable crosswalk field, and prohibits automatic resolution. A
   provider miss is kept as a gap, not converted into absence or incompatibility.
+- `name_assertions.jsonl` treats accepted names and ALA-linked synonyms as
+  sourced assertions, not interchangeable labels. Each row has a stable ID,
+  language and region scope, source fingerprints, trust tier, review state,
+  homonym risk, and explicit query eligibility. Scientific-name language uses
+  BCP 47 `zxx` because Latinized nomenclature is not assumed to be Latin text.
+- A synonym attached by the ALA species index remains a provider-linked,
+  unreviewed assertion. Cross-taxon normalized-name collisions are excluded
+  from query use and no synonym changes the accepted AFD concept.
 - Source updates require a new frozen snapshot, review of the diff, and a new
   version or documented compatible revision. Live provider state never mutates
   this checked-in snapshot.

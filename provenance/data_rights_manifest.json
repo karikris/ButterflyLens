@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T16:01:22Z",
+  "generated_at": "2026-07-17T16:41:15Z",
   "sources": [
     {
       "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
@@ -26,6 +26,18 @@
       "terms_url": "https://www.ala.org.au/terms-of-use/",
       "attribution": "Atlas of Living Australia and Australian Faunal Directory, accessed 17 July 2026.",
       "scope_note": "Taxon concepts, identifiers, ranks, classifications, and matcher diagnostics only; AFD provider terms are retained."
+    },
+    {
+      "source_id": "ala-species-profiles-20260717-82f8c346",
+      "provider": "Atlas of Living Australia",
+      "dataset": "ALA species-index name profiles for exact crosswalk concepts",
+      "source_url": "https://api.ala.org.au/species/species/{url_encoded_taxon_guid}",
+      "retrieved_at": "2026-07-17T16:41:05Z",
+      "licence": "MIXED-SEE-SOURCES",
+      "licence_url": "https://www.ala.org.au/terms-of-use/",
+      "terms_url": "https://www.ala.org.au/terms-of-use/",
+      "attribution": "Atlas of Living Australia species index and the name authorities identified on each profile, including Australian Faunal Directory.",
+      "scope_note": "Selected taxon concepts, classifications, scientific synonyms, vernacular-name assertions, and source metadata only. Provider media arrays, occurrence records, coordinates, users, and downloaded images are excluded; each derived assertion retains its source response fingerprint."
     },
     {
       "source_id": "gbif-matcher-20260709-2e33c6e",
@@ -91,7 +103,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:0d9aa2bf0912ff33640a368a727d774a30aa58bc2f329f3968463ad4a07596c5",
+      "fingerprint": "sha256:d37d753e0a2377f1c5d72362c509522ccfb0baebe9d7e98c5847e4e8e55d6d05",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "mixed-taxonomy-crosswalk-20260717",
       "licence": "MIXED-SEE-SOURCES",
@@ -108,6 +120,30 @@
       "source_id": "mixed-taxonomy-crosswalk-20260717",
       "licence": "MIXED-SEE-SOURCES",
       "attribution": "Australian Biological Resources Study/Australian Faunal Directory; Atlas of Living Australia; GBIF Backbone Taxonomy; iNaturalist Taxonomy.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/sources/ala_species_profiles.json",
+      "fingerprint": "sha256:82f8c346b0344275888aa698214d7b59b2dcb7a65c9fc0a9d9e6409e99c6a620",
+      "provider": "Atlas of Living Australia and identified name authorities",
+      "source_id": "ala-species-profiles-20260717-82f8c346",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "Atlas of Living Australia species index and the name authorities identified on each profile, including Australian Faunal Directory.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/name_assertions.jsonl",
+      "fingerprint": "sha256:c7655f3689ed74f561be5c453933198f4e13259528305ff97415ed39a7686bc7",
+      "provider": "ButterflyLens derived from Australian Faunal Directory and Atlas of Living Australia name profiles",
+      "source_id": "ala-species-profiles-20260717-82f8c346",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "Australian Biological Resources Study/Australian Faunal Directory and Atlas of Living Australia species index; per-assertion sources are retained.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,
