@@ -1,0 +1,13 @@
+schema_version: butterflylens-biominer-migration-v1
+updated_at: "2026-07-17T13:54:06Z"
+source_snapshot:
+  repository: karikris/BioMiner
+  commit: d71bceabf75748a25df39d0025e8da907f295f8c
+  branch_observed: main
+  working_tree_used: false
+  source_license: MIT
+components: []
+notes:
+  - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
+  - Candidate artifact contracts are added only after the application boundary is defined.
+  - Every later component must pin this or a newer immutable source commit.
