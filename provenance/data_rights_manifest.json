@@ -1,0 +1,57 @@
+{
+  "schema_version": "butterflylens-data-rights/v1",
+  "generated_at": "2026-07-17T15:06:19Z",
+  "sources": [
+    {
+      "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
+      "provider": "Australian Biological Resources Study",
+      "dataset": "Australian Faunal Directory",
+      "source_url": "https://biodiversity.org.au/afd/taxa/PAPILIONOIDEA",
+      "retrieved_at": "2026-07-17T15:02:59Z",
+      "licence": "CC-BY-4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+      "terms_url": "https://www.dcceew.gov.au/about/copyright",
+      "citation_guidance_url": "https://www.dcceew.gov.au/science-research/abrs/online-resources/citation",
+      "attribution": "Australian Biological Resources Study, Australian Faunal Directory; Department of Climate Change, Energy, the Environment and Water.",
+      "scope_note": "Checklist taxonomy only; no source images, logos, Coat of Arms, occurrence records, coordinates, or other third-party media are included."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "data/packs/australian_butterflies/v1/sources/afd_papilionoidea.json",
+      "fingerprint": "sha256:e54804772ee9dba3e101af5dea66fc1f10caca2ef028ab07ed07ae69ce7baff3",
+      "provider": "Australian Biological Resources Study",
+      "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
+      "licence": "CC-BY-4.0",
+      "attribution": "Australian Biological Resources Study, Australian Faunal Directory; Department of Climate Change, Energy, the Environment and Water.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/taxa.jsonl",
+      "fingerprint": "sha256:df62592172d3291ebbb86f538a8275643c20a6aefa64857b26d85019ef463bf8",
+      "provider": "ButterflyLens derived from Australian Faunal Directory",
+      "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
+      "licence": "CC-BY-4.0",
+      "attribution": "Australian Biological Resources Study, Australian Faunal Directory; Department of Climate Change, Energy, the Environment and Water.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/manifest.json",
+      "fingerprint": "sha256:78594a2945d8c4c762d4e925ae58bbe5110ebe7016d2acf43cca8c5297aea4a0",
+      "provider": "ButterflyLens derived from Australian Faunal Directory",
+      "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
+      "licence": "CC-BY-4.0",
+      "attribution": "Australian Biological Resources Study, Australian Faunal Directory; Department of Climate Change, Energy, the Environment and Water.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    }
+  ]
+}

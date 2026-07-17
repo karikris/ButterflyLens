@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -14,6 +15,8 @@ PROVIDER_SUFFIXES = {
     ".csv",
     ".geojson",
     ".gpkg",
+    ".json",
+    ".jsonl",
     ".jpeg",
     ".jpg",
     ".mbtiles",
@@ -99,6 +102,12 @@ def verify_manifest(payloads: set[str]) -> None:
             raise VerificationError(f"rights record for {payload} is missing: {missing_fields}")
         if record.get("licence") in {None, "", "unknown"}:
             raise VerificationError(f"rights record for {payload} has an unknown licence")
+        fingerprint = record.get("fingerprint", "")
+        if not isinstance(fingerprint, str) or not fingerprint.startswith("sha256:"):
+            raise VerificationError(f"rights record for {payload} has an invalid fingerprint")
+        observed = "sha256:" + hashlib.sha256((ROOT / payload).read_bytes()).hexdigest()
+        if fingerprint != observed:
+            raise VerificationError(f"rights record for {payload} fingerprint does not match")
 
 
 def verify() -> None:
