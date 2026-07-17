@@ -1,0 +1,19 @@
+schema_version: 1
+updated_at: "2026-07-17T13:28:43Z"
+
+attestations: []
+
+pending_review:
+  - scope: "Phase 0 repository initialization"
+    reason: "No post-change human review has yet been explicitly attested."
+
+human_decisions:
+  - decided_at: "2026-07-17"
+    decided_by: "Kris Kari"
+    decision: "Create ButterflyLens as a new public repository and work directly on main."
+    source: "Build contract supplied to the primary Codex session."
+  - decided_at: "2026-07-17"
+    decided_by: "Kris Kari"
+    decision: "Add AGENTS.md to .gitignore."
+    source: "Direct chat instruction in the primary Codex session."
+
