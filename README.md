@@ -16,7 +16,8 @@ ButterflyLens never claims exhaustive Flickr coverage and never silently promote
 
 ## Status
 
-Repository initialization is in progress. No live pipeline, quality metric, reviewed candidate, or occurrence contribution is claimed yet.
+Phase 0 repository governance is in progress. No live pipeline, quality metric, reviewed candidate, or occurrence contribution is claimed yet.
 
-Licensing will be selected only after the required software, model, API, boundary-data, and image-source audit is complete.
+ButterflyLens code and configuration are licensed under `AGPL-3.0-only` because the intended YOLOE path is AGPL-covered and no Ultralytics Enterprise licence is documented. Data, media, model weights, community content, and third-party software retain their own terms. See [the licence decision](LICENSE_DECISION.md), [third-party audit](THIRD_PARTY_LICENSES.md), and [data-rights audit](DATA_RIGHTS.md).
 
+Release remains blocked unless the executable licence and rights verifiers pass at the release SHA.
