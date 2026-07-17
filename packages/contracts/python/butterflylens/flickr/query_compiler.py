@@ -11,6 +11,9 @@ import rfc8785
 
 
 QUERY_DEFINITION_SCHEMA_VERSION = "butterflylens-flickr-query-definition:v1.0.0"
+GLOBAL_QUERY_DEFINITION_SCHEMA_VERSION = (
+    "butterflylens-flickr-global-query-definition:v1.0.0"
+)
 _STABLE_ID = re.compile(r"^[a-z0-9][a-z0-9._:-]{0,159}$")
 _SUPPORTED_NAME_TYPES = {
     "accepted_scientific",
@@ -123,3 +126,65 @@ def compile_name_assertions(
     if len(identities) != len(set(identities)):
         raise QueryCompilationError("query definition ID collision")
     return tuple(compiled)
+
+
+def compile_global_out_of_range_assertion(
+    assertion: Mapping[str, object],
+) -> dict[str, object]:
+    """Compile one authoritative global species assertion into tier 5."""
+
+    base = compile_name_assertion(assertion)
+    if base["taxon_rank"] != "species":
+        raise QueryCompilationError("global out-of-range terms must be species rank")
+    if base["name_type"] != "accepted_scientific":
+        raise QueryCompilationError(
+            "global out-of-range terms must be accepted scientific names"
+        )
+    if base["trust_tier"] != "accepted_global_authority":
+        raise QueryCompilationError("global out-of-range trust is not authoritative")
+    homonym_risk = base["homonym_risk"]
+    if not isinstance(homonym_risk, str) or not homonym_risk.startswith("none_detected"):
+        raise QueryCompilationError("global out-of-range term has homonym risk")
+    scope = assertion.get("australia_scope")
+    required_scope = {
+        "status",
+        "basis",
+        "comparison_pack_id",
+        "comparison_taxa_sha256",
+    }
+    if not isinstance(scope, dict) or set(scope) != required_scope:
+        raise QueryCompilationError("global assertion has incomplete Australia scope evidence")
+    if scope["status"] != "not_currently_known":
+        raise QueryCompilationError("global assertion is not out of Australian range")
+    if scope["basis"] != "authoritative_checklist_complement":
+        raise QueryCompilationError("global assertion range basis is not authoritative")
+    if (
+        not isinstance(scope["comparison_taxa_sha256"], str)
+        or re.fullmatch(r"[0-9a-f]{64}", scope["comparison_taxa_sha256"]) is None
+    ):
+        raise QueryCompilationError("global assertion comparison checksum is invalid")
+    preimage = {
+        key: deepcopy(base[key])
+        for key in (
+            "source_assertion_id",
+            "source_taxon_key",
+            "query_text",
+            "normalized_query_text",
+            "language_code",
+            "name_type",
+            "taxon_rank",
+            "trust_tier",
+            "source",
+        )
+    }
+    preimage["tier"] = 5
+    preimage["scope_evidence"] = deepcopy(scope)
+    digest = hashlib.sha256(rfc8785.dumps(preimage)).hexdigest()
+    return {
+        **base,
+        "schema_version": GLOBAL_QUERY_DEFINITION_SCHEMA_VERSION,
+        "query_definition_id": f"blfq:v1:{digest[:24]}",
+        "tier": 5,
+        "scope_evidence": deepcopy(scope),
+        "compiler_fingerprint": digest,
+    }

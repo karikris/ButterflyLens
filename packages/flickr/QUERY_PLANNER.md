@@ -47,3 +47,20 @@ those associations losslessly.
 not add an Australian location filter, does not establish that a discovered
 photo was taken in Australia, and does not permit absence inference. Every
 request remains `planned_not_sent` until a later budgeted execution task.
+
+## Global out-of-range lane
+
+Tier 5 accepts only species-rank accepted scientific names from an admitted,
+fingerprinted global authority snapshot. Every source assertion must state
+authoritative trust, no detected homonym risk, query eligibility, and a
+checksum-bound comparison showing that the species is not in the current
+authoritative Australian checklist. A collision with any accepted Australian
+species name or synonym fails the lane rather than treating an incomplete
+crosswalk as range evidence.
+
+"Not currently known from Australia" is a checklist-comparison state, not a
+claim of biological absence, endemism elsewhere, or photo location. Weak,
+homonymous, ambiguous, stale-comparison, and non-species rows do not enter the
+lane. The current real-data lane is blocked pending BioMiner's live
+current-policy GBIF fingerprint database and quality evidence; fixtures only
+exercise the admission contract, and no Flickr request is made.

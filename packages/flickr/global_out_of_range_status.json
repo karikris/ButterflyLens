@@ -1,0 +1,27 @@
+{
+  "schema_version": "butterflylens-flickr-global-out-of-range-status:v1.0.0",
+  "lane_id": "global_out_of_range",
+  "status": "blocked_pending_authoritative_global_source",
+  "recorded_at": "2026-07-17T22:57:00Z",
+  "upstream": {
+    "repository": "karikris/BioMiner",
+    "inspected_commit": "c7eaa9bf3696a25a0c8229837819dccec4fb9d66",
+    "authoritative_goal_status": "implementation_complete_with_live_scientific_work_pending",
+    "live_current_policy_gbif_acquisition": "pending",
+    "current_quality_metrics": "unavailable",
+    "active_process_observed": false
+  },
+  "admission": {
+    "source_snapshot_id": null,
+    "source_snapshot_sha256": null,
+    "admitted_global_species": 0,
+    "query_definitions": 0,
+    "physical_requests": 0,
+    "flickr_calls_made": 0
+  },
+  "limitations": [
+    "No BioMiner fixture-backed, provisional, or untracked data was copied.",
+    "The lane cannot be materialized until a current fingerprinted global species snapshot passes project quality gates.",
+    "Not currently known from Australia will remain a checklist comparison and will not be represented as biological absence."
+  ]
+}
