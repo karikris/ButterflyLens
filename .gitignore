@@ -1,0 +1,29 @@
+AGENTS.md
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# JavaScript
+node_modules/
+dist/
+.vite/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+
+# Local runtime artifacts
+cache/
+logs/
+tmp/
+
