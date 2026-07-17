@@ -5,6 +5,7 @@ import importlib.util
 import json
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 
 
@@ -508,6 +509,180 @@ class AlaAggregatedCellTests(unittest.TestCase):
                 digest.update(b"\n")
         australia = next(row for row in rows if row["scope_type"] == "australia")
         self.assertEqual(australia["source_record_fingerprint_digest"], digest.hexdigest())
+
+
+class AlaPublishedSnapshotTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        try:
+            import pyarrow.parquet as pq
+        except ImportError as error:
+            raise unittest.SkipTest("locked PyArrow dependency is not installed") from error
+        cls.builder = load_builder()
+        cls.pq = pq
+        cls.dataset_path = ALA / "ala_dataset_manifest.parquet"
+        cls.dataset_table = pq.read_table(cls.dataset_path)
+        cls.dataset_schema = json.loads(
+            (ALA / "schemas/ala_dataset_manifest.schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        cls.snapshot = json.loads(
+            (ALA / "ala_snapshot_manifest.json").read_text(encoding="utf-8")
+        )
+        cls.receipt = json.loads(
+            (ALA / "ala_snapshot_receipt.json").read_text(encoding="utf-8")
+        )
+        cls.pack_manifest = json.loads(
+            (PACK / "manifest.json").read_text(encoding="utf-8")
+        )
+
+    def test_dataset_schema_snapshot_and_pack_manifest_reconcile(self) -> None:
+        artifact = self.snapshot["artifacts"]["dataset_manifest"]
+        self.assertEqual(artifact["physical_sha256"], self.builder.sha256_file(self.dataset_path))
+        self.assertEqual(artifact["physical_bytes"], self.dataset_path.stat().st_size)
+        self.assertEqual(artifact["row_count"], self.dataset_table.num_rows)
+        expected_names = [field["name"] for field in self.dataset_schema["fields"]]
+        self.assertEqual(self.dataset_table.schema.names, expected_names)
+        metadata = self.dataset_table.schema.metadata
+        self.assertEqual(
+            metadata[b"schema_version"].decode(),
+            self.builder.DATASET_SCHEMA_VERSION,
+        )
+        snapshot_copy = dict(self.snapshot)
+        fingerprint = snapshot_copy.pop("snapshot_manifest_fingerprint")
+        self.assertEqual(
+            fingerprint,
+            self.builder.sha256_bytes(self.builder.canonical_json(snapshot_copy)),
+        )
+        ala_state = self.pack_manifest["ala_state"]
+        self.assertEqual(ala_state["snapshot_id"], self.snapshot["snapshot_id"])
+        self.assertEqual(
+            ala_state["snapshot_manifest_sha256"],
+            self.builder.sha256_file(ALA / "ala_snapshot_manifest.json"),
+        )
+        self.assertEqual(ala_state["status"], "built_rights_review_required")
+        self.assertEqual(
+            self.pack_manifest["occurrence_sources"],
+            [
+                {
+                    "path": "ala/ala_snapshot_receipt.json",
+                    "physical_sha256": self.builder.sha256_file(
+                        ALA / "ala_snapshot_receipt.json"
+                    ),
+                    "retrieved_at": self.receipt["retrieved_at"],
+                    "provider": self.builder.ALA_PROVIDER,
+                    "snapshot_id": self.receipt["snapshot_id"],
+                    "snapshot_fingerprint": self.receipt["snapshot_fingerprint"],
+                }
+            ],
+        )
+
+    def test_dataset_uid_citation_counts_and_licences_reconcile(self) -> None:
+        rows = self.dataset_table.to_pylist()
+        uids = [row["data_resource_uid"] for row in rows]
+        self.assertEqual(uids, sorted(uids))
+        self.assertEqual(len(uids), len(set(uids)))
+        self.assertEqual(len(rows), self.receipt["download"]["dataset_count"])
+        self.assertEqual(
+            sum(row["selected_record_count"] for row in rows),
+            self.receipt["download"]["row_count"],
+        )
+        licence_counts: Counter[str] = Counter()
+        for row in rows:
+            self.assertTrue(row["citation_count_matches_selected"])
+            self.assertEqual(row["citation_record_count"], row["selected_record_count"])
+            self.assertEqual(
+                row["selected_record_count"],
+                sum(row[field] for field in self.builder.LICENCE_COUNT_FIELDS.values()),
+            )
+            for licence, field in self.builder.LICENCE_COUNT_FIELDS.items():
+                licence_counts[licence] += row[field]
+        self.assertEqual(
+            dict(sorted(licence_counts.items())),
+            self.receipt["download"]["licence_counts"],
+        )
+
+    def test_dataset_rows_preserve_exact_receipts_and_fingerprints(self) -> None:
+        dataset_by_uid = {
+            row["data_resource_uid"]: row
+            for row in self.receipt["download"]["datasets"]
+        }
+        citation_by_uid = {
+            row["uid"]: row
+            for row in self.receipt["download"]["citation_entries"]
+        }
+        for row in self.dataset_table.to_pylist():
+            uid = row["data_resource_uid"]
+            citation = citation_by_uid[uid]
+            self.assertEqual(row["citation"], citation["citation"])
+            self.assertEqual(row["citation_rights"], citation["rights"])
+            self.assertEqual(row["data_generalisations"], citation["data_generalisations"])
+            self.assertEqual(row["information_withheld"], citation["information_withheld"])
+            self.assertEqual(row["download_limit"], citation["download_limit"])
+            self.assertEqual(
+                row["source_dataset_receipt_fingerprint"],
+                self.builder.sha256_bytes(
+                    self.builder.canonical_json(
+                        {"dataset": dataset_by_uid[uid], "citation": citation}
+                    )
+                ),
+            )
+            semantic_row = dict(row)
+            fingerprint = semantic_row.pop("dataset_manifest_fingerprint")
+            self.assertEqual(
+                fingerprint,
+                self.builder.sha256_bytes(self.builder.canonical_json(semantic_row)),
+            )
+
+    def test_rights_conflicts_are_explicit_and_block_public_release(self) -> None:
+        rows = self.dataset_table.to_pylist()
+        flagged = [
+            row for row in rows if row["citation_restrictive_rights_terms_detected"]
+        ]
+        self.assertEqual(
+            {row["data_resource_uid"] for row in flagged},
+            {"dr1097", "dr30019", "dr635"},
+        )
+        self.assertEqual(sum(row["selected_record_count"] for row in flagged), 16_753)
+        self.assertTrue(
+            all(
+                row["public_product_rights_review_state"]
+                == "blocked_pending_citation_rights_resolution"
+                for row in flagged
+            )
+        )
+        self.assertEqual(
+            self.snapshot["rights"]["downstream_public_product_release_state"],
+            "blocked_pending_dataset_rights_resolution",
+        )
+        self.assertIn(
+            "not a legal conclusion",
+            self.snapshot["rights"]["citation_restrictive_rights_screening"],
+        )
+        self.assertEqual(
+            sum(row["information_withheld"] is not None for row in rows), 4
+        )
+        self.assertEqual(
+            sum(row["data_generalisations"] is not None for row in rows), 1
+        )
+
+    def test_snapshot_artifact_inventory_and_scientific_policies(self) -> None:
+        for artifact in self.snapshot["artifacts"].values():
+            path = ALA / artifact["path"]
+            self.assertTrue(path.is_file(), artifact["path"])
+            self.assertEqual(
+                artifact["physical_sha256"],
+                self.builder.sha256_file(path),
+            )
+            self.assertEqual(artifact["physical_bytes"], path.stat().st_size)
+        self.assertFalse(
+            self.snapshot["policies"]["provider_taxon_assertions_are_human_verification"]
+        )
+        self.assertFalse(self.snapshot["policies"]["absence_inference_permitted"])
+        self.assertFalse(self.snapshot["policies"]["boundary_geometry_copied"])
+        self.assertEqual(self.snapshot["counts"]["citation_entries"], 84)
+        self.assertEqual(self.snapshot["counts"]["non_dataset_citation_entries"], 31)
 
 
 if __name__ == "__main__":

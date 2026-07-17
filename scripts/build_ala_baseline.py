@@ -33,6 +33,8 @@ NORMALIZED_SCHEMA_VERSION = "butterflylens-ala-normalized-occurrence/v1"
 NORMALIZATION_MANIFEST_SCHEMA_VERSION = "butterflylens-ala-normalization-manifest/v1"
 AGGREGATED_SCHEMA_VERSION = "butterflylens-ala-baseline-cell/v1"
 AGGREGATION_MANIFEST_SCHEMA_VERSION = "butterflylens-ala-aggregation-manifest/v1"
+DATASET_SCHEMA_VERSION = "butterflylens-ala-dataset-manifest/v1"
+PUBLISHED_SNAPSHOT_SCHEMA_VERSION = "butterflylens-ala-published-snapshot/v1"
 ALA_PROVIDER = "Atlas of Living Australia"
 ALA_ROOT_NAME = "PAPILIONOIDEA"
 ALA_ROOT_TAXON_ID = (
@@ -204,6 +206,54 @@ AGGREGATED_FIELD_SPECS = (
     ("publicly_generalised_record_count", "int64", False, "Rows marked generalised or alreadyGeneralised by ALA."),
     ("source_record_fingerprint_digest", "string", False, "SHA-256 over ordered normalized source-row fingerprints."),
     ("aggregate_fingerprint", "string", False, "SHA-256 of the aggregate semantic row before this field is added."),
+)
+LICENCE_COUNT_FIELDS = {
+    "CC-BY": "licence_cc_by_count",
+    "CC-BY 3.0 (Au)": "licence_cc_by_3_au_count",
+    "CC-BY 3.0 (Int)": "licence_cc_by_3_int_count",
+    "CC-BY 4.0 (Au)": "licence_cc_by_4_au_count",
+    "CC-BY 4.0 (Int)": "licence_cc_by_4_int_count",
+    "CC-BY-Int": "licence_cc_by_int_count",
+    "CC0": "licence_cc0_count",
+    "PDM": "licence_pdm_count",
+}
+DATASET_FIELD_SPECS = (
+    ("source_snapshot_id", "string", False, "Frozen ALA snapshot identifier."),
+    ("source_snapshot_fingerprint", "string", False, "Semantic fingerprint of the source snapshot."),
+    ("source_occurrence_artifact_sha256", "string", False, "Physical SHA-256 of the normalized occurrence artifact."),
+    ("data_resource_uid", "string", False, "ALA data-resource identifier and exact citation join key."),
+    ("data_resource_name", "string", False, "ALA data-resource name."),
+    ("data_provider_uid", "string", True, "ALA data-provider identifier when supplied on selected rows."),
+    ("data_provider_name", "string", True, "ALA data-provider name when supplied on selected rows."),
+    ("selected_record_count", "int64", False, "Selected normalized rows from the data resource."),
+    ("citation_record_count", "int64", False, "ALA citation inventory count for the exact resource UID."),
+    ("citation_count_matches_selected", "bool", False, "Whether citation and selected normalized counts agree."),
+    ("licence_cc_by_count", "int64", False, "Selected rows with processed licence CC-BY."),
+    ("licence_cc_by_3_au_count", "int64", False, "Selected rows with processed licence CC-BY 3.0 (Au)."),
+    ("licence_cc_by_3_int_count", "int64", False, "Selected rows with processed licence CC-BY 3.0 (Int)."),
+    ("licence_cc_by_4_au_count", "int64", False, "Selected rows with processed licence CC-BY 4.0 (Au)."),
+    ("licence_cc_by_4_int_count", "int64", False, "Selected rows with processed licence CC-BY 4.0 (Int)."),
+    ("licence_cc_by_int_count", "int64", False, "Selected rows with processed licence CC-BY-Int."),
+    ("licence_cc0_count", "int64", False, "Selected rows with processed licence CC0."),
+    ("licence_pdm_count", "int64", False, "Selected rows with processed licence PDM."),
+    ("doi", "string", True, "Provider citation DOI when supplied; not minted by ButterflyLens."),
+    ("citation", "string", False, "Exact ALA citation-inventory text for the resource."),
+    ("citation_rights", "string", True, "Exact ALA citation-inventory rights text."),
+    ("data_generalisations", "string", True, "Exact ALA citation-inventory data-generalisation text."),
+    ("information_withheld", "string", True, "Exact ALA citation-inventory information-withheld text."),
+    ("download_limit", "string", True, "Exact ALA citation-inventory download-limit text."),
+    ("more_information", "string", False, "ALA citation-inventory resource information link text."),
+    ("publicly_generalised_record_count", "int64", False, "Selected rows marked generalised or alreadyGeneralised by ALA."),
+    ("spatially_eligible_record_count", "int64", False, "Selected rows eligible for at least the configured coarse aggregate."),
+    ("citation_restrictive_rights_terms_detected", "bool", False, "Conservative textual screening flag; not a legal conclusion."),
+    ("citation_provider_conditions_present", "bool", False, "Whether rights/generalisation/withheld/download-limit text is supplied."),
+    ("public_product_rights_review_state", "string", False, "Downstream public-product rights gate based on selected licences and citation text."),
+    ("source_dataset_receipt_fingerprint", "string", False, "SHA-256 of the exact dataset and citation receipt pair."),
+    ("dataset_manifest_fingerprint", "string", False, "SHA-256 of the dataset semantic row before this field is added."),
+)
+RESTRICTIVE_CITATION_RIGHTS_PATTERN = re.compile(
+    r"non[ -]?commercial|cc[ -]?by[ -]?nc|no[ -]?derivatives|cc[ -]?by[ -]?nd|share[ -]?alike|cc[ -]?by[ -]?sa",
+    re.IGNORECASE,
 )
 
 
@@ -1570,6 +1620,611 @@ def aggregate_occurrences(args: argparse.Namespace) -> None:
     )
 
 
+def dataset_arrow_schema(
+    pa: Any,
+    receipt: dict[str, Any],
+    occurrence_sha256: str,
+) -> Any:
+    metadata = {
+        b"schema_version": DATASET_SCHEMA_VERSION.encode(),
+        b"snapshot_id": receipt["snapshot_id"].encode(),
+        b"snapshot_fingerprint": receipt["snapshot_fingerprint"].encode(),
+        b"source_occurrence_artifact_sha256": occurrence_sha256.encode(),
+        b"evidence_label": b"ALA contributing dataset and citation evidence",
+        b"rights_review_semantics": (
+            b"textual screening is conservative and not a legal conclusion"
+        ),
+    }
+    return pa.schema(
+        [
+            pa.field(name, arrow_type(pa, type_name), nullable=nullable)
+            for name, type_name, nullable, _ in DATASET_FIELD_SPECS
+        ],
+        metadata=metadata,
+    )
+
+
+def dataset_schema_contract() -> dict[str, Any]:
+    return {
+        "schema_version": "butterflylens-parquet-schema/v1",
+        "artifact_schema_version": DATASET_SCHEMA_VERSION,
+        "format": "parquet",
+        "closed": True,
+        "fields": [
+            {
+                "name": name,
+                "type": type_name,
+                "nullable": nullable,
+                "description": description,
+            }
+            for name, type_name, nullable, description in DATASET_FIELD_SPECS
+        ],
+        "rights_review_states": [
+            "selected_record_licences_allowlisted_no_restrictive_citation_term_detected",
+            "blocked_pending_citation_rights_resolution",
+        ],
+        "invariants": [
+            "data_resource_uid is unique and rows are sorted by data_resource_uid",
+            "every resource has one exact citation entry joined by UID",
+            "selected_record_count equals citation_record_count",
+            "selected_record_count equals the sum of the closed processed-licence counts",
+            "citation rights, generalisation, withheld, and download-limit text are preserved verbatim",
+            "restrictive-term screening blocks downstream public-product release but is not a legal conclusion",
+            "provider labels and citations are not human verification",
+        ],
+    }
+
+
+def normalized_dataset_statistics(
+    pq: Any,
+    occurrences: Path,
+) -> dict[str, dict[str, Any]]:
+    columns = [
+        "data_resource_uid",
+        "data_resource_name",
+        "data_provider_uid",
+        "data_provider_name",
+        "licence",
+        "coordinates_publicly_generalised",
+        "spatial_aggregation_eligibility",
+    ]
+    table = pq.read_table(occurrences, columns=columns)
+    result: dict[str, dict[str, Any]] = {}
+    for batch in table.to_batches(max_chunksize=65_536):
+        for row in batch.to_pylist():
+            uid = row["data_resource_uid"]
+            stats = result.setdefault(
+                uid,
+                {
+                    "record_count": 0,
+                    "resource_names": set(),
+                    "provider_uids": set(),
+                    "provider_names": set(),
+                    "licence_counts": Counter(),
+                    "publicly_generalised_record_count": 0,
+                    "spatially_eligible_record_count": 0,
+                },
+            )
+            stats["record_count"] += 1
+            if row["data_resource_name"] is not None:
+                stats["resource_names"].add(row["data_resource_name"])
+            if row["data_provider_uid"] is not None:
+                stats["provider_uids"].add(row["data_provider_uid"])
+            if row["data_provider_name"] is not None:
+                stats["provider_names"].add(row["data_provider_name"])
+            licence = row["licence"]
+            if licence not in LICENCE_COUNT_FIELDS:
+                raise AlaBaselineError(
+                    f"dataset {uid!r} contains unexpected licence {licence!r}"
+                )
+            stats["licence_counts"][licence] += 1
+            if row["coordinates_publicly_generalised"]:
+                stats["publicly_generalised_record_count"] += 1
+            if row["spatial_aggregation_eligibility"].startswith("eligible_"):
+                stats["spatially_eligible_record_count"] += 1
+    return result
+
+
+def one_or_none(values: set[str], *, field: str, uid: str) -> str | None:
+    if len(values) > 1:
+        raise AlaBaselineError(f"dataset {uid!r} has multiple {field} values")
+    return next(iter(values)) if values else None
+
+
+def build_dataset_manifest_rows(
+    *,
+    receipt: dict[str, Any],
+    normalization_manifest: dict[str, Any],
+    statistics: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    receipt_datasets = {
+        row["data_resource_uid"]: row for row in receipt["download"]["datasets"]
+    }
+    citation_by_uid: dict[str, dict[str, Any]] = {}
+    for citation in receipt["download"]["citation_entries"]:
+        uid = citation["uid"]
+        if uid in citation_by_uid:
+            raise AlaBaselineError(f"duplicate ALA citation UID {uid!r}")
+        citation_by_uid[uid] = citation
+    if set(statistics) != set(receipt_datasets):
+        raise AlaBaselineError("normalized and receipt dataset UID inventories differ")
+
+    rows: list[dict[str, Any]] = []
+    for uid in sorted(statistics):
+        stats = statistics[uid]
+        receipt_dataset = receipt_datasets[uid]
+        citation = citation_by_uid.get(uid)
+        if citation is None:
+            raise AlaBaselineError(f"dataset {uid!r} has no exact citation entry")
+        resource_name = one_or_none(
+            stats["resource_names"], field="resource name", uid=uid
+        )
+        provider_uid = one_or_none(
+            stats["provider_uids"], field="provider UID", uid=uid
+        )
+        provider_name = one_or_none(
+            stats["provider_names"], field="provider name", uid=uid
+        )
+        if resource_name is None:
+            raise AlaBaselineError(f"dataset {uid!r} has no resource name")
+        expected = {
+            "data_resource_name": resource_name,
+            "data_provider_uid": provider_uid,
+            "data_provider_name": provider_name,
+            "row_count": stats["record_count"],
+            "licence_counts": dict(sorted(stats["licence_counts"].items())),
+        }
+        for key, value in expected.items():
+            if receipt_dataset.get(key) != value:
+                raise AlaBaselineError(
+                    f"dataset {uid!r} receipt {key} does not match normalized rows"
+                )
+        if citation.get("name") != resource_name:
+            raise AlaBaselineError(f"dataset {uid!r} citation name does not match")
+        citation_text = citation.get("citation")
+        more_information = citation.get("more_information")
+        if not citation_text or not more_information:
+            raise AlaBaselineError(f"dataset {uid!r} citation text/link is incomplete")
+        citation_rights = citation.get("rights")
+        restrictive_terms = bool(
+            citation_rights
+            and RESTRICTIVE_CITATION_RIGHTS_PATTERN.search(citation_rights)
+        )
+        provider_conditions_present = any(
+            citation.get(field)
+            for field in (
+                "rights",
+                "data_generalisations",
+                "information_withheld",
+                "download_limit",
+            )
+        )
+        source_receipt = {
+            "dataset": receipt_dataset,
+            "citation": citation,
+        }
+        row = {
+            "source_snapshot_id": receipt["snapshot_id"],
+            "source_snapshot_fingerprint": receipt["snapshot_fingerprint"],
+            "source_occurrence_artifact_sha256": normalization_manifest["artifact"][
+                "physical_sha256"
+            ],
+            "data_resource_uid": uid,
+            "data_resource_name": resource_name,
+            "data_provider_uid": provider_uid,
+            "data_provider_name": provider_name,
+            "selected_record_count": stats["record_count"],
+            "citation_record_count": citation["record_count"],
+            "citation_count_matches_selected": (
+                citation["record_count"] == stats["record_count"]
+            ),
+            **{
+                field: stats["licence_counts"].get(licence, 0)
+                for licence, field in LICENCE_COUNT_FIELDS.items()
+            },
+            "doi": citation.get("doi"),
+            "citation": citation_text,
+            "citation_rights": citation_rights,
+            "data_generalisations": citation.get("data_generalisations"),
+            "information_withheld": citation.get("information_withheld"),
+            "download_limit": citation.get("download_limit"),
+            "more_information": more_information,
+            "publicly_generalised_record_count": stats[
+                "publicly_generalised_record_count"
+            ],
+            "spatially_eligible_record_count": stats[
+                "spatially_eligible_record_count"
+            ],
+            "citation_restrictive_rights_terms_detected": restrictive_terms,
+            "citation_provider_conditions_present": provider_conditions_present,
+            "public_product_rights_review_state": (
+                "blocked_pending_citation_rights_resolution"
+                if restrictive_terms
+                else "selected_record_licences_allowlisted_no_restrictive_citation_term_detected"
+            ),
+            "source_dataset_receipt_fingerprint": sha256_bytes(
+                canonical_json(source_receipt)
+            ),
+        }
+        if not row["citation_count_matches_selected"]:
+            raise AlaBaselineError(f"dataset {uid!r} citation count does not match")
+        if sum(row[field] for field in LICENCE_COUNT_FIELDS.values()) != stats[
+            "record_count"
+        ]:
+            raise AlaBaselineError(f"dataset {uid!r} licence counts do not match")
+        row["dataset_manifest_fingerprint"] = sha256_bytes(canonical_json(row))
+        rows.append(row)
+    return rows
+
+
+def relative_posix(path: Path, parent: Path) -> str:
+    try:
+        return path.resolve().relative_to(parent.resolve()).as_posix()
+    except ValueError as error:
+        raise AlaBaselineError(f"{path} is outside expected root {parent}") from error
+
+
+def published_artifact(
+    path: Path,
+    *,
+    root: Path,
+    schema_version: str,
+    row_count: int | None = None,
+) -> dict[str, Any]:
+    value: dict[str, Any] = {
+        "path": relative_posix(path, root),
+        "physical_sha256": sha256_file(path),
+        "physical_bytes": path.stat().st_size,
+        "schema_version": schema_version,
+    }
+    if row_count is not None:
+        value["row_count"] = row_count
+    return value
+
+
+def publish_snapshot(args: argparse.Namespace) -> None:
+    try:
+        import h3
+        import pyarrow as pa
+        import pyarrow.compute as pc
+        import pyarrow.parquet as pq
+    except ImportError as error:
+        raise AlaBaselineError(
+            "publication requires the locked h3 and PyArrow dependencies; run uv sync --frozen"
+        ) from error
+
+    receipt = json.loads(args.receipt.read_text(encoding="utf-8"))
+    normalization_manifest = json.loads(
+        args.normalization_manifest.read_text(encoding="utf-8")
+    )
+    aggregation_manifest = json.loads(
+        args.aggregation_manifest.read_text(encoding="utf-8")
+    )
+    attribution = json.loads(args.attribution.read_text(encoding="utf-8"))
+    if receipt.get("schema_version") != SNAPSHOT_SCHEMA_VERSION:
+        raise AlaBaselineError("unexpected ALA snapshot receipt schema")
+    if normalization_manifest.get("schema_version") != NORMALIZATION_MANIFEST_SCHEMA_VERSION:
+        raise AlaBaselineError("unexpected ALA normalization manifest schema")
+    if aggregation_manifest.get("schema_version") != AGGREGATION_MANIFEST_SCHEMA_VERSION:
+        raise AlaBaselineError("unexpected ALA aggregation manifest schema")
+    if attribution.get("schema_version") != ATTRIBUTION_SCHEMA_VERSION:
+        raise AlaBaselineError("unexpected ALA attribution schema")
+    if len(
+        {
+            receipt["snapshot_id"],
+            normalization_manifest["snapshot_id"],
+            aggregation_manifest["snapshot_id"],
+            attribution["snapshot_id"],
+        }
+    ) != 1:
+        raise AlaBaselineError("ALA publication inputs use different snapshot IDs")
+    occurrence_sha = sha256_file(args.occurrences)
+    cell_sha = sha256_file(args.cells)
+    if occurrence_sha != normalization_manifest["artifact"]["physical_sha256"]:
+        raise AlaBaselineError("published occurrence checksum does not match manifest")
+    if cell_sha != aggregation_manifest["artifact"]["physical_sha256"]:
+        raise AlaBaselineError("published cell checksum does not match manifest")
+
+    statistics = normalized_dataset_statistics(pq, args.occurrences)
+    rows = build_dataset_manifest_rows(
+        receipt=receipt,
+        normalization_manifest=normalization_manifest,
+        statistics=statistics,
+    )
+    schema = dataset_arrow_schema(pa, receipt, occurrence_sha)
+    dataset_table = pa.Table.from_pylist(rows, schema=schema)
+    order = pc.sort_indices(
+        dataset_table, sort_keys=[("data_resource_uid", "ascending")]
+    )
+    dataset_table = pc.take(dataset_table, order)
+    dataset_uids = dataset_table.column("data_resource_uid").to_pylist()
+    if len(dataset_uids) != len(set(dataset_uids)):
+        raise AlaBaselineError("dataset manifest UIDs are not unique")
+    write_bytes(args.dataset_schema_output, canonical_json(dataset_schema_contract()))
+    args.dataset_output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = args.dataset_output.with_suffix(args.dataset_output.suffix + ".tmp")
+    pq.write_table(
+        dataset_table,
+        temporary,
+        compression="zstd",
+        compression_level=9,
+        use_dictionary=True,
+        write_statistics=True,
+        row_group_size=65_536,
+        data_page_version="2.0",
+        version="2.6",
+        use_compliant_nested_type=True,
+    )
+    os.replace(temporary, args.dataset_output)
+
+    ala_root = args.snapshot_manifest.parent
+    pack_root = args.pack_manifest.parent
+    archive_path = ala_root / receipt["download"]["archive_path"]
+    occurrence_schema = ala_root / normalization_manifest["schema"]["path"]
+    cell_schema = ala_root / aggregation_manifest["schema"]["path"]
+    for path in (archive_path, occurrence_schema, cell_schema):
+        if not path.is_file():
+            raise AlaBaselineError(f"missing publication input {path}")
+    restrictive_rows = [
+        row
+        for row in dataset_table.to_pylist()
+        if row["citation_restrictive_rights_terms_detected"]
+    ]
+    restrictive_uids = sorted(row["data_resource_uid"] for row in restrictive_rows)
+    restrictive_record_count = sum(
+        row["selected_record_count"] for row in restrictive_rows
+    )
+    dataset_uid_set = set(dataset_uids)
+    non_dataset_citation_uids = sorted(
+        citation["uid"]
+        for citation in receipt["download"]["citation_entries"]
+        if citation["uid"] not in dataset_uid_set
+    )
+    dataset_fingerprint_digest = hashlib.sha256()
+    for fingerprint in dataset_table.column("dataset_manifest_fingerprint").to_pylist():
+        dataset_fingerprint_digest.update(fingerprint.encode("ascii"))
+        dataset_fingerprint_digest.update(b"\n")
+    artifacts = {
+        "source_archive": published_artifact(
+            archive_path,
+            root=ala_root,
+            schema_version="ALA offline download ZIP",
+            row_count=receipt["download"]["row_count"],
+        ),
+        "snapshot_receipt": published_artifact(
+            args.receipt,
+            root=ala_root,
+            schema_version=SNAPSHOT_SCHEMA_VERSION,
+            row_count=1,
+        ),
+        "attribution": published_artifact(
+            args.attribution,
+            root=ala_root,
+            schema_version=ATTRIBUTION_SCHEMA_VERSION,
+            row_count=1,
+        ),
+        "normalized_occurrences": published_artifact(
+            args.occurrences,
+            root=ala_root,
+            schema_version=NORMALIZED_SCHEMA_VERSION,
+            row_count=normalization_manifest["artifact"]["row_count"],
+        ),
+        "normalization_manifest": published_artifact(
+            args.normalization_manifest,
+            root=ala_root,
+            schema_version=NORMALIZATION_MANIFEST_SCHEMA_VERSION,
+            row_count=1,
+        ),
+        "occurrence_schema": published_artifact(
+            occurrence_schema,
+            root=ala_root,
+            schema_version="butterflylens-parquet-schema/v1",
+            row_count=1,
+        ),
+        "aggregate_cells": published_artifact(
+            args.cells,
+            root=ala_root,
+            schema_version=AGGREGATED_SCHEMA_VERSION,
+            row_count=aggregation_manifest["artifact"]["row_count"],
+        ),
+        "aggregation_manifest": published_artifact(
+            args.aggregation_manifest,
+            root=ala_root,
+            schema_version=AGGREGATION_MANIFEST_SCHEMA_VERSION,
+            row_count=1,
+        ),
+        "cell_schema": published_artifact(
+            cell_schema,
+            root=ala_root,
+            schema_version="butterflylens-parquet-schema/v1",
+            row_count=1,
+        ),
+        "dataset_manifest": published_artifact(
+            args.dataset_output,
+            root=ala_root,
+            schema_version=DATASET_SCHEMA_VERSION,
+            row_count=dataset_table.num_rows,
+        ),
+        "dataset_schema": published_artifact(
+            args.dataset_schema_output,
+            root=ala_root,
+            schema_version="butterflylens-parquet-schema/v1",
+            row_count=1,
+        ),
+    }
+    snapshot_manifest = {
+        "schema_version": PUBLISHED_SNAPSHOT_SCHEMA_VERSION,
+        "generated_at": args.generated_at or utc_now(),
+        "snapshot_id": receipt["snapshot_id"],
+        "snapshot_fingerprint": receipt["snapshot_fingerprint"],
+        "evidence_label": "ALA baseline occurrence evidence",
+        "provider": ALA_PROVIDER,
+        "query": receipt["query_policy"],
+        "taxon_scope": receipt["taxon_scope"],
+        "artifacts": artifacts,
+        "counts": {
+            "selected_occurrence_rows": normalization_manifest["artifact"][
+                "row_count"
+            ],
+            "dataset_resources": dataset_table.num_rows,
+            "citation_entries": receipt["download"]["citation_entry_count"],
+            "dataset_citation_entries": dataset_table.num_rows,
+            "non_dataset_citation_entries": len(non_dataset_citation_uids),
+            "non_dataset_citation_uids": non_dataset_citation_uids,
+            "exact_crosswalk_rows": normalization_manifest["counts"][
+                "taxon_match_state"
+            ]["exact_ala_taxon_concept_crosswalk"],
+            "unmatched_provider_taxon_assertion_rows": normalization_manifest[
+                "counts"
+            ]["taxon_match_state"]["unmatched_provider_taxon_assertion"],
+            "spatially_eligible_rows": aggregation_manifest["counts"][
+                "unique_spatially_eligible_source_rows"
+            ],
+            "aggregate_scope_rows": aggregation_manifest["counts"]["scope_rows"],
+            "rights_review_required_datasets": len(restrictive_uids),
+            "rights_review_required_records": restrictive_record_count,
+            "citation_information_withheld_datasets": sum(
+                row["information_withheld"] is not None
+                for row in dataset_table.to_pylist()
+            ),
+            "citation_data_generalisation_datasets": sum(
+                row["data_generalisations"] is not None
+                for row in dataset_table.to_pylist()
+            ),
+        },
+        "rights": {
+            "attribution_path": relative_posix(args.attribution, ala_root),
+            "attribution_sha256": sha256_file(args.attribution),
+            "selected_record_licence_allowlist": list(ALLOWED_PUBLIC_LICENCES),
+            "dataset_fingerprint_digest": dataset_fingerprint_digest.hexdigest(),
+            "citation_restrictive_rights_review_required_uids": restrictive_uids,
+            "citation_restrictive_rights_screening": (
+                "Conservative text detection only; this is not a legal conclusion. Exact citation "
+                "rights remain in ala_dataset_manifest.parquet and the source receipt."
+            ),
+            "downstream_public_product_release_state": (
+                "blocked_pending_dataset_rights_resolution"
+                if restrictive_uids
+                else "selected_record_licences_allowlisted_no_restrictive_citation_term_detected"
+            ),
+            "repository_evidence_status": (
+                "preserved with exact provider licences, citations, conditions, and release gate"
+            ),
+        },
+        "policies": {
+            "provider_taxon_assertions_are_human_verification": False,
+            "absence_inference_permitted": False,
+            "sensitive_coordinates": (
+                "ALA public generalisation is preserved; generalized rows are coarse-only"
+            ),
+            "boundary_geometry_copied": False,
+            "citation_join": "exact data-resource UID only; no provider hierarchy inferred",
+            "non_dataset_citations": (
+                "provider, collection, and institution entries remain in the source receipt"
+            ),
+        },
+        "build": {
+            "python": ".".join(map(str, __import__("sys").version_info[:3])),
+            "pyarrow": pa.__version__,
+            "h3": h3.__version__,
+        },
+    }
+    snapshot_manifest["snapshot_manifest_fingerprint"] = sha256_bytes(
+        canonical_json(snapshot_manifest)
+    )
+    write_bytes(args.snapshot_manifest, canonical_json(snapshot_manifest))
+
+    pack_manifest = json.loads(args.pack_manifest.read_text(encoding="utf-8"))
+    snapshot_manifest_sha = sha256_file(args.snapshot_manifest)
+    pack_manifest["ala_state"] = {
+        "status": (
+            "built_rights_review_required"
+            if restrictive_uids
+            else "built"
+        ),
+        "generated_at": snapshot_manifest["generated_at"],
+        "snapshot_id": receipt["snapshot_id"],
+        "snapshot_fingerprint": receipt["snapshot_fingerprint"],
+        "selected_occurrence_rows": sum(
+            dataset_table.column("selected_record_count").to_pylist()
+        ),
+        "dataset_resources": dataset_table.num_rows,
+        "citation_entries": receipt["download"]["citation_entry_count"],
+        "spatially_eligible_rows": aggregation_manifest["counts"][
+            "unique_spatially_eligible_source_rows"
+        ],
+        "rights_review_required_datasets": len(restrictive_uids),
+        "rights_review_required_records": restrictive_record_count,
+        "snapshot_manifest_path": "ala/ala_snapshot_manifest.json",
+        "snapshot_manifest_sha256": snapshot_manifest_sha,
+    }
+    pack_artifacts = pack_manifest.setdefault("artifacts", {})
+    pack_artifacts.update(
+        {
+            "ala/ala_baseline_occurrences.parquet": {
+                "schema_version": NORMALIZED_SCHEMA_VERSION,
+                "physical_sha256": occurrence_sha,
+                "row_count": normalization_manifest["artifact"]["row_count"],
+            },
+            "ala/ala_baseline_cells.parquet": {
+                "schema_version": AGGREGATED_SCHEMA_VERSION,
+                "physical_sha256": cell_sha,
+                "row_count": aggregation_manifest["artifact"]["row_count"],
+            },
+            "ala/ala_dataset_manifest.parquet": {
+                "schema_version": DATASET_SCHEMA_VERSION,
+                "physical_sha256": sha256_file(args.dataset_output),
+                "row_count": dataset_table.num_rows,
+            },
+            "ala/ala_snapshot_manifest.json": {
+                "schema_version": PUBLISHED_SNAPSHOT_SCHEMA_VERSION,
+                "physical_sha256": snapshot_manifest_sha,
+                "row_count": 1,
+            },
+            "ala/ala_attribution.json": {
+                "schema_version": ATTRIBUTION_SCHEMA_VERSION,
+                "physical_sha256": sha256_file(args.attribution),
+                "row_count": 1,
+            },
+        }
+    )
+    pack_manifest["sources"] = [
+        source
+        for source in pack_manifest.get("sources", [])
+        if source.get("path") != "ala/ala_snapshot_receipt.json"
+    ]
+    occurrence_sources = [
+        source
+        for source in pack_manifest.get("occurrence_sources", [])
+        if source.get("path") != "ala/ala_snapshot_receipt.json"
+    ]
+    occurrence_sources.append(
+        {
+            "path": "ala/ala_snapshot_receipt.json",
+            "physical_sha256": sha256_file(args.receipt),
+            "retrieved_at": receipt["retrieved_at"],
+            "provider": ALA_PROVIDER,
+            "snapshot_id": receipt["snapshot_id"],
+            "snapshot_fingerprint": receipt["snapshot_fingerprint"],
+        }
+    )
+    pack_manifest["occurrence_sources"] = occurrence_sources
+    write_bytes(args.pack_manifest, canonical_json(pack_manifest))
+    print(
+        json.dumps(
+            {
+                "dataset_rows": dataset_table.num_rows,
+                "dataset_parquet_sha256": sha256_file(args.dataset_output),
+                "snapshot_manifest_sha256": snapshot_manifest_sha,
+                "pack_manifest_sha256": sha256_file(args.pack_manifest),
+                "rights_review_required_datasets": len(restrictive_uids),
+                "rights_review_required_records": restrictive_record_count,
+            },
+            sort_keys=True,
+        )
+    )
+
+
 def acquire_contracts(source_dir: Path, retrieved_at: str) -> dict[str, Any]:
     definitions = (
         ("occurrence_openapi", ALA_OPENAPI_URL, "ala_occurrence_openapi.json", "application/json"),
@@ -1863,6 +2518,21 @@ def parser() -> argparse.ArgumentParser:
     aggregate.add_argument("--manifest", type=Path, required=True)
     aggregate.add_argument("--generated-at")
     aggregate.set_defaults(handler=aggregate_occurrences)
+    publish = commands.add_parser(
+        "publish-manifest", help="publish dataset and snapshot manifests"
+    )
+    publish.add_argument("--receipt", type=Path, required=True)
+    publish.add_argument("--attribution", type=Path, required=True)
+    publish.add_argument("--occurrences", type=Path, required=True)
+    publish.add_argument("--normalization-manifest", type=Path, required=True)
+    publish.add_argument("--cells", type=Path, required=True)
+    publish.add_argument("--aggregation-manifest", type=Path, required=True)
+    publish.add_argument("--dataset-output", type=Path, required=True)
+    publish.add_argument("--dataset-schema-output", type=Path, required=True)
+    publish.add_argument("--snapshot-manifest", type=Path, required=True)
+    publish.add_argument("--pack-manifest", type=Path, required=True)
+    publish.add_argument("--generated-at")
+    publish.set_defaults(handler=publish_snapshot)
     return value
 
 

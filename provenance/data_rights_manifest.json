@@ -1,7 +1,19 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T18:50:27Z",
+  "generated_at": "2026-07-17T19:14:01Z",
   "sources": [
+    {
+      "source_id": "butterflylens-australian-butterflies-pack-v1",
+      "provider": "ButterflyLens derived from the separately identified taxonomy, name, ALA occurrence, and contextual-geography sources",
+      "dataset": "Australian butterflies pack umbrella manifest",
+      "source_url": "data/packs/australian_butterflies/v1/manifest.json",
+      "retrieved_at": "2026-07-17T19:14:01Z",
+      "licence": "MIXED-SEE-SOURCES",
+      "licence_url": "DATA_RIGHTS.md",
+      "terms_url": "DATA_RIGHTS.md",
+      "attribution": "Australian Biological Resources Study/Australian Faunal Directory; Atlas of Living Australia and contributing resources; GBIF Backbone Taxonomy; iNaturalist Taxonomy; DCCEEW; Source: Australian Bureau of Statistics.",
+      "scope_note": "Umbrella metadata only. Every named child artifact retains its own source, fingerprint, licence, attribution, sensitive-data state, and downstream release gate."
+    },
     {
       "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
       "provider": "Australian Biological Resources Study",
@@ -147,6 +159,18 @@
       "terms_url": "https://www.ala.org.au/terms-of-use/",
       "attribution": "Atlas of Living Australia, every contributing provider/resource, DCCEEW, Source: Australian Bureau of Statistics, and ButterflyLens aggregation provenance.",
       "scope_note": "Aggregate counts and lineage digests from 230,027 spatially eligible public rows. Generalised rows are coarse-only; no boundary geometry is copied; H3 centers are not occurrence coordinates; missing evidence does not imply biological absence."
+    },
+    {
+      "source_id": "butterflylens-ala-publication-v1",
+      "provider": "ButterflyLens derived from the frozen ALA occurrence, dataset, and citation receipts",
+      "dataset": "Published ALA dataset and snapshot evidence manifests",
+      "source_url": "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json",
+      "retrieved_at": "2026-07-17T19:14:01Z",
+      "licence": "MIXED-SELECTED-RECORD-LICENCES-CITATION-REVIEW-REQUIRED",
+      "licence_url": "data/packs/australian_butterflies/v1/ala/ala_attribution.json",
+      "terms_url": "https://www.ala.org.au/terms-of-use/",
+      "attribution": "Atlas of Living Australia and all contributing resources represented in the frozen citation receipt; ButterflyLens publication provenance.",
+      "scope_note": "Exact UID joins preserve 53 resource citations and 31 non-resource citation entries. Three potentially restrictive citation-rights conflicts covering 16,753 selected rows block downstream public-product release pending resolution or exclusion; the screen is not a legal conclusion."
     }
   ],
   "artifacts": [
@@ -176,9 +200,9 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:f4b7ef4fc04fb8a4e48791f771656d6126701488a8a3281ac79d00d506158372",
+      "fingerprint": "sha256:9f840b3f04348bbe3624ee7879e559b8baeb6acb9cc1b2030e43884ebbb3275f",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
-      "source_id": "mixed-taxonomy-crosswalk-20260717",
+      "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
       "attribution": "Australian Biological Resources Study/Australian Faunal Directory; Atlas of Living Australia; GBIF Backbone Taxonomy; iNaturalist Taxonomy.",
       "processing_allowed": true,
@@ -481,6 +505,42 @@
       "source_id": "butterflylens-ala-aggregation-v1",
       "licence": "AGPL-3.0-only",
       "attribution": "ButterflyLens ALA baseline aggregate-cell schema.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/ala_dataset_manifest.parquet",
+      "fingerprint": "sha256:7b65e001225c06aff88ec823c804516cdd0ac35baa3d54e3f646e5d9bed34691",
+      "provider": "ButterflyLens derived from the frozen ALA dataset and citation receipts",
+      "source_id": "butterflylens-ala-publication-v1",
+      "licence": "MIXED-SELECTED-RECORD-LICENCES-CITATION-REVIEW-REQUIRED",
+      "attribution": "Atlas of Living Australia and all 53 selected contributing data resources represented in the frozen citation receipt.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json",
+      "fingerprint": "sha256:f16cb0939721b40b941caa5a7e2cd6767b20774750f56208b799422bde758b7e",
+      "provider": "ButterflyLens derived from the frozen ALA occurrence, dataset, and citation receipts",
+      "source_id": "butterflylens-ala-publication-v1",
+      "licence": "MIXED-SELECTED-RECORD-LICENCES-CITATION-REVIEW-REQUIRED",
+      "attribution": "Atlas of Living Australia, every selected contributing resource, DCCEEW, Source: Australian Bureau of Statistics, and ButterflyLens publication provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/schemas/ala_dataset_manifest.schema.json",
+      "fingerprint": "sha256:fdda27dd92527e91d887a8045b308f0d73a8b7e40b10a6d25e89cbaf728f240c",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-ala-publication-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens ALA dataset-manifest schema.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

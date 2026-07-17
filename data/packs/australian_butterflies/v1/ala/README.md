@@ -150,6 +150,50 @@ uv run python scripts/build_ala_baseline.py aggregate \
   --generated-at 2026-07-17T18:50:27Z
 ```
 
+## Dataset and snapshot publication
+
+`ala_dataset_manifest.parquet` contains one row for each of the 53 selected
+ALA data resources. Exact resource UID joins reconcile every selected row and
+processed licence count with the resource-level citation entry. DOI, citation,
+rights, data-generalisation, information-withheld, download-limit, provider,
+and resource fields remain explicit. The other 31 provider, collection, and
+institution citation entries remain fingerprinted in
+`ala_snapshot_receipt.json`; no unsupported hierarchy is inferred between
+them and the resource rows.
+
+Conservative citation-rights screening flags `dr1097`, `dr30019`, and `dr635`,
+covering 16,753 selected rows, because their citation text contains
+NonCommercial terms despite the allowlisted processed licences on selected
+rows. This flag is not a legal conclusion. Under ButterflyLens's
+unknown-is-blocking rule, downstream public-product and commercial use is
+blocked until those resources are resolved or excluded. Four resource
+citations describe information withheld and one describes data
+generalisation; the exact text remains available and never authorizes finer
+coordinates or reconstruction.
+
+`ala_snapshot_manifest.json` is written after the dataset artifact and binds
+the archive, receipt, attribution, normalized occurrences, aggregate cells,
+three Parquet schemas/manifests, exact counts, rights-review state, and build
+versions. The root pack manifest exposes this snapshot without relabelling ALA
+provider assertions as human verification or unoccupied cells as absence.
+
+Rebuild the publication artifacts without provider access:
+
+```bash
+uv run python scripts/build_ala_baseline.py publish-manifest \
+  --receipt data/packs/australian_butterflies/v1/ala/ala_snapshot_receipt.json \
+  --attribution data/packs/australian_butterflies/v1/ala/ala_attribution.json \
+  --occurrences data/packs/australian_butterflies/v1/ala/ala_baseline_occurrences.parquet \
+  --normalization-manifest data/packs/australian_butterflies/v1/ala/ala_normalization_manifest.json \
+  --cells data/packs/australian_butterflies/v1/ala/ala_baseline_cells.parquet \
+  --aggregation-manifest data/packs/australian_butterflies/v1/ala/ala_aggregation_manifest.json \
+  --dataset-output data/packs/australian_butterflies/v1/ala/ala_dataset_manifest.parquet \
+  --dataset-schema-output data/packs/australian_butterflies/v1/ala/schemas/ala_dataset_manifest.schema.json \
+  --snapshot-manifest data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json \
+  --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
+  --generated-at 2026-07-17T19:14:01Z
+```
+
 ## Reproduction
 
 Submitting a new provider snapshot is an explicit network action. ALA's bulk

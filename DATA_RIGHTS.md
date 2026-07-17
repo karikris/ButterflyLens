@@ -16,7 +16,7 @@ statuses define what must be true before later artifacts become eligible.
 | Source | Current status | Release gate |
 | --- | --- | --- |
 | Flickr API | No key configured or call made. | Register the application/use, accept current API terms, identify commercial status, activate the single global budget, and pass per-photo rights/display/removal checks. |
-| Atlas of Living Australia (ALA) | Public-compatible snapshot frozen on 17 July 2026. | Preserve the exact query/archive fingerprint, contributing-resource citations, per-row licence, quality/sensitivity state, and downstream eligibility. Recheck terms before replacement or release. |
+| Atlas of Living Australia (ALA) | Selected evidence snapshot frozen on 17 July 2026; downstream public-product release remains blocked for three dataset-rights conflicts. | Preserve the exact query/archive fingerprint, contributing-resource citations, per-row licence, quality/sensitivity state, dataset review state, and downstream eligibility. Resolve or exclude the flagged resources and recheck terms before release. |
 | GBIF | No download or DOI exists. | Use a DOI-bearing download where practical; retain dataset keys, publisher identities, record licences, media licences, and citation. |
 | iNaturalist | No API call or media download made. | Prefer citable exports/GBIF for bulk evidence; enforce API guidance, per-object/per-media licences, and the commercial-AI-training prohibition. |
 | ABS ASGS boundaries | ALA-indexed LGA 2023 contextual values selected; no geometry copied. | Retain the ALA layer metadata receipt, CC BY 4.0 attribution, and statistical-boundary qualification; a future geometry file requires its own checksum and gate. |
@@ -94,8 +94,9 @@ basis-of-record acquisition filter, and disabled default quality filters so
 quality assertions remain explicit. Its public rights allowlist is limited to
 CC0, Public Domain Mark, and attribution-only CC BY variants. NonCommercial,
 NoDerivatives, ShareAlike, unspecified, record-level-unspecified, and `other`
-values do not enter the public artifact. This is a conservative product-use
-gate, not a statement about record validity.
+values do not pass the processed-record licence filter. This is a conservative
+selection gate, not a statement about record validity or a substitute for the
+dataset citation review.
 
 The archive retains ALA's provider citation file, including per-resource DOI,
 citation, rights, generalisation, information-withheld, download-limit, and row
@@ -104,6 +105,18 @@ only: no provider media is downloaded. The bulk service required a contact
 email, but ButterflyLens requested no notification or DOI and does not persist
 the email. The archive, provider API contracts, query policy, and attribution
 are fingerprinted under `data/packs/australian_butterflies/v1/ala/`.
+
+The dataset publication manifest joins all 53 selected data-resource UIDs to
+their exact citation entries. Conservative text screening finds potentially
+restrictive NonCommercial wording for `dr1097`, `dr30019`, and `dr635`, covering
+16,753 selected rows. This is not a legal conclusion, but it is a blocking
+downstream public-product and commercial-use review state under the
+unknown-is-blocking rule. The selected snapshot remains preserved as evidence
+with its exact processed licences and citation conditions; later public
+projections must resolve or exclude those resources. Four citation entries
+also describe information withheld and one describes data generalisation;
+those texts remain verbatim and do not authorize reconstruction of withheld
+information.
 
 ## GBIF
 
