@@ -97,6 +97,8 @@ def _verify_execution(execution: Mapping[str, object]) -> dict[str, str]:
     required = {
         "schema_version",
         "execution_id",
+        "root_physical_query_request_id",
+        "root_request_fingerprint",
         "page_request_fingerprint",
         "page_checkpoint_id",
         "reserved_at",
@@ -139,6 +141,10 @@ def _verify_execution(execution: Mapping[str, object]) -> dict[str, str]:
     if request_fingerprint != execution["page_request_fingerprint"]:
         raise EvidenceLedgerError("request fingerprint does not match canonical request bytes")
     execution_preimage = {
+        "root_physical_query_request_id": execution[
+            "root_physical_query_request_id"
+        ],
+        "root_request_fingerprint": execution["root_request_fingerprint"],
         "page_request_fingerprint": execution["page_request_fingerprint"],
         "page_checkpoint_id": execution["page_checkpoint_id"],
         "reserved_at": execution["reserved_at"],

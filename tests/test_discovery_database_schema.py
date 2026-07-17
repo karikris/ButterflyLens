@@ -8,6 +8,9 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 MIGRATION = next((ROOT / "supabase/migrations").glob("*_discovery_schema.sql"))
 DATABASE_TEST = ROOT / "supabase/tests/database/002_discovery_schema.test.sql"
+ASSOCIATION_MIGRATION = next(
+    (ROOT / "supabase/migrations").glob("*_add_api_request_association_ledger.sql")
+)
 
 
 class DiscoveryDatabaseSchemaTests(unittest.TestCase):
@@ -15,6 +18,7 @@ class DiscoveryDatabaseSchemaTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.sql = MIGRATION.read_text(encoding="utf-8")
         cls.database_test = DATABASE_TEST.read_text(encoding="utf-8")
+        cls.association_sql = ASSOCIATION_MIGRATION.read_text(encoding="utf-8")
 
     def test_required_discovery_tables_are_closed_and_rls_enabled(self) -> None:
         tables = (
@@ -74,6 +78,28 @@ class DiscoveryDatabaseSchemaTests(unittest.TestCase):
         )
         self.assertEqual(assertions, plan)
         self.assertTrue(self.database_test.rstrip().endswith("rollback;"))
+
+    def test_request_association_ledger_is_closed_indexed_and_append_only(self) -> None:
+        sql = self.association_sql
+        self.assertIn("create table public.api_request_associations", sql)
+        self.assertIn("bigint generated always as identity primary key", sql)
+        self.assertIn("api_request_pk bigint not null references public.api_requests", sql)
+        self.assertIn("query_association_pk bigint not null references public.query_associations", sql)
+        self.assertIn("api_request_associations_logical_key", sql)
+        self.assertIn("api_request_associations_query_association_pk_idx", sql)
+        self.assertIn("'trusted_vernacular'", sql)
+        self.assertIn("'broad_butterfly'", sql)
+        self.assertIn(
+            "alter table public.api_request_associations enable row level security", sql
+        )
+        self.assertIn(
+            "grant select, insert on table public.api_request_associations to service_role",
+            sql,
+        )
+        self.assertNotIn("grant update", sql)
+        self.assertNotIn("grant delete", sql)
+        self.assertNotIn("create policy", sql)
+        self.assertNotIn("security definer", sql)
 
 
 if __name__ == "__main__":

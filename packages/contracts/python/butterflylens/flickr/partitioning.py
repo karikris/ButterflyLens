@@ -18,7 +18,7 @@ PARTITION_COUNT_CHECKPOINT_SCHEMA_VERSION = (
     "butterflylens-flickr-partition-count-checkpoint:v1.0.0"
 )
 PARTITION_PAGE_CHECKPOINT_SCHEMA_VERSION = (
-    "butterflylens-flickr-partition-page-checkpoint:v1.0.0"
+    "butterflylens-flickr-partition-page-checkpoint:v1.1.0"
 )
 PARTITION_COMPLETION_SCHEMA_VERSION = (
     "butterflylens-flickr-partition-completion:v1.0.0"
@@ -215,6 +215,10 @@ def plan_partition_pages(
         }
         request_fingerprint = _digest(request_preimage)
         checkpoint_preimage = {
+            "root_physical_query_request_id": partition[
+                "root_physical_query_request_id"
+            ],
+            "root_request_fingerprint": partition["root_request_fingerprint"],
             "partition_fingerprint": partition["partition_fingerprint"],
             "count_checkpoint_fingerprint": count_checkpoint["checkpoint_fingerprint"],
             "page": page,
@@ -524,6 +528,10 @@ def _validate_page_checkpoint(checkpoint: Mapping[str, object]) -> None:
     if checkpoint.get("page_request_fingerprint") != request_fingerprint:
         raise PartitionError("page request fingerprint mismatch")
     preimage = {
+        "root_physical_query_request_id": checkpoint.get(
+            "root_physical_query_request_id"
+        ),
+        "root_request_fingerprint": checkpoint.get("root_request_fingerprint"),
         "partition_fingerprint": checkpoint.get("partition_fingerprint"),
         "count_checkpoint_fingerprint": checkpoint.get("count_checkpoint_fingerprint"),
         "page": page,
@@ -531,6 +539,13 @@ def _validate_page_checkpoint(checkpoint: Mapping[str, object]) -> None:
         "page_request_fingerprint": request_fingerprint,
     }
     expected = _digest(preimage)
+    root_id = checkpoint.get("root_physical_query_request_id")
+    if not isinstance(root_id, str) or not root_id.startswith("blpr:v1:"):
+        raise PartitionError("page checkpoint root request ID is invalid")
+    _validate_sha256(
+        str(checkpoint.get("root_request_fingerprint")),
+        "page checkpoint root request fingerprint",
+    )
     if checkpoint.get("checkpoint_fingerprint") != expected:
         raise PartitionError("page checkpoint fingerprint mismatch")
     if checkpoint.get("page_checkpoint_id") != f"blfp:v1:{expected[:24]}":

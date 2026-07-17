@@ -119,6 +119,15 @@ hashes exactly. Raw response bytes and credentials are not database fields.
 Only a service-side injected store may perform the insert; the table remains
 RLS-enabled and unavailable to browser roles.
 
+Every executed page also retains the root physical request identity in its
+checkpoint. A second atomic service-side adapter validates the original
+physical-to-logical request links and inserts one append-only
+`public.api_request_associations` row per logical association. The join table
+has indexed foreign keys, unique physical/logical pairs, RLS, no browser
+privileges, and only `select`/`insert` service-role access. Physical
+deduplication therefore never erases which species/name assertions motivated a
+search, and the query term remains explicitly not a taxon label.
+
 ## Adaptive scheduling
 
 Candidate priority is an availability-weighted combination of unique media per

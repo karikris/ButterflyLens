@@ -179,6 +179,53 @@ def plan_physical_query_requests(
     }
 
 
+def validate_logical_query_association(association: Mapping[str, object]) -> None:
+    """Validate one retained logical meaning record without changing it."""
+
+    _validate_association(association)
+
+
+def validate_query_request_link(link: Mapping[str, object]) -> None:
+    """Validate the fingerprint binding a physical request to logical meaning."""
+
+    required = {
+        "schema_version",
+        "query_request_link_id",
+        "physical_query_request_id",
+        "request_fingerprint",
+        "logical_query_association_id",
+        "association_fingerprint",
+        "link_fingerprint",
+    }
+    if set(link) != required:
+        raise QueryPlanError("query request link fields are not exact")
+    if link["schema_version"] != QUERY_REQUEST_LINK_SCHEMA_VERSION:
+        raise QueryPlanError("query request link version is unsupported")
+    for field in ("physical_query_request_id", "logical_query_association_id"):
+        if (
+            not isinstance(link[field], str)
+            or _STABLE_ID.fullmatch(link[field]) is None
+        ):
+            raise QueryPlanError(f"query request link {field} is invalid")
+    for field in ("request_fingerprint", "association_fingerprint"):
+        if (
+            not isinstance(link[field], str)
+            or re.fullmatch(r"[0-9a-f]{64}", link[field]) is None
+        ):
+            raise QueryPlanError(f"query request link {field} is invalid")
+    preimage = {
+        "physical_query_request_id": link["physical_query_request_id"],
+        "request_fingerprint": link["request_fingerprint"],
+        "logical_query_association_id": link["logical_query_association_id"],
+        "association_fingerprint": link["association_fingerprint"],
+    }
+    expected = _digest(preimage)
+    if link["link_fingerprint"] != expected:
+        raise QueryPlanError("query request link fingerprint mismatch")
+    if link["query_request_link_id"] != f"blql:v1:{expected[:24]}":
+        raise QueryPlanError("query request link ID mismatch")
+
+
 def _validate_definition(definition: Mapping[str, object]) -> None:
     required = {
         "query_definition_id",

@@ -23,6 +23,8 @@ from .query_plan import (
     QueryPlanError,
     build_logical_query_association,
     plan_physical_query_requests,
+    validate_logical_query_association,
+    validate_query_request_link,
 )
 from .query_lanes import (
     AUSTRALIA_KNOWN_LANE_ID,
@@ -72,6 +74,12 @@ from .evidence_ledger import (
     EvidenceLedgerStore,
     persist_execution_hashes,
 )
+from .logical_ledger import (
+    LOGICAL_ASSOCIATION_LEDGER_SCHEMA_VERSION,
+    LogicalAssociationLedgerError,
+    LogicalAssociationLedgerStore,
+    persist_logical_associations,
+)
 
 __all__ = [
     "FLICKR_BUDGET_SCHEMA_VERSION",
@@ -92,6 +100,8 @@ __all__ = [
     "QueryPlanError",
     "build_logical_query_association",
     "plan_physical_query_requests",
+    "validate_logical_query_association",
+    "validate_query_request_link",
     "AUSTRALIA_KNOWN_LANE_ID",
     "AUSTRALIA_KNOWN_LANE_SCHEMA_VERSION",
     "GLOBAL_OUT_OF_RANGE_LANE_ID",
@@ -130,4 +140,8 @@ __all__ = [
     "EvidenceLedgerError",
     "EvidenceLedgerStore",
     "persist_execution_hashes",
+    "LOGICAL_ASSOCIATION_LEDGER_SCHEMA_VERSION",
+    "LogicalAssociationLedgerError",
+    "LogicalAssociationLedgerStore",
+    "persist_logical_associations",
 ]

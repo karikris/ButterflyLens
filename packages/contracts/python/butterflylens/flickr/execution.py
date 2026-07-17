@@ -22,7 +22,7 @@ from .query_plan import FLICKR_REST_ENDPOINT, FLICKR_SEARCH_METHOD
 
 
 SEARCH_PAGE_EXECUTION_SCHEMA_VERSION = (
-    "butterflylens-flickr-search-page-execution:v1.0.0"
+    "butterflylens-flickr-search-page-execution:v1.1.0"
 )
 
 
@@ -86,6 +86,10 @@ def execute_search_page(
         raise SearchPageExecutionError("reserved_at must use UTC")
 
     execution_preimage = {
+        "root_physical_query_request_id": checkpoint[
+            "root_physical_query_request_id"
+        ],
+        "root_request_fingerprint": checkpoint["root_request_fingerprint"],
         "page_request_fingerprint": checkpoint["page_request_fingerprint"],
         "page_checkpoint_id": checkpoint["page_checkpoint_id"],
         "reserved_at": _utc_text(reserved_at),
