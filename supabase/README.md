@@ -3,8 +3,8 @@
 The database is built as ordered Supabase migrations. Task 3.1.1 establishes
 the typed `projects` and `runs` control-state tables. Task 3.1.2 adds species
 and name projections, logical query definitions and associations, deduplicated
-physical API requests, and versioned Flickr source records. Later 3.1 subtasks
-add model-evidence, review, map-impact, and user-role/RLS policy tables.
+physical API requests, and versioned Flickr source records. The remaining 3.1
+migrations add model-evidence, review, map-impact, and user-role/RLS storage.
 
 The discovery schema performs no provider call and stores no credential.
 Logical species/name associations remain separate from physical request rows,
@@ -31,11 +31,18 @@ become a misleading zero. Release candidates are append-only, blocked by
 default, coordinate-coarsened, and require every scientific gate plus qualified
 authorization before approval.
 
-Every public table has row-level security enabled immediately. The
-`anon` and `authenticated` roles have no table or sequence privileges until
-Task 3.1.6 defines project membership and least-privilege policies. The
-server-only `service_role` has explicit access; its credential must never enter
-a browser or committed configuration.
+The role migration adds project-scoped reviewer, expert, curator, and
+administrator memberships. Anonymous access is restricted to explicitly
+public projections. Reviewers can read their own assignments and append a
+decision only to their own open assignment; consensus stays blind until they
+respond. Curators receive project-scoped inspection and campaign-management
+policies, while raw evidence and scientific releases remain server-written.
+
+Every public table has row-level security. The `anon` role can read only safe
+columns through four security-invoker public views. Authenticated access is
+further constrained by self, assignment, and project-role policies; raw writes
+and scientific releases remain server-only. The `service_role` credential must
+never enter a browser or committed configuration.
 
 Create migration filenames through the CLI:
 
