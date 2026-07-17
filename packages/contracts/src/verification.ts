@@ -2,6 +2,8 @@ export const VERIFICATION_CAMPAIGN_SCHEMA_VERSION =
   'butterflylens-verification-campaign:v1.0.0' as const
 export const VERIFICATION_ASSIGNMENT_SCHEMA_VERSION =
   'butterflylens-verification-assignment:v1.0.0' as const
+export const VERIFICATION_ADJUDICATION_SCHEMA_VERSION =
+  'butterflylens-verification-adjudication:v1.0.0' as const
 export const VERIFICATION_EVENT_SCHEMA_VERSION =
   'butterflylens-verification-event:v1.0.0' as const
 export const VERIFICATION_CONSENSUS_SCHEMA_VERSION =
@@ -109,6 +111,22 @@ export interface VerificationAssignment {
   readonly expires_at: string | null
   readonly completed_at: string | null
   readonly visibility: 'private'
+}
+
+export interface VerificationAdjudication {
+  readonly schema_version: typeof VERIFICATION_ADJUDICATION_SCHEMA_VERSION
+  readonly adjudication_id: string
+  readonly project_id: string
+  readonly campaign_id: string
+  readonly item_id: string
+  readonly adjudicator_id: string
+  readonly conflicting_reviewer_ids: readonly string[]
+  readonly conflicting_event_fingerprints: readonly string[]
+  readonly decision_event_fingerprint: string
+  readonly independence_check: 'passed'
+  readonly lineage_fingerprint: string
+  readonly adjudicated_at: string
+  readonly scientific_claim_allowed: false
 }
 
 export interface VerificationEvent {

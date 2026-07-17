@@ -353,6 +353,72 @@
         "visibility": { "const": "private" }
       }
     },
+    "adjudication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "adjudication_id",
+        "project_id",
+        "campaign_id",
+        "item_id",
+        "adjudicator_id",
+        "conflicting_reviewer_ids",
+        "conflicting_event_fingerprints",
+        "decision_event_fingerprint",
+        "independence_check",
+        "lineage_fingerprint",
+        "adjudicated_at",
+        "scientific_claim_allowed"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-verification-adjudication:v1.0.0"
+        },
+        "adjudication_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "project_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "campaign_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "item_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "adjudicator_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "conflicting_reviewer_ids": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+          }
+        },
+        "conflicting_event_fingerprints": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+          }
+        },
+        "decision_event_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "independence_check": { "const": "passed" },
+        "lineage_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "adjudicated_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        },
+        "scientific_claim_allowed": { "const": false }
+      }
+    },
     "review_event": {
       "type": "object",
       "additionalProperties": false,

@@ -1,5 +1,5 @@
 schema_version: butterflylens-taxalens-migration-v1
-updated_at: "2026-07-17T14:12:21Z"
+updated_at: "2026-07-17T14:50:42Z"
 source_snapshot:
   repository: karikris/taxalens
   commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -25,9 +25,9 @@ components:
       - Define ButterflyLens-owned JSON Schema with an explicit compatibility map.
       - Add Australian butterfly and community-account identifiers without weakening the upstream evidence boundary.
     tests:
-      - Planned Python, TypeScript, and JSON Schema parity fixtures.
-      - Planned unknown-version and missing-fingerprint rejection tests.
-    status: planned
+      - Python, TypeScript, and JSON Schema parity fixture for the campaign wire contract.
+      - Unknown version, scientific-claim, missing-field, and controlled-vocabulary rejection through the closed schema.
+    status: adapted_contract_defined
   - component_id: taxalens-review-event-consensus-contracts-v1
     source_repository: karikris/taxalens
     source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -41,9 +41,9 @@ components:
       - Bind events to ButterflyLens project, run, assignment, media, question, and evidence fingerprints.
       - Keep model evidence outside human consensus and expose no public reviewer score.
     tests:
-      - Planned ledger, supersession, conflict, and independent-adjudicator parity tests.
-      - Planned no-model-vote and no-majority-truth policy tests.
-    status: planned
+      - Cross-language event, consensus, adjudication, field-conflict, private-assignment, and fingerprint contract parity.
+      - Model-vote, public-assignment, missing No category, and failed-independence rejection fixtures.
+    status: adapted_contract_defined
   - component_id: taxalens-quality-estimation-contracts-v1
     source_repository: karikris/taxalens
     source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -56,14 +56,16 @@ components:
     changes:
       - Separate reusable aggregate campaign metrics from ButterflyLens-owned private reviewer reliability.
       - Require exact algorithm and fixture parity before adapting any estimator implementation.
+      - Define the ButterflyLens private reliability wire contract; keep target-precision, aggregate-agreement, quality-snapshot, and release-policy algorithms pending.
     tests:
-      - Planned Wilson, Hajek, grouped-bootstrap, missing-strata, leakage, and unavailable-state fixtures.
-    status: planned
+      - Private reliability availability and public-ranking rejection are covered by cross-language parity.
+      - Wilson, Hajek, grouped-bootstrap, missing-strata, leakage, aggregate-agreement, and release-gate fixtures remain planned.
+    status: partially_defined
   - component_id: taxalens-geographic-impact-contract-v1
     source_repository: karikris/taxalens
     source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
     source_path: apps/web/src/impact and docs/architecture/geographic-impact-lens.md
-    destination_path: packages/contracts/schemas/geographic-impact.schema.json
+    destination_path: packages/contracts/schemas/{geographic-impact-cell,geographic-impact-snapshot,geographic-impact-query}.schema.json
     migration_kind: contract_and_evidence_facade_pattern
     reason: Preserve baseline, candidate, reviewed, release-ready, no-geo, provider-union, precision, H3, scope, and unavailable semantics.
     build_week_scope: new
@@ -72,8 +74,9 @@ components:
       - Add ButterflyLens-owned ALA baseline comparison and Australian administrative and IBRA scopes.
       - Keep the MapLibre implementation, national live map, and non-WebGL interface ButterflyLens-owned.
     tests:
-      - Planned source-identity, provider-union, precision rollup, no-absence, GeoJSON-bound, and accessible-table parity tests.
-    status: planned
+      - Cross-language cell, Live/Submitted snapshot, query, explicit-availability, protected-coordinate, and no-scientific-claim contract parity.
+      - Provider-union algorithms, H3 validity, rollups, GeoJSON bounds, renderer, and accessible table remain later implementation tests.
+    status: adapted_contract_defined
   - component_id: taxalens-evidence-tool-pattern-v1
     source_repository: karikris/taxalens
     source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -124,6 +127,7 @@ butterflylens_owned_changes:
     butterflylens_responsibility: Rights-aware ALA snapshots, sensitive-data controls, taxon reconciliation, conservative provider union, and explicit candidate/review/release comparison.
 notes:
   - No TaxaLens code, generated data, media, model, build, or runtime artifact has been copied.
-  - Every component remains planned; no destination file exists merely because it is named here.
+  - Completed entries are original ButterflyLens contract adaptations bound to the immutable TaxaLens source; they are not broad source copies.
+  - Quality estimation is partial and the evidence-tool adapter remains planned; neither may be reported as implemented.
   - The static Papilio replay and its measurements are evidence about TaxaLens, not ButterflyLens fixtures or outcomes.
   - Later migrations must record exact copied or adapted files and retain the MIT notice where required.

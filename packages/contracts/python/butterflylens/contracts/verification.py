@@ -11,6 +11,9 @@ VERIFICATION_CAMPAIGN_SCHEMA_VERSION = (
 VERIFICATION_ASSIGNMENT_SCHEMA_VERSION = (
     "butterflylens-verification-assignment:v1.0.0"
 )
+VERIFICATION_ADJUDICATION_SCHEMA_VERSION = (
+    "butterflylens-verification-adjudication:v1.0.0"
+)
 VERIFICATION_EVENT_SCHEMA_VERSION = "butterflylens-verification-event:v1.0.0"
 VERIFICATION_CONSENSUS_SCHEMA_VERSION = (
     "butterflylens-verification-consensus:v1.0.0"
@@ -72,6 +75,22 @@ class VerificationAssignment(TypedDict):
     expires_at: str | None
     completed_at: str | None
     visibility: Literal["private"]
+
+
+class VerificationAdjudication(TypedDict):
+    schema_version: Literal["butterflylens-verification-adjudication:v1.0.0"]
+    adjudication_id: str
+    project_id: str
+    campaign_id: str
+    item_id: str
+    adjudicator_id: str
+    conflicting_reviewer_ids: list[str]
+    conflicting_event_fingerprints: list[str]
+    decision_event_fingerprint: str
+    independence_check: Literal["passed"]
+    lineage_fingerprint: str
+    adjudicated_at: str
+    scientific_claim_allowed: Literal[False]
 
 
 class VerificationEvent(TypedDict):

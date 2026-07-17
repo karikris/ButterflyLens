@@ -29,3 +29,28 @@ checks are added in Task 1.3.6.
 
 Schema identifiers are versioned URNs. A later version is a new contract, not
 an in-place reinterpretation of stored evidence.
+
+## Parity check
+
+Run the complete cross-language check with:
+
+```bash
+BUTTERFLYLENS_TSC=/path/to/pinned/tsc \
+  python3 packages/contracts/tests/check_parity.py
+```
+
+When the repository workspace has its pinned TypeScript development dependency,
+the environment variable is unnecessary. The check:
+
+- validates every schema as Draft 2020-12;
+- validates one accepted and one rejected fixture for every wire contract in
+  Python with format checking;
+- compiles the checked-in TypeScript declarations and schema interpreter;
+- applies the same fixture matrix in TypeScript; and
+- compares schema versions and controlled vocabularies across JSON Schema,
+  Python, and TypeScript.
+
+The small TypeScript interpreter is a parity-test utility for the JSON Schema
+keywords used here. Production services must use a maintained Draft 2020-12
+validator and must also enforce storage, authorization, temporal, lineage, and
+canonical-hash invariants that are not expressible in the wire schema alone.

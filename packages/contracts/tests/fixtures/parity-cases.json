@@ -1,0 +1,528 @@
+{
+  "schema_version": "butterflylens-contract-parity-fixtures:v1.0.0",
+  "schema_version_checks": [
+    { "constant": "PROJECT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "pointer": "/properties/schema_version/const" },
+    { "constant": "RUN_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/schema_version/const" },
+    { "constant": "CONTENT_CHECKSUM_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:content-checksum:v1.0.0", "pointer": "/properties/schema_version/const" },
+    { "constant": "EVIDENCE_FINGERPRINT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0", "pointer": "/properties/schema_version/const" },
+    { "constant": "VERIFICATION_CAMPAIGN_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/campaign/properties/schema_version/const" },
+    { "constant": "VERIFICATION_ASSIGNMENT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/assignment/properties/schema_version/const" },
+    { "constant": "VERIFICATION_ADJUDICATION_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/adjudication/properties/schema_version/const" },
+    { "constant": "VERIFICATION_EVENT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/review_event/properties/schema_version/const" },
+    { "constant": "VERIFICATION_CONSENSUS_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/consensus/properties/schema_version/const" },
+    { "constant": "REVIEWER_RELIABILITY_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/reviewer_reliability/properties/schema_version/const" },
+    { "constant": "GEOGRAPHIC_IMPACT_CELL_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:geographic-impact-contracts:v1.0.0", "pointer": "/$defs/cell/properties/schema_version/const" },
+    { "constant": "GEOGRAPHIC_IMPACT_SNAPSHOT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:geographic-impact-contracts:v1.0.0", "pointer": "/$defs/snapshot/properties/schema_version/const" },
+    { "constant": "GEOGRAPHIC_IMPACT_QUERY_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:geographic-impact-contracts:v1.0.0", "pointer": "/$defs/query/properties/schema_version/const" },
+    { "constant": "WORKER_IDENTITY_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/worker_identity/properties/schema_version/const" },
+    { "constant": "WORKER_HEARTBEAT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/heartbeat/properties/schema_version/const" },
+    { "constant": "WORKER_LEASE_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/lease/properties/schema_version/const" },
+    { "constant": "WORKER_COMMAND_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/command/properties/schema_version/const" },
+    { "constant": "WORKER_EVENT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/event/properties/schema_version/const" }
+  ],
+  "vocabulary_checks": [
+    { "constant": "PROJECT_STATUSES", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "pointer": "/properties/status/enum" },
+    { "constant": "RUN_KINDS", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/run_kind/enum" },
+    { "constant": "RUN_MODES", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/mode/enum" },
+    { "constant": "RUN_STATUSES", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/status/enum" },
+    { "constant": "PIPELINE_STAGE_IDS", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/stages/items/properties/stage_id/enum" },
+    { "constant": "FINGERPRINT_KINDS", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0", "pointer": "/$defs/fingerprint_kind/enum" },
+    { "constant": "FINGERPRINT_PARENT_RELATIONSHIPS", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0", "pointer": "/$defs/parent_relationship/enum" },
+    { "constant": "VERIFICATION_OUTCOMES", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/review_event/properties/outcome/enum" },
+    { "constant": "CONSENSUS_STATUSES", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/consensus/properties/status/enum" },
+    { "constant": "EVIDENCE_COUNT_STATUSES", "schema_id": "urn:butterflylens:schema:geographic-impact-contracts:v1.0.0", "pointer": "/$defs/evidence_count/properties/status/enum" },
+    { "constant": "WORKER_COMMAND_KINDS", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/command/properties/kind/enum" },
+    { "constant": "WORKER_EVENT_KINDS", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/event/properties/kind/enum" }
+  ],
+  "valid_documents": [
+    {
+      "case_id": "project-valid",
+      "schema_id": "urn:butterflylens:schema:project:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-project:v1.0.0",
+        "project_id": "project:australian-butterflies",
+        "slug": "australian-butterflies",
+        "name": "Australian butterflies",
+        "description": "Parity fixture only.",
+        "status": "draft",
+        "geographic_scope": {
+          "country_code": "AU",
+          "boundary_id": "boundary:aus",
+          "boundary_version": "fixture-v1",
+          "boundary_sha256": "{{sha256}}",
+          "sensitive_coordinate_policy_version": "v1"
+        },
+        "taxon_scope": {
+          "root_taxon_keys": ["taxon:papilionoidea"],
+          "taxonomy_fingerprint": "{{sha256}}"
+        },
+        "discovery_scope": {
+          "search_plan_fingerprint": "{{sha256}}",
+          "public_discovery_claim": "All butterfly candidate images discoverable through the published ButterflyLens Flickr search plan."
+        },
+        "data_policy_version": "v1",
+        "consent_policy_version": "v1",
+        "created_at": "{{now}}",
+        "updated_at": "{{now}}"
+      }
+    },
+    {
+      "case_id": "run-valid",
+      "schema_id": "urn:butterflylens:schema:run:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-run:v1.0.0",
+        "run_id": "run:fixture",
+        "project_id": "project:australian-butterflies",
+        "run_kind": "full_pipeline",
+        "mode": "replay",
+        "status": "queued",
+        "requested_by": { "actor_type": "system", "actor_id": null },
+        "requested_at": "{{now}}",
+        "started_at": null,
+        "finished_at": null,
+        "updated_at": "{{now}}",
+        "engine": {
+          "repository": "karikris/BioMiner",
+          "commit": "{{git_sha}}",
+          "interface_version": "v1",
+          "command": "biominer production run"
+        },
+        "input_fingerprints": ["{{sha256}}"],
+        "stages": [],
+        "artifacts": [],
+        "error": null,
+        "revision": 1
+      }
+    },
+    {
+      "case_id": "content-checksum-valid",
+      "schema_id": "urn:butterflylens:schema:content-checksum:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-content-checksum:v1.0.0",
+        "algorithm": "sha256",
+        "digest": "{{sha256}}",
+        "byte_count": 42,
+        "media_type": "image/jpeg"
+      }
+    },
+    {
+      "case_id": "evidence-fingerprint-valid",
+      "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-evidence-fingerprint:v1.0.0",
+        "hash_algorithm": "sha256",
+        "canonicalization": "RFC8785-JCS",
+        "preimage": {
+          "fingerprint_kind": "review_event",
+          "subject_id": "event:fixture",
+          "payload_schema_version": "butterflylens-verification-event:v1.0.0",
+          "payload": { "outcome": "yes" },
+          "parents": [
+            { "relationship": "reviews", "fingerprint_kind": "media_object", "digest": "{{sha256}}" }
+          ]
+        },
+        "digest": "{{sha256_b}}",
+        "recorded_at": "{{now}}"
+      }
+    },
+    {
+      "case_id": "verification-campaign-valid",
+      "schema_id": "urn:butterflylens:schema:verification-campaign:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-verification-campaign:v1.0.0",
+        "campaign_id": "campaign:fixture",
+        "project_id": "project:australian-butterflies",
+        "run_id": null,
+        "kind": "flickr_target_verification",
+        "status": "draft",
+        "target": { "accepted_taxon_key": "taxon:fixture", "scientific_name": "Papilio example", "rank": "species" },
+        "source_providers": ["flickr"],
+        "question_fingerprint": "{{sha256}}",
+        "manifest_fingerprint": "{{sha256}}",
+        "sampling_plan": {
+          "plan_id": "plan:fixture",
+          "purpose": "quality_estimation",
+          "design": "simple_random",
+          "representative": true,
+          "blind": true,
+          "inclusion_probabilities_recorded": true,
+          "grouping_keys": ["source_photo_id"],
+          "strata": [],
+          "quality_estimation_eligible": true,
+          "quality_estimation_blockers": []
+        },
+        "review_requirement": {
+          "required_independent_reviewers": 2,
+          "second_review_policy": "always",
+          "adjudication_required_on_conflict": true,
+          "expert_gate_required_for_release": true
+        },
+        "blind_policy": { "enabled": true, "hidden_fields": ["model_score", "other_reviews"] },
+        "public_replay": false,
+        "scientific_claim_allowed": false,
+        "created_at": "{{now}}",
+        "updated_at": "{{now}}"
+      }
+    },
+    {
+      "case_id": "verification-assignment-valid",
+      "schema_id": "urn:butterflylens:schema:verification-assignment:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-verification-assignment:v1.0.0",
+        "assignment_id": "assignment:fixture",
+        "campaign_id": "campaign:fixture",
+        "item_id": "item:fixture",
+        "reviewer_id": "reviewer:one",
+        "review_round": 1,
+        "reason": "ordinary",
+        "status": "assigned",
+        "blind": true,
+        "independence_group_key": "group:fixture",
+        "assigned_at": "{{now}}",
+        "expires_at": null,
+        "completed_at": null,
+        "visibility": "private"
+      }
+    },
+    {
+      "case_id": "verification-adjudication-valid",
+      "schema_id": "urn:butterflylens:schema:verification-adjudication:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-verification-adjudication:v1.0.0",
+        "adjudication_id": "adjudication:fixture",
+        "project_id": "project:australian-butterflies",
+        "campaign_id": "campaign:fixture",
+        "item_id": "item:fixture",
+        "adjudicator_id": "reviewer:three",
+        "conflicting_reviewer_ids": ["reviewer:one", "reviewer:two"],
+        "conflicting_event_fingerprints": ["{{sha256}}", "{{sha256_b}}"],
+        "decision_event_fingerprint": "{{sha256}}",
+        "independence_check": "passed",
+        "lineage_fingerprint": "{{sha256}}",
+        "adjudicated_at": "{{now}}",
+        "scientific_claim_allowed": false
+      }
+    },
+    {
+      "case_id": "verification-event-valid",
+      "schema_id": "urn:butterflylens:schema:verification-event:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-verification-event:v1.0.0",
+        "event_id": "event:fixture",
+        "project_id": "project:australian-butterflies",
+        "campaign_id": "campaign:fixture",
+        "assignment_id": "assignment:fixture",
+        "item_id": "item:fixture",
+        "reviewer_id": "reviewer:one",
+        "review_round": 1,
+        "outcome": "yes",
+        "non_target_category": null,
+        "alternative_taxon": null,
+        "corrected_life_stage": "adult",
+        "corrected_visual_domain": "live_field",
+        "corrected_view": "dorsal",
+        "media_quality": "high",
+        "duplicate_concern": false,
+        "captive_or_cultivated_concern": false,
+        "confidence": "medium",
+        "comment": null,
+        "reviewed_at": "{{now}}",
+        "duration_ms": 1200,
+        "displayed_media_sha256": "{{sha256}}",
+        "source_record_fingerprint": "{{sha256}}",
+        "question_fingerprint": "{{sha256}}",
+        "campaign_manifest_fingerprint": "{{sha256}}",
+        "supersedes_event_fingerprint": null,
+        "conflicts_with_consensus_fingerprint": null,
+        "scientific_claim_allowed": false
+      }
+    },
+    {
+      "case_id": "verification-consensus-valid",
+      "schema_id": "urn:butterflylens:schema:verification-consensus:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-verification-consensus:v1.0.0",
+        "consensus_id": "consensus:fixture",
+        "project_id": "project:australian-butterflies",
+        "campaign_id": "campaign:fixture",
+        "item_id": "item:fixture",
+        "revision": 1,
+        "status": "pending",
+        "required_review_count": 2,
+        "effective_review_count": 1,
+        "decisive_review_count": 1,
+        "effective_event_fingerprints": ["{{sha256}}"],
+        "conflicts": [],
+        "adjudication_event_fingerprint": null,
+        "community_evidence": { "status": "pending", "outcome": null, "blockers": [] },
+        "qualified_consensus": { "status": "pending", "outcome": null, "blockers": [] },
+        "release_consensus": { "status": "pending", "outcome": null, "blockers": [] },
+        "reviewer_weights_applied": false,
+        "reliability_snapshot_fingerprint": null,
+        "model_vote_included": false,
+        "resolved_at": null,
+        "consensus_fingerprint": "{{sha256}}"
+      }
+    },
+    {
+      "case_id": "reviewer-reliability-valid",
+      "schema_id": "urn:butterflylens:schema:reviewer-reliability:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-reviewer-reliability:v1.0.0",
+        "reliability_id": "reliability:fixture",
+        "reviewer_id": "reviewer:one",
+        "domain": { "taxon_group": "family:papilionidae", "source_provider": "flickr", "life_stage": "adult", "visual_domain": "live_field" },
+        "method": "control_calibrated_beta_binomial_v1",
+        "availability": "unavailable",
+        "sample_count": 0,
+        "decisive_count": 0,
+        "control_count": 0,
+        "estimate": null,
+        "interval": null,
+        "equal_weight_target": 1,
+        "applied_weight": null,
+        "shrinkage_fraction": null,
+        "minimum_evidence": 20,
+        "blockers": ["minimum evidence not met"],
+        "evidence_fingerprint": "{{sha256}}",
+        "visibility": "private",
+        "public_ranking_allowed": false,
+        "model_agreement_used": false,
+        "majority_agreement_alone_used": false,
+        "recorded_at": "{{now}}"
+      }
+    },
+    {
+      "case_id": "geographic-impact-cell-valid",
+      "schema_id": "urn:butterflylens:schema:geographic-impact-cell:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-geographic-impact-cell:v1.0.0",
+        "cell_id": "8928308280fffff",
+        "grid": "H3",
+        "h3_version": "4.3.0",
+        "h3_resolution": 9,
+        "project_id": "project:australian-butterflies",
+        "run_id": "run:fixture",
+        "snapshot_mode": "submitted",
+        "accepted_taxon_key": "taxon:fixture",
+        "ala_snapshot_fingerprint": "{{sha256}}",
+        "flickr_snapshot_fingerprint": "{{sha256}}",
+        "provider_union_fingerprint": "{{sha256}}",
+        "review_projection_fingerprint": null,
+        "quality_snapshot_fingerprint": null,
+        "counts": {
+          "ala_baseline": { "status": "available", "value": 2, "reason": null },
+          "flickr_candidate": { "status": "available", "value": 1, "reason": null },
+          "yoloe_butterfly": { "status": "available", "value": 0, "reason": null },
+          "bioclip_species_candidate": { "status": "available", "value": 0, "reason": null },
+          "community_reviewed": { "status": "available", "value": 0, "reason": null },
+          "human_supported": { "status": "available", "value": 0, "reason": null },
+          "release_ready": { "status": "available", "value": 0, "reason": null }
+        },
+        "impact": {
+          "potential_coverage_gap": { "status": "available", "value": false, "reason": null },
+          "human_supported_additional": { "status": "available", "value": false, "reason": null },
+          "release_ready_additional": { "status": "available", "value": false, "reason": null }
+        },
+        "nearest_ala_evidence_distance": { "status": "available", "metres": 120.5, "reason": null },
+        "latest_ala_event_date": "2025-01-01",
+        "latest_flickr_event_date": "2026-01-02",
+        "data_deficiency_state": "baseline_and_candidate",
+        "public_geometry": { "status": "available", "source_precision_metres": 20, "published_h3_resolution": 9, "reason": null },
+        "evidence_fingerprints": ["{{sha256}}"],
+        "cell_fingerprint": "{{sha256}}",
+        "scientific_claim_allowed": false
+      }
+    },
+    {
+      "case_id": "geographic-impact-snapshot-valid",
+      "schema_id": "urn:butterflylens:schema:geographic-impact-snapshot:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-geographic-impact-snapshot:v1.0.0",
+        "snapshot_id": "snapshot:fixture",
+        "project_id": "project:australian-butterflies",
+        "run_id": "run:fixture",
+        "mode": "submitted",
+        "country_code": "AU",
+        "status": "available",
+        "generated_at": "{{now}}",
+        "last_updated_at": "{{now}}",
+        "submitted_source_commit": "{{git_sha}}",
+        "worker_heartbeat_fingerprint": null,
+        "cell_schema_version": "butterflylens-geographic-impact-cell:v1.0.0",
+        "cell_count": 1,
+        "cell_artifact_checksum": "{{sha256}}",
+        "cell_artifact_fingerprint": "{{sha256}}",
+        "query_fingerprint": "{{sha256}}",
+        "map_projection_fingerprint": "{{sha256}}",
+        "blockers": [],
+        "append_only_revision": 1
+      }
+    },
+    {
+      "case_id": "geographic-impact-query-valid",
+      "schema_id": "urn:butterflylens:schema:geographic-impact-query:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-geographic-impact-query:v1.0.0",
+        "project_id": "project:australian-butterflies",
+        "accepted_taxon_keys": ["taxon:fixture"],
+        "snapshot_mode": "submitted",
+        "h3_resolution": 9,
+        "scope": { "kind": "national", "scope_id": "au" },
+        "event_date_from": null,
+        "event_date_to": null,
+        "evidence_maturity": ["ala_baseline", "flickr_candidate"],
+        "ala_basis_of_record": [],
+        "review_states": ["pending"],
+        "page_size": 250,
+        "query_fingerprint": "{{sha256}}"
+      }
+    },
+    {
+      "case_id": "worker-identity-valid",
+      "schema_id": "urn:butterflylens:schema:worker-identity:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-worker-identity:v1.0.0",
+        "worker_id": "worker:m5-1",
+        "registered_at": "{{now}}",
+        "machine_profile": {
+          "platform": "macos",
+          "architecture": "arm64",
+          "os_version": "26.0",
+          "chip_label": "Apple M5 Pro",
+          "cpu_core_count": 12,
+          "unified_memory_bytes": 68719476736,
+          "mps_available": true,
+          "mps_runtime": "torch-mps"
+        },
+        "capabilities": {
+          "supported_stage_ids": ["metadata", "download", "yoloe", "bioclip", "artifact_commit"],
+          "max_queue_records": 1000,
+          "max_queue_bytes": 1073741824,
+          "rolling_prefetch_batches": 4,
+          "checkpoint_format": "parquet-manifest-v1",
+          "graceful_shutdown_supported": true
+        },
+        "configured_models": [],
+        "identity_fingerprint": "{{sha256}}",
+        "scientific_claim_allowed": false
+      }
+    },
+    {
+      "case_id": "worker-heartbeat-valid",
+      "schema_id": "urn:butterflylens:schema:worker-heartbeat:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-worker-heartbeat:v1.0.0",
+        "heartbeat_id": "heartbeat:fixture",
+        "worker_id": "worker:m5-1",
+        "sequence": 1,
+        "observed_at": "{{now}}",
+        "state": "idle",
+        "project_id": null,
+        "run_id": null,
+        "lease_id": null,
+        "lease_revision": null,
+        "lease_expires_at": null,
+        "current_stage_id": null,
+        "resources": { "process_rss_bytes": 1000, "mps_allocated_bytes": 0, "mps_reserved_bytes": 0, "free_disk_bytes": 1000000 },
+        "queues": [],
+        "models": [],
+        "cache": { "entry_count": 0, "byte_count": 0, "hit_count": 0, "miss_count": 0 },
+        "last_committed_artifact_fingerprint": null,
+        "last_committed_at": null,
+        "health_checks": [{ "check_id": "disk", "status": "pass", "message": "space available" }],
+        "heartbeat_fingerprint": "{{sha256}}",
+        "scientific_claim_allowed": false
+      }
+    },
+    {
+      "case_id": "worker-lease-valid",
+      "schema_id": "urn:butterflylens:schema:worker-lease:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-worker-lease:v1.0.0",
+        "lease_id": "lease:fixture",
+        "project_id": "project:australian-butterflies",
+        "run_id": "run:fixture",
+        "stage_id": "bioclip",
+        "worker_id": "worker:m5-1",
+        "status": "active",
+        "revision": 1,
+        "fencing_token": "1",
+        "idempotency_key": "lease:run-fixture-bioclip",
+        "issued_at": "{{now}}",
+        "acquired_at": "{{now}}",
+        "renewed_at": null,
+        "expires_at": "{{later}}",
+        "released_at": null,
+        "checkpoint_fingerprint": null,
+        "cancellation_requested": false,
+        "cancellation_requested_at": null,
+        "lease_fingerprint": "{{sha256}}"
+      }
+    },
+    {
+      "case_id": "worker-command-valid",
+      "schema_id": "urn:butterflylens:schema:worker-command:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-worker-command:v1.0.0",
+        "command_id": "command:fixture",
+        "worker_id": "worker:m5-1",
+        "project_id": "project:australian-butterflies",
+        "run_id": "run:fixture",
+        "lease_id": "lease:fixture",
+        "expected_lease_revision": 1,
+        "kind": "start_run",
+        "idempotency_key": "command:start-run-fixture",
+        "issued_at": "{{now}}",
+        "expires_at": "{{later}}",
+        "requested_by": "operator:one",
+        "payload": { "stage_id": "bioclip", "checkpoint_fingerprint": null, "reason": null },
+        "command_fingerprint": "{{sha256}}"
+      }
+    },
+    {
+      "case_id": "worker-event-valid",
+      "schema_id": "urn:butterflylens:schema:worker-event:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-worker-event:v1.0.0",
+        "event_id": "worker-event:fixture",
+        "worker_id": "worker:m5-1",
+        "sequence": 1,
+        "project_id": "project:australian-butterflies",
+        "run_id": "run:fixture",
+        "lease_id": "lease:fixture",
+        "lease_revision": 1,
+        "kind": "progress",
+        "stage_id": "bioclip",
+        "occurred_at": "{{now}}",
+        "records_processed": 10,
+        "bytes_processed": 1000,
+        "checkpoint_fingerprint": null,
+        "artifact_fingerprint": null,
+        "error": null,
+        "event_fingerprint": "{{sha256}}",
+        "scientific_claim_allowed": false
+      }
+    }
+  ],
+  "invalid_cases": [
+    { "case_id": "project-rejects-non-au", "base_case_id": "project-valid", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "changes": [{ "op": "set", "path": "/geographic_scope/country_code", "value": "NZ" }] },
+    { "case_id": "run-rejects-started-queued", "base_case_id": "run-valid", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "changes": [{ "op": "set", "path": "/started_at", "value": "{{now}}" }] },
+    { "case_id": "checksum-rejects-short-digest", "base_case_id": "content-checksum-valid", "schema_id": "urn:butterflylens:schema:content-checksum:v1.0.0", "changes": [{ "op": "set", "path": "/digest", "value": "bad" }] },
+    { "case_id": "fingerprint-rejects-unapproved-canonicalizer", "base_case_id": "evidence-fingerprint-valid", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0", "changes": [{ "op": "set", "path": "/canonicalization", "value": "sorted-json" }] },
+    { "case_id": "campaign-rejects-scientific-claim", "base_case_id": "verification-campaign-valid", "schema_id": "urn:butterflylens:schema:verification-campaign:v1.0.0", "changes": [{ "op": "set", "path": "/scientific_claim_allowed", "value": true }] },
+    { "case_id": "assignment-rejects-public-visibility", "base_case_id": "verification-assignment-valid", "schema_id": "urn:butterflylens:schema:verification-assignment:v1.0.0", "changes": [{ "op": "set", "path": "/visibility", "value": "public" }] },
+    { "case_id": "adjudication-rejects-failed-independence", "base_case_id": "verification-adjudication-valid", "schema_id": "urn:butterflylens:schema:verification-adjudication:v1.0.0", "changes": [{ "op": "set", "path": "/independence_check", "value": "failed" }] },
+    { "case_id": "event-rejects-no-without-category", "base_case_id": "verification-event-valid", "schema_id": "urn:butterflylens:schema:verification-event:v1.0.0", "changes": [{ "op": "set", "path": "/outcome", "value": "no" }] },
+    { "case_id": "consensus-rejects-model-vote", "base_case_id": "verification-consensus-valid", "schema_id": "urn:butterflylens:schema:verification-consensus:v1.0.0", "changes": [{ "op": "set", "path": "/model_vote_included", "value": true }] },
+    { "case_id": "reliability-rejects-public-ranking", "base_case_id": "reviewer-reliability-valid", "schema_id": "urn:butterflylens:schema:reviewer-reliability:v1.0.0", "changes": [{ "op": "set", "path": "/public_ranking_allowed", "value": true }] },
+    { "case_id": "impact-cell-rejects-unavailable-zero", "base_case_id": "geographic-impact-cell-valid", "schema_id": "urn:butterflylens:schema:geographic-impact-cell:v1.0.0", "changes": [{ "op": "set", "path": "/counts/ala_baseline/status", "value": "unavailable" }, { "op": "set", "path": "/counts/ala_baseline/reason", "value": "snapshot missing" }] },
+    { "case_id": "submitted-snapshot-requires-commit", "base_case_id": "geographic-impact-snapshot-valid", "schema_id": "urn:butterflylens:schema:geographic-impact-snapshot:v1.0.0", "changes": [{ "op": "set", "path": "/submitted_source_commit", "value": null }] },
+    { "case_id": "impact-query-rejects-raw-coordinates", "base_case_id": "geographic-impact-query-valid", "schema_id": "urn:butterflylens:schema:geographic-impact-query:v1.0.0", "changes": [{ "op": "set", "path": "/raw_coordinates", "value": [1, 2] }] },
+    { "case_id": "worker-identity-rejects-secret", "base_case_id": "worker-identity-valid", "schema_id": "urn:butterflylens:schema:worker-identity:v1.0.0", "changes": [{ "op": "set", "path": "/secret", "value": "not-allowed" }] },
+    { "case_id": "heartbeat-rejects-zero-sequence", "base_case_id": "worker-heartbeat-valid", "schema_id": "urn:butterflylens:schema:worker-heartbeat:v1.0.0", "changes": [{ "op": "set", "path": "/sequence", "value": 0 }] },
+    { "case_id": "active-lease-requires-acquisition", "base_case_id": "worker-lease-valid", "schema_id": "urn:butterflylens:schema:worker-lease:v1.0.0", "changes": [{ "op": "set", "path": "/acquired_at", "value": null }] },
+    { "case_id": "worker-command-rejects-shell", "base_case_id": "worker-command-valid", "schema_id": "urn:butterflylens:schema:worker-command:v1.0.0", "changes": [{ "op": "set", "path": "/shell", "value": "rm -rf" }] },
+    { "case_id": "artifact-event-requires-artifact", "base_case_id": "worker-event-valid", "schema_id": "urn:butterflylens:schema:worker-event:v1.0.0", "changes": [{ "op": "set", "path": "/kind", "value": "artifact_committed" }] }
+  ]
+}
