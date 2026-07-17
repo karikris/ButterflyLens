@@ -1,5 +1,5 @@
 schema_version: butterflylens-taxalens-migration-v1
-updated_at: "2026-07-17T14:08:54Z"
+updated_at: "2026-07-17T14:12:21Z"
 source_snapshot:
   repository: karikris/taxalens
   commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -89,6 +89,39 @@ components:
     tests:
       - Planned deterministic tool, citation, budget, unavailable-evidence, and stored-replay evaluation.
     status: planned
+butterflylens_owned_changes:
+  - ownership_id: australia-wide-community-product
+    status: planned
+    upstream_boundary: Static single-target researcher replay with no login.
+    butterflylens_responsibility: Scoped Australian projects, contributors, reviewers, moderators, evidence maturity, and public community projections.
+  - ownership_id: live-national-map
+    status: planned
+    upstream_boundary: Operational SVG Flickr-cluster map plus partial Geographic Impact analytics and newly pinned renderer dependencies.
+    butterflylens_responsibility: Live MapLibre/H3 Australian evidence map, ALA comparison, administrative and IBRA scopes, synchronized table, and non-WebGL experience.
+  - ownership_id: live-m5-pipeline
+    status: planned
+    upstream_boundary: Static replay that does not invoke BioMiner or a model runtime.
+    butterflylens_responsibility: Server-side pinned BioMiner queue, M5/MPS worker control, health, cancellation, progress, and verified artifact admission.
+  - ownership_id: all-butterfly-taxonomy
+    status: planned
+    upstream_boundary: Papilio demoleus pilot target.
+    butterflylens_responsibility: Reproducible Australian butterfly hierarchy, identifier crosswalks, synonyms, conflicts, and sourced-name governance.
+  - ownership_id: community-accounts
+    status: planned
+    upstream_boundary: Credential-free local IndexedDB review and optional static repository snapshots.
+    butterflylens_responsibility: Supabase Auth, least-privilege RLS, roles, assignments, consent, private metadata, moderation, and audit.
+  - ownership_id: private-reviewer-reliability
+    status: planned
+    upstream_boundary: Aggregate anonymous agreement and control-set metrics with unweighted human consensus.
+    butterflylens_responsibility: Private domain-specific uncertainty-aware estimates shrunk toward equal weight, with no public ranking or model-vote shortcut.
+  - ownership_id: contributor-experience
+    status: planned
+    upstream_boundary: Researcher-oriented fixture mission, evidence, local review, dashboard, and replay.
+    butterflylens_responsibility: Accessible onboarding, consent, attribution, history, correction, escalation, adjudication, moderation, takedown, and dignity safeguards.
+  - ownership_id: ala-comparison
+    status: planned
+    upstream_boundary: GBIF and optional direct-iNaturalist provider-union architecture; no ALA baseline adapter or comparison.
+    butterflylens_responsibility: Rights-aware ALA snapshots, sensitive-data controls, taxon reconciliation, conservative provider union, and explicit candidate/review/release comparison.
 notes:
   - No TaxaLens code, generated data, media, model, build, or runtime artifact has been copied.
   - Every component remains planned; no destination file exists merely because it is named here.

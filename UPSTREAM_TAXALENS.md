@@ -271,3 +271,138 @@ is not counted as a product failure or hidden as a successful run.
 
 No TaxaLens source, data, media, model, build output, or runtime artifact was
 copied into ButterflyLens during this audit.
+
+## ButterflyLens product ownership boundary
+
+The reusable contracts above are foundations, not the ButterflyLens product.
+Every capability in this section is ButterflyLens-owned and currently
+**planned** unless a later implementation commit provides direct evidence.
+Nothing in the TaxaLens audit makes ButterflyLens live, national, community
+operated, or scientifically release-ready today.
+
+| Product dimension | TaxaLens at the audited boundary | ButterflyLens-owned change |
+| --- | --- | --- |
+| Australia-wide community product | A static, credential-free, single-target *Papilio demoleus* research replay with local fixture reviews | A public Australian community-science product spanning configured jurisdictions, taxa, projects, contributors, reviewers, moderators, and evidence maturity |
+| Live national map | An operational SVG Flickr-cluster map; geographic-impact analytics and MapLibre dependencies without the Geographic Impact React map | A MapLibre/H3 evidence map for Australia with live run status, ALA baseline, Flickr candidates, review maturity, release readiness, administrative and IBRA scopes, synchronized table, and non-WebGL path |
+| Live M5 pipeline | A static replay that never launches BioMiner, downloads a model, or runs live inference | Server-side project and run control over a pinned BioMiner worker on the configured Apple M5/MPS host, including queue, health, progress, cancellation, artifact verification, and explicit unavailable states |
+| All-butterfly taxonomy | One pilot target and its committed evidence bundle | A reproducible accepted Australian butterfly taxonomy across configured Papilionoidea scope, with ALA, GBIF, and iNaturalist crosswalks, hierarchy, synonyms, conflicts, and sourced name governance |
+| Community accounts | No-login static replay; local IndexedDB events and optional repository-storage fixtures | Supabase-backed authenticated contributor, reviewer, moderator, and admin roles with least-privilege RLS, versioned consent, assignment isolation, append-only events, and auditable moderation |
+| Reviewer reliability | Aggregate anonymous agreement and control-set metrics; consensus is unweighted and has no model vote | Private, domain-specific, uncertainty-aware reliability estimates shrunk toward equal weight, used only under documented assignment/consensus policy and never exposed as a public ranking |
+| Contributor experience | Researcher-oriented mission, evidence, local review, dashboard, and stored-agent replay | Accessible onboarding, plain-language candidate versus occurrence education, consent, attribution, personal contribution history, feedback, escalation, conflict/adjudication, moderation, takedown, and contributor dignity safeguards |
+| ALA comparison | Baseline architecture covers GBIF plus a possible direct iNaturalist delta; a source may retain an ALA original-provider label, but no ALA baseline adapter or comparison is implemented | ALA snapshot ingestion, taxon reconciliation, sensitive-data handling, rights/citation lineage, conservative cross-provider deduplication, and explicit ALA-versus-Flickr candidate/review/release-ready comparison |
+
+### 1. Australia-wide community product
+
+ButterflyLens is not a reskinned TaxaLens judge replay. Its product unit is a
+community project over Australian butterfly evidence, not a static evidence
+bundle for one researcher and one target. Projects, runs, taxa, reviews,
+moderation events, map projections, quality snapshots, and exports must all be
+scoped and fingerprinted. National coverage means configured Australian scope;
+it does not mean exhaustive discovery, complete biological range, or proof of
+absence.
+
+### 2. Live national evidence map
+
+ButterflyLens owns the rendered and operated national map. TaxaLens contributes
+useful evidence-state semantics and query patterns, but its operational SVG
+cluster view and proposed geographic lens are not the deliverable. The
+ButterflyLens map must visibly distinguish:
+
+- ALA baseline occurrence evidence;
+- Flickr discovery candidates;
+- reviewed positive, non-target, uncertain, media-failure, and deferred work;
+- human-supported candidates from release-ready occurrence candidates; and
+- zero, missing, withheld, generalized, and unavailable states.
+
+MapLibre is a renderer, not a source or basemap licence. H3 is an analytical
+index, not proof that a taxon occurs or is absent. Exact values and all core
+actions must remain available through a synchronized accessible table when
+WebGL is missing or disabled.
+
+### 3. Live M5 worker pipeline
+
+TaxaLens intentionally replays committed artifacts. ButterflyLens must instead
+operate a live, server-side, pinned BioMiner boundary for authorized projects.
+The API owns queueing, idempotency, cancellation, health, progress, artifact
+admission, and state transition rules; BioMiner owns evidence production.
+Browser code must not import BioMiner internals or receive provider secrets.
+
+The intended Apple M5/MPS runtime is a deployment target, not an achieved
+benchmark. Until a later run records the exact machine, model/checkpoint,
+inputs, command, timings, artifacts, and failures, throughput and latency are
+unavailable.
+
+### 4. All-butterfly taxonomy
+
+The TaxaLens Papilio fixture cannot seed a claim of Australian taxonomic
+coverage. ButterflyLens will build its own dated taxonomy and identifier
+crosswalk, preserve incompatible concepts rather than silently merging them,
+and distinguish accepted scientific names, synonyms, English vernacular names,
+and authorized First Nations language-name assertions. Search terms remain
+retrieval hypotheses and never become taxon labels.
+
+### 5. Community accounts and authorization
+
+Local IndexedDB replay events are useful for a credential-free demonstration
+but do not provide multi-user authority. ButterflyLens owns authenticated
+accounts, roles, assignments, consent versions, row-level security, private
+reviewer metadata, server-side secrets, rate limits, moderation, removals, and
+audit export. Public readers receive only allowlisted, rights-compatible,
+non-sensitive projections.
+
+### 6. Private reviewer reliability
+
+TaxaLens aggregate agreement and control metrics remain valid campaign-level
+evidence. ButterflyLens adds a separate private reliability system only after
+contracts and tests define domain, sample size, uncertainty, shrinkage, update
+rules, and appeal paths. Reliability must not be inferred from model agreement
+or majority agreement alone. It must not become a public score, speed
+leaderboard, punitive label, or shortcut around independent review and
+adjudication.
+
+### 7. Contributor experience and dignity
+
+ButterflyLens owns the end-to-end contributor journey: understand the evidence
+question, give informed consent, submit or review within rights constraints,
+see what happened to a contribution, correct mistakes, request removal,
+challenge a decision, and obtain moderation support. Keyboard access, screen
+reader structure, text alternatives, reduced motion, contrast, mobile layout,
+non-colour state cues, and plain unavailable-language are product requirements,
+not optional polish.
+
+The interface will not reward review speed, shame disagreement, expose private
+reliability, imply that AI agrees with a reviewer, or erase uncertainty to make
+the map look complete.
+
+### 8. ALA comparison
+
+ALA integration belongs to ButterflyLens. An ALA observation is baseline
+occurrence evidence subject to provider rights, sensitivity, quality,
+uncertainty, attribution, and snapshot identity. A Flickr match is discovery
+candidate evidence. Even after human review it does not become release-ready
+until the configured occurrence gates pass.
+
+Comparisons must conservatively reconcile ALA, GBIF, and iNaturalist
+relationships, retain duplicates and unresolved groups, and avoid presenting a
+candidate-only cell as a new occurrence, range extension, knowledge gain, or
+biological absence. Provider withholding or generalized coordinates remain
+visible states and must not be reverse engineered.
+
+## Shared versus owned implementation rule
+
+The boundary for later work is:
+
+- shared schemas may preserve TaxaLens-compatible evidence semantics;
+- adapters may translate immutable TaxaLens events or quality fixtures during
+  parity testing;
+- ButterflyLens database tables, RLS, API routes, workers, accounts, map UI,
+  taxonomy, ALA ingestion, reliability policy, moderation, and agent tools are
+  owned here;
+- no shared contract may silently inherit a TaxaLens fixture metric, maturity
+  label, provider permission, deployment claim, or user authority; and
+- changes to a shared schema require explicit versioning and Python,
+  TypeScript, and JSON Schema parity.
+
+This split keeps TaxaLens independently useful while making ButterflyLens a
+substantially different national community product rather than a broad source
+copy.
