@@ -135,6 +135,15 @@ No checkpoint is committed. The required Ultralytics/YOLOE runtime is external
 and remains subject to the AGPL/commercial licensing gate documented in
 `THIRD_PARTY_LICENSES.md`.
 
+Task 2.4.4 also inspected BioMiner commit
+`c7eaa9bf3696a25a0c8229837819dccec4fb9d66` without changing the immutable
+ButterflyLens pin. Its committed GBIF fast-start final report says the
+implementation is complete while live GBIF acquisition and the durable media
+bank remain pending; no related process or copyable live artifact was present.
+The pinned routing adapter accepts GBIF rows only, whereas the currently
+admitted ButterflyLens lane contains iNaturalist rows only. ButterflyLens does
+not relabel those rows or invent routes to cross that boundary.
+
 ### 6. BioCLIP 2.5 — implemented adapter and artifact pipeline; weights not bundled
 
 BioMiner has a persistent BioCLIP worker, taxonomy text-embedding cache,

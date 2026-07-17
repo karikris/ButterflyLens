@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T20:36:03.622395Z",
+  "generated_at": "2026-07-17T20:47:49Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -224,7 +224,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:e65a25fdf01f680a7a92ef0cae28a58b3e101c8d46d9db12cea993e9fb736626",
+      "fingerprint": "sha256:21ae9a405f71f2015a8379641afef3733630f4a9ed1463f878a33d6646d085e4",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
@@ -745,6 +745,30 @@
       "source_id": "butterflylens-reference-admission-v1",
       "licence": "MIXED-SEE-SOURCES",
       "attribution": "iNaturalist photo creators and rights holders; BioMiner and ButterflyLens provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/gated/reference_yoloe_readiness.parquet",
+      "fingerprint": "sha256:f4c0dc86f1f3864a46b10b643b0bbdecf9f2f5915b97845305cfdde62c174eba",
+      "provider": "ButterflyLens derived from pinned BioMiner contracts and frozen admission evidence",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "MIXED-CC0-CC-BY-METADATA-NO-MEDIA-BYTES",
+      "attribution": "iNaturalist photo creators and rights holders retained in candidate metadata; ButterflyLens fail-closed readiness provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json",
+      "fingerprint": "sha256:e05664a1e8141f6be3cc2c2a35197facd7bc080a24a540cc8ff5cd24d162501b",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens YOLOE readiness status; no model execution or output.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

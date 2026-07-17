@@ -76,6 +76,15 @@ content identity remains attached to both source records; byte/perceptual
 duplicate resolution is a separate gate. Failed rows retain their stable media
 identity and quarantine reason but no invented checksum or dimensions.
 
+Task 2.4.4 records zero executed YOLOE routes. All 2,906 valid decodes are
+`blocked_not_executed`: the pinned router accepts GBIF rows, the current
+admitted lane contains iNaturalist rows, the audited runtime is absent, and no
+verified checkpoint is available. The four failed downloads retain their
+separate media blocker. BioMiner commit
+`c7eaa9bf3696a25a0c8229837819dccec4fb9d66` was inspected but not adopted: its
+committed report says the live GBIF support bank remains pending and no
+copyable live artifact or active build was found. No Flickr API call was made.
+
 Rebuild the query plan:
 
 ```bash
@@ -140,4 +149,18 @@ uv run python scripts/build_reference_admission.py publish \
   --manifest-output data/packs/australian_butterflies/v1/references/v1/reference_admission_manifest.json \
   --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
   --generated-at 2026-07-17T20:36:03.622395Z
+```
+
+Rebuild the fail-closed YOLOE readiness ledger without model execution:
+
+```bash
+uv run python scripts/build_reference_yoloe_readiness.py \
+  --selections data/packs/australian_butterflies/v1/references/v1/gated/reference_download_selections.parquet \
+  --observations data/packs/australian_butterflies/v1/references/v1/imported/reference_observations.parquet \
+  --media-objects data/packs/australian_butterflies/v1/references/v1/gated/reference_media_objects.parquet \
+  --admission-manifest data/packs/australian_butterflies/v1/references/v1/reference_admission_manifest.json \
+  --output data/packs/australian_butterflies/v1/references/v1/gated/reference_yoloe_readiness.parquet \
+  --manifest-output data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json \
+  --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
+  --generated-at 2026-07-17T20:47:49Z
 ```

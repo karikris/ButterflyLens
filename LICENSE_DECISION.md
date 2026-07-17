@@ -55,6 +55,12 @@ Current status: **AGPL-3.0 path selected; no Ultralytics Enterprise licence docu
 
 Before YOLOE runs, its code repository/revision, model ID/revision, checksums, licence snapshots, third-party components, corresponding-source boundary, and runtime integration must be recorded. YOLOE remains a router, never a species classifier.
 
+Task 2.4.4 records this as an executable fail-closed gate over all 2,910
+selected reference outcomes. No Torch or Ultralytics runtime is installed in
+the pinned worker, no checkpoint or model revision is available, and no
+detection or route was produced. The readiness ledger is evidence of the
+blocker, not permission to run or a substitute for model output.
+
 ## Alternatives and change control
 
 The decision may change only through a new audited, human-reviewed commit that chooses one of:

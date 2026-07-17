@@ -202,6 +202,12 @@ retained as separate source evidence. All 2,910 outcomes, including the four
 failures, remain in the media-object inventory and command report. None is
 human verified.
 
+Task 2.4.4 does not substitute a detector for the unavailable audited YOLOE
+runtime. All 2,906 decoded objects remain explicitly pending routing and the
+four failed downloads remain separately quarantined. The readiness artifact
+contains no detection, route, crop, model output, or source-image bytes and
+does not broaden any source permission.
+
 - CC0 and compatible CC BY media may enter allowed lanes with provenance and attribution.
 - CC BY-NC, CC BY-ND, CC BY-SA, and combined variants require explicit use-specific gates; no blanket compatibility is asserted.
 - All-rights-reserved, unknown, private, embargoed, culturally restricted, or removed media is blocked absent documented permission.

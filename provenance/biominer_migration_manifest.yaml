@@ -190,6 +190,26 @@ components:
       - Pinned BioMiner selection-schema validation.
       - Gate counts, licence lanes, host policy, conflict blocks, observation uniqueness, species quota, observer cap, checksums, decode status, and no-source-media-in-Git invariants.
     status: automated_gate_verified_2906_provisional_4_quarantined
+  - component_id: biominer-reference-yoloe-readiness-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/references/yoloe_routing.py and src/biominer/detection/yoloe26_detector.py
+    destination_path: scripts/build_reference_yoloe_readiness.py and data/packs/australian_butterflies/v1/references/v1/gated/reference_yoloe_readiness.parquet
+    migration_kind: artifact_contract
+    reason: Make the YOLOE routing prerequisite executable and fail closed without inventing model evidence when source, runtime, and checkpoint boundaries are unsatisfied.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Record one readiness outcome for every selected reference-media identity.
+      - Keep successful decodes pending and failed downloads separately blocked.
+      - Preserve the pinned router's GBIF-only source contract instead of relabelling iNaturalist rows.
+      - Record the absent Torch/Ultralytics runtime and absent verified checkpoint as explicit blockers.
+      - Emit no detection, route, crop, embedding, or source-image content.
+      - Inspect the newer BioMiner GBIF fast-start report without changing the immutable origin pin or copying fixture-only data.
+    tests:
+      - Byte-identical isolated readiness-ledger and pack-manifest rebuild with PyArrow 25.0.0.
+      - Full selected-identity coverage, media-state reconciliation, stable fingerprints, explicit blockers, and no-model-output invariants.
+    status: blocked_live_gbif_bank_and_audited_yoloe_runtime_pending
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
   - Candidate model and workflow contracts remain planned; the live-worker boundary plus ALA Parquet and H3 adapters are now defined.
