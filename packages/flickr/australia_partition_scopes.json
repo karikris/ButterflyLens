@@ -1,0 +1,34 @@
+{
+  "schema_version": "butterflylens-australia-partition-scopes:v1.0.0",
+  "scope_id": "asgs3_2021_australia_states_gda2020",
+  "national_bbox": [96.0, -45.0, 169.0, -8.0],
+  "bbox_order": ["minimum_longitude", "minimum_latitude", "maximum_longitude", "maximum_latitude"],
+  "source": {
+    "provider": "Australian Bureau of Statistics",
+    "dataset": "ASGS Edition 3 States and Territories 2021 GDA2020",
+    "source_url": "https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-3-july-2021-june-2026/access-and-downloads/digital-boundary-files/STE_2021_AUST_SHP_GDA2020.zip",
+    "retrieved_at": "2026-07-17T23:06:00Z",
+    "physical_sha256": "d9b7f735de6085b37414faf011f796dda3c7f768c55e9dce01f96e790f399a21",
+    "datum": "GDA2020",
+    "reference_year": 2021,
+    "licence": "CC-BY-4.0",
+    "attribution": "Australian Bureau of Statistics, Australian Statistical Geography Standard (ASGS) Edition 3"
+  },
+  "bbox_semantics": {
+    "kind": "axis_aligned_envelope_of_official_state_or_territory_geometry",
+    "polygon_membership_implied": false,
+    "partition_envelopes_may_overlap": true,
+    "photo_result_deduplication_required": true
+  },
+  "partitions": [
+    {"state_code": "1", "state_name": "New South Wales", "bbox": [140.99927238, -37.50514665, 159.10922389, -28.15687869]},
+    {"state_code": "2", "state_name": "Victoria", "bbox": [140.96186564, -39.15917568, 149.97619801, -33.98063603]},
+    {"state_code": "3", "state_name": "Queensland", "bbox": [137.99465368, -29.1792526, 153.55217701, -9.14216303]},
+    {"state_code": "4", "state_name": "South Australia", "bbox": [129.00184676, -38.06259014, 141.00296253, -25.99637818]},
+    {"state_code": "5", "state_name": "Western Australia", "bbox": [112.92112481, -35.19199474, 129.00192848, -13.68868957]},
+    {"state_code": "6", "state_name": "Tasmania", "bbox": [143.81892949, -43.74049655, 148.49867865, -39.20364886]},
+    {"state_code": "7", "state_name": "Northern Territory", "bbox": [129.00044835, -25.99860416, 137.99906061, -10.90590366]},
+    {"state_code": "8", "state_name": "Australian Capital Territory", "bbox": [148.76279591, -35.92051745, 149.39929264, -35.12440273]},
+    {"state_code": "9", "state_name": "Other Territories", "bbox": [96.81695226, -35.20085853, 167.9980387, -10.41234277]}
+  ]
+}

@@ -116,7 +116,7 @@ def build_australia_known_lane(
     plan = plan_physical_query_requests(
         definitions,
         associations,
-        fixed_parameters={"content_type": 1, "media": "photos", "safe_search": 1},
+        fixed_parameters={"content_types": 0, "media": "photos", "safe_search": 1},
     )
     tier_definition_counts = _tier_counts(definitions)
     tier_association_counts = _tier_counts(plan["logical_associations"])
@@ -247,7 +247,7 @@ def build_global_out_of_range_lane(
     plan = plan_physical_query_requests(
         definitions,
         associations,
-        fixed_parameters={"content_type": 1, "media": "photos", "safe_search": 1},
+        fixed_parameters={"content_types": 0, "media": "photos", "safe_search": 1},
     )
     lane_preimage = {
         "lane_id": GLOBAL_OUT_OF_RANGE_LANE_ID,

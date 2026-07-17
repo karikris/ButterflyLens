@@ -80,3 +80,24 @@ contradictory eligibility reasons, unsupported ranks, unauthorized First
 Nations terms, and stale range comparisons all fail closed. These are query
 eligibility decisions only; passing them does not label a photo or verify a
 taxon occurrence.
+
+## Australian geo/time partitioning
+
+Australian discovery seeds one bounding-box envelope for each of the nine ABS
+ASGS Edition 3 state/territory codes inside the official national extent. The
+envelopes are derived from the 2021 GDA2020 boundary geometry and are not
+polygons: they may overlap, include water, and do not prove state membership.
+Result records must therefore still be deduplicated and geographically
+validated downstream.
+
+Each geo partition fixes `has_geo=1`, the non-deprecated `content_types=0`
+photo filter, and exactly 250 results per page. A count checkpoint at 4,000 or
+more is never paged as complete. It bisects its inclusive upload-time interval
+without gaps; if a one-second interval still saturates, it bisects the longest
+bbox axis. Physical parameter fingerprints reject duplicate partitions.
+
+Below 4,000 results, the planner creates an exact page inventory with explicit
+page numbers and null cursors. Completion requires every expected page once,
+stable observed totals, response fingerprints, no page over 250 rows, and
+returned row counts reconciling to the count checkpoint. Planning and
+checkpoint functions make no Flickr request.

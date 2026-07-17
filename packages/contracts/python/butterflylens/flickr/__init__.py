@@ -33,6 +33,22 @@ from .query_lanes import (
     build_australia_known_lane,
     build_global_out_of_range_lane,
 )
+from .partitioning import (
+    AUSTRALIA_PARTITION_SCHEMA_VERSION,
+    FLICKR_ACCESSIBLE_RESULT_LIMIT,
+    FLICKR_GEO_RESULTS_PER_PAGE,
+    PARTITION_COMPLETION_SCHEMA_VERSION,
+    PARTITION_COUNT_CHECKPOINT_SCHEMA_VERSION,
+    PARTITION_PAGE_CHECKPOINT_SCHEMA_VERSION,
+    PartitionError,
+    checkpoint_partition_count,
+    complete_page_checkpoint,
+    plan_partition_pages,
+    seed_australia_state_partitions,
+    split_saturated_partition,
+    validate_australia_partition_scope,
+    validate_partition_completion,
+)
 
 __all__ = [
     "FLICKR_BUDGET_SCHEMA_VERSION",
@@ -60,4 +76,18 @@ __all__ = [
     "QueryLaneError",
     "build_australia_known_lane",
     "build_global_out_of_range_lane",
+    "AUSTRALIA_PARTITION_SCHEMA_VERSION",
+    "FLICKR_ACCESSIBLE_RESULT_LIMIT",
+    "FLICKR_GEO_RESULTS_PER_PAGE",
+    "PARTITION_COMPLETION_SCHEMA_VERSION",
+    "PARTITION_COUNT_CHECKPOINT_SCHEMA_VERSION",
+    "PARTITION_PAGE_CHECKPOINT_SCHEMA_VERSION",
+    "PartitionError",
+    "checkpoint_partition_count",
+    "complete_page_checkpoint",
+    "plan_partition_pages",
+    "seed_australia_state_partitions",
+    "split_saturated_partition",
+    "validate_australia_partition_scope",
+    "validate_partition_completion",
 ]
