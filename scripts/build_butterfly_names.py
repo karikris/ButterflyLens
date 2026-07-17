@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import time
 import unicodedata
 from collections import Counter, defaultdict
@@ -235,17 +236,26 @@ def finalize_query_safety(assertions: list[dict[str, Any]]) -> None:
         keys_by_name[assertion["normalized_name"]].add(assertion["butterflylens_key"])
     for assertion in assertions:
         collision = len(keys_by_name[assertion["normalized_name"]]) > 1
-        assertion["homonym_risk"] = (
-            "cross_taxon_collision" if collision else "none_detected_in_pack"
-        )
-        assertion["query_eligibility"] = {
-            "eligible": not collision,
-            "reason": (
-                "excluded_cross_taxon_collision"
-                if collision
-                else "trusted_scientific_name_unique_in_pack"
-            ),
-        }
+        if collision:
+            risk = "cross_taxon_collision"
+            eligible = False
+            reason = "excluded_cross_taxon_collision"
+        elif assertion["name_type"] == "english_vernacular":
+            lexical_tokens = re.findall(r"[A-Za-z]+", assertion["name"])
+            if len(lexical_tokens) < 2:
+                risk = "single_token_vernacular"
+                eligible = False
+                reason = "excluded_single_token_vernacular"
+            else:
+                risk = "none_detected_in_pack"
+                eligible = True
+                reason = "trusted_english_name_unique_in_pack"
+        else:
+            risk = "none_detected_in_pack"
+            eligible = True
+            reason = "trusted_scientific_name_unique_in_pack"
+        assertion["homonym_risk"] = risk
+        assertion["query_eligibility"] = {"eligible": eligible, "reason": reason}
         assertion["assertion_id"] = assertion_identifier(assertion)
 
 
@@ -363,6 +373,154 @@ def build_scientific_names(
     manifest_path.write_bytes(canonical_json(manifest))
 
 
+def common_name_identifier(common_name: dict[str, Any]) -> str:
+    identity = {
+        "name": common_name.get("nameString"),
+        "language": common_name.get("language"),
+        "country_code": common_name.get("countryCode"),
+        "locality": common_name.get("locality"),
+        "source_name": common_name.get("infoSourceName"),
+        "source_url": common_name.get("infoSourceURL"),
+        "dataset_url": common_name.get("datasetURL"),
+    }
+    return "ala-common:v1:" + sha256_bytes(canonical_json(identity))[:24]
+
+
+def vernacular_assertion(
+    taxon: dict[str, Any],
+    snapshot: dict[str, Any],
+    snapshot_sha256: str,
+    profile: dict[str, Any],
+    common_name: dict[str, Any],
+) -> dict[str, Any]:
+    name = common_name.get("nameString")
+    if not isinstance(name, str) or not name.strip():
+        raise NamePackError("ALA common-name assertion has no name")
+    if common_name.get("language") != "en":
+        raise NamePackError("build-vernacular accepts only explicit English names")
+    if common_name.get("countryCode") != "AU":
+        raise NamePackError("build-vernacular accepts only Australia-scoped names")
+    source_name = common_name.get("infoSourceName")
+    if source_name == "AFD":
+        trust_tier = "authority_vernacular"
+    elif source_name == "ALA Preferred Vernacular Names":
+        trust_tier = "provider_curated_vernacular"
+    else:
+        trust_tier = "provider_vernacular"
+    source = source_for_profile_name(
+        snapshot, snapshot_sha256, profile, common_name
+    )
+    return {
+        "schema_version": NAME_SCHEMA_VERSION,
+        "assertion_id": None,
+        "butterflylens_key": taxon["butterflylens_key"],
+        "accepted_scientific_name": taxon["accepted_scientific_name"],
+        "taxon_rank": taxon["rank"],
+        "name": name.strip(),
+        "normalized_name": normalized_name(name),
+        "name_type": "english_vernacular",
+        "language": {"code": "en", "label": "English"},
+        "region": {
+            "code": common_name["countryCode"],
+            "label": common_name.get("locality") or "Australia",
+            "scope": "assertion",
+        },
+        "source": source,
+        "trust_tier": trust_tier,
+        "query_eligibility": {"eligible": False, "reason": "pending_collision_check"},
+        "homonym_risk": "pending_collision_check",
+        "review_state": "source_assertion_unreviewed",
+        "provider_status": common_name.get("status"),
+        "nomenclatural_status": None,
+        "provider_name_id": common_name_identifier(common_name),
+        "retrieval_date": snapshot["retrieved_at"][:10],
+    }
+
+
+def build_vernacular_names(
+    taxa_path: Path,
+    profiles_path: Path,
+    assertions_path: Path,
+    output_dir: Path,
+    generated_at: str | None,
+) -> None:
+    taxa = [
+        json.loads(line)
+        for line in taxa_path.read_text(encoding="utf-8").splitlines()
+    ]
+    taxon_by_key = {taxon["butterflylens_key"]: taxon for taxon in taxa}
+    taxon_order = {
+        taxon["butterflylens_key"]: index for index, taxon in enumerate(taxa)
+    }
+    assertions = [
+        json.loads(line)
+        for line in assertions_path.read_text(encoding="utf-8").splitlines()
+    ]
+    assertions = [
+        assertion
+        for assertion in assertions
+        if assertion.get("name_type")
+        in {"accepted_scientific", "scientific_synonym"}
+    ]
+    snapshot = json.loads(profiles_path.read_text(encoding="utf-8"))
+    snapshot_sha256 = sha256_file(profiles_path)
+    for profile in snapshot["profiles"]:
+        taxon = taxon_by_key.get(profile["butterflylens_key"])
+        if taxon is None:
+            raise NamePackError("ALA profile references a taxon outside the pack")
+        for common_name in profile["profile"].get("commonNames") or []:
+            assertions.append(
+                vernacular_assertion(
+                    taxon, snapshot, snapshot_sha256, profile, common_name
+                )
+            )
+    type_order = {
+        "accepted_scientific": 0,
+        "scientific_synonym": 1,
+        "english_vernacular": 2,
+    }
+    assertions.sort(
+        key=lambda assertion: (
+            taxon_order[assertion["butterflylens_key"]],
+            type_order[assertion["name_type"]],
+            assertion["normalized_name"],
+            assertion.get("provider_name_id") or "",
+        )
+    )
+    finalize_query_safety(assertions)
+    identifiers = [assertion["assertion_id"] for assertion in assertions]
+    if len(identifiers) != len(set(identifiers)):
+        raise NamePackError("name assertion IDs are not unique")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / "name_assertions.jsonl"
+    output_path.write_bytes(
+        b"".join(canonical_json(assertion) for assertion in assertions)
+    )
+    manifest_path = output_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    type_counts = Counter(assertion["name_type"] for assertion in assertions)
+    manifest["artifacts"]["name_assertions.jsonl"] = {
+        "schema_version": NAME_SCHEMA_VERSION,
+        "physical_sha256": sha256_file(output_path),
+        "row_count": len(assertions),
+        "type_counts": dict(sorted(type_counts.items())),
+        "query_eligible_count": sum(
+            assertion["query_eligibility"]["eligible"] for assertion in assertions
+        ),
+    }
+    state = manifest["name_state"]
+    state.update(
+        {
+            "status": "partially_built",
+            "generated_at": generated_at or utc_now(),
+            "scientific_names": "built",
+            "english_vernacular_names": "built",
+            "first_nations_names": "not_built",
+        }
+    )
+    manifest_path.write_bytes(canonical_json(manifest))
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     commands = root.add_subparsers(dest="command", required=True)
@@ -377,6 +535,12 @@ def parser() -> argparse.ArgumentParser:
     scientific.add_argument("--profiles", type=Path, required=True)
     scientific.add_argument("--output-dir", type=Path, required=True)
     scientific.add_argument("--generated-at")
+    vernacular = commands.add_parser("build-vernacular")
+    vernacular.add_argument("--taxa", type=Path, required=True)
+    vernacular.add_argument("--profiles", type=Path, required=True)
+    vernacular.add_argument("--assertions", type=Path, required=True)
+    vernacular.add_argument("--output-dir", type=Path, required=True)
+    vernacular.add_argument("--generated-at")
     return root
 
 
@@ -394,6 +558,14 @@ def main() -> None:
             arguments.taxa,
             arguments.crosswalk,
             arguments.profiles,
+            arguments.output_dir,
+            arguments.generated_at,
+        )
+    elif arguments.command == "build-vernacular":
+        build_vernacular_names(
+            arguments.taxa,
+            arguments.profiles,
+            arguments.assertions,
             arguments.output_dir,
             arguments.generated_at,
         )

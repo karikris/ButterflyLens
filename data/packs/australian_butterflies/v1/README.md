@@ -66,6 +66,12 @@ python3 scripts/build_butterfly_names.py build-scientific \
   --crosswalk data/packs/australian_butterflies/v1/crosswalk.jsonl \
   --profiles data/packs/australian_butterflies/v1/sources/ala_species_profiles.json \
   --output-dir data/packs/australian_butterflies/v1
+
+python3 scripts/build_butterfly_names.py build-vernacular \
+  --taxa data/packs/australian_butterflies/v1/taxa.jsonl \
+  --profiles data/packs/australian_butterflies/v1/sources/ala_species_profiles.json \
+  --assertions data/packs/australian_butterflies/v1/name_assertions.jsonl \
+  --output-dir data/packs/australian_butterflies/v1
 ```
 
 Default tests make no provider calls. They validate the checked-in snapshot,
@@ -105,6 +111,12 @@ checksums, hierarchy, rank policy, and stable ButterflyLens keys.
 - A synonym attached by the ALA species index remains a provider-linked,
   unreviewed assertion. Cross-taxon normalized-name collisions are excluded
   from query use and no synonym changes the accepted AFD concept.
+- English vernacular assertions are limited to profile rows explicitly marked
+  `en` and `AU`. AFD and ALA Preferred Vernacular Names remain distinct trust
+  tiers and every row retains its original source URL and response hash.
+  Cross-taxon collisions and single-token vernaculars are excluded from query
+  use as a conservative homonym policy; exclusion is not a claim that a name
+  is incorrect. Query terms explain retrieval and never label returned media.
 - Source updates require a new frozen snapshot, review of the diff, and a new
   version or documented compatible revision. Live provider state never mutates
   this checked-in snapshot.

@@ -124,6 +124,46 @@ class ButterflyNamePackTests(unittest.TestCase):
             self.assertEqual(assertion["trust_tier"], "provider_linked_synonym")
             self.assertEqual(assertion["review_state"], "source_assertion_unreviewed")
 
+    def test_english_vernacular_assertions_preserve_source_and_region(self) -> None:
+        profiles = {
+            profile["butterflylens_key"]: profile
+            for profile in self.profiles["profiles"]
+        }
+        vernacular = [
+            assertion
+            for assertion in self.assertions
+            if assertion["name_type"] == "english_vernacular"
+        ]
+        expected_count = sum(
+            len(profile["profile"].get("commonNames") or [])
+            for profile in self.profiles["profiles"]
+        )
+        self.assertEqual(len(vernacular), expected_count)
+        self.assertTrue(vernacular)
+        for assertion in vernacular:
+            self.assertEqual(assertion["language"], {"code": "en", "label": "English"})
+            self.assertEqual(assertion["region"]["code"], "AU")
+            self.assertEqual(assertion["region"]["label"], "Australia")
+            self.assertIn(
+                assertion["trust_tier"],
+                {"authority_vernacular", "provider_curated_vernacular"},
+            )
+            self.assertEqual(assertion["provider_status"], "common")
+            self.assertEqual(assertion["review_state"], "source_assertion_unreviewed")
+            profile = profiles[assertion["butterflylens_key"]]
+            self.assertEqual(
+                assertion["source"]["source_response_sha256"],
+                profile["response_sha256"],
+            )
+
+    def test_no_english_name_is_relabelled_as_first_nations_language(self) -> None:
+        for assertion in self.assertions:
+            self.assertNotEqual(assertion["name_type"], "first_nations_language")
+            self.assertNotIn(
+                assertion["language"]["label"].casefold(),
+                {"aboriginal", "indigenous", "first nations"},
+            )
+
     def test_assertions_have_required_governance_fields_and_stable_ids(self) -> None:
         required = {
             "butterflylens_key",
@@ -140,7 +180,10 @@ class ButterflyNamePackTests(unittest.TestCase):
         ids = []
         for assertion in self.assertions:
             self.assertTrue(required.issubset(assertion))
-            self.assertEqual(assertion["language"]["code"], "zxx")
+            expected_language = (
+                "en" if assertion["name_type"] == "english_vernacular" else "zxx"
+            )
+            self.assertEqual(assertion["language"]["code"], expected_language)
             self.assertEqual(assertion["region"]["code"], "AU")
             self.assertEqual(
                 assertion["assertion_id"], self.builder.assertion_identifier(assertion)
@@ -159,7 +202,27 @@ class ButterflyNamePackTests(unittest.TestCase):
             self.assertEqual(
                 assertion["homonym_risk"] == "cross_taxon_collision", collision
             )
-            self.assertEqual(assertion["query_eligibility"]["eligible"], not collision)
+            if collision:
+                self.assertFalse(assertion["query_eligibility"]["eligible"])
+                self.assertEqual(
+                    assertion["query_eligibility"]["reason"],
+                    "excluded_cross_taxon_collision",
+                )
+
+    def test_single_token_vernaculars_are_not_query_eligible(self) -> None:
+        rows = [
+            assertion
+            for assertion in self.assertions
+            if assertion["homonym_risk"] == "single_token_vernacular"
+        ]
+        self.assertTrue(rows)
+        for assertion in rows:
+            self.assertEqual(assertion["name_type"], "english_vernacular")
+            self.assertFalse(assertion["query_eligibility"]["eligible"])
+            self.assertEqual(
+                assertion["query_eligibility"]["reason"],
+                "excluded_single_token_vernacular",
+            )
 
     def test_manifest_fingerprints_and_counts_name_artifacts(self) -> None:
         artifacts = self.manifest["artifacts"]
@@ -180,7 +243,7 @@ class ButterflyNamePackTests(unittest.TestCase):
         )
         self.assertEqual(self.manifest["name_state"]["scientific_names"], "built")
         self.assertEqual(
-            self.manifest["name_state"]["english_vernacular_names"], "not_built"
+            self.manifest["name_state"]["english_vernacular_names"], "built"
         )
 
 
