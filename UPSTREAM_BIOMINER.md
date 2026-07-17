@@ -179,6 +179,20 @@ Physical file SHA-256 and semantic fingerprints are distinct. ButterflyLens
 can reuse the concept, but cross-language parity must be proved before it treats
 Python and TypeScript fingerprints as interchangeable.
 
+### 8a. Parquet handoff — adapted contract; no source copied
+
+Task 2.3 adopts the artifact behavior of pinned
+`src/biominer/storage/parquet.py`: Zstandard compression, an explicit schema,
+temporary-file replacement, and bounded row groups. ButterflyLens does not
+import `biominer.*`, copy the implementation, or use the dirty upstream
+worktree. Its native PyArrow adapter adds ALA-specific provider, licence,
+sensitivity, quality, exact-crosswalk, and row-fingerprint fields and writes a
+manifest only after the Parquet checksum is available.
+
+The resulting artifact remains ButterflyLens-owned ALA baseline occurrence
+evidence. This integration does not turn ALA into a BioMiner reference source,
+does not establish human verification, and does not infer absence.
+
 ### 9. Statistical evaluation — implemented components; no audited live result
 
 BioMiner has committed modules for reviewed labels, grouped splits, leakage

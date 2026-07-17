@@ -1,5 +1,5 @@
 schema_version: butterflylens-biominer-migration-v1
-updated_at: "2026-07-17T14:50:42Z"
+updated_at: "2026-07-17T18:20:23Z"
 source_snapshot:
   repository: karikris/BioMiner
   commit: d71bceabf75748a25df39d0025e8da907f295f8c
@@ -115,7 +115,24 @@ components:
       - Cross-language valid and invalid fixtures for identity, heartbeat, fenced lease, closed commands, and append-only worker events.
       - Forbidden shell/secret command fields, stale-state invariants, and scientific-claim rejection at the wire boundary.
     status: adapted_contract_defined
+  - component_id: biominer-parquet-handoff-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/storage/parquet.py
+    destination_path: scripts/build_ala_baseline.py and data/packs/australian_butterflies/v1/ala/schemas/ala_baseline_occurrence.schema.json
+    migration_kind: artifact_contract
+    reason: Adopt the pinned immutable Parquet handoff pattern for the ButterflyLens-owned ALA baseline without importing or copying BioMiner internals.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Preserve atomic temporary-file replacement and Zstandard compression.
+      - Add a closed ButterflyLens occurrence schema, sorted stable IDs, row fingerprints, source archive identity, and manifest-last publication.
+      - Keep provider taxon labels, coordinates, quality assertions, licence, sensitivity, and unmatched crosswalk state explicit.
+    tests:
+      - Byte-identical isolated normalization rebuild with PyArrow 25.0.0.
+      - Parquet schema, checksum, row-count, uniqueness, fingerprint, rights, and sensitive-resolution invariants.
+    status: verified
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
-  - Candidate BioMiner artifact contracts remain planned; only the ButterflyLens-owned live-worker application boundary is defined.
+  - Candidate model and workflow contracts remain planned; the live-worker boundary and ALA Parquet handoff contract are now defined.
   - Every later component must pin this or a newer immutable source commit.

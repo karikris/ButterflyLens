@@ -1,0 +1,97 @@
+{
+  "schema_version": "butterflylens-dependency-licenses/v1",
+  "generated_at": "2026-07-17T18:34:32Z",
+  "lockfile": {
+    "path": "uv.lock",
+    "manager": "uv",
+    "resolution": "cross-platform lock for Python >=3.12,<3.15"
+  },
+  "direct": [
+    {
+      "name": "jsonschema",
+      "version": "4.26.0",
+      "purpose": "Draft 2020-12 contract and fixture validation",
+      "licence": "MIT",
+      "licence_url": "https://github.com/python-jsonschema/jsonschema/blob/v4.26.0/COPYING",
+      "source_url": "https://pypi.org/project/jsonschema/4.26.0/",
+      "source_distribution_sha256": "0c26707e2efad8aa1bfc5b7ce170f3fccc2e4918ff85989ba9ffa9facb2be326",
+      "universal_wheel_sha256": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+      "bundled_notice_required": true
+    },
+    {
+      "name": "pyarrow",
+      "version": "25.0.0",
+      "purpose": "Typed Arrow schemas and deterministic Zstandard Parquet artifacts",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/apache/arrow/blob/main/LICENSE.txt",
+      "notice_url": "https://github.com/apache/arrow/blob/main/NOTICE.txt",
+      "source_url": "https://pypi.org/project/pyarrow/25.0.0/",
+      "source_distribution_sha256": "d2d697008b5ec06d75952ef260c2e9a8a0f6ccfce24266c04c9c8ade927cb3b4",
+      "python_3_14_linux_wheel_sha256": "447df764beb07c544f0178a5f6b70ef44b9ecf382b3cdfad4c2d7867353c3887",
+      "bundled_notice_required": true
+    }
+  ],
+  "transitive": [
+    {
+      "name": "attrs",
+      "version": "26.1.0",
+      "required_by": ["jsonschema", "referencing"],
+      "licence": "MIT",
+      "source_url": "https://pypi.org/project/attrs/26.1.0/",
+      "source_distribution_sha256": "d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32",
+      "universal_wheel_sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1",
+      "required_by": ["jsonschema"],
+      "licence": "MIT",
+      "source_url": "https://pypi.org/project/jsonschema-specifications/2025.9.1/",
+      "source_distribution_sha256": "b540987f239e745613c7a9176f3edb72b832a4ac465cf02712288397832b5e8d",
+      "universal_wheel_sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0",
+      "required_by": ["jsonschema", "jsonschema-specifications"],
+      "licence": "MIT",
+      "source_url": "https://pypi.org/project/referencing/0.37.0/",
+      "source_distribution_sha256": "44aefc3142c5b842538163acb373e24cce6632bd54bdb01b21ad5863489f50d8",
+      "universal_wheel_sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.6.3",
+      "required_by": ["jsonschema", "referencing"],
+      "licence": "MIT",
+      "source_url": "https://pypi.org/project/rpds-py/2026.6.3/",
+      "source_distribution_sha256": "1cebd1337c242e4ec2293e541f712b2da849b29f48f0c293684b71c0632625d4",
+      "python_3_14_linux_wheel_sha256": "dc319e5a1de4b6913aac94bf6a2f9e847371e0a140a43dd4991db1a09bc2d504"
+    },
+    {
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "required_by": ["referencing on Python <3.13"],
+      "licence": "PSF-2.0",
+      "source_url": "https://pypi.org/project/typing-extensions/4.16.0/",
+      "source_distribution_sha256": "dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5",
+      "universal_wheel_sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "environment_marker": "python_full_version < '3.13'"
+    }
+  ],
+  "verification": {
+    "source": "official PyPI release metadata retrieved 2026-07-17",
+    "locked_direct_versions": [
+      "jsonschema==4.26.0",
+      "pyarrow==25.0.0"
+    ],
+    "locked_transitive_versions": [
+      "attrs==26.1.0",
+      "jsonschema-specifications==2025.9.1",
+      "referencing==0.37.0",
+      "rpds-py==2026.6.3",
+      "typing-extensions==4.16.0 (conditional)"
+    ],
+    "unknown_or_unreviewed": []
+  }
+}

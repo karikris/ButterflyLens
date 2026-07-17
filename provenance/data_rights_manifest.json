@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T17:49:34Z",
+  "generated_at": "2026-07-17T18:20:23Z",
   "sources": [
     {
       "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
@@ -123,6 +123,18 @@
       "terms_url": "https://www.ala.org.au/terms-of-use/",
       "attribution": "Atlas of Living Australia Spatial Service; Department of Climate Change, Energy, the Environment and Water; Source: Australian Bureau of Statistics.",
       "scope_note": "OpenAPI contract and factual layer metadata plus ALA-indexed contextual values. No boundary geometry is copied. LGA values are Mesh Block approximations for statistical use, not official legal boundaries."
+    },
+    {
+      "source_id": "butterflylens-ala-normalization-v1",
+      "provider": "ButterflyLens derived from the frozen ALA public occurrence snapshot",
+      "dataset": "Normalized ALA baseline occurrence evidence",
+      "source_url": "data/packs/australian_butterflies/v1/ala/ala_normalization_manifest.json",
+      "retrieved_at": "2026-07-17T18:15:26Z",
+      "licence": "MIXED-CC0-PDM-CC-BY",
+      "licence_url": "data/packs/australian_butterflies/v1/ala/ala_attribution.json",
+      "terms_url": "https://www.ala.org.au/terms-of-use/",
+      "attribution": "Atlas of Living Australia and every contributing provider/resource in the frozen citation receipt; ButterflyLens normalization schema and provenance.",
+      "scope_note": "Deterministic typed normalization of all 236,897 selected source rows. Provider taxon, quality, licence, sensitivity, and contextual-geography assertions remain explicit; exact crosswalk matches are not human verification and unmatched values are retained."
     }
   ],
   "artifacts": [
@@ -385,6 +397,42 @@
       "source_id": "ala-spatial-contracts-20260717",
       "licence": "CC-BY-4.0",
       "attribution": "Atlas of Living Australia Spatial Service; DCCEEW; Source: Australian Bureau of Statistics.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/ala_baseline_occurrences.parquet",
+      "fingerprint": "sha256:5f2d64e2993cedd8409fedbb3bc9485cef6e8d511005003332375bd134128b81",
+      "provider": "ButterflyLens derived from Atlas of Living Australia and identified contributing resources",
+      "source_id": "butterflylens-ala-normalization-v1",
+      "licence": "MIXED-CC0-PDM-CC-BY",
+      "attribution": "Atlas of Living Australia and every contributing provider/resource in the frozen citation and snapshot receipts.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/ala_normalization_manifest.json",
+      "fingerprint": "sha256:a04d41d45751a8c5ca19bf583f9d5fd3ffe8ec8b74791e36eb2b49ba53e8e7da",
+      "provider": "ButterflyLens derived from the frozen ALA public occurrence snapshot",
+      "source_id": "butterflylens-ala-normalization-v1",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "Atlas of Living Australia, its contributing providers/resources, and ButterflyLens normalization provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/schemas/ala_baseline_occurrence.schema.json",
+      "fingerprint": "sha256:ce10ecc082b5b1d16cfd58da84e00b19cb5ff65068ca4e1ab84af4d0ebca7f2f",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-ala-normalization-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens normalized ALA occurrence schema.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

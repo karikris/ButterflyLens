@@ -45,7 +45,7 @@ Model weights and source code are separately fingerprinted licence subjects. A p
 | `@supabase/supabase-js` | Browser/server client | MIT | [Official client repository](https://github.com/supabase/supabase-js). Pin package and lockfile. Never expose secret/service-role keys. |
 | DuckDB | Local analytics and deterministic artifact queries | MIT | [DuckDB repository](https://github.com/duckdb/duckdb). Preserve notice. Audit separately bundled extensions before enabling them. |
 | Polars | Dataframe and Parquet processing | MIT | [Polars repository](https://github.com/pola-rs/polars). Preserve notice and audit optional dependencies selected by extras. |
-| Apache Arrow / PyArrow | Parquet and Arrow interoperability | Apache-2.0 | [Apache Arrow repository](https://github.com/apache/arrow/). Preserve licence and NOTICE. |
+| Apache Arrow / PyArrow 25.0.0 | Locked Parquet and Arrow interoperability | Apache-2.0 | [Apache Arrow repository](https://github.com/apache/arrow/). Preserve licence and NOTICE. Exact source/wheel hashes and the Python 3.14 compatibility receipt are in `uv.lock` and `provenance/dependency_licenses.json`. |
 | H3 | Hierarchical spatial cells | Apache-2.0 | [H3 repository](https://github.com/uber/h3). Preserve licence and `NOTICE`; audit each language binding and version. |
 | MapLibre GL JS | Public map renderer | BSD-3-Clause with bundled third-party notices | [MapLibre licence file](https://github.com/maplibre/maplibre-gl-js/blob/main/LICENSE.txt). Reproduce source/binary notices and non-endorsement conditions. No external basemap or tile provider is selected by this software choice. |
 
@@ -55,6 +55,7 @@ The initial public map should render ButterflyLens-owned evidence layers and sep
 
 | Component | Candidate role | Licence | Evidence and obligation |
 | --- | --- | --- | --- |
+| jsonschema 4.26.0 | Draft 2020-12 Python contract and fixture validation | MIT | [jsonschema release](https://github.com/python-jsonschema/jsonschema/tree/v4.26.0). Preserve the licence notice. Exact direct and transitive versions, licences, and distribution hashes are recorded in `uv.lock` and `provenance/dependency_licenses.json`. |
 | React / React DOM | Public application UI | MIT | [React licence](https://github.com/facebook/react/blob/main/LICENSE). Preserve notice. |
 | React Aria Components | Accessible interaction primitives | Apache-2.0 | [React Spectrum repository](https://github.com/adobe/react-spectrum). Preserve licence and `NOTICE`. |
 | Vite and official React plugin | Build system | MIT | [Vite repository](https://github.com/vitejs/vite). Generate and publish the production dependency licence report. |
@@ -78,4 +79,3 @@ The software-licence verifier must fail unless all applicable conditions are tru
 7. production builds emit a third-party licence file;
 8. no unreviewed basemap, tiles, glyphs, sprites, model, browser binary, extension, or hosted service is introduced;
 9. data and media rights pass the independent `DATA_RIGHTS.md` gate.
-

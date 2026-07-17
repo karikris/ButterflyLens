@@ -12,7 +12,9 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import os
+import re
 import time
 import urllib.error
 import urllib.parse
@@ -27,6 +29,8 @@ from typing import Any, Iterable
 
 SNAPSHOT_SCHEMA_VERSION = "butterflylens-ala-occurrence-snapshot/v1"
 ATTRIBUTION_SCHEMA_VERSION = "butterflylens-ala-attribution/v1"
+NORMALIZED_SCHEMA_VERSION = "butterflylens-ala-normalized-occurrence/v1"
+NORMALIZATION_MANIFEST_SCHEMA_VERSION = "butterflylens-ala-normalization-manifest/v1"
 ALA_PROVIDER = "Atlas of Living Australia"
 ALA_ROOT_NAME = "PAPILIONOIDEA"
 ALA_ROOT_TAXON_ID = (
@@ -103,6 +107,53 @@ LICENCE_FILTER = "license:(" + " OR ".join(
     f'"{licence}"' for licence in ALLOWED_PUBLIC_LICENCES
 ) + ")"
 FILTER_QUERIES = ("country:Australia", LICENCE_FILTER)
+NORMALIZED_FIELD_SPECS = (
+    ("source_snapshot_id", "string", False, "Frozen ALA snapshot identifier."),
+    ("source_snapshot_fingerprint", "string", False, "Semantic fingerprint of the source snapshot policy and archive."),
+    ("source_archive_sha256", "string", False, "Physical SHA-256 of the frozen provider archive."),
+    ("source_row_number", "int32", False, "One-based row position in the provider occurrence CSV."),
+    ("ala_record_id", "string", False, "ALA stable record UUID from requested field id."),
+    ("source_occurrence_id", "string", True, "Provider occurrenceID preserved without reinterpretation."),
+    ("normalized_occurrence_fingerprint", "string", False, "SHA-256 of the normalized semantic row before this field is added."),
+    ("butterflylens_taxon_key", "string", True, "Stable pack key only for an exact ALA taxonConceptID crosswalk match."),
+    ("taxon_match_state", "string", False, "Exact-crosswalk or unmatched-provider-assertion state."),
+    ("provider_taxon_concept_id", "string", True, "ALA-processed taxon concept assertion."),
+    ("provider_names_and_lsid", "string", True, "ALA combined name/identifier display field."),
+    ("provider_scientific_name", "string", True, "ALA-processed scientific-name assertion."),
+    ("provider_taxon_rank", "string", True, "ALA-processed taxon-rank assertion."),
+    ("provider_species_name", "string", True, "ALA-processed species-name assertion."),
+    ("provider_species_id", "string", True, "ALA-processed species identifier."),
+    ("provider_subspecies_name", "string", True, "ALA-processed subspecies-name assertion."),
+    ("provider_subspecies_id", "string", True, "ALA-processed subspecies identifier."),
+    ("data_provider_name", "string", True, "ALA data-provider name."),
+    ("data_provider_uid", "string", True, "ALA data-provider identifier."),
+    ("data_resource_name", "string", True, "Contributing data-resource name."),
+    ("data_resource_uid", "string", False, "Contributing ALA data-resource identifier."),
+    ("decimal_latitude", "float64", True, "Public ALA-processed WGS84 latitude."),
+    ("decimal_longitude", "float64", True, "Public ALA-processed WGS84 longitude."),
+    ("coordinate_uncertainty_meters", "float64", True, "Provider coordinate uncertainty in metres."),
+    ("has_coordinates", "bool", False, "Both processed coordinate values are present."),
+    ("coordinate_in_wgs84_range", "bool", False, "Coordinates are finite and within WGS84 latitude/longitude ranges."),
+    ("spatially_valid", "bool", True, "ALA spatiallyValid assertion; null only when not supplied."),
+    ("sensitive_status", "string", False, "ALA sensitive/generalisation state or not_supplied."),
+    ("coordinates_publicly_generalised", "bool", False, "ALA marks coordinates generalised or alreadyGeneralised."),
+    ("spatial_aggregation_eligibility", "string", False, "Explicit exclusion, coarse-only, or all-configured-resolution state."),
+    ("event_date", "string", True, "ALA-processed event date preserved as supplied by the download."),
+    ("event_year", "int32", True, "Leading valid four-digit event year when parseable."),
+    ("temporal_evidence_band", "string", False, "Declared temporal band; historical is an analytical convention, not a provider type."),
+    ("basis_of_record", "string", True, "ALA-processed basis of record."),
+    ("raw_basis_of_record", "string", True, "Publisher-supplied basis of record retained by ALA."),
+    ("evidence_category", "string", False, "Deterministic category distinguishing observations, machine evidence, material, specimens, fossils, and unspecified occurrences."),
+    ("licence", "string", False, "ALA-processed per-record licence from the public allowlist."),
+    ("rights", "string", True, "Provider rights text retained without reinterpretation."),
+    ("quality_assertions", "list<string>", False, "Ordered ALA quality-assertion codes."),
+    ("quality_assertion_count", "int32", False, "Number of retained quality assertions."),
+    ("country", "string", True, "ALA-processed country."),
+    ("state_territory", "string", True, "ALA-processed state or territory."),
+    ("ibra_region", "string", True, "ALA contextual IBRA v7 region assertion (cl11185)."),
+    ("lga_name", "string", True, "ALA contextual LGA 2023 statistical approximation (cl11170)."),
+    ("source_reference", "string", True, "Provider source reference URL or identifier."),
+)
 
 
 class AlaBaselineError(RuntimeError):
@@ -455,6 +506,455 @@ def inspect_archive(path: Path) -> dict[str, Any]:
     }
 
 
+def optional_text(value: str | None) -> str | None:
+    if value is None:
+        return None
+    cleaned = value.strip()
+    return cleaned or None
+
+
+def optional_float(value: str | None) -> float | None:
+    cleaned = optional_text(value)
+    if cleaned is None:
+        return None
+    try:
+        parsed = float(cleaned)
+    except ValueError:
+        return None
+    return parsed if math.isfinite(parsed) else None
+
+
+def optional_bool(value: str | None) -> bool | None:
+    cleaned = optional_text(value)
+    if cleaned is None:
+        return None
+    normalized = cleaned.casefold()
+    if normalized == "true":
+        return True
+    if normalized == "false":
+        return False
+    raise AlaBaselineError(f"unexpected boolean value {cleaned!r}")
+
+
+def assertion_codes(value: str | None) -> list[str]:
+    cleaned = optional_text(value)
+    if cleaned is None:
+        return []
+    values = [item.strip() for item in cleaned.split("|") if item.strip()]
+    if len(values) != len(set(values)):
+        raise AlaBaselineError("ALA quality assertion list contains duplicates")
+    return values
+
+
+def parsed_event_year(value: str | None) -> int | None:
+    cleaned = optional_text(value)
+    if cleaned is None:
+        return None
+    match = re.match(r"^(\d{4})(?:-|$)", cleaned)
+    return int(match.group(1)) if match else None
+
+
+def temporal_evidence_band(year: int | None, snapshot_year: int) -> str:
+    if year is None:
+        return "undated_or_unparseable"
+    if year < 1600 or year > snapshot_year:
+        return "outside_declared_valid_year_range"
+    if year < 1900:
+        return "pre_1900_historical"
+    if year < 1950:
+        return "1900_1949_historical"
+    if year < 2000:
+        return "1950_1999"
+    return "2000_snapshot_year"
+
+
+def evidence_category(basis: str | None) -> str:
+    return {
+        "HUMAN_OBSERVATION": "human_observation",
+        "OBSERVATION": "unspecified_observation",
+        "MACHINE_OBSERVATION": "machine_observation",
+        "MATERIAL_SAMPLE": "material_sample",
+        "PRESERVED_SPECIMEN": "preserved_specimen",
+        "FOSSIL_SPECIMEN": "fossil_specimen",
+        "OCCURRENCE": "unspecified_occurrence",
+    }.get(basis or "", "other_or_not_supplied")
+
+
+def spatial_eligibility(
+    *,
+    has_coordinates: bool,
+    coordinate_in_range: bool,
+    spatially_valid: bool | None,
+    publicly_generalised: bool,
+) -> str:
+    if not has_coordinates:
+        return "excluded_missing_coordinates"
+    if not coordinate_in_range:
+        return "excluded_invalid_coordinates"
+    if spatially_valid is False:
+        return "excluded_spatially_suspect"
+    if spatially_valid is None:
+        return "excluded_spatial_validity_not_supplied"
+    if publicly_generalised:
+        return "eligible_generalised_coarse_only"
+    return "eligible_all_configured_resolutions"
+
+
+def provider_rows(path: Path) -> Iterable[tuple[int, dict[str, str]]]:
+    import io
+
+    with zipfile.ZipFile(path) as archive:
+        members = safe_zip_members(archive)
+        data_member = record_csv_member(members)
+        heading_members = [
+            member for member in members if member.filename.lower().endswith("headings.csv")
+        ]
+        if len(heading_members) != 1:
+            raise AlaBaselineError("ALA archive must contain exactly one headings.csv")
+        with archive.open(heading_members[0]) as binary:
+            heading_reader = csv.DictReader(
+                io.TextIOWrapper(binary, encoding="utf-8-sig", newline="")
+            )
+            heading_map = {
+                row["Column name"]: row["Requested field"]
+                for row in heading_reader
+                if row.get("Column name") and row.get("Requested field")
+            }
+        with archive.open(data_member) as binary:
+            reader = csv.DictReader(
+                io.TextIOWrapper(binary, encoding="utf-8-sig", newline="")
+            )
+            if reader.fieldnames is None:
+                raise AlaBaselineError("ALA occurrence CSV has no header")
+            for row_number, provider_row in enumerate(reader, start=1):
+                yield row_number, {
+                    heading_map.get(name, name): value
+                    for name, value in provider_row.items()
+                }
+
+
+def exact_taxon_crosswalk(path: Path) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        row = json.loads(line)
+        identifier = row.get("ala_taxon_id")
+        key = row.get("butterflylens_key")
+        if not identifier:
+            continue
+        if not isinstance(key, str) or not key:
+            raise AlaBaselineError("crosswalk row with ALA ID has no ButterflyLens key")
+        if identifier in result:
+            raise AlaBaselineError(f"duplicate ALA taxon ID in crosswalk: {identifier}")
+        result[identifier] = key
+    if not result:
+        raise AlaBaselineError("crosswalk contains no exact ALA identifiers")
+    return result
+
+
+def normalized_row(
+    source: dict[str, str],
+    *,
+    row_number: int,
+    receipt: dict[str, Any],
+    taxon_crosswalk: dict[str, str],
+) -> dict[str, Any]:
+    record_id = optional_text(source.get("id"))
+    if record_id is None:
+        raise AlaBaselineError(f"ALA source row {row_number} has no record ID")
+    resource_uid = optional_text(source.get("dataResourceUid"))
+    if resource_uid is None:
+        raise AlaBaselineError(f"ALA source row {row_number} has no data resource ID")
+    licence = optional_text(source.get("license"))
+    if licence not in ALLOWED_PUBLIC_LICENCES:
+        raise AlaBaselineError(
+            f"ALA source row {row_number} has non-allowlisted licence {licence!r}"
+        )
+    latitude_raw = optional_text(source.get("decimalLatitude"))
+    longitude_raw = optional_text(source.get("decimalLongitude"))
+    latitude = optional_float(latitude_raw)
+    longitude = optional_float(longitude_raw)
+    has_coordinates = latitude_raw is not None and longitude_raw is not None
+    coordinate_in_range = (
+        latitude is not None
+        and longitude is not None
+        and -90 <= latitude <= 90
+        and -180 <= longitude <= 180
+    )
+    spatially_valid = optional_bool(source.get("spatiallyValid"))
+    sensitive_status = optional_text(source.get("sensitive")) or "not_supplied"
+    if sensitive_status not in {"not_supplied", "generalised", "alreadyGeneralised"}:
+        raise AlaBaselineError(
+            f"ALA source row {row_number} has unexpected sensitive state {sensitive_status!r}"
+        )
+    publicly_generalised = sensitive_status in {"generalised", "alreadyGeneralised"}
+    provider_taxon_id = optional_text(source.get("taxonConceptID"))
+    butterflylens_key = taxon_crosswalk.get(provider_taxon_id or "")
+    event_date = optional_text(source.get("eventDate"))
+    event_year = parsed_event_year(event_date)
+    snapshot_year = int(receipt["retrieved_at"][:4])
+    basis = optional_text(source.get("basisOfRecord"))
+    assertions = assertion_codes(source.get("assertions"))
+    row = {
+        "source_snapshot_id": receipt["snapshot_id"],
+        "source_snapshot_fingerprint": receipt["snapshot_fingerprint"],
+        "source_archive_sha256": receipt["download"]["archive_sha256"],
+        "source_row_number": row_number,
+        "ala_record_id": record_id,
+        "source_occurrence_id": optional_text(source.get("occurrenceID")),
+        "butterflylens_taxon_key": butterflylens_key,
+        "taxon_match_state": (
+            "exact_ala_taxon_concept_crosswalk"
+            if butterflylens_key
+            else "unmatched_provider_taxon_assertion"
+        ),
+        "provider_taxon_concept_id": provider_taxon_id,
+        "provider_names_and_lsid": optional_text(source.get("names_and_lsid")),
+        "provider_scientific_name": optional_text(source.get("scientificName")),
+        "provider_taxon_rank": optional_text(source.get("taxonRank")),
+        "provider_species_name": optional_text(source.get("species")),
+        "provider_species_id": optional_text(source.get("speciesID")),
+        "provider_subspecies_name": optional_text(source.get("subspecies")),
+        "provider_subspecies_id": optional_text(source.get("subspeciesID")),
+        "data_provider_name": optional_text(source.get("dataProviderName")),
+        "data_provider_uid": optional_text(source.get("dataProviderUid")),
+        "data_resource_name": optional_text(source.get("dataResourceName")),
+        "data_resource_uid": resource_uid,
+        "decimal_latitude": latitude,
+        "decimal_longitude": longitude,
+        "coordinate_uncertainty_meters": optional_float(
+            source.get("coordinateUncertaintyInMeters")
+        ),
+        "has_coordinates": has_coordinates,
+        "coordinate_in_wgs84_range": coordinate_in_range,
+        "spatially_valid": spatially_valid,
+        "sensitive_status": sensitive_status,
+        "coordinates_publicly_generalised": publicly_generalised,
+        "spatial_aggregation_eligibility": spatial_eligibility(
+            has_coordinates=has_coordinates,
+            coordinate_in_range=coordinate_in_range,
+            spatially_valid=spatially_valid,
+            publicly_generalised=publicly_generalised,
+        ),
+        "event_date": event_date,
+        "event_year": event_year,
+        "temporal_evidence_band": temporal_evidence_band(event_year, snapshot_year),
+        "basis_of_record": basis,
+        "raw_basis_of_record": optional_text(source.get("raw_basisOfRecord")),
+        "evidence_category": evidence_category(basis),
+        "licence": licence,
+        "rights": optional_text(source.get("rights")),
+        "quality_assertions": assertions,
+        "quality_assertion_count": len(assertions),
+        "country": optional_text(source.get("country")),
+        "state_territory": optional_text(source.get("stateProvince")),
+        "ibra_region": optional_text(source.get(IBRA_FIELD)),
+        "lga_name": optional_text(source.get(LGA_FIELD)),
+        "source_reference": optional_text(source.get("references")),
+    }
+    row["normalized_occurrence_fingerprint"] = sha256_bytes(canonical_json(row))
+    return row
+
+
+def arrow_type(pa: Any, type_name: str) -> Any:
+    return {
+        "string": pa.string(),
+        "int32": pa.int32(),
+        "float64": pa.float64(),
+        "bool": pa.bool_(),
+        "list<string>": pa.list_(pa.string()),
+    }[type_name]
+
+
+def normalized_arrow_schema(pa: Any, receipt: dict[str, Any]) -> Any:
+    metadata = {
+        b"schema_version": NORMALIZED_SCHEMA_VERSION.encode(),
+        b"snapshot_id": receipt["snapshot_id"].encode(),
+        b"snapshot_fingerprint": receipt["snapshot_fingerprint"].encode(),
+        b"source_archive_sha256": receipt["download"]["archive_sha256"].encode(),
+        b"evidence_label": b"ALA baseline occurrence evidence",
+    }
+    return pa.schema(
+        [
+            pa.field(name, arrow_type(pa, type_name), nullable=nullable)
+            for name, type_name, nullable, _ in NORMALIZED_FIELD_SPECS
+        ],
+        metadata=metadata,
+    )
+
+
+def normalized_schema_contract() -> dict[str, Any]:
+    return {
+        "schema_version": "butterflylens-parquet-schema/v1",
+        "artifact_schema_version": NORMALIZED_SCHEMA_VERSION,
+        "format": "parquet",
+        "closed": True,
+        "fields": [
+            {
+                "name": name,
+                "type": type_name,
+                "nullable": nullable,
+                "description": description,
+            }
+            for name, type_name, nullable, description in NORMALIZED_FIELD_SPECS
+        ],
+        "invariants": [
+            "ala_record_id is unique and rows are sorted by ala_record_id",
+            "butterflylens_taxon_key is populated only for an exact ALA taxonConceptID crosswalk match",
+            "licence is a member of the frozen public allowlist",
+            "provider taxon fields remain provider assertions, not human verification",
+            "generalised sensitive coordinates are never promoted beyond coarse-only spatial eligibility",
+            "quality_assertions retains ordered ALA assertion codes",
+        ],
+    }
+
+
+def normalize_occurrences(args: argparse.Namespace) -> None:
+    try:
+        import pyarrow as pa
+        import pyarrow.compute as pc
+        import pyarrow.parquet as pq
+    except ImportError as error:
+        raise AlaBaselineError(
+            "normalization requires the locked PyArrow dependency; run uv sync --frozen"
+        ) from error
+
+    receipt = json.loads(args.receipt.read_text(encoding="utf-8"))
+    if receipt.get("schema_version") != SNAPSHOT_SCHEMA_VERSION:
+        raise AlaBaselineError("unexpected ALA snapshot receipt schema")
+    if sha256_file(args.archive) != receipt["download"]["archive_sha256"]:
+        raise AlaBaselineError("ALA source archive checksum does not match receipt")
+    taxon_crosswalk = exact_taxon_crosswalk(args.crosswalk)
+    columns: dict[str, list[Any]] = {
+        name: [] for name, _, _, _ in NORMALIZED_FIELD_SPECS
+    }
+    seen_record_ids: set[str] = set()
+    counters: dict[str, Counter[str]] = {
+        "taxon_match_state": Counter(),
+        "spatial_aggregation_eligibility": Counter(),
+        "evidence_category": Counter(),
+        "temporal_evidence_band": Counter(),
+        "licence": Counter(),
+        "sensitive_status": Counter(),
+    }
+    for row_number, source in provider_rows(args.archive):
+        row = normalized_row(
+            source,
+            row_number=row_number,
+            receipt=receipt,
+            taxon_crosswalk=taxon_crosswalk,
+        )
+        record_id = row["ala_record_id"]
+        if record_id in seen_record_ids:
+            raise AlaBaselineError(f"duplicate ALA record ID {record_id!r}")
+        seen_record_ids.add(record_id)
+        for name in columns:
+            columns[name].append(row[name])
+        for name, counter in counters.items():
+            counter[row[name]] += 1
+    expected_rows = receipt["download"]["row_count"]
+    if len(seen_record_ids) != expected_rows:
+        raise AlaBaselineError(
+            f"normalized row count {len(seen_record_ids)} != snapshot rows {expected_rows}"
+        )
+    schema = normalized_arrow_schema(pa, receipt)
+    table = pa.Table.from_pydict(columns, schema=schema)
+    order = pc.sort_indices(table, sort_keys=[("ala_record_id", "ascending")])
+    table = pc.take(table, order)
+    ordered_ids = table.column("ala_record_id").to_pylist()
+    if ordered_ids != sorted(ordered_ids) or len(ordered_ids) != len(set(ordered_ids)):
+        raise AlaBaselineError("normalized ALA record IDs are not uniquely sorted")
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = args.output.with_suffix(args.output.suffix + ".tmp")
+    pq.write_table(
+        table,
+        temporary,
+        compression="zstd",
+        compression_level=9,
+        use_dictionary=True,
+        write_statistics=True,
+        row_group_size=65_536,
+        data_page_version="2.0",
+        version="2.6",
+        use_compliant_nested_type=True,
+    )
+    os.replace(temporary, args.output)
+    schema_payload = normalized_schema_contract()
+    write_bytes(args.schema_output, canonical_json(schema_payload))
+    logical_digest = hashlib.sha256()
+    for fingerprint in table.column("normalized_occurrence_fingerprint").to_pylist():
+        logical_digest.update(fingerprint.encode())
+        logical_digest.update(b"\n")
+    parquet_file = pq.ParquetFile(args.output)
+    manifest = {
+        "schema_version": NORMALIZATION_MANIFEST_SCHEMA_VERSION,
+        "artifact_schema_version": NORMALIZED_SCHEMA_VERSION,
+        "generated_at": args.generated_at or utc_now(),
+        "snapshot_id": receipt["snapshot_id"],
+        "snapshot_fingerprint": receipt["snapshot_fingerprint"],
+        "input": {
+            "archive_path": receipt["download"]["archive_path"],
+            "archive_sha256": sha256_file(args.archive),
+            "receipt_path": "ala_snapshot_receipt.json",
+            "receipt_sha256": sha256_file(args.receipt),
+            "crosswalk_path": receipt["taxon_scope"]["input_crosswalk_path"],
+            "crosswalk_sha256": sha256_file(args.crosswalk),
+        },
+        "artifact": {
+            "path": args.output.name,
+            "physical_sha256": sha256_file(args.output),
+            "logical_row_fingerprint_sha256": logical_digest.hexdigest(),
+            "row_count": table.num_rows,
+            "column_count": table.num_columns,
+            "row_group_count": parquet_file.metadata.num_row_groups,
+            "physical_bytes": args.output.stat().st_size,
+            "compression": "zstd",
+            "row_group_size": 65_536,
+            "sort_order": ["ala_record_id:ascending"],
+        },
+        "schema": {
+            "path": f"schemas/{args.schema_output.name}",
+            "physical_sha256": sha256_file(args.schema_output),
+            "field_count": len(NORMALIZED_FIELD_SPECS),
+        },
+        "counts": {
+            name: dict(sorted(counter.items())) for name, counter in counters.items()
+        },
+        "policies": {
+            "taxon_match": "exact taxonConceptID only; unmatched provider assertions remain explicit",
+            "historical_bands": [
+                "pre_1900_historical",
+                "1900_1949_historical",
+                "1950_1999",
+                "2000_snapshot_year",
+                "undated_or_unparseable",
+                "outside_declared_valid_year_range",
+            ],
+            "sensitive_coordinates": "ALA-public generalised values are coarse-only; no reconstruction",
+            "spatial_eligibility": "requires finite in-range coordinates and ALA spatiallyValid=true",
+            "provider_assertions": "taxon labels, quality flags, and contextual geography are not human verification",
+            "absence_inference_permitted": False,
+        },
+        "build": {
+            "python": ".".join(map(str, __import__("sys").version_info[:3])),
+            "pyarrow": pa.__version__,
+        },
+    }
+    write_bytes(args.manifest, canonical_json(manifest))
+    print(
+        json.dumps(
+            {
+                "rows": table.num_rows,
+                "columns": table.num_columns,
+                "row_groups": parquet_file.metadata.num_row_groups,
+                "parquet_bytes": args.output.stat().st_size,
+                "parquet_sha256": sha256_file(args.output),
+                "manifest_sha256": sha256_file(args.manifest),
+            },
+            sort_keys=True,
+        )
+    )
+
+
 def acquire_contracts(source_dir: Path, retrieved_at: str) -> dict[str, Any]:
     definitions = (
         ("occurrence_openapi", ALA_OPENAPI_URL, "ala_occurrence_openapi.json", "application/json"),
@@ -727,6 +1227,17 @@ def parser() -> argparse.ArgumentParser:
     acquire.add_argument("--poll-interval", type=float, default=10.0)
     acquire.add_argument("--timeout", type=float, default=3600.0)
     acquire.set_defaults(handler=freeze_snapshot)
+    normalize = commands.add_parser(
+        "normalize", help="build deterministic normalized occurrence Parquet"
+    )
+    normalize.add_argument("--archive", type=Path, required=True)
+    normalize.add_argument("--receipt", type=Path, required=True)
+    normalize.add_argument("--crosswalk", type=Path, required=True)
+    normalize.add_argument("--output", type=Path, required=True)
+    normalize.add_argument("--schema-output", type=Path, required=True)
+    normalize.add_argument("--manifest", type=Path, required=True)
+    normalize.add_argument("--generated-at")
+    normalize.set_defaults(handler=normalize_occurrences)
     return value
 
 
