@@ -3,21 +3,27 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime
 import hashlib
+import hmac
 import math
+import re
 from typing import Literal, Mapping, NoReturn, TypedDict
 
 import rfc8785
 
 
 CONTENT_CHECKSUM_SCHEMA_VERSION = "butterflylens-content-checksum:v1.0.0"
-EVIDENCE_FINGERPRINT_SCHEMA_VERSION = (
+EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION = (
     "butterflylens-evidence-fingerprint:v1.0.0"
+)
+EVIDENCE_FINGERPRINT_SCHEMA_VERSION = (
+    "butterflylens-evidence-fingerprint:v1.1.0"
 )
 FINGERPRINT_CANONICALIZATION = "RFC8785-JCS"
 FINGERPRINT_HASH_ALGORITHM = "sha256"
 
-FINGERPRINT_KINDS = (
+FINGERPRINT_KINDS_V1_0 = (
     "project_definition",
     "run_input_set",
     "taxon_concept",
@@ -26,6 +32,37 @@ FINGERPRINT_KINDS = (
     "physical_api_request",
     "provider_snapshot",
     "api_response",
+    "source_flickr_record",
+    "downloaded_image",
+    "media_object",
+    "perceptual_duplicate_group",
+    "model_artifact",
+    "preprocessing",
+    "yoloe_route",
+    "full_frame_visual_input",
+    "bioclip_embedding",
+    "reference_bank",
+    "prototype",
+    "candidate_score",
+    "review_event",
+    "consensus",
+    "quality_snapshot",
+    "geographic_impact_cell",
+    "map_snapshot",
+    "release_candidate",
+    "artifact_manifest",
+    "export_manifest",
+)
+FINGERPRINT_KINDS = (
+    "project_definition",
+    "run_input_set",
+    "taxon_concept",
+    "name_assertion",
+    "query_definition",
+    "logical_query_association",
+    "physical_api_request",
+    "provider_snapshot",
+    "source_response",
     "source_flickr_record",
     "downloaded_image",
     "media_object",
@@ -58,10 +95,19 @@ FINGERPRINT_PARENT_RELATIONSHIPS = (
     "calibrates",
 )
 I_JSON_MAX_INTEGER = 9_007_199_254_740_991
+_SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+_STABLE_ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._:-]*$")
+_RFC3339_PATTERN = re.compile(
+    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
+)
 
 
 class CanonicalizationError(ValueError):
     """Raised when a value cannot be represented by the fingerprint contract."""
+
+
+class FingerprintValidationError(ValueError):
+    """Raised when a fingerprint record is malformed or fails recomputation."""
 
 
 def _canonicalization_error(path: str, message: str) -> NoReturn:
@@ -166,6 +212,132 @@ def semantic_fingerprint_digest(preimage: Mapping[str, object]) -> str:
     return hashlib.sha256(canonicalize_evidence_preimage(preimage)).hexdigest()
 
 
+def _validation_error(path: str, message: str) -> NoReturn:
+    raise FingerprintValidationError(f"{path}: {message}")
+
+
+def _expect_mapping(value: object, path: str) -> Mapping[str, object]:
+    if not isinstance(value, dict):
+        _validation_error(path, "expected an object")
+    return value
+
+
+def _expect_exact_keys(
+    value: Mapping[str, object], expected: set[str], path: str
+) -> None:
+    observed = set(value)
+    missing = sorted(expected - observed)
+    additional = sorted(observed - expected)
+    if missing:
+        _validation_error(path, f"missing required properties: {', '.join(missing)}")
+    if additional:
+        _validation_error(path, f"additional properties: {', '.join(additional)}")
+
+
+def _validate_recorded_at(value: object) -> None:
+    if not isinstance(value, str) or _RFC3339_PATTERN.fullmatch(value) is None:
+        _validation_error("$.recorded_at", "invalid RFC 3339 date-time")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise FingerprintValidationError(
+            "$.recorded_at: invalid RFC 3339 date-time"
+        ) from error
+    if parsed.tzinfo is None:
+        _validation_error("$.recorded_at", "timezone offset is required")
+
+
+def validate_evidence_fingerprint(record: Mapping[str, object]) -> None:
+    """Validate structure, vocabulary, and recomputed semantic identity.
+
+    Both immutable v1.0 records and current v1.1 records are accepted. New
+    writers use v1.1; each version is checked against its own closed kind set.
+    """
+
+    value = _expect_mapping(record, "$")
+    _expect_exact_keys(
+        value,
+        {
+            "schema_version",
+            "hash_algorithm",
+            "canonicalization",
+            "preimage",
+            "digest",
+            "recorded_at",
+        },
+        "$",
+    )
+    version = value["schema_version"]
+    kinds: tuple[str, ...]
+    if version == EVIDENCE_FINGERPRINT_SCHEMA_VERSION:
+        kinds = FINGERPRINT_KINDS
+    elif version == EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION:
+        kinds = FINGERPRINT_KINDS_V1_0
+    else:
+        _validation_error("$.schema_version", "unsupported fingerprint version")
+    if value["hash_algorithm"] != FINGERPRINT_HASH_ALGORITHM:
+        _validation_error("$.hash_algorithm", "expected sha256")
+    if value["canonicalization"] != FINGERPRINT_CANONICALIZATION:
+        _validation_error("$.canonicalization", "expected RFC8785-JCS")
+
+    preimage = _expect_mapping(value["preimage"], "$.preimage")
+    _expect_exact_keys(
+        preimage,
+        {"fingerprint_kind", "subject_id", "payload_schema_version", "payload", "parents"},
+        "$.preimage",
+    )
+    kind = preimage["fingerprint_kind"]
+    if not isinstance(kind, str) or kind not in kinds:
+        _validation_error("$.preimage.fingerprint_kind", "kind is outside version vocabulary")
+    subject_id = preimage["subject_id"]
+    if (
+        not isinstance(subject_id, str)
+        or len(subject_id) > 160
+        or _STABLE_ID_PATTERN.fullmatch(subject_id) is None
+    ):
+        _validation_error("$.preimage.subject_id", "invalid stable identifier")
+    payload_version = preimage["payload_schema_version"]
+    if not isinstance(payload_version, str) or not 1 <= len(payload_version) <= 160:
+        _validation_error("$.preimage.payload_schema_version", "expected 1 to 160 characters")
+    _expect_mapping(preimage["payload"], "$.preimage.payload")
+    parents = preimage["parents"]
+    if not isinstance(parents, list):
+        _validation_error("$.preimage.parents", "expected an array")
+    for index, raw_parent in enumerate(parents):
+        parent = _expect_mapping(raw_parent, f"$.preimage.parents[{index}]")
+        _expect_exact_keys(
+            parent,
+            {"relationship", "fingerprint_kind", "digest"},
+            f"$.preimage.parents[{index}]",
+        )
+        if parent["relationship"] not in FINGERPRINT_PARENT_RELATIONSHIPS:
+            _validation_error(
+                f"$.preimage.parents[{index}].relationship",
+                "relationship is outside vocabulary",
+            )
+        if parent["fingerprint_kind"] not in kinds:
+            _validation_error(
+                f"$.preimage.parents[{index}].fingerprint_kind",
+                "kind is outside version vocabulary",
+            )
+        digest = parent["digest"]
+        if not isinstance(digest, str) or _SHA256_PATTERN.fullmatch(digest) is None:
+            _validation_error(
+                f"$.preimage.parents[{index}].digest", "expected lowercase SHA-256"
+            )
+
+    digest = value["digest"]
+    if not isinstance(digest, str) or _SHA256_PATTERN.fullmatch(digest) is None:
+        _validation_error("$.digest", "expected lowercase SHA-256")
+    _validate_recorded_at(value["recorded_at"])
+    try:
+        expected_digest = semantic_fingerprint_digest(preimage)
+    except CanonicalizationError as error:
+        raise FingerprintValidationError(f"$.preimage: {error}") from error
+    if not hmac.compare_digest(digest, expected_digest):
+        _validation_error("$.digest", "semantic digest mismatch")
+
+
 class ContentChecksum(TypedDict):
     schema_version: Literal["butterflylens-content-checksum:v1.0.0"]
     algorithm: Literal["sha256"]
@@ -189,7 +361,10 @@ class EvidenceFingerprintPreimage(TypedDict):
 
 
 class EvidenceFingerprint(TypedDict):
-    schema_version: Literal["butterflylens-evidence-fingerprint:v1.0.0"]
+    schema_version: Literal[
+        "butterflylens-evidence-fingerprint:v1.0.0",
+        "butterflylens-evidence-fingerprint:v1.1.0",
+    ]
     hash_algorithm: Literal["sha256"]
     canonicalization: Literal["RFC8785-JCS"]
     preimage: EvidenceFingerprintPreimage

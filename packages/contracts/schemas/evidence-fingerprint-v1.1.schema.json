@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0",
+  "title": "ButterflyLens semantic evidence fingerprint v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hash_algorithm",
+    "canonicalization",
+    "preimage",
+    "digest",
+    "recorded_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "butterflylens-evidence-fingerprint:v1.1.0"
+    },
+    "hash_algorithm": { "const": "sha256" },
+    "canonicalization": { "const": "RFC8785-JCS" },
+    "preimage": { "$ref": "#/$defs/preimage" },
+    "digest": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+    },
+    "recorded_at": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+    }
+  },
+  "$defs": {
+    "fingerprint_kind": {
+      "enum": [
+        "project_definition",
+        "run_input_set",
+        "taxon_concept",
+        "name_assertion",
+        "query_definition",
+        "logical_query_association",
+        "physical_api_request",
+        "provider_snapshot",
+        "source_response",
+        "source_flickr_record",
+        "downloaded_image",
+        "media_object",
+        "perceptual_duplicate_group",
+        "model_artifact",
+        "preprocessing",
+        "yoloe_route",
+        "full_frame_visual_input",
+        "bioclip_embedding",
+        "reference_bank",
+        "prototype",
+        "candidate_score",
+        "review_event",
+        "consensus",
+        "quality_snapshot",
+        "geographic_impact_cell",
+        "map_snapshot",
+        "release_candidate",
+        "artifact_manifest",
+        "export_manifest"
+      ]
+    },
+    "parent_relationship": {
+      "enum": [
+        "derived_from",
+        "contains",
+        "produced_by",
+        "supersedes",
+        "reviews",
+        "aggregates",
+        "compares",
+        "calibrates"
+      ]
+    },
+    "parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationship", "fingerprint_kind", "digest"],
+      "properties": {
+        "relationship": { "$ref": "#/$defs/parent_relationship" },
+        "fingerprint_kind": { "$ref": "#/$defs/fingerprint_kind" },
+        "digest": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        }
+      }
+    },
+    "preimage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fingerprint_kind",
+        "subject_id",
+        "payload_schema_version",
+        "payload",
+        "parents"
+      ],
+      "properties": {
+        "fingerprint_kind": { "$ref": "#/$defs/fingerprint_kind" },
+        "subject_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "payload_schema_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "payload": { "type": "object" },
+        "parents": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/parent" }
+        }
+      }
+    }
+  }
+}

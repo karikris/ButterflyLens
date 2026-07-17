@@ -222,9 +222,11 @@ def main() -> None:
     schemas, registry = load_schemas()
     sys.path.insert(0, str(PACKAGE / "python"))
     from butterflylens.contracts import (  # noqa: PLC0415
+        FingerprintValidationError,
         canonicalize_evidence_preimage,
         canonicalize_json,
         semantic_fingerprint_digest,
+        validate_evidence_fingerprint,
     )
 
     for vector in fixtures.get("canonicalization_vectors", []):
@@ -236,6 +238,23 @@ def main() -> None:
         digest = semantic_fingerprint_digest(vector["preimage"])
         if canonical != vector["canonical"] or digest != vector["digest"]:
             raise ParityFailure(f"Python fingerprint vector {vector['case_id']} diverged")
+    for vector in fixtures.get("fingerprint_validation_vectors", []):
+        try:
+            validate_evidence_fingerprint(vector["record"])
+            observed_valid = True
+            observed_error = ""
+        except FingerprintValidationError as error:
+            observed_valid = False
+            observed_error = str(error)
+        if observed_valid != vector["valid"]:
+            raise ParityFailure(
+                f"Python fingerprint validation vector {vector['case_id']} diverged"
+            )
+        expected_error = vector.get("error")
+        if expected_error and expected_error not in observed_error:
+            raise ParityFailure(
+                f"Python fingerprint validation error {vector['case_id']} diverged"
+            )
     python_results = validate_python_cases(fixtures, schemas, registry)
     typescript_results, constants, compiler_version = run_typescript(fixtures)
     expected = {

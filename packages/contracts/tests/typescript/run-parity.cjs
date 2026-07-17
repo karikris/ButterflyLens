@@ -37,6 +37,19 @@ for (const vector of fixtures.fingerprint_vectors ?? []) {
     throw new Error(`fingerprint vector ${vector.case_id} diverged`)
   }
 }
+for (const vector of fixtures.fingerprint_validation_vectors ?? []) {
+  let valid = true
+  let message = ''
+  try {
+    declarations.validateEvidenceFingerprint(vector.record)
+  } catch (error) {
+    valid = false
+    message = error instanceof Error ? error.message : String(error)
+  }
+  if (valid !== vector.valid || (vector.error && !message.includes(vector.error))) {
+    throw new Error(`fingerprint validation vector ${vector.case_id} diverged: ${message}`)
+  }
+}
 
 const validById = new Map()
 const results = []

@@ -12,7 +12,7 @@ carry both.
 
 ## Semantic preimage
 
-`butterflylens-evidence-fingerprint:v1.0.0` calculates `digest` as SHA-256 over
+`butterflylens-evidence-fingerprint:v1.1.0` calculates `digest` as SHA-256 over
 the UTF-8 bytes of RFC 8785 JSON Canonicalization Scheme output for the exact
 `preimage` object. The digest and `recorded_at` fields are outside the preimage.
 
@@ -56,9 +56,10 @@ general substitute because number and Unicode behavior can diverge.
 
 ## Required kinds
 
-The v1 vocabulary covers every fingerprint required by the current build
-contract: taxon concept, name assertion, query definition, physical API
-request, source Flickr record, downloaded image, perceptual duplicate group,
+The v1.1 vocabulary covers every fingerprint required by the current build
+contract: taxon concept, name assertion, query definition, logical query
+association, physical API request, source response, source Flickr record,
+downloaded image, perceptual duplicate group,
 YOLOE route, full-frame visual input, BioCLIP embedding, reference bank,
 prototype, candidate score, review event, consensus, quality snapshot,
 geographic-impact cell, release candidate, and export manifest. It also covers
@@ -67,7 +68,10 @@ model-artifact, preprocessing, artifact-manifest, and map-snapshot envelopes
 needed to connect those records.
 
 A new evidence kind or different preimage meaning requires a contract version
-change. It must not be squeezed into a misleading existing kind.
+change. It must not be squeezed into a misleading existing kind. Version 1.0
+remains readable for existing records; v1.1 adds `logical_query_association`
+and replaces the ambiguous v1.0 `api_response` vocabulary item with
+`source_response`. Writers emit v1.1.
 
 ## Meaning and limits
 

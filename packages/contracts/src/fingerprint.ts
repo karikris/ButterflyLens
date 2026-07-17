@@ -1,12 +1,14 @@
 export const CONTENT_CHECKSUM_SCHEMA_VERSION =
   'butterflylens-content-checksum:v1.0.0' as const
-export const EVIDENCE_FINGERPRINT_SCHEMA_VERSION =
+export const EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION =
   'butterflylens-evidence-fingerprint:v1.0.0' as const
+export const EVIDENCE_FINGERPRINT_SCHEMA_VERSION =
+  'butterflylens-evidence-fingerprint:v1.1.0' as const
 export const FINGERPRINT_CANONICALIZATION = 'RFC8785-JCS' as const
 export const FINGERPRINT_HASH_ALGORITHM = 'sha256' as const
 export const I_JSON_MAX_INTEGER = 9_007_199_254_740_991 as const
 
-export const FINGERPRINT_KINDS = [
+export const FINGERPRINT_KINDS_V1_0 = [
   'project_definition',
   'run_input_set',
   'taxon_concept',
@@ -15,6 +17,38 @@ export const FINGERPRINT_KINDS = [
   'physical_api_request',
   'provider_snapshot',
   'api_response',
+  'source_flickr_record',
+  'downloaded_image',
+  'media_object',
+  'perceptual_duplicate_group',
+  'model_artifact',
+  'preprocessing',
+  'yoloe_route',
+  'full_frame_visual_input',
+  'bioclip_embedding',
+  'reference_bank',
+  'prototype',
+  'candidate_score',
+  'review_event',
+  'consensus',
+  'quality_snapshot',
+  'geographic_impact_cell',
+  'map_snapshot',
+  'release_candidate',
+  'artifact_manifest',
+  'export_manifest',
+] as const
+
+export const FINGERPRINT_KINDS = [
+  'project_definition',
+  'run_input_set',
+  'taxon_concept',
+  'name_assertion',
+  'query_definition',
+  'logical_query_association',
+  'physical_api_request',
+  'provider_snapshot',
+  'source_response',
   'source_flickr_record',
   'downloaded_image',
   'media_object',
@@ -49,6 +83,7 @@ export const FINGERPRINT_PARENT_RELATIONSHIPS = [
 ] as const
 
 export type FingerprintKind = (typeof FINGERPRINT_KINDS)[number]
+export type LegacyFingerprintKind = (typeof FINGERPRINT_KINDS_V1_0)[number]
 export type FingerprintParentRelationship =
   (typeof FINGERPRINT_PARENT_RELATIONSHIPS)[number]
 
@@ -66,12 +101,26 @@ export interface EvidenceFingerprintParent {
   readonly digest: string
 }
 
+export interface LegacyEvidenceFingerprintParent {
+  readonly relationship: FingerprintParentRelationship
+  readonly fingerprint_kind: LegacyFingerprintKind
+  readonly digest: string
+}
+
 export interface EvidenceFingerprintPreimage {
   readonly fingerprint_kind: FingerprintKind
   readonly subject_id: string
   readonly payload_schema_version: string
   readonly payload: Readonly<Record<string, unknown>>
   readonly parents: readonly EvidenceFingerprintParent[]
+}
+
+export interface LegacyEvidenceFingerprintPreimage {
+  readonly fingerprint_kind: LegacyFingerprintKind
+  readonly subject_id: string
+  readonly payload_schema_version: string
+  readonly payload: Readonly<Record<string, unknown>>
+  readonly parents: readonly LegacyEvidenceFingerprintParent[]
 }
 
 export interface EvidenceFingerprint {
@@ -83,10 +132,30 @@ export interface EvidenceFingerprint {
   readonly recorded_at: string
 }
 
+export interface LegacyEvidenceFingerprint {
+  readonly schema_version: typeof EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION
+  readonly hash_algorithm: typeof FINGERPRINT_HASH_ALGORITHM
+  readonly canonicalization: typeof FINGERPRINT_CANONICALIZATION
+  readonly preimage: LegacyEvidenceFingerprintPreimage
+  readonly digest: string
+  readonly recorded_at: string
+}
+
+export type EvidenceFingerprintRecord =
+  | EvidenceFingerprint
+  | LegacyEvidenceFingerprint
+
 export class FingerprintCanonicalizationError extends Error {
   constructor(message: string) {
     super(message)
     this.name = 'FingerprintCanonicalizationError'
+  }
+}
+
+export class FingerprintValidationError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'FingerprintValidationError'
   }
 }
 
@@ -127,9 +196,126 @@ export function canonicalizeEvidencePreimage(
 }
 
 export function semanticFingerprintDigest(
-  preimage: EvidenceFingerprintPreimage,
+  preimage: EvidenceFingerprintPreimage | LegacyEvidenceFingerprintPreimage,
 ): string {
-  return sha256Hex(utf8Bytes(canonicalizeEvidencePreimage(preimage)))
+  return sha256Hex(utf8Bytes(canonicalizeEvidencePreimage(
+    preimage as EvidenceFingerprintPreimage,
+  )))
+}
+
+export function validateEvidenceFingerprint(
+  candidate: unknown,
+): asserts candidate is EvidenceFingerprintRecord {
+  const value = expectObject(candidate, '$')
+  expectExactKeys(value, [
+    'schema_version', 'hash_algorithm', 'canonicalization',
+    'preimage', 'digest', 'recorded_at',
+  ], '$')
+  let kinds: readonly string[]
+  if (value.schema_version === EVIDENCE_FINGERPRINT_SCHEMA_VERSION) {
+    kinds = FINGERPRINT_KINDS
+  } else if (value.schema_version === EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION) {
+    kinds = FINGERPRINT_KINDS_V1_0
+  } else {
+    validationError('$.schema_version', 'unsupported fingerprint version')
+  }
+  if (value.hash_algorithm !== FINGERPRINT_HASH_ALGORITHM) {
+    validationError('$.hash_algorithm', 'expected sha256')
+  }
+  if (value.canonicalization !== FINGERPRINT_CANONICALIZATION) {
+    validationError('$.canonicalization', 'expected RFC8785-JCS')
+  }
+  const preimage = expectObject(value.preimage, '$.preimage')
+  expectExactKeys(preimage, [
+    'fingerprint_kind', 'subject_id', 'payload_schema_version', 'payload', 'parents',
+  ], '$.preimage')
+  if (typeof preimage.fingerprint_kind !== 'string' ||
+      !kinds.includes(preimage.fingerprint_kind)) {
+    validationError('$.preimage.fingerprint_kind', 'kind is outside version vocabulary')
+  }
+  if (typeof preimage.subject_id !== 'string' || preimage.subject_id.length > 160 ||
+      !/^[a-z0-9][a-z0-9._:-]*$/.test(preimage.subject_id)) {
+    validationError('$.preimage.subject_id', 'invalid stable identifier')
+  }
+  if (typeof preimage.payload_schema_version !== 'string' ||
+      preimage.payload_schema_version.length < 1 ||
+      preimage.payload_schema_version.length > 160) {
+    validationError('$.preimage.payload_schema_version', 'expected 1 to 160 characters')
+  }
+  expectObject(preimage.payload, '$.preimage.payload')
+  if (!Array.isArray(preimage.parents)) {
+    validationError('$.preimage.parents', 'expected an array')
+  }
+  for (const [index, rawParent] of preimage.parents.entries()) {
+    const path = `$.preimage.parents[${index}]`
+    const parent = expectObject(rawParent, path)
+    expectExactKeys(parent, ['relationship', 'fingerprint_kind', 'digest'], path)
+    if (typeof parent.relationship !== 'string' ||
+        !(FINGERPRINT_PARENT_RELATIONSHIPS as readonly string[]).includes(parent.relationship)) {
+      validationError(`${path}.relationship`, 'relationship is outside vocabulary')
+    }
+    if (typeof parent.fingerprint_kind !== 'string' ||
+        !kinds.includes(parent.fingerprint_kind)) {
+      validationError(`${path}.fingerprint_kind`, 'kind is outside version vocabulary')
+    }
+    expectSha256(parent.digest, `${path}.digest`)
+  }
+  expectSha256(value.digest, '$.digest')
+  if (typeof value.recorded_at !== 'string' || !isRfc3339DateTime(value.recorded_at)) {
+    validationError('$.recorded_at', 'invalid RFC 3339 date-time')
+  }
+  let expectedDigest: string
+  try {
+    expectedDigest = semanticFingerprintDigest(
+      preimage as unknown as EvidenceFingerprintPreimage,
+    )
+  } catch (error) {
+    if (error instanceof FingerprintCanonicalizationError) {
+      throw new FingerprintValidationError(`$.preimage: ${error.message}`)
+    }
+    throw error
+  }
+  if (value.digest !== expectedDigest) {
+    validationError('$.digest', 'semantic digest mismatch')
+  }
+}
+
+function validationError(path: string, message: string): never {
+  throw new FingerprintValidationError(`${path}: ${message}`)
+}
+
+function expectObject(value: unknown, path: string): Record<string, unknown> {
+  if (value === null || typeof value !== 'object' || Array.isArray(value) ||
+      (Object.getPrototypeOf(value) !== Object.prototype &&
+       Object.getPrototypeOf(value) !== null)) {
+    validationError(path, 'expected an object')
+  }
+  return value as Record<string, unknown>
+}
+
+function expectExactKeys(
+  value: Readonly<Record<string, unknown>>,
+  expected: readonly string[],
+  path: string,
+): void {
+  const keys = Object.keys(value)
+  const missing = expected.filter((key) => !Object.hasOwn(value, key))
+  const additional = keys.filter((key) => !expected.includes(key))
+  if (missing.length > 0) validationError(path, `missing required properties: ${missing.sort().join(', ')}`)
+  if (additional.length > 0) validationError(path, `additional properties: ${additional.sort().join(', ')}`)
+}
+
+function expectSha256(value: unknown, path: string): void {
+  if (typeof value !== 'string' || !/^[0-9a-f]{64}$/.test(value)) {
+    validationError(path, 'expected lowercase SHA-256')
+  }
+}
+
+function isRfc3339DateTime(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value)) {
+    return false
+  }
+  return Number.isFinite(Date.parse(value))
 }
 
 function canonicalizeNode(value: unknown, path: string): string {
