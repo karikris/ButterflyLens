@@ -101,3 +101,22 @@ page numbers and null cursors. Completion requires every expected page once,
 stable observed totals, response fingerprints, no page over 250 rows, and
 returned row counts reconciling to the count checkpoint. Planning and
 checkpoint functions make no Flickr request.
+
+## Adaptive scheduling
+
+Candidate priority is an availability-weighted combination of unique media per
+call, geotagged media per call, butterfly-positive yield, baseline coverage
+gap, species coverage need, review capacity, reference readiness, age since
+last query, and unexplored date partitions. Missing model-derived values are
+listed and their weights are removed from the denominator; they are never
+fabricated as zero. This is especially important while YOLOE and BioCLIP
+remain unfinished.
+
+Candidates with enough observed calls and low unique-media plus low or
+unavailable butterfly-positive yield enter a configurable cooldown. Repeated
+low-yield windows stop the candidate. Tier 5 remains locked until both the
+Australian baseline-coverage and saturation gates pass. Once unlocked, a
+configurable share of the normal 3,000-call lane is reserved for Tier 5 and is
+not silently reassigned if no eligible Tier-5 source exists. Schedule outputs
+remain deterministic `planned_not_sent` records; execution must separately
+reserve the global hourly budget.

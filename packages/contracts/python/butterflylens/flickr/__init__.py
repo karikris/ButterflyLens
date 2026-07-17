@@ -49,6 +49,15 @@ from .partitioning import (
     validate_australia_partition_scope,
     validate_partition_completion,
 )
+from .scheduler import (
+    ADAPTIVE_SCHEDULER_SCHEMA_VERSION,
+    AustraliaLaneGate,
+    SchedulerPolicy,
+    SchedulingCandidate,
+    SchedulingError,
+    allocate_schedule,
+    score_candidate,
+)
 
 __all__ = [
     "FLICKR_BUDGET_SCHEMA_VERSION",
@@ -90,4 +99,11 @@ __all__ = [
     "split_saturated_partition",
     "validate_australia_partition_scope",
     "validate_partition_completion",
+    "ADAPTIVE_SCHEDULER_SCHEMA_VERSION",
+    "AustraliaLaneGate",
+    "SchedulerPolicy",
+    "SchedulingCandidate",
+    "SchedulingError",
+    "allocate_schedule",
+    "score_candidate",
 ]
