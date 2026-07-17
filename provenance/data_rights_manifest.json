@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T17:05:00Z",
+  "generated_at": "2026-07-17T17:49:34Z",
   "sources": [
     {
       "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
@@ -86,6 +86,43 @@
       "terms_url": "FIRST_NATIONS_NAMES.md",
       "attribution": "ButterflyLens First Nations Language-Name Governance; AIATSIS, CARE, AustLang, and Local Contexts principles are cited but no community name or knowledge is copied.",
       "scope_note": "Original schemas, an empty assertion dataset, an empty append-only decision dataset, and a zero-count review manifest. No First Nations language name, cultural knowledge, community contact, authority decision, or permission evidence is included."
+    },
+    {
+      "source_id": "ala-occurrence-public-20260717-d13b60aa",
+      "provider": "Atlas of Living Australia and identified contributing data resources",
+      "dataset": "Selected public-compatible Papilionoidea occurrence download for processed country Australia",
+      "source_url": "https://api.ala.org.au/occurrences/occurrences/offline/download",
+      "retrieved_at": "2026-07-17T17:49:34Z",
+      "licence": "MIXED-CC0-PDM-CC-BY",
+      "licence_url": "data/packs/australian_butterflies/v1/ala/ala_attribution.json",
+      "terms_url": "https://www.ala.org.au/terms-of-use/",
+      "citation_guidance_url": "https://support.ala.org.au/support/solutions/articles/6000261662-citing-the-ala",
+      "attribution": "Atlas of Living Australia and every contributing data provider and data resource identified in the frozen citation and snapshot receipts.",
+      "scope_note": "236,897 public processed occurrence-metadata rows from 53 data resources. Only CC0, Public Domain Mark, and attribution-only CC BY variants are admitted. Per-row licence and provider/resource citation, generalisation, withheld-information, quality, basis, and sensitive-state evidence are retained. No media is included."
+    },
+    {
+      "source_id": "ala-occurrence-contracts-20260717",
+      "provider": "Atlas of Living Australia",
+      "dataset": "ALA occurrence API OpenAPI and current indexed-field definitions",
+      "source_url": "https://docs.ala.org.au/openapi/specs/biocache.json",
+      "retrieved_at": "2026-07-17T17:49:34Z",
+      "licence": "ALA-TERMS-CC-BY-3.0-AU",
+      "licence_url": "https://creativecommons.org/licenses/by/3.0/au/",
+      "terms_url": "https://www.ala.org.au/terms-of-use/",
+      "attribution": "Atlas of Living Australia occurrence API documentation and indexed-field metadata.",
+      "scope_note": "Provider API contracts and factual field metadata only; no credentials, private API data, occurrence media, or sensitive unprocessed values."
+    },
+    {
+      "source_id": "ala-spatial-contracts-20260717",
+      "provider": "Atlas of Living Australia Spatial Service, DCCEEW, and Australian Bureau of Statistics",
+      "dataset": "ALA spatial API contract and metadata for IBRA v7 regions and Local Government Areas 2023",
+      "source_url": "https://spatial.ala.org.au/ws/layer/11185",
+      "retrieved_at": "2026-07-17T17:49:34Z",
+      "licence": "MIXED-MPL-1.1-CC-BY-4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+      "terms_url": "https://www.ala.org.au/terms-of-use/",
+      "attribution": "Atlas of Living Australia Spatial Service; Department of Climate Change, Energy, the Environment and Water; Source: Australian Bureau of Statistics.",
+      "scope_note": "OpenAPI contract and factual layer metadata plus ALA-indexed contextual values. No boundary geometry is copied. LGA values are Mesh Block approximations for statistical use, not official legal boundaries."
     }
   ],
   "artifacts": [
@@ -264,6 +301,90 @@
       "source_id": "mixed-taxonomy-crosswalk-20260717",
       "licence": "MIXED-SEE-SOURCES",
       "attribution": "Australian Biological Resources Study/Australian Faunal Directory; Atlas of Living Australia; GBIF Backbone Taxonomy; iNaturalist Taxonomy.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/sources/ala_occurrence_download.zip",
+      "fingerprint": "sha256:d13b60aa85af54176832cc2ea374f472a02f0ffdc5f1f5c49f896c899f3afab7",
+      "provider": "Atlas of Living Australia and identified contributing data resources",
+      "source_id": "ala-occurrence-public-20260717-d13b60aa",
+      "licence": "MIXED-CC0-PDM-CC-BY",
+      "attribution": "Atlas of Living Australia and every contributing provider/resource in citation.csv and the snapshot receipt.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/ala_snapshot_receipt.json",
+      "fingerprint": "sha256:a2bd0325b0700c8429b3214b4be3eff72b73e748a64bd0203dba4e767ae54ab8",
+      "provider": "ButterflyLens derived from Atlas of Living Australia receipts",
+      "source_id": "ala-occurrence-public-20260717-d13b60aa",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "Atlas of Living Australia, its contributing providers/resources, DCCEEW, and Source: Australian Bureau of Statistics.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/ala_attribution.json",
+      "fingerprint": "sha256:355b6fe886712d98e74272be1587c07f57fc659572a689052979a71f41190cf2",
+      "provider": "ButterflyLens derived from Atlas of Living Australia receipts",
+      "source_id": "ala-occurrence-public-20260717-d13b60aa",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "Atlas of Living Australia, each contributing provider/resource, DCCEEW, and Source: Australian Bureau of Statistics.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/sources/ala_occurrence_openapi.json",
+      "fingerprint": "sha256:357f03e4970a20708ed9d6762fb88d19c35c3d85efe162e15fdcb33ea8070ae1",
+      "provider": "Atlas of Living Australia",
+      "source_id": "ala-occurrence-contracts-20260717",
+      "licence": "ALA-TERMS-CC-BY-3.0-AU",
+      "attribution": "Atlas of Living Australia occurrence API documentation.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/sources/ala_index_fields.json",
+      "fingerprint": "sha256:3fa9018cb2af0fbe0a5da162b4ee808b79a96854435aaa57254d13d2e7d20c29",
+      "provider": "Atlas of Living Australia",
+      "source_id": "ala-occurrence-contracts-20260717",
+      "licence": "ALA-TERMS-CC-BY-3.0-AU",
+      "attribution": "Atlas of Living Australia indexed-field metadata.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/sources/ala_spatial_openapi.yaml",
+      "fingerprint": "sha256:069c299e6dc8d4ab7af3673a6589f3cd4f789ea25b4ee444120e8ad7c7a41437",
+      "provider": "Atlas of Living Australia Spatial Service",
+      "source_id": "ala-spatial-contracts-20260717",
+      "licence": "MPL-1.1",
+      "attribution": "Atlas of Living Australia Spatial Service OpenAPI contract.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/ala/sources/ala_spatial_layers.json",
+      "fingerprint": "sha256:48bd5c7e7f3063b3256334893606bd42e1395dd04946010f20adb6461a1e26f4",
+      "provider": "Atlas of Living Australia Spatial Service, DCCEEW, and Australian Bureau of Statistics",
+      "source_id": "ala-spatial-contracts-20260717",
+      "licence": "CC-BY-4.0",
+      "attribution": "Atlas of Living Australia Spatial Service; DCCEEW; Source: Australian Bureau of Statistics.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

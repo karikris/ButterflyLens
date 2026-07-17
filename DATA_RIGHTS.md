@@ -8,16 +8,19 @@ This document is engineering evidence, not legal advice. Provider terms can chan
 
 ## Gate outcome
 
-No provider credential, occurrence snapshot, boundary file, source image, reference bank, community review, or export exists in ButterflyLens at this audit. The statuses below define what must be true before those artifacts become eligible.
+No provider credential, boundary geometry, source image, reference bank,
+community review, or export is stored in ButterflyLens at this audit. A selected
+ALA occurrence snapshot now exists under the controls below. The remaining
+statuses define what must be true before later artifacts become eligible.
 
 | Source | Current status | Release gate |
 | --- | --- | --- |
 | Flickr API | No key configured or call made. | Register the application/use, accept current API terms, identify commercial status, activate the single global budget, and pass per-photo rights/display/removal checks. |
-| Atlas of Living Australia (ALA) | No snapshot downloaded. | Freeze query, datasets, per-dataset licences/attribution, quality/sensitivity handling, retrieval time, and checksums. |
+| Atlas of Living Australia (ALA) | Public-compatible snapshot frozen on 17 July 2026. | Preserve the exact query/archive fingerprint, contributing-resource citations, per-row licence, quality/sensitivity state, and downstream eligibility. Recheck terms before replacement or release. |
 | GBIF | No download or DOI exists. | Use a DOI-bearing download where practical; retain dataset keys, publisher identities, record licences, media licences, and citation. |
 | iNaturalist | No API call or media download made. | Prefer citable exports/GBIF for bulk evidence; enforce API guidance, per-object/per-media licences, and the commercial-AI-training prohibition. |
-| ABS ASGS boundaries | Candidate only; no file selected. | Freeze the exact current release/file and checksum, verify its product-specific licence, and publish ABS attribution. |
-| DCCEEW IBRA 7 | Candidate only; no file selected. | Freeze the exact dataset/resource and checksum, retain CC BY 3.0 Australia metadata, and publish provider attribution. |
+| ABS ASGS boundaries | ALA-indexed LGA 2023 contextual values selected; no geometry copied. | Retain the ALA layer metadata receipt, CC BY 4.0 attribution, and statistical-boundary qualification; a future geometry file requires its own checksum and gate. |
+| DCCEEW IBRA 7 | ALA-indexed IBRA v7 region values selected; no geometry copied. | Retain the ALA layer metadata receipt and CC BY 4.0 attribution; a future geometry file requires its own checksum and gate. |
 | Community reviews/comments | No accounts, terms acceptance, or review event exists. | Publish participant terms/privacy/moderation, collect versioned acceptance, and bind every event to its licence/consent version. |
 
 ## Rights manifest contract
@@ -84,6 +87,24 @@ ALA aggregates content from data providers. ButterflyLens must:
 
 `ALA baseline occurrence evidence` means a versioned selected snapshot, not all ALA knowledge.
 
+The frozen public snapshot
+`ala-papilionoidea-au-20260717-d33d4d367525` uses the accepted ALA
+Papilionoidea root, processed country `Australia`, no coordinate or
+basis-of-record acquisition filter, and disabled default quality filters so
+quality assertions remain explicit. Its public rights allowlist is limited to
+CC0, Public Domain Mark, and attribution-only CC BY variants. NonCommercial,
+NoDerivatives, ShareAlike, unspecified, record-level-unspecified, and `other`
+values do not enter the public artifact. This is a conservative product-use
+gate, not a statement about record validity.
+
+The archive retains ALA's provider citation file, including per-resource DOI,
+citation, rights, generalisation, information-withheld, download-limit, and row
+count fields where supplied. It contains public processed occurrence metadata
+only: no provider media is downloaded. The bulk service required a contact
+email, but ButterflyLens requested no notification or DOI and does not persist
+the email. The archive, provider API contracts, query policy, and attribution
+are fingerprinted under `data/packs/australian_butterflies/v1/ala/`.
+
 ## GBIF
 
 Authoritative sources inspected:
@@ -132,11 +153,25 @@ ALA, GBIF, and iNaturalist observations are candidate reference evidence, not au
 
 The [ABS copyright statement](https://www.abs.gov.au/website-privacy-copyright-and-disclaimer) provides website material under CC BY 4.0 International except identified exclusions and third-party material. As of the audit date, the [ASGS page](https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs) identifies Edition 3 as the latest release and Edition 4 as a future release beginning `2026-07-22`.
 
-ButterflyLens must select and freeze exact Edition 3 Australia/state/territory and annual LGA resources available on the acquisition date, confirm the licence displayed for each downloaded product, store checksums and retrieval metadata, and attribute unmodified data as “Source: Australian Bureau of Statistics” or transformed data as “Based on Australian Bureau of Statistics data.” ABS logos, the Commonwealth Coat of Arms, trademarks, microdata, and third-party content are excluded.
+For Task 2.3, ButterflyLens selects ALA contextual field `cl11170`, “Local
+Government Areas 2023.” ALA's frozen layer metadata identifies the Australian
+Bureau of Statistics source, Edition 3 download and metadata pages, and CC BY
+4.0. It states that the values are Mesh Block approximations for statistical
+use and do not match official legal boundaries. No ABS geometry, logo, Coat of
+Arms, trademark, microdata, or third-party content is copied. Public
+attribution uses “Source: Australian Bureau of Statistics” for the indexed
+values; a future direct geometry download must receive a separate checksum and
+product-level review.
 
 ### IBRA 7
 
-The [DCCEEW/data.gov.au IBRA Version 7 regions dataset](https://www.data.gov.au/data/dataset/interim-biogeographic-regionalisation-for-australia-ibra-version-7-regions2) identifies Creative Commons Attribution 3.0 Australia and requires attribution to the Australian Government environment department/data provider. ButterflyLens must pin the exact resource, version, checksum, retrieval date, attribution, and any resource-specific caveat. IBRA geometry is a boundary/rollup reference, not occurrence evidence.
+For Task 2.3, ButterflyLens selects ALA contextual field `cl11185`, “IBRA
+version 7 regions.” ALA's frozen layer metadata identifies the Department of
+Climate Change, Energy, the Environment and Water as source and CC BY 4.0 as
+the licence for this indexed layer. No IBRA geometry is copied. The contextual
+value is a boundary/rollup assertion attached by ALA, not occurrence evidence,
+identity evidence, or proof of absence; a future direct geometry download must
+receive a separate checksum and resource-level review.
 
 ### Map services
 

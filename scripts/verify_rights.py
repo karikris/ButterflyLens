@@ -26,6 +26,8 @@ PROVIDER_SUFFIXES = {
     ".tif",
     ".tiff",
     ".webp",
+    ".yaml",
+    ".zip",
 }
 PROVIDER_ROOTS = ("data/", "demo/", "public/media/", "apps/web/public/media/")
 

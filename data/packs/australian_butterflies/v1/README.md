@@ -133,6 +133,13 @@ checksums, hierarchy, rank policy, and stable ButterflyLens keys.
   version or documented compatible revision. Live provider state never mutates
   this checked-in snapshot.
 
+## ALA baseline occurrence evidence
+
+The separate [`ala/`](ala/) directory contains the selected, fingerprinted ALA
+baseline occurrence-evidence snapshot and its own query, rights, sensitive-data,
+attribution, and rebuild policy. Occurrence rows never change the accepted AFD
+taxonomy or constitute human verification of a provider taxon label.
+
 ## Source, rights, and citation
 
 The source is the [Australian Faunal Directory Papilionoidea checklist](https://biodiversity.org.au/afd/taxa/PAPILIONOIDEA),
