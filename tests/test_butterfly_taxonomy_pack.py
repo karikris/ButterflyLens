@@ -4,6 +4,7 @@ import hashlib
 import importlib.util
 import json
 import re
+import sys
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -12,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "data/packs/australian_butterflies/v1"
 SCRIPT = ROOT / "scripts/build_butterfly_taxonomy.py"
+CROSSWALK_SCRIPT = ROOT / "scripts/crosswalk_butterfly_taxonomy.py"
 
 
 def load_builder():
@@ -23,6 +25,22 @@ def load_builder():
     return module
 
 
+def load_crosswalk_builder():
+    specification = importlib.util.spec_from_file_location(
+        "butterfly_taxonomy_crosswalk", CROSSWALK_SCRIPT
+    )
+    if specification is None or specification.loader is None:
+        raise RuntimeError("unable to load taxonomy crosswalk builder")
+    module = importlib.util.module_from_spec(specification)
+    scripts_path = str(ROOT / "scripts")
+    sys.path.insert(0, scripts_path)
+    try:
+        specification.loader.exec_module(module)
+    finally:
+        sys.path.remove(scripts_path)
+    return module
+
+
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -31,6 +49,7 @@ class ButterflyTaxonomyPackTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.builder = load_builder()
+        cls.builder_crosswalk = load_crosswalk_builder()
         cls.manifest = json.loads((PACK / "manifest.json").read_text(encoding="utf-8"))
         cls.snapshot = json.loads(
             (PACK / "sources/afd_papilionoidea.json").read_text(encoding="utf-8")
@@ -42,6 +61,10 @@ class ButterflyTaxonomyPackTests(unittest.TestCase):
         cls.crosswalk = [
             json.loads(line)
             for line in (PACK / "crosswalk.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        cls.conflicts = [
+            json.loads(line)
+            for line in (PACK / "conflicts.jsonl").read_text(encoding="utf-8").splitlines()
         ]
 
     def test_snapshot_integrity(self) -> None:
@@ -118,7 +141,7 @@ class ButterflyTaxonomyPackTests(unittest.TestCase):
         self.assertIn("Viewed", rights["citation"])
         self.assertEqual(self.manifest["scope"]["additional_configured_taxa"], [])
         self.assertEqual(self.manifest["crosswalk_state"]["status"], "built")
-        self.assertEqual(self.manifest["conflict_state"], "not_built")
+        self.assertEqual(self.manifest["conflict_state"]["status"], "built")
 
     def test_crosswalk_covers_every_taxon_in_order(self) -> None:
         taxon_keys = [record["butterflylens_key"] for record in self.records]
@@ -194,6 +217,55 @@ class ButterflyTaxonomyPackTests(unittest.TestCase):
         self.assertIsNone(superfamily["gbif_taxon_key"])
         self.assertEqual(superfamily["provider_matches"]["gbif"]["state"], "conflict")
         self.assertIn("non_exact_match", superfamily["provider_matches"]["gbif"]["reasons"])
+
+    def test_conflicts_cover_every_non_matched_provider_relationship(self) -> None:
+        expected = {
+            (row["butterflylens_key"], provider)
+            for row in self.crosswalk
+            for provider, match in row["provider_matches"].items()
+            if match["state"] != "matched"
+        }
+        observed = {
+            (conflict["butterflylens_key"], conflict["provider"])
+            for conflict in self.conflicts
+        }
+        self.assertEqual(observed, expected)
+        self.assertEqual(len(observed), len(self.conflicts))
+        artifact = self.manifest["artifacts"]["conflicts.jsonl"]
+        self.assertEqual(artifact["row_count"], len(self.conflicts))
+        self.assertEqual(artifact["open_count"], len(self.conflicts))
+        self.assertEqual(artifact["physical_sha256"], sha256(PACK / "conflicts.jsonl"))
+
+    def test_conflict_ids_are_recomputable_and_all_resolutions_are_open(self) -> None:
+        crosswalk = {row["butterflylens_key"]: row for row in self.crosswalk}
+        ids = []
+        for conflict in self.conflicts:
+            row = crosswalk[conflict["butterflylens_key"]]
+            match = row["provider_matches"][conflict["provider"]]
+            ids.append(conflict["conflict_id"])
+            self.assertEqual(
+                conflict["conflict_id"],
+                self.builder_crosswalk.conflict_identifier(
+                    row, conflict["provider"], match
+                ),
+            )
+            self.assertTrue(conflict["provider_identifier_withheld"])
+            self.assertEqual(conflict["concept_equivalence"], "not_established")
+            self.assertEqual(conflict["resolution"]["status"], "open")
+            self.assertFalse(
+                conflict["resolution"]["automatic_resolution_permitted"]
+            )
+            self.assertTrue(conflict["reasons"])
+        self.assertEqual(len(ids), len(set(ids)))
+
+    def test_conflict_ledger_does_not_misclassify_provider_misses_as_absence(self) -> None:
+        forbidden_types = {"biological_absence", "not_in_australia", "invalid_taxon"}
+        for conflict in self.conflicts:
+            self.assertNotIn(conflict["conflict_type"], forbidden_types)
+            if conflict["reasons"] == ["provider_no_match"]:
+                self.assertEqual(
+                    conflict["conflict_type"], "missing_provider_concept"
+                )
 
 
 if __name__ == "__main__":

@@ -50,6 +50,10 @@ python3 scripts/crosswalk_butterfly_taxonomy.py build-crosswalk \
   --gbif data/packs/australian_butterflies/v1/sources/gbif_name_matches.json \
   --inaturalist data/packs/australian_butterflies/v1/sources/inaturalist_taxonomy_matches.json \
   --output-dir data/packs/australian_butterflies/v1
+
+python3 scripts/crosswalk_butterfly_taxonomy.py build-conflicts \
+  --crosswalk data/packs/australian_butterflies/v1/crosswalk.jsonl \
+  --output-dir data/packs/australian_butterflies/v1
 ```
 
 Default tests make no provider calls. They validate the checked-in snapshot,
@@ -71,9 +75,16 @@ checksums, hierarchy, rank policy, and stable ButterflyLens keys.
   is null.
 - `complete`, `partial`, and `unresolved` describe identifier availability only;
   they are not quality, truth, occurrence, or human-review states.
+- Even three aligned provider identifiers establish only name/rank/classification
+  alignment, not full biological concept equivalence. Concept circumscription
+  is `not_established` unless later taxonomic evidence resolves it.
 - A parenthesized AFD subgenus is removed only from the provider query name. The
   accepted AFD name and full source lineage remain unchanged, and every such
   normalization is declared on the crosswalk row.
+- Every non-matched provider relationship has one open row in `conflicts.jsonl`.
+  It retains the provider candidate and source receipts, withholds the provider
+  ID from the usable crosswalk field, and prohibits automatic resolution. A
+  provider miss is kept as a gap, not converted into absence or incompatibility.
 - Source updates require a new frozen snapshot, review of the diff, and a new
   version or documented compatible revision. Live provider state never mutates
   this checked-in snapshot.

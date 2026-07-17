@@ -25,6 +25,7 @@ from build_butterfly_taxonomy import canonical_json, sha256_file, utc_now
 
 SOURCE_SCHEMA_VERSION = "butterflylens-taxonomy-crosswalk-source/v1"
 CROSSWALK_SCHEMA_VERSION = "butterflylens-taxonomy-crosswalk/v1"
+CONFLICT_SCHEMA_VERSION = "butterflylens-taxonomy-conflict/v1"
 ALA_ENDPOINT = (
     "https://api.ala.org.au/namematching/api/searchAllByClassification"
 )
@@ -698,6 +699,147 @@ def build_crosswalk(
     manifest_path.write_bytes(canonical_json(manifest))
 
 
+def conflict_type(match: dict[str, Any]) -> str:
+    reasons = set(match.get("reasons", []))
+    if "ambiguous_multiple_matches" in reasons:
+        return "ambiguous_provider_concept"
+    if reasons & {
+        "name_mismatch",
+        "rank_mismatch",
+        "family_mismatch",
+        "genus_mismatch",
+        "classification_mismatch",
+    }:
+        return "incompatible_provider_concept"
+    if "non_accepted_usage" in reasons:
+        return "provider_status_conflict"
+    if "non_exact_match" in reasons:
+        return "non_exact_provider_match"
+    if "provider_issue" in reasons:
+        return "provider_reported_issue"
+    if reasons & {
+        "provider_no_match",
+        "missing_identifier",
+        "missing_or_non_numeric_identifier",
+    }:
+        return "missing_provider_concept"
+    return "unclassified_provider_conflict"
+
+
+def conflict_identifier(
+    crosswalk: dict[str, Any], provider: str, match: dict[str, Any]
+) -> str:
+    identity = {
+        "butterflylens_key": crosswalk["butterflylens_key"],
+        "provider": provider,
+        "provider_source_version": crosswalk["source_versions"][provider],
+        "state": match["state"],
+        "reasons": sorted(match.get("reasons", [])),
+        "candidate_identifier": match.get("candidate_taxon_id")
+        or match.get("candidate_taxon_key"),
+    }
+    return "bltc:v1:" + sha256_bytes(canonical_json(identity))[:24]
+
+
+def build_conflicts(
+    crosswalk_path: Path,
+    output_dir: Path,
+    generated_at: str | None,
+) -> None:
+    crosswalk = [
+        json.loads(line)
+        for line in crosswalk_path.read_text(encoding="utf-8").splitlines()
+    ]
+    if not crosswalk:
+        raise CrosswalkError("crosswalk is empty")
+    conflicts: list[dict[str, Any]] = []
+    provider_counts: Counter[str] = Counter()
+    type_counts: Counter[str] = Counter()
+    for row in crosswalk:
+        if row.get("schema_version") != CROSSWALK_SCHEMA_VERSION:
+            raise CrosswalkError("unsupported crosswalk schema")
+        for provider in ("ala", "gbif", "inaturalist"):
+            match = row["provider_matches"][provider]
+            if match["state"] == "matched":
+                continue
+            reasons = match.get("reasons", [])
+            if not reasons:
+                raise CrosswalkError(
+                    f"non-matched provider relationship has no reasons: "
+                    f"{row['butterflylens_key']} {provider}"
+                )
+            kind = conflict_type(match)
+            provider_counts[provider] += 1
+            type_counts[kind] += 1
+            conflicts.append(
+                {
+                    "schema_version": CONFLICT_SCHEMA_VERSION,
+                    "conflict_id": conflict_identifier(row, provider, match),
+                    "butterflylens_key": row["butterflylens_key"],
+                    "accepted_scientific_name": row["accepted_scientific_name"],
+                    "rank": row["rank"],
+                    "parent_path": row["parent_path"],
+                    "provider": provider,
+                    "provider_relationship_state": match["state"],
+                    "conflict_type": kind,
+                    "reasons": reasons,
+                    "provider_query_name": match["query_name"],
+                    "provider_candidate": {
+                        "identifier": match.get("candidate_taxon_id")
+                        or match.get("candidate_taxon_key"),
+                        "name": match.get("matched_name"),
+                        "rank": match.get("matched_rank"),
+                        "taxonomic_status": match.get("provider_taxonomic_status"),
+                        "match_type": match.get("match_type"),
+                        "confidence": match.get("confidence"),
+                        "issues": match.get("issues", []),
+                        "candidate_count": match.get("candidate_count"),
+                    },
+                    "provider_identifier_withheld": True,
+                    "concept_equivalence": "not_established",
+                    "resolution": {
+                        "status": "open",
+                        "automatic_resolution_permitted": False,
+                        "resolution_type": None,
+                        "decided_by": None,
+                        "evidence_fingerprints": [],
+                    },
+                    "source": {
+                        "crosswalk_sha256": sha256_file(crosswalk_path),
+                        "provider_source_version": row["source_versions"][provider],
+                        "provider_response_sha256": match[
+                            "source_response_sha256"
+                        ],
+                    },
+                }
+            )
+    conflict_ids = [conflict["conflict_id"] for conflict in conflicts]
+    if len(conflict_ids) != len(set(conflict_ids)):
+        raise CrosswalkError("conflict IDs are not unique")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    conflicts_path = output_dir / "conflicts.jsonl"
+    conflicts_path.write_bytes(
+        b"".join(canonical_json(conflict) for conflict in conflicts)
+    )
+    manifest_path = output_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["artifacts"]["conflicts.jsonl"] = {
+        "schema_version": CONFLICT_SCHEMA_VERSION,
+        "physical_sha256": sha256_file(conflicts_path),
+        "row_count": len(conflicts),
+        "open_count": len(conflicts),
+        "provider_counts": dict(sorted(provider_counts.items())),
+        "type_counts": dict(sorted(type_counts.items())),
+    }
+    manifest["conflict_state"] = {
+        "status": "built",
+        "generated_at": generated_at or utc_now(),
+        "open_count": len(conflicts),
+        "automatic_resolutions": 0,
+    }
+    manifest_path.write_bytes(canonical_json(manifest))
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     commands = root.add_subparsers(dest="command", required=True)
@@ -721,6 +863,10 @@ def parser() -> argparse.ArgumentParser:
     build.add_argument("--inaturalist", type=Path, required=True)
     build.add_argument("--output-dir", type=Path, required=True)
     build.add_argument("--generated-at")
+    conflicts = commands.add_parser("build-conflicts")
+    conflicts.add_argument("--crosswalk", type=Path, required=True)
+    conflicts.add_argument("--output-dir", type=Path, required=True)
+    conflicts.add_argument("--generated-at")
     return root
 
 
@@ -743,6 +889,12 @@ def main() -> None:
             arguments.ala,
             arguments.gbif,
             arguments.inaturalist,
+            arguments.output_dir,
+            arguments.generated_at,
+        )
+    elif arguments.command == "build-conflicts":
+        build_conflicts(
+            arguments.crosswalk,
             arguments.output_dir,
             arguments.generated_at,
         )

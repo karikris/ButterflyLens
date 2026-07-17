@@ -106,9 +106,16 @@ butterflylens_owned_changes:
     upstream_boundary: Static replay that does not invoke BioMiner or a model runtime.
     butterflylens_responsibility: Server-side pinned BioMiner queue, M5/MPS worker control, health, cancellation, progress, and verified artifact admission.
   - ownership_id: all-butterfly-taxonomy
-    status: planned
+    status: partially_implemented
     upstream_boundary: Papilio demoleus pilot target.
     butterflylens_responsibility: Reproducible Australian butterfly hierarchy, identifier crosswalks, synonyms, conflicts, and sourced-name governance.
+    completed_scope:
+      - Frozen Australian Faunal Directory Papilionoidea hierarchy across the seven configured ranks.
+      - Conservative ALA, GBIF and iNaturalist identifier crosswalk with immutable provider receipts.
+      - Open conflict ledger for every missing, non-exact, incompatible or provider-status relationship.
+    remaining_scope:
+      - Task 2.2 synonym, English vernacular and culturally governed name assertions.
+      - Human taxonomic resolution evidence for open cross-provider conflicts.
   - ownership_id: community-accounts
     status: planned
     upstream_boundary: Credential-free local IndexedDB review and optional static repository snapshots.

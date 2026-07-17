@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T15:54:54Z",
+  "generated_at": "2026-07-17T16:01:22Z",
   "sources": [
     {
       "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
@@ -91,7 +91,19 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:c803751e88be1131ecc3aa31486d105cc8629ccfe6face8100a33f656bcc71f4",
+      "fingerprint": "sha256:0d9aa2bf0912ff33640a368a727d774a30aa58bc2f329f3968463ad4a07596c5",
+      "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
+      "source_id": "mixed-taxonomy-crosswalk-20260717",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "Australian Biological Resources Study/Australian Faunal Directory; Atlas of Living Australia; GBIF Backbone Taxonomy; iNaturalist Taxonomy.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/conflicts.jsonl",
+      "fingerprint": "sha256:b61fa059b7c4087b15ea23ea0bc2491b7df8f4741d1dc056e382dcddd06adef3",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "mixed-taxonomy-crosswalk-20260717",
       "licence": "MIXED-SEE-SOURCES",
