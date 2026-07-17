@@ -11,7 +11,14 @@ Logical species/name associations remain separate from physical request rows,
 query terms are structurally forbidden from becoming labels, and unknown media
 rights block download, inference, display, and redistribution.
 
-Both current public tables have row-level security enabled immediately. The
+The model-evidence schema adds content-addressed media, duplicate-group
+membership, typed pipeline stages, fenced worker leases, append-only
+heartbeats, and raw model-evidence state. YOLOE and BioCLIP stage values exist
+only so their blocked or `skipped_unfinished` state can be represented. This
+migration does not acquire model weights or produce routes, embeddings,
+prototypes, scores, or human-verification claims.
+
+Every public table has row-level security enabled immediately. The
 `anon` and `authenticated` roles have no table or sequence privileges until
 Task 3.1.6 defines project membership and least-privilege policies. The
 server-only `service_role` has explicit access; its credential must never enter
