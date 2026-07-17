@@ -91,6 +91,14 @@ species prototypes were produced. The checked-in status record preserves that
 skip decision so downstream diagnostics cannot mistake missing model evidence
 for negative biological evidence.
 
+Task 2.4.6 publishes one evidence-only diagnostic for each of the 463 accepted
+species. Valid provisional decodes cover 237 species; 126 have no imported
+candidate media and 100 have candidates but no automated-gate-eligible media.
+Every row remains blocked from release, zero rows are human verified, and the
+missing YOLOE and BioCLIP dimensions are explicit flags. No quality score,
+accuracy estimate, model inference, source-image byte, or absence claim is
+created.
+
 Rebuild the query plan:
 
 ```bash
@@ -169,4 +177,20 @@ uv run python scripts/build_reference_yoloe_readiness.py \
   --manifest-output data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json \
   --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
   --generated-at 2026-07-17T20:47:49Z
+```
+
+Rebuild the reference-quality diagnostics without model execution:
+
+```bash
+uv run python scripts/build_reference_quality_diagnostics.py \
+  --taxa data/packs/australian_butterflies/v1/taxa.jsonl \
+  --decisions data/packs/australian_butterflies/v1/references/v1/gated/reference_media_gate_decisions.parquet \
+  --selections data/packs/australian_butterflies/v1/references/v1/gated/reference_download_selections.parquet \
+  --media-objects data/packs/australian_butterflies/v1/references/v1/gated/reference_media_objects.parquet \
+  --yoloe-manifest data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json \
+  --bioclip-status data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json \
+  --output data/packs/australian_butterflies/v1/references/v1/gated/reference_quality_diagnostics.parquet \
+  --manifest-output data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json \
+  --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
+  --generated-at 2026-07-17T21:05:00Z
 ```

@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T20:56:05Z",
+  "generated_at": "2026-07-17T21:05:00Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -224,7 +224,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:7d24a99994c61637851bef3b2e07fb042f4276cbaacb7183813bbacba9e1f2fb",
+      "fingerprint": "sha256:00059c2b282a8613c31480512e7588370a7d42c642416f6744a3bae3e81ac023",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
@@ -781,6 +781,30 @@
       "source_id": "butterflylens-reference-admission-v1",
       "licence": "AGPL-3.0-only",
       "attribution": "ButterflyLens BioCLIP unfinished status; no model execution or output.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/gated/reference_quality_diagnostics.parquet",
+      "fingerprint": "sha256:0db0eda98e51a3e0ac875dd8d5ff16ee4eb9115375ed59d2e81035fb9b6849fa",
+      "provider": "ButterflyLens derived from frozen taxonomy, reference metadata, gate, and decode evidence",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "MIXED-CC0-CC-BY-METADATA-NO-MEDIA-BYTES",
+      "attribution": "Australian Biological Resources Study/Australian Faunal Directory; iNaturalist photo creators and rights holders; ButterflyLens diagnostics provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json",
+      "fingerprint": "sha256:4cfc41de9908dbe7f0997e5dc59fd964606d3127d5af24e660868eabc7367d91",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens reference-quality diagnostics manifest.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

@@ -225,6 +225,23 @@ components:
     tests:
       - Status artifact checksum, zero-count, null-model, and root-manifest binding invariants.
     status: skipped_unfinished_by_goal_instruction
+  - component_id: butterflylens-reference-quality-diagnostics-v1
+    source_repository: karikris/ButterflyLens
+    source_commit: null
+    source_path: scripts/build_reference_quality_diagnostics.py
+    destination_path: data/packs/australian_butterflies/v1/references/v1/gated/reference_quality_diagnostics.parquet
+    migration_kind: original
+    reason: Publish evidence-only reference coverage and blocker diagnostics without filling skipped model dimensions with fabricated values.
+    build_week_scope: new
+    source_license: AGPL-3.0-only
+    changes:
+      - Cover every accepted Australian butterfly species.
+      - Reconcile candidate, eligible, selected, decoded, rights, observer, and exact-content evidence.
+      - Preserve zero human verification, YOLOE routes, BioCLIP embeddings, and prototypes.
+      - Emit flags and categorical coverage states without a quality score or accuracy claim.
+    tests:
+      - Full species coverage, exact aggregate reconciliation, semantic fingerprints, root-manifest binding, and byte-identical replay.
+    status: verified_unfinished_model_dimensions_explicit
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
   - Candidate model and workflow contracts remain planned; the live-worker boundary plus ALA Parquet and H3 adapters are now defined.

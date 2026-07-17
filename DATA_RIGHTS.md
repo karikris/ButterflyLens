@@ -208,6 +208,13 @@ four failed downloads remain separately quarantined. The readiness artifact
 contains no detection, route, crop, model output, or source-image bytes and
 does not broaden any source permission.
 
+Task 2.4.5 leaves BioCLIP explicitly unfinished with zero embeddings,
+prototypes, or support rows. Task 2.4.6 reports reference-bank coverage and
+quality flags from the existing metadata, gate, decode, rights, and diversity
+evidence only. It computes no quality score or accuracy claim, performs no
+model inference, and keeps all 463 species blocked from release pending model
+and human-review evidence as applicable.
+
 - CC0 and compatible CC BY media may enter allowed lanes with provenance and attribution.
 - CC BY-NC, CC BY-ND, CC BY-SA, and combined variants require explicit use-specific gates; no blanket compatibility is asserted.
 - All-rights-reserved, unknown, private, embargoed, culturally restricted, or removed media is blocked absent documented permission.
