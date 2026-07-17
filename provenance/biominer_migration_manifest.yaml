@@ -1,13 +1,104 @@
 schema_version: butterflylens-biominer-migration-v1
-updated_at: "2026-07-17T13:54:06Z"
+updated_at: "2026-07-17T13:58:04Z"
 source_snapshot:
   repository: karikris/BioMiner
   commit: d71bceabf75748a25df39d0025e8da907f295f8c
   branch_observed: main
   working_tree_used: false
   source_license: MIT
-components: []
+components:
+  - component_id: biominer-production-run-artifacts-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/run/{orchestrator.py,manifest.py,paths.py}
+    destination_path: packages/contracts/schemas/biominer-run-artifacts.schema.json
+    migration_kind: artifact_contract
+    reason: Validate immutable run status and the allowlisted artifact inventory without importing BioMiner internals.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Define a ButterflyLens-owned runtime schema and fail-closed version allowlist.
+      - Preserve upstream stage status, output identity, and unavailable states.
+    tests:
+      - Planned Python/TypeScript/JSON Schema parity fixtures.
+      - Planned checksum, unknown-version, and partial-stage rejection tests.
+    status: planned
+  - component_id: biominer-registry-artifacts-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/registry/{build.py,publish.py}
+    destination_path: packages/contracts/schemas/biominer-registry-artifacts.schema.json
+    migration_kind: artifact_contract
+    reason: Consume accepted taxonomy, sourced names, and Flickr discovery hypotheses through versioned artifacts.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Retain taxon, name-evidence, query-definition, source, and registry identities.
+      - Prevent query definitions from becoming species identifications.
+    tests:
+      - Planned registry inventory and foreign-key contract tests.
+    status: planned
+  - component_id: biominer-geographic-artifacts-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/{registry/geographic_spread.py,registry/geographic_summary.py,flickr_fetch/geography.py,flickr_fetch/geographic_clustering.py,candidates/regional_union.py}
+    destination_path: packages/contracts/schemas/biominer-geographic-artifacts.schema.json
+    migration_kind: artifact_contract
+    reason: Use geographic evidence for candidate generation and explanation without treating it as identity or absence proof.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Preserve no-geo, outlier, uncertainty, provider, and candidate-distribution states.
+      - Join to ButterflyLens-owned ALA baseline only through a separate comparison contract.
+    tests:
+      - Planned schema, coordinate, no-geo, and soft-evidence semantic tests.
+    status: planned
+  - component_id: biominer-reference-readiness-v3
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/references/{admission.py,readiness.py}
+    destination_path: packages/contracts/schemas/biominer-reference-readiness.schema.json
+    migration_kind: artifact_contract
+    reason: Preserve provisional versus strict reference maturity and fail-closed readiness permits.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Accept only explicit readiness-v3 and support-manifest-v3 identities.
+      - Keep GBIF provider-asserted provisional support distinct from human verification.
+    tests:
+      - Planned maturity downgrade, stale fingerprint, and unknown-mode rejection tests.
+    status: planned
+  - component_id: biominer-reference-embeddings-v3
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/bioclip/reference_embeddings.py
+    destination_path: packages/contracts/schemas/biominer-reference-embeddings.schema.json
+    migration_kind: artifact_contract
+    reason: Consume frozen embedding evidence with full model, input, support, and preprocessing identity.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Validate reference-embeddings-v3 and its artifact-manifest-v1 inventory.
+      - Preserve raw-vector and raw-similarity semantics without probability claims.
+    tests:
+      - Planned model/input fingerprint and manifest checksum rejection tests.
+    status: planned
+  - component_id: biominer-target-aware-scores-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/bioclip/{target_aware_fusion.py,target_aware_output.py,target_aware_scoring.py}
+    destination_path: packages/contracts/schemas/biominer-target-aware-scores.schema.json
+    migration_kind: artifact_contract
+    reason: Present target-versus-complete-candidate evidence, abstention, and calibration availability in ButterflyLens.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Require complete candidate count and keep display truncation separate from scoring.
+      - Require raw and calibrated evidence to remain structurally distinct.
+    tests:
+      - Planned candidate-union, abstention, and raw-versus-calibrated contract tests.
+    status: planned
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
-  - Candidate artifact contracts are added only after the application boundary is defined.
+  - Candidate artifact contracts are planned only; no destination schema exists yet.
   - Every later component must pin this or a newer immutable source commit.

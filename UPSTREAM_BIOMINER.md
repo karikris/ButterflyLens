@@ -242,3 +242,188 @@ This test result establishes only deterministic behavior covered by those
 tests at the pinned commit. It does not establish provider availability,
 licensing permission for a specific asset, model accuracy, MPS performance,
 human review, scientific release readiness, or successful deployment.
+
+## ButterflyLens application boundary
+
+The boundary is artifact-first and pinned to the audited SHA. “Stable” here
+means ButterflyLens has chosen an explicit command or artifact contract at that
+commit; it is not a claim that BioMiner has published a backwards-compatibility
+guarantee or package release.
+
+### Ownership
+
+BioMiner owns research-engine work:
+
+- taxonomic registry and name/query compilation;
+- Flickr discovery planning and physical-request deduplication;
+- GBIF and iNaturalist reference acquisition;
+- geographic spread, clustering, and regional candidate generation;
+- reference admission, readiness, and route-separated support artifacts;
+- YOLOE routing and full-frame visual-input evidence where that path is
+  explicitly selected;
+- BioCLIP embeddings, prototypes, classifiers, calibrators, scoring, and
+  statistical evaluation.
+
+ButterflyLens owns the Australia-wide product:
+
+- the ALA baseline snapshot and ALA provider semantics;
+- user projects, runs, accounts, consent, moderation, and review operations;
+- Australian taxonomy/name overlays and First Nations governance;
+- reviewer reliability and quality-estimate presentation;
+- live M5 worker control, health, and product-visible job state;
+- public maps, evidence cards, comparisons, exports, replay, and deployment;
+- the final release gate joining provider rights, reviews, quality snapshots,
+  coordinate sensitivity, and removal state.
+
+BioMiner artifacts never acquire greater maturity when imported. In
+particular, a Flickr candidate remains a candidate, GBIF provisional support
+remains provider asserted, raw scores remain raw, and unavailable selective
+rerun metrics remain unavailable.
+
+### Permitted command surface
+
+ButterflyLens may invoke only the following committed public command classes,
+through a server-side worker adapter pinned to the full BioMiner SHA:
+
+```text
+biominer registry build --output-dir <dir> --registry-version <version> ...
+biominer registry audit --registry-dir <dir> --report-dir <dir>
+biominer registry publish --registry-dir <dir> --output-dir <dir>
+
+biominer references <supported-command> --settings-file <json> [--dry-run]
+
+biominer run \
+  --taxon <accepted-name-or-key> \
+  --rank <auto|family|genus|species> \
+  --registry-dir <immutable-registry> \
+  --output-prefix <local-or-s3-prefix> \
+  --workflow adaptive \
+  [--dry-run]
+```
+
+The permitted `references` commands are limited to the committed producer or
+validator set needed by an approved worker plan:
+
+```text
+build-geographic-spread
+build-regional-competitor-evidence
+cluster-flickr-metadata
+materialize-flickr-workload
+plan
+fetch-metadata
+download
+build-support-embeddings
+build-prototypes
+train-classifier
+calibrate-classifier
+score-target-aware
+evaluate-target-verifier
+```
+
+Prototype-finalization and prototype-only commands are not part of the
+ButterflyLens production boundary. Nothing under `biominer dev` is stable
+product integration. Storage/workstore doctors and handoff commands may be
+used operationally, but their output is diagnostic and cannot become
+scientific evidence by itself.
+
+Before a non-dry run, the adapter must persist:
+
+- BioMiner full SHA and dirty-state check;
+- exact argv with secrets redacted;
+- project/run identity and approval event;
+- input artifact URIs, byte counts, SHA-256 values, schema versions, and
+  semantic fingerprints;
+- provider and model rights permits;
+- output prefix and expected artifact contract;
+- worker/device identity and retry/stop policy.
+
+A dirty BioMiner worktree blocks execution unless the worker runs from a clean
+archive or isolated environment created from the pinned commit. ButterflyLens
+must never invoke a command against whatever happens to be checked out in a
+developer directory.
+
+### Permitted artifact surface
+
+The primary handoff root is:
+
+```text
+<output-prefix>/run_id=<run-id>/
+```
+
+Its layout identity is `reference-first-run-artifacts-v1.0.0`. ButterflyLens
+may ingest only artifacts listed in a verified manifest or in the allowlist
+below. A path match alone is insufficient.
+
+| Artifact | Upstream contract | ButterflyLens use |
+| --- | --- | --- |
+| `run_manifest.json` | integer `schema_version: 1` | stage/status projection only after contract validation |
+| `registry/manifest.json` | registry-produced manifest | source snapshot and inventory root |
+| `registry/taxa.parquet` | accepted taxon rows | immutable taxonomy input, not image truth |
+| `registry/names.parquet` | sourced name rows | names and evidence links |
+| `registry/flickr_query_definitions.parquet` | query definitions | discovery hypotheses and logical-query provenance |
+| `registry/geography/taxon_geographic_spread.parquet` | versioned geographic-spread artifact | soft regional evidence |
+| `registry/geography/geographic_occurrence_evidence.parquet` | versioned provider evidence | source assertions, never absence proof |
+| `registry/geography/taxon_geographic_summary.parquet` | versioned summary | candidate generation and explanation |
+| `registry/geography/geographic_qa_findings.parquet` | versioned QA | blocked/warning state |
+| `flickr/geography/flickr_geography.parquet` | `flickr-geography-v1.0.0` | normalized candidate coordinates |
+| `flickr/geography/flickr_geo_clusters.parquet` | `flickr-geo-clusters-v1.1.0` | candidate-distribution clusters |
+| `flickr/geography/flickr_geo_assignments.parquet` | `flickr-geo-assignments-v1.1.0` | candidate cluster/no-geo state |
+| `candidates/regional_candidate_species.parquet` | versioned regional-candidate artifact | complete candidate-set input; geography is soft |
+| `references/metadata/reference_observations.parquet` | `reference-observations-v1.2.0` | provider assertions and provenance |
+| `references/media/reference_media_candidates.parquet` | `reference-media-candidates-v1.0.0` | acquisition candidates, not redistribution permission |
+| `references/media/reference_media_objects.parquet` | `reference-media-objects-v1.1.0` | content identity and download state |
+| `references/readiness/reference_bank_readiness.json` | `reference-bank-readiness-v3.0.0` | fail-closed readiness permit |
+| `references/readiness/reference_support_manifest.parquet` | `reference-support-manifest-v3.0.0` | route- and maturity-specific support rows |
+| `references/embeddings/reference_embeddings.parquet` | `reference-embeddings-v3.0.0` | frozen raw embedding evidence |
+| `references/embeddings/manifest.json` | `biominer-artifact-manifest-v1` | inventory, checksums, and dependencies |
+| `references/prototypes/reference_prototypes.parquet` | embedded version field required | route-separated prototype evidence |
+| `scores/target_aware_object_scores.parquet` | embedded version field required | raw/calibrated fields kept distinct |
+| `scores/target_aware_candidate_scores.parquet` | embedded version field required | full candidate-union evidence |
+
+Files not listed above require a new migration-manifest entry and contract
+review before ingestion. Historical `examples/` and `reports/` are not product
+handoffs. Model weights, downloaded media, and provider payloads are never
+implicitly ingestible merely because a BioMiner manifest references them.
+
+### Acceptance rules for every handoff
+
+The ButterflyLens adapter must fail closed unless all applicable checks pass:
+
+1. the producer repository and full SHA match the approved migration entry;
+2. every required artifact is named in the upstream inventory;
+3. byte count and SHA-256 match before parsing;
+4. schema version is explicitly supported—missing or unknown is not upgraded;
+5. Parquet columns and types pass a ButterflyLens-owned runtime schema;
+6. semantic fingerprints recompute identically where a shared contract exists;
+7. dependency fingerprints resolve to artifacts in the same verified graph;
+8. row primary keys are unique and declared foreign keys resolve;
+9. evidence maturity, provider, licence, review, coordinate, and removal fields
+   remain attached;
+10. partial, failed, blocked, stale, and awaiting-review stages remain visible;
+11. no raw score is mapped into a probability field;
+12. provider/media rights pass the independent ButterflyLens rights gate.
+
+TypeScript or JSON Schema validation may confirm structure, but it cannot
+substitute for Parquet checksum verification, statistical policy, source
+rights, or human review.
+
+### Integration prohibitions
+
+- Do not import `biominer.*` from the ButterflyLens web application.
+- Do not copy `src/biominer` or vendor upstream internal modules.
+- Do not use a BioMiner worktree path as a production dependency.
+- Do not let the browser invoke provider APIs, YOLOE, BioCLIP, or BioMiner.
+- Do not accept floating branches, tags, package versions, model revisions, or
+  artifact prefixes as immutable identity.
+- Do not infer ALA support, all-Australia coverage, live M5 readiness, human
+  verification, calibration, or release readiness from the upstream audit.
+- Do not use `detector_crop` output in a target-aware ButterflyLens decision;
+  require the explicit full-frame transformation and fingerprint contract.
+
+If the pinned BioMiner SHA changes, ButterflyLens must repeat the relevant
+audit, update `provenance/biominer_migration_manifest.yaml`, rerun contract
+tests, and record whether each integration is unchanged, migrated, or blocked.
+
+The command, reference-contract, run-path, and target-aware CLI boundary was
+checked separately at the pinned commit: `121 passed in 8.71s`. This remains an
+offline interface check, not evidence that a provider or model run completed.
