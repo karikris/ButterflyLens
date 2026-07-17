@@ -223,6 +223,7 @@ def main() -> None:
     sys.path.insert(0, str(PACKAGE / "python"))
     from butterflylens.contracts import (  # noqa: PLC0415
         FingerprintValidationError,
+        FingerprintCollisionError,
         EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
         FINGERPRINT_CANONICALIZATION,
         FINGERPRINT_HASH_ALGORITHM,
@@ -230,6 +231,7 @@ def main() -> None:
         canonicalize_evidence_preimage,
         canonicalize_json,
         semantic_fingerprint_digest,
+        assert_same_fingerprint_identity,
         validate_evidence_fingerprint,
     )
 
@@ -282,6 +284,20 @@ def main() -> None:
         }
         if observed != expected_lineage:
             raise ParityFailure(f"Python lineage vector {vector['case_id']} diverged")
+    for vector in fixtures.get("identity_conflict_vectors", []):
+        shared_digest = "f" * 64
+        try:
+            assert_same_fingerprint_identity(
+                {"digest": shared_digest, "preimage": vector["left"]},
+                {"digest": shared_digest, "preimage": vector["right"]},
+            )
+            collision = False
+        except FingerprintCollisionError:
+            collision = True
+        if collision != vector["collision"]:
+            raise ParityFailure(
+                f"Python identity conflict vector {vector['case_id']} diverged"
+            )
     python_results = validate_python_cases(fixtures, schemas, registry)
     typescript_results, constants, compiler_version = run_typescript(fixtures)
     expected = {

@@ -71,6 +71,22 @@ for (const vector of fixtures.lineage_vectors ?? []) {
     }
   }
 }
+for (const vector of fixtures.identity_conflict_vectors ?? []) {
+  const shared = 'f'.repeat(64)
+  let collision = false
+  try {
+    declarations.assertSameFingerprintIdentity(
+      { digest: shared, preimage: vector.left },
+      { digest: shared, preimage: vector.right },
+    )
+  } catch (error) {
+    if (error instanceof declarations.FingerprintCollisionError) collision = true
+    else throw error
+  }
+  if (collision !== vector.collision) {
+    throw new Error(`identity conflict vector ${vector.case_id} diverged`)
+  }
+}
 
 const validById = new Map()
 const results = []

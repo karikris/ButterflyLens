@@ -181,6 +181,44 @@
       ]
     }
   ],
+  "identity_conflict_vectors": [
+    {
+      "case_id": "same-preimage-different-key-order-is-duplicate",
+      "collision": false,
+      "left": {
+        "fingerprint_kind": "query_definition",
+        "subject_id": "query:conflict",
+        "payload_schema_version": "v1",
+        "payload": { "alpha": 1, "beta": 2 },
+        "parents": []
+      },
+      "right": {
+        "parents": [],
+        "payload": { "beta": 2, "alpha": 1 },
+        "payload_schema_version": "v1",
+        "subject_id": "query:conflict",
+        "fingerprint_kind": "query_definition"
+      }
+    },
+    {
+      "case_id": "same-digest-different-preimage-is-collision",
+      "collision": true,
+      "left": {
+        "fingerprint_kind": "query_definition",
+        "subject_id": "query:conflict",
+        "payload_schema_version": "v1",
+        "payload": { "terms": ["alpha", "beta"] },
+        "parents": []
+      },
+      "right": {
+        "fingerprint_kind": "query_definition",
+        "subject_id": "query:conflict",
+        "payload_schema_version": "v1",
+        "payload": { "terms": ["beta", "alpha"] },
+        "parents": []
+      }
+    }
+  ],
   "schema_version_checks": [
     { "constant": "PROJECT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "pointer": "/properties/schema_version/const" },
     { "constant": "RUN_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/schema_version/const" },

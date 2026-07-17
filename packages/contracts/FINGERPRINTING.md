@@ -86,6 +86,13 @@ traversals. Breadth-first traversals order nodes by minimum distance and then
 digest; topological ties use digest order. Returned records are defensive
 copies, so consumer mutation cannot change the validated graph.
 
+When a content-addressed store encounters an existing digest,
+`assert_same_fingerprint_identity` / `assertSameFingerprintIdentity` compares
+the canonical preimages. An equal preimage is a duplicate identity; a
+different preimage raises `FingerprintCollisionError`. This defensive branch
+does not claim that the test suite can find or rule out cryptographic SHA-256
+collisions.
+
 ## Meaning and limits
 
 A fingerprint establishes repeatable identity only when its preimage is

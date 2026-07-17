@@ -12,6 +12,7 @@ from .fingerprint import (
     I_JSON_MAX_INTEGER,
     CanonicalizationError,
     FingerprintIntegrityError,
+    FingerprintCollisionError,
     FingerprintValidationError,
     ContentChecksum,
     EvidenceFingerprint,
@@ -22,6 +23,7 @@ from .fingerprint import (
     canonicalize_json,
     normalize_evidence_preimage,
     semantic_fingerprint_digest,
+    assert_same_fingerprint_identity,
     validate_evidence_fingerprint,
 )
 from .geographic_impact import (
@@ -122,6 +124,7 @@ __all__ = [
     "ContentChecksum",
     "CanonicalizationError",
     "FingerprintIntegrityError",
+    "FingerprintCollisionError",
     "FingerprintValidationError",
     "ConsensusLayer",
     "EvidenceFingerprint",
@@ -151,5 +154,6 @@ __all__ = [
     "canonicalize_json",
     "normalize_evidence_preimage",
     "semantic_fingerprint_digest",
+    "assert_same_fingerprint_identity",
     "validate_evidence_fingerprint",
 ]

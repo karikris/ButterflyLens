@@ -166,6 +166,13 @@ export class FingerprintIntegrityError extends Error {
   }
 }
 
+export class FingerprintCollisionError extends FingerprintIntegrityError {
+  constructor(message: string) {
+    super(message)
+    this.name = 'FingerprintCollisionError'
+  }
+}
+
 export function canonicalizeJson(value: unknown): string {
   return canonicalizeNode(value, '$')
 }
@@ -208,6 +215,32 @@ export function semanticFingerprintDigest(
   return sha256Hex(utf8Bytes(canonicalizeEvidencePreimage(
     preimage as EvidenceFingerprintPreimage,
   )))
+}
+
+export function assertSameFingerprintIdentity(
+  existing: Readonly<Record<string, unknown>>,
+  candidate: Readonly<Record<string, unknown>>,
+): void {
+  const existingDigest = existing.digest
+  const candidateDigest = candidate.digest
+  if (typeof existingDigest !== 'string' ||
+      typeof candidateDigest !== 'string' ||
+      existingDigest !== candidateDigest) {
+    throw new FingerprintIntegrityError(
+      'fingerprint identity comparison requires one shared digest',
+    )
+  }
+  const existingPreimage = expectObject(existing.preimage, '$.existing.preimage')
+  const candidatePreimage = expectObject(candidate.preimage, '$.candidate.preimage')
+  if (canonicalizeEvidencePreimage(
+    existingPreimage as unknown as EvidenceFingerprintPreimage,
+  ) !== canonicalizeEvidencePreimage(
+    candidatePreimage as unknown as EvidenceFingerprintPreimage,
+  )) {
+    throw new FingerprintCollisionError(
+      `semantic fingerprint collision detected for ${existingDigest}`,
+    )
+  }
 }
 
 export function validateEvidenceFingerprint(
@@ -342,6 +375,10 @@ export class EvidenceLineageGraph {
       }
       const record = cloneFingerprint(candidate)
       if (this.records.has(record.digest)) {
+        assertSameFingerprintIdentity(
+          this.records.get(record.digest) as unknown as Readonly<Record<string, unknown>>,
+          record as unknown as Readonly<Record<string, unknown>>,
+        )
         throw new FingerprintIntegrityError(
           `duplicate fingerprint digest: ${record.digest}`,
         )

@@ -116,6 +116,10 @@ class FingerprintIntegrityError(ValueError):
     """Raised when a validated fingerprint graph has broken lineage."""
 
 
+class FingerprintCollisionError(FingerprintIntegrityError):
+    """Raised when one digest is presented for distinct canonical preimages."""
+
+
 def _canonicalization_error(path: str, message: str) -> NoReturn:
     raise CanonicalizationError(f"{path}: {message}")
 
@@ -216,6 +220,39 @@ def semantic_fingerprint_digest(preimage: Mapping[str, object]) -> str:
     """Calculate the lowercase SHA-256 digest of a canonical semantic preimage."""
 
     return hashlib.sha256(canonicalize_evidence_preimage(preimage)).hexdigest()
+
+
+def assert_same_fingerprint_identity(
+    existing: Mapping[str, object], candidate: Mapping[str, object]
+) -> None:
+    """Fail if equal digest claims resolve to different canonical preimages.
+
+    Callers validate both records first. This guard is intended for the unique
+    digest conflict path in a content-addressed store.
+    """
+
+    existing_digest = existing.get("digest")
+    candidate_digest = candidate.get("digest")
+    if (
+        not isinstance(existing_digest, str)
+        or not isinstance(candidate_digest, str)
+        or existing_digest != candidate_digest
+    ):
+        raise FingerprintIntegrityError(
+            "fingerprint identity comparison requires one shared digest"
+        )
+    existing_preimage = existing.get("preimage")
+    candidate_preimage = candidate.get("preimage")
+    if not isinstance(existing_preimage, dict) or not isinstance(candidate_preimage, dict):
+        raise FingerprintIntegrityError(
+            "fingerprint identity comparison requires object preimages"
+        )
+    if canonicalize_evidence_preimage(existing_preimage) != canonicalize_evidence_preimage(
+        candidate_preimage
+    ):
+        raise FingerprintCollisionError(
+            f"semantic fingerprint collision detected for {existing_digest}"
+        )
 
 
 def _validation_error(path: str, message: str) -> NoReturn:
@@ -358,6 +395,7 @@ class EvidenceLineageGraph:
             digest = copied["digest"]
             assert isinstance(digest, str)
             if digest in self._records:
+                assert_same_fingerprint_identity(self._records[digest], copied)
                 raise FingerprintIntegrityError(f"duplicate fingerprint digest: {digest}")
             self._records[digest] = copied
 
