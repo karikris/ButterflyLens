@@ -1,0 +1,16 @@
+{
+  "checkpoint_media_candidate_row_count": 24329,
+  "checkpoint_observation_row_count": 12980,
+  "command": "references fetch-metadata",
+  "deduplicated_media_candidate_count": 0,
+  "deduplicated_observation_count": 0,
+  "fetched_page_count": 371,
+  "geographic_assignment": "not_configured",
+  "media_candidate_count": 24329,
+  "observation_count": 12980,
+  "query_count": 742,
+  "schema_version": "reference-metadata-cli-report-v2",
+  "settings_fingerprint": "sha256:8dade2805cec46ce4045b41edea8e5339065ca796a5211b33bf6a0c0adee4ab3",
+  "source_shortfalls": "not_configured",
+  "status": "complete"
+}

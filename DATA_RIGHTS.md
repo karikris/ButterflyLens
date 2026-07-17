@@ -17,8 +17,8 @@ statuses define what must be true before later artifacts become eligible.
 | --- | --- | --- |
 | Flickr API | No key configured or call made. | Register the application/use, accept current API terms, identify commercial status, activate the single global budget, and pass per-photo rights/display/removal checks. |
 | Atlas of Living Australia (ALA) | Selected evidence snapshot frozen on 17 July 2026; downstream public-product release remains blocked for three dataset-rights conflicts. | Preserve the exact query/archive fingerprint, contributing-resource citations, per-row licence, quality/sensitivity state, dataset review state, and downstream eligibility. Resolve or exclude the flagged resources and recheck terms before release. |
-| GBIF | No download or DOI exists. | Use a DOI-bearing download where practical; retain dataset keys, publisher identities, record licences, media licences, and citation. |
-| iNaturalist | No API call or media download made. | Prefer citable exports/GBIF for bulk evidence; enforce API guidance, per-object/per-media licences, and the commercial-AI-training prohibition. |
+| GBIF | Bounded candidate-reference metadata imported through pinned BioMiner; no media bytes downloaded and no DOI minted. | Apply the 2.4.3 automated licence/decode/taxon gate before any media download or use; retain dataset, publisher, occurrence, media, creator, licence, attribution, and source fingerprints. |
+| iNaturalist | Bounded, one-request-per-second candidate-reference metadata import complete; only `cc0`/`cc-by` photos marked allowed and no media bytes downloaded. | Keep every candidate unreviewed, enforce the commercial-AI-training prohibition, preserve creator/licence/source evidence, and apply later decode/taxon/duplicate gates. |
 | ABS ASGS boundaries | ALA-indexed LGA 2023 contextual values selected; no geometry copied. | Retain the ALA layer metadata receipt, CC BY 4.0 attribution, and statistical-boundary qualification; a future geometry file requires its own checksum and gate. |
 | DCCEEW IBRA 7 | ALA-indexed IBRA v7 region values selected; no geometry copied. | Retain the ALA layer metadata receipt and CC BY 4.0 attribution; a future geometry file requires its own checksum and gate. |
 | Community reviews/comments | No accounts, terms acceptance, or review event exists. | Publish participant terms/privacy/moderation, collect versioned acceptance, and bind every event to its licence/consent version. |
@@ -151,6 +151,20 @@ Required controls:
 ## Reference images and derived model artifacts
 
 ALA, GBIF, and iNaturalist observations are candidate reference evidence, not automatically verified reference images.
+
+The Task 2.4.1 import uses pinned BioMiner commit
+`d71bceabf75748a25df39d0025e8da907f295f8c` for 742 bounded GBIF and
+iNaturalist queries across 371 exactly crosswalked species. It stores 12,980
+provider-labelled observations and 24,329 media-candidate metadata rows, but
+downloads zero image bytes and marks every media row unreviewed. Three taxon
+conflicts, 45 quarantined media rows, and 1,651 GBIF rows awaiting the
+automated licence gate cannot enter support. The 22,633 iNaturalist rows marked
+allowed passed only the import-time `cc0`/`cc-by` photo-licence filter; that is
+not taxonomic verification, decode validation, display approval, or final
+reference admission. The archived checkpoint ledger records 769 requests and
+27 recovered rate-limit retries. The frozen ALA snapshot remains candidate
+observation evidence but contributes zero reference media because its source
+contract did not capture media metadata; no URL or image label is inferred.
 
 - CC0 and compatible CC BY media may enter allowed lanes with provenance and attribution.
 - CC BY-NC, CC BY-ND, CC BY-SA, and combined variants require explicit use-specific gates; no blanket compatibility is asserted.
