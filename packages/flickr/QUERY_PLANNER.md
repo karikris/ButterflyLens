@@ -139,6 +139,15 @@ The failed or uncertain parent attempt must be durably acknowledged in
 The API-request ledger uniquely identifies each `(run, request fingerprint,
 retry count)` attempt and rejects retry rows without parent lineage.
 
+Comment retrieval uses `flickr.photos.comments.getList` with only the public
+photo ID in the persisted request parameters. The planned-only scheduler admits
+current public photos with retained logical associations, ranks unresolved
+review need, never-checked state, association breadth, and checkpoint age, and
+backs off repeatedly empty comment checks. A configurable fraction of the
+currently available reserve lane caps comment work, leaving unused calls for
+retry, manual, judge, and accounting purposes. Comments remain discovery
+evidence only and are never treated as taxon labels.
+
 ## Adaptive scheduling
 
 Candidate priority is an availability-weighted combination of unique media per

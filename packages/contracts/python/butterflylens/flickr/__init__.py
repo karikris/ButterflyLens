@@ -88,6 +88,14 @@ from .retry import (
     execute_scheduled_retry,
     plan_search_retry,
 )
+from .comments import (
+    COMMENT_SCHEDULER_SCHEMA_VERSION,
+    FLICKR_COMMENTS_METHOD,
+    CommentCandidate,
+    CommentSchedulingError,
+    CommentSchedulingPolicy,
+    schedule_comment_requests,
+)
 
 __all__ = [
     "FLICKR_BUDGET_SCHEMA_VERSION",
@@ -158,4 +166,10 @@ __all__ = [
     "RetryPolicy",
     "execute_scheduled_retry",
     "plan_search_retry",
+    "COMMENT_SCHEDULER_SCHEMA_VERSION",
+    "FLICKR_COMMENTS_METHOD",
+    "CommentCandidate",
+    "CommentSchedulingError",
+    "CommentSchedulingPolicy",
+    "schedule_comment_requests",
 ]
