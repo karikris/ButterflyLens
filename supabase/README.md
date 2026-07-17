@@ -1,9 +1,15 @@
 # ButterflyLens Supabase database
 
 The database is built as ordered Supabase migrations. Task 3.1.1 establishes
-the typed `projects` and `runs` control-state tables only. Later 3.1 subtasks
-add discovery, model-evidence, review, map-impact, and user-role/RLS policy
-tables.
+the typed `projects` and `runs` control-state tables. Task 3.1.2 adds species
+and name projections, logical query definitions and associations, deduplicated
+physical API requests, and versioned Flickr source records. Later 3.1 subtasks
+add model-evidence, review, map-impact, and user-role/RLS policy tables.
+
+The discovery schema performs no provider call and stores no credential.
+Logical species/name associations remain separate from physical request rows,
+query terms are structurally forbidden from becoming labels, and unknown media
+rights block download, inference, display, and redistribution.
 
 Both current public tables have row-level security enabled immediately. The
 `anon` and `authenticated` roles have no table or sequence privileges until
