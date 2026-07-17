@@ -123,6 +123,15 @@ class FlickrGlobalOutOfRangeLaneTests(unittest.TestCase):
         with self.assertRaisesRegex(QueryLaneError, "stale"):
             self._build([stale])
 
+    def test_cross_row_global_homonym_claim_fails_closed(self) -> None:
+        collision = self._fixture_assertion(
+            assertion_id="global:assertion:collision",
+            taxon_key="global:taxon:collision",
+            name=str(self.fixture["name"]),
+        )
+        with self.assertRaisesRegex(QueryLaneError, "homonym collision"):
+            self._build([self.fixture, collision])
+
     def test_replay_is_deterministic_and_status_is_truthful(self) -> None:
         second = self._fixture_assertion(
             assertion_id="global:assertion:2",

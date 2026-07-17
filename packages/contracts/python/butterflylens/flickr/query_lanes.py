@@ -223,6 +223,13 @@ def build_global_out_of_range_lane(
     )
     if len({row["query_definition_id"] for row in definitions}) != len(definitions):
         raise QueryLaneError("global query definition ID collision")
+    global_taxa_by_term: dict[str, set[str]] = {}
+    for definition in definitions:
+        global_taxa_by_term.setdefault(
+            str(definition["normalized_query_text"]), set()
+        ).add(str(definition["source_taxon_key"]))
+    if any(len(taxon_keys) > 1 for taxon_keys in global_taxa_by_term.values()):
+        raise QueryLaneError("global normalized-name homonym collision")
 
     associations = [
         build_logical_query_association(

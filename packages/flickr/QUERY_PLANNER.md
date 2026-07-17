@@ -64,3 +64,19 @@ homonymous, ambiguous, stale-comparison, and non-species rows do not enter the
 lane. The current real-data lane is blocked pending BioMiner's live
 current-policy GBIF fingerprint database and quality evidence; fixtures only
 exercise the admission contract, and no Flickr request is made.
+
+## Eligibility and homonym boundary
+
+An assertion cannot become query-eligible merely by setting a boolean. The
+compiler independently requires canonical NFKC/casefold/whitespace
+normalization, a non-pending eligibility reason, no detected homonym risk, a
+name-type-appropriate trust tier and language, and an identified source
+provider. Batch compilation rejects a normalized term assigned to multiple
+taxa even if every individual row claims eligibility. The global lane applies
+the same cross-row homonym gate after its tier-5 checks.
+
+Single-token vernaculars, cross-taxon collisions, weak or mismatched trust,
+contradictory eligibility reasons, unsupported ranks, unauthorized First
+Nations terms, and stale range comparisons all fail closed. These are query
+eligibility decisions only; passing them does not label a photo or verify a
+taxon occurrence.

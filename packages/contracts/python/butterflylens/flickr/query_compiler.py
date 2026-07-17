@@ -6,6 +6,7 @@ from copy import deepcopy
 import hashlib
 import re
 from typing import Mapping
+import unicodedata
 
 import rfc8785
 
@@ -21,6 +22,16 @@ _SUPPORTED_NAME_TYPES = {
     "english_vernacular",
     "trusted_vernacular",
     "first_nations_language",
+}
+_TRUST_BY_NAME_TYPE = {
+    "accepted_scientific": {"accepted_authority", "accepted_global_authority"},
+    "scientific_synonym": {"provider_linked_synonym"},
+    "english_vernacular": {
+        "authority_vernacular",
+        "provider_curated_vernacular",
+    },
+    "trusted_vernacular": {"trusted_vernacular_authority"},
+    "first_nations_language": {"authorized_first_nations_name"},
 }
 _RANK_TIERS = {"species": 1, "genus": 2, "family": 3, "order": 4, "superfamily": 4}
 
@@ -61,6 +72,8 @@ def compile_name_assertion(assertion: Mapping[str, object]) -> dict[str, object]
         raise QueryCompilationError("query name is invalid")
     if not isinstance(normalized, str) or not normalized.strip() or len(normalized) > 200:
         raise QueryCompilationError("normalized query name is invalid")
+    if normalized != _normalize_query_name(name):
+        raise QueryCompilationError("normalized query name does not match query text")
     name_type = assertion["name_type"]
     if name_type not in _SUPPORTED_NAME_TYPES:
         raise QueryCompilationError("name type is not supported by the compiler")
@@ -71,6 +84,17 @@ def compile_name_assertion(assertion: Mapping[str, object]) -> dict[str, object]
     if not isinstance(eligibility, dict) or eligibility.get("eligible") is not True:
         reason = eligibility.get("reason") if isinstance(eligibility, dict) else "missing"
         raise QueryCompilationError(f"name assertion is not query eligible: {reason}")
+    eligibility_reason = eligibility.get("reason")
+    if (
+        not isinstance(eligibility_reason, str)
+        or not eligibility_reason
+        or eligibility_reason.startswith("excluded_")
+        or "pending" in eligibility_reason
+    ):
+        raise QueryCompilationError("query eligibility reason is contradictory or incomplete")
+    homonym_risk = assertion["homonym_risk"]
+    if not isinstance(homonym_risk, str) or not homonym_risk.startswith("none_detected"):
+        raise QueryCompilationError("name assertion has unresolved homonym risk")
     language = assertion["language"]
     region = assertion["region"]
     source = assertion["source"]
@@ -79,10 +103,20 @@ def compile_name_assertion(assertion: Mapping[str, object]) -> dict[str, object]
     language_code = language.get("code")
     if not isinstance(language_code, str) or not language_code:
         raise QueryCompilationError("language code is required")
+    if name_type in {"accepted_scientific", "scientific_synonym"} and language_code != "zxx":
+        raise QueryCompilationError("scientific name language must be zxx")
+    if name_type == "english_vernacular" and language_code != "en":
+        raise QueryCompilationError("English vernacular language must be en")
     if name_type == "first_nations_language":
         raise QueryCompilationError(
             "First Nations query terms require an authorized scoped decision adapter"
         )
+    trust_tier = assertion["trust_tier"]
+    if trust_tier not in _TRUST_BY_NAME_TYPE[name_type]:
+        raise QueryCompilationError("name assertion trust is insufficient for its type")
+    provider = source.get("provider")
+    if not isinstance(provider, str) or not provider:
+        raise QueryCompilationError("query source provider is required")
     preimage = {
         "source_assertion_id": assertion_id,
         "source_taxon_key": taxon_key,
@@ -91,7 +125,7 @@ def compile_name_assertion(assertion: Mapping[str, object]) -> dict[str, object]
         "language_code": language_code,
         "name_type": name_type,
         "taxon_rank": rank,
-        "trust_tier": assertion["trust_tier"],
+        "trust_tier": trust_tier,
         "tier": _RANK_TIERS[rank],
         "source": deepcopy(source),
     }
@@ -101,8 +135,8 @@ def compile_name_assertion(assertion: Mapping[str, object]) -> dict[str, object]
         "query_definition_id": f"blfq:v1:{digest[:24]}",
         **preimage,
         "region": deepcopy(region),
-        "homonym_risk": assertion["homonym_risk"],
-        "eligibility_reason": eligibility["reason"],
+        "homonym_risk": homonym_risk,
+        "eligibility_reason": eligibility_reason,
         "term_semantics": "discovery_term_only_not_a_taxon_label",
         "compiler_fingerprint": digest,
     }
@@ -125,6 +159,17 @@ def compile_name_assertions(
     identities = [item["query_definition_id"] for item in compiled]
     if len(identities) != len(set(identities)):
         raise QueryCompilationError("query definition ID collision")
+    taxon_keys_by_term: dict[str, set[str]] = {}
+    for item in compiled:
+        term = str(item["normalized_query_text"])
+        taxon_keys_by_term.setdefault(term, set()).add(str(item["source_taxon_key"]))
+    collisions = sorted(
+        term for term, taxon_keys in taxon_keys_by_term.items() if len(taxon_keys) > 1
+    )
+    if collisions:
+        raise QueryCompilationError(
+            "eligible normalized query term maps to multiple taxa: " + ", ".join(collisions)
+        )
     return tuple(compiled)
 
 
@@ -188,3 +233,7 @@ def compile_global_out_of_range_assertion(
         "scope_evidence": deepcopy(scope),
         "compiler_fingerprint": digest,
     }
+
+
+def _normalize_query_name(value: str) -> str:
+    return " ".join(unicodedata.normalize("NFKC", value).casefold().split())
