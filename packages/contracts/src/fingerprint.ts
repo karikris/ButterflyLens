@@ -159,6 +159,13 @@ export class FingerprintValidationError extends Error {
   }
 }
 
+export class FingerprintIntegrityError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'FingerprintIntegrityError'
+  }
+}
+
 export function canonicalizeJson(value: unknown): string {
   return canonicalizeNode(value, '$')
 }
@@ -316,6 +323,182 @@ function isRfc3339DateTime(value: string): boolean {
     return false
   }
   return Number.isFinite(Date.parse(value))
+}
+
+export class EvidenceLineageGraph {
+  private readonly records = new Map<string, EvidenceFingerprintRecord>()
+  private readonly parents = new Map<string, readonly string[]>()
+  private readonly children = new Map<string, readonly string[]>()
+
+  constructor(candidates: readonly unknown[]) {
+    candidates.forEach((candidate, index) => {
+      try {
+        validateEvidenceFingerprint(candidate)
+      } catch (error) {
+        if (error instanceof FingerprintValidationError) {
+          throw new FingerprintIntegrityError(`records[${index}]: ${error.message}`)
+        }
+        throw error
+      }
+      const record = cloneFingerprint(candidate)
+      if (this.records.has(record.digest)) {
+        throw new FingerprintIntegrityError(
+          `duplicate fingerprint digest: ${record.digest}`,
+        )
+      }
+      this.records.set(record.digest, record)
+    })
+
+    const childSets = new Map<string, Set<string>>()
+    for (const digest of this.records.keys()) childSets.set(digest, new Set())
+    for (const [digest, record] of this.records) {
+      const parentDigests: string[] = []
+      for (const parent of record.preimage.parents) {
+        const referenced = this.records.get(parent.digest)
+        if (referenced === undefined) {
+          throw new FingerprintIntegrityError(
+            `${digest}: missing parent fingerprint ${parent.digest}`,
+          )
+        }
+        if (parent.fingerprint_kind !== referenced.preimage.fingerprint_kind) {
+          throw new FingerprintIntegrityError(
+            `${digest}: parent kind mismatch for ${parent.digest}`,
+          )
+        }
+        parentDigests.push(parent.digest)
+        childSets.get(parent.digest)?.add(digest)
+      }
+      this.parents.set(digest, parentDigests.sort())
+    }
+    for (const [digest, children] of childSets) {
+      this.children.set(digest, [...children].sort())
+    }
+    this.assertAcyclic()
+  }
+
+  get digests(): readonly string[] {
+    return [...this.records.keys()].sort()
+  }
+
+  record(digest: string): EvidenceFingerprintRecord {
+    return cloneFingerprint(this.requireRecord(digest))
+  }
+
+  parentDigests(digest: string): readonly string[] {
+    this.requireRecord(digest)
+    return [...(this.parents.get(digest) ?? [])]
+  }
+
+  childDigests(digest: string): readonly string[] {
+    this.requireRecord(digest)
+    return [...(this.children.get(digest) ?? [])]
+  }
+
+  ancestorDigests(digest: string): readonly string[] {
+    return this.breadthFirst(digest, this.parents)
+  }
+
+  descendantDigests(digest: string): readonly string[] {
+    return this.breadthFirst(digest, this.children)
+  }
+
+  topologicalLineage(digest: string): readonly string[] {
+    this.requireRecord(digest)
+    const selected = new Set([digest, ...this.ancestorDigests(digest)])
+    const indegree = new Map<string, number>()
+    for (const node of selected) {
+      indegree.set(
+        node,
+        (this.parents.get(node) ?? []).filter((parent) => selected.has(parent)).length,
+      )
+    }
+    const ready = [...selected].filter((node) => indegree.get(node) === 0).sort()
+    const ordered: string[] = []
+    while (ready.length > 0) {
+      const node = ready.shift()
+      if (node === undefined) break
+      ordered.push(node)
+      for (const child of this.children.get(node) ?? []) {
+        if (!selected.has(child)) continue
+        const remaining = (indegree.get(child) ?? 0) - 1
+        indegree.set(child, remaining)
+        if (remaining === 0) insertSorted(ready, child)
+      }
+    }
+    if (ordered.length !== selected.size) {
+      throw new FingerprintIntegrityError('cycle detected during lineage traversal')
+    }
+    return ordered
+  }
+
+  hasLineage(descendant: string, ancestor: string): boolean {
+    this.requireRecord(ancestor)
+    return this.ancestorDigests(descendant).includes(ancestor)
+  }
+
+  private breadthFirst(
+    digest: string,
+    adjacency: ReadonlyMap<string, readonly string[]>,
+  ): readonly string[] {
+    this.requireRecord(digest)
+    const distance = new Map<string, number>([[digest, 0]])
+    const pending = [digest]
+    for (let index = 0; index < pending.length; index += 1) {
+      const node = pending[index]
+      for (const adjacent of adjacency.get(node) ?? []) {
+        if (distance.has(adjacent)) continue
+        distance.set(adjacent, (distance.get(node) ?? 0) + 1)
+        pending.push(adjacent)
+      }
+    }
+    distance.delete(digest)
+    return [...distance.keys()].sort((left, right) =>
+      (distance.get(left) ?? 0) - (distance.get(right) ?? 0) ||
+      compareStrings(left, right),
+    )
+  }
+
+  private assertAcyclic(): void {
+    const indegree = new Map(
+      [...this.parents].map(([digest, parents]) => [digest, parents.length]),
+    )
+    const ready = [...indegree].filter(([, count]) => count === 0)
+      .map(([digest]) => digest).sort()
+    let visited = 0
+    while (ready.length > 0) {
+      const node = ready.shift()
+      if (node === undefined) break
+      visited += 1
+      for (const child of this.children.get(node) ?? []) {
+        const remaining = (indegree.get(child) ?? 0) - 1
+        indegree.set(child, remaining)
+        if (remaining === 0) insertSorted(ready, child)
+      }
+    }
+    if (visited !== this.records.size) {
+      const cycleNode = [...indegree].filter(([, count]) => count > 0)
+        .map(([digest]) => digest).sort()[0]
+      throw new FingerprintIntegrityError(`lineage cycle detected at ${cycleNode}`)
+    }
+  }
+
+  private requireRecord(digest: string): EvidenceFingerprintRecord {
+    const record = this.records.get(digest)
+    if (record === undefined) {
+      throw new FingerprintIntegrityError(`unknown fingerprint digest: ${digest}`)
+    }
+    return record
+  }
+}
+
+function cloneFingerprint(record: EvidenceFingerprintRecord): EvidenceFingerprintRecord {
+  return JSON.parse(canonicalizeJson(record)) as EvidenceFingerprintRecord
+}
+
+function insertSorted(values: string[], value: string): void {
+  let index = 0
+  while (index < values.length && values[index] < value) index += 1
+  values.splice(index, 0, value)
 }
 
 function canonicalizeNode(value: unknown, path: string): string {

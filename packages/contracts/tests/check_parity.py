@@ -223,6 +223,10 @@ def main() -> None:
     sys.path.insert(0, str(PACKAGE / "python"))
     from butterflylens.contracts import (  # noqa: PLC0415
         FingerprintValidationError,
+        EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
+        FINGERPRINT_CANONICALIZATION,
+        FINGERPRINT_HASH_ALGORITHM,
+        EvidenceLineageGraph,
         canonicalize_evidence_preimage,
         canonicalize_json,
         semantic_fingerprint_digest,
@@ -255,6 +259,29 @@ def main() -> None:
             raise ParityFailure(
                 f"Python fingerprint validation error {vector['case_id']} diverged"
             )
+    for vector in fixtures.get("lineage_vectors", []):
+        records = [
+            {
+                "schema_version": EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
+                "hash_algorithm": FINGERPRINT_HASH_ALGORITHM,
+                "canonicalization": FINGERPRINT_CANONICALIZATION,
+                "preimage": preimage,
+                "digest": semantic_fingerprint_digest(preimage),
+                "recorded_at": "2026-07-17T22:10:47Z",
+            }
+            for preimage in vector["nodes"]
+        ]
+        graph = EvidenceLineageGraph(records)
+        observed = {
+            "ancestors": list(graph.ancestor_digests(vector["target_digest"])),
+            "descendants": list(graph.descendant_digests(vector["root_digest"])),
+            "topological": list(graph.topological_lineage(vector["target_digest"])),
+        }
+        expected_lineage = {
+            key: vector[key] for key in ("ancestors", "descendants", "topological")
+        }
+        if observed != expected_lineage:
+            raise ParityFailure(f"Python lineage vector {vector['case_id']} diverged")
     python_results = validate_python_cases(fixtures, schemas, registry)
     typescript_results, constants, compiler_version = run_typescript(fixtures)
     expected = {

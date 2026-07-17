@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+from collections import deque
 from copy import deepcopy
 from datetime import datetime
 import hashlib
 import hmac
+import heapq
 import math
 import re
-from typing import Literal, Mapping, NoReturn, TypedDict
+from typing import Iterable, Literal, Mapping, NoReturn, TypedDict
 
 import rfc8785
 
@@ -108,6 +110,10 @@ class CanonicalizationError(ValueError):
 
 class FingerprintValidationError(ValueError):
     """Raised when a fingerprint record is malformed or fails recomputation."""
+
+
+class FingerprintIntegrityError(ValueError):
+    """Raised when a validated fingerprint graph has broken lineage."""
 
 
 def _canonicalization_error(path: str, message: str) -> NoReturn:
@@ -336,6 +342,160 @@ def validate_evidence_fingerprint(record: Mapping[str, object]) -> None:
         raise FingerprintValidationError(f"$.preimage: {error}") from error
     if not hmac.compare_digest(digest, expected_digest):
         _validation_error("$.digest", "semantic digest mismatch")
+
+
+class EvidenceLineageGraph:
+    """Validated, immutable semantic-fingerprint DAG with deterministic traversal."""
+
+    def __init__(self, records: Iterable[Mapping[str, object]]) -> None:
+        self._records: dict[str, dict[str, object]] = {}
+        for index, record in enumerate(records):
+            try:
+                validate_evidence_fingerprint(record)
+            except FingerprintValidationError as error:
+                raise FingerprintIntegrityError(f"records[{index}]: {error}") from error
+            copied = deepcopy(dict(record))
+            digest = copied["digest"]
+            assert isinstance(digest, str)
+            if digest in self._records:
+                raise FingerprintIntegrityError(f"duplicate fingerprint digest: {digest}")
+            self._records[digest] = copied
+
+        self._parents: dict[str, tuple[str, ...]] = {}
+        child_sets: dict[str, set[str]] = {digest: set() for digest in self._records}
+        for digest, record in self._records.items():
+            preimage = record["preimage"]
+            assert isinstance(preimage, dict)
+            parents = preimage["parents"]
+            assert isinstance(parents, list)
+            parent_digests: list[str] = []
+            for parent in parents:
+                assert isinstance(parent, dict)
+                parent_digest = parent["digest"]
+                assert isinstance(parent_digest, str)
+                referenced = self._records.get(parent_digest)
+                if referenced is None:
+                    raise FingerprintIntegrityError(
+                        f"{digest}: missing parent fingerprint {parent_digest}"
+                    )
+                referenced_preimage = referenced["preimage"]
+                assert isinstance(referenced_preimage, dict)
+                if parent["fingerprint_kind"] != referenced_preimage["fingerprint_kind"]:
+                    raise FingerprintIntegrityError(
+                        f"{digest}: parent kind mismatch for {parent_digest}"
+                    )
+                parent_digests.append(parent_digest)
+                child_sets[parent_digest].add(digest)
+            self._parents[digest] = tuple(sorted(parent_digests))
+        self._children = {
+            digest: tuple(sorted(children)) for digest, children in child_sets.items()
+        }
+        self._assert_acyclic()
+
+    @property
+    def digests(self) -> tuple[str, ...]:
+        """Return every graph digest in lexical order."""
+
+        return tuple(sorted(self._records))
+
+    def record(self, digest: str) -> dict[str, object]:
+        """Return a defensive copy of one validated record."""
+
+        self._require_digest(digest)
+        return deepcopy(self._records[digest])
+
+    def parent_digests(self, digest: str) -> tuple[str, ...]:
+        """Return direct parent digests in lexical order."""
+
+        self._require_digest(digest)
+        return self._parents[digest]
+
+    def child_digests(self, digest: str) -> tuple[str, ...]:
+        """Return direct child digests in lexical order."""
+
+        self._require_digest(digest)
+        return self._children[digest]
+
+    def ancestor_digests(self, digest: str) -> tuple[str, ...]:
+        """Return ancestors nearest-first, then by lexical digest at each depth."""
+
+        return self._breadth_first(digest, self._parents)
+
+    def descendant_digests(self, digest: str) -> tuple[str, ...]:
+        """Return descendants nearest-first, then by lexical digest at each depth."""
+
+        return self._breadth_first(digest, self._children)
+
+    def topological_lineage(self, digest: str) -> tuple[str, ...]:
+        """Return all ancestors and the subject with every parent before its child."""
+
+        self._require_digest(digest)
+        selected = {digest, *self.ancestor_digests(digest)}
+        indegree = {
+            node: sum(parent in selected for parent in self._parents[node])
+            for node in selected
+        }
+        ready = [node for node, count in indegree.items() if count == 0]
+        heapq.heapify(ready)
+        ordered: list[str] = []
+        while ready:
+            node = heapq.heappop(ready)
+            ordered.append(node)
+            for child in self._children[node]:
+                if child not in selected:
+                    continue
+                indegree[child] -= 1
+                if indegree[child] == 0:
+                    heapq.heappush(ready, child)
+        if len(ordered) != len(selected):
+            raise FingerprintIntegrityError("cycle detected during lineage traversal")
+        return tuple(ordered)
+
+    def has_lineage(self, descendant: str, ancestor: str) -> bool:
+        """Return whether ancestor is transitively upstream of descendant."""
+
+        self._require_digest(ancestor)
+        return ancestor in self.ancestor_digests(descendant)
+
+    def _breadth_first(
+        self, digest: str, adjacency: Mapping[str, tuple[str, ...]]
+    ) -> tuple[str, ...]:
+        self._require_digest(digest)
+        distance = {digest: 0}
+        pending: deque[str] = deque([digest])
+        while pending:
+            node = pending.popleft()
+            for adjacent in adjacency[node]:
+                if adjacent in distance:
+                    continue
+                distance[adjacent] = distance[node] + 1
+                pending.append(adjacent)
+        distance.pop(digest)
+        return tuple(sorted(distance, key=lambda node: (distance[node], node)))
+
+    def _assert_acyclic(self) -> None:
+        indegree = {digest: len(parents) for digest, parents in self._parents.items()}
+        ready = [digest for digest, count in indegree.items() if count == 0]
+        heapq.heapify(ready)
+        visited = 0
+        while ready:
+            digest = heapq.heappop(ready)
+            visited += 1
+            for child in self._children[digest]:
+                indegree[child] -= 1
+                if indegree[child] == 0:
+                    heapq.heappush(ready, child)
+        if visited != len(self._records):
+            cycle_digest = min(
+                digest for digest, count in indegree.items() if count > 0
+            )
+            raise FingerprintIntegrityError(
+                f"lineage cycle detected at {cycle_digest}"
+            )
+
+    def _require_digest(self, digest: str) -> None:
+        if digest not in self._records:
+            raise FingerprintIntegrityError(f"unknown fingerprint digest: {digest}")
 
 
 class ContentChecksum(TypedDict):

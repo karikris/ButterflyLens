@@ -50,6 +50,27 @@ for (const vector of fixtures.fingerprint_validation_vectors ?? []) {
     throw new Error(`fingerprint validation vector ${vector.case_id} diverged: ${message}`)
   }
 }
+for (const vector of fixtures.lineage_vectors ?? []) {
+  const records = vector.nodes.map((preimage) => ({
+    schema_version: declarations.EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
+    hash_algorithm: declarations.FINGERPRINT_HASH_ALGORITHM,
+    canonicalization: declarations.FINGERPRINT_CANONICALIZATION,
+    preimage,
+    digest: declarations.semanticFingerprintDigest(preimage),
+    recorded_at: '2026-07-17T22:10:47Z',
+  }))
+  const graph = new declarations.EvidenceLineageGraph(records)
+  const observed = {
+    ancestors: graph.ancestorDigests(vector.target_digest),
+    descendants: graph.descendantDigests(vector.root_digest),
+    topological: graph.topologicalLineage(vector.target_digest),
+  }
+  for (const key of Object.keys(observed)) {
+    if (JSON.stringify(observed[key]) !== JSON.stringify(vector[key])) {
+      throw new Error(`lineage vector ${vector.case_id} ${key} diverged`)
+    }
+  }
+}
 
 const validById = new Map()
 const results = []

@@ -63,7 +63,7 @@ downloaded image, perceptual duplicate group,
 YOLOE route, full-frame visual input, BioCLIP embedding, reference bank,
 prototype, candidate score, review event, consensus, quality snapshot,
 geographic-impact cell, release candidate, and export manifest. It also covers
-the project, run-input, provider-snapshot, API-response, media-object,
+the project, run-input, provider-snapshot, source-response, media-object,
 model-artifact, preprocessing, artifact-manifest, and map-snapshot envelopes
 needed to connect those records.
 
@@ -72,6 +72,19 @@ change. It must not be squeezed into a misleading existing kind. Version 1.0
 remains readable for existing records; v1.1 adds `logical_query_association`
 and replaces the ambiguous v1.0 `api_response` vocabulary item with
 `source_response`. Writers emit v1.1.
+
+## Lineage traversal
+
+`EvidenceLineageGraph` validates every record before indexing it. Construction
+fails when a digest is duplicated, a parent is absent, the declared parent
+kind differs from the referenced record, or the graph contains a cycle. It
+never fetches a missing parent or silently truncates a lineage.
+
+Python and TypeScript expose deterministic direct-parent, direct-child,
+ancestor, descendant, reachability, and parent-before-child topological
+traversals. Breadth-first traversals order nodes by minimum distance and then
+digest; topological ties use digest order. Returned records are defensive
+copies, so consumer mutation cannot change the validated graph.
 
 ## Meaning and limits
 

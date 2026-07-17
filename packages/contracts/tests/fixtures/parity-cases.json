@@ -110,6 +110,77 @@
       }
     }
   ],
+  "lineage_vectors": [
+    {
+      "case_id": "discovery-chain-lineage",
+      "nodes": [
+        {
+          "fingerprint_kind": "source_flickr_record",
+          "subject_id": "flickr:lineage",
+          "payload_schema_version": "v1",
+          "payload": { "fixture": "flickr:lineage" },
+          "parents": [
+            { "relationship": "derived_from", "fingerprint_kind": "source_response", "digest": "ab988ac8b9208079cb58c89d345bc9f0e99bdee2b151e1bca865dad3af955939" }
+          ]
+        },
+        {
+          "fingerprint_kind": "query_definition",
+          "subject_id": "query:lineage",
+          "payload_schema_version": "v1",
+          "payload": { "fixture": "query:lineage" },
+          "parents": []
+        },
+        {
+          "fingerprint_kind": "source_response",
+          "subject_id": "response:lineage",
+          "payload_schema_version": "v1",
+          "payload": { "fixture": "response:lineage" },
+          "parents": [
+            { "relationship": "derived_from", "fingerprint_kind": "physical_api_request", "digest": "335400989d92565b726eb0d74ad526e9f0fdff38df46486c6ab3258821817ebf" }
+          ]
+        },
+        {
+          "fingerprint_kind": "logical_query_association",
+          "subject_id": "association:lineage",
+          "payload_schema_version": "v1",
+          "payload": { "fixture": "association:lineage" },
+          "parents": [
+            { "relationship": "derived_from", "fingerprint_kind": "query_definition", "digest": "53cb5ce557e9b26482e7a6f41325a7cd974bd230688abd38ae39ad43394ca5c9" }
+          ]
+        },
+        {
+          "fingerprint_kind": "physical_api_request",
+          "subject_id": "request:lineage",
+          "payload_schema_version": "v1",
+          "payload": { "fixture": "request:lineage" },
+          "parents": [
+            { "relationship": "derived_from", "fingerprint_kind": "logical_query_association", "digest": "d59c4750f11183c0841f4863b9bf3d8ae36193bc7074ed79625a37d7b8f4049d" }
+          ]
+        }
+      ],
+      "root_digest": "53cb5ce557e9b26482e7a6f41325a7cd974bd230688abd38ae39ad43394ca5c9",
+      "target_digest": "72dda2d6c660d0f020c3d001a0b9e4ed9188cade636a43def2ec3810fc23fce4",
+      "ancestors": [
+        "ab988ac8b9208079cb58c89d345bc9f0e99bdee2b151e1bca865dad3af955939",
+        "335400989d92565b726eb0d74ad526e9f0fdff38df46486c6ab3258821817ebf",
+        "d59c4750f11183c0841f4863b9bf3d8ae36193bc7074ed79625a37d7b8f4049d",
+        "53cb5ce557e9b26482e7a6f41325a7cd974bd230688abd38ae39ad43394ca5c9"
+      ],
+      "descendants": [
+        "d59c4750f11183c0841f4863b9bf3d8ae36193bc7074ed79625a37d7b8f4049d",
+        "335400989d92565b726eb0d74ad526e9f0fdff38df46486c6ab3258821817ebf",
+        "ab988ac8b9208079cb58c89d345bc9f0e99bdee2b151e1bca865dad3af955939",
+        "72dda2d6c660d0f020c3d001a0b9e4ed9188cade636a43def2ec3810fc23fce4"
+      ],
+      "topological": [
+        "53cb5ce557e9b26482e7a6f41325a7cd974bd230688abd38ae39ad43394ca5c9",
+        "d59c4750f11183c0841f4863b9bf3d8ae36193bc7074ed79625a37d7b8f4049d",
+        "335400989d92565b726eb0d74ad526e9f0fdff38df46486c6ab3258821817ebf",
+        "ab988ac8b9208079cb58c89d345bc9f0e99bdee2b151e1bca865dad3af955939",
+        "72dda2d6c660d0f020c3d001a0b9e4ed9188cade636a43def2ec3810fc23fce4"
+      ]
+    }
+  ],
   "schema_version_checks": [
     { "constant": "PROJECT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "pointer": "/properties/schema_version/const" },
     { "constant": "RUN_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/schema_version/const" },
