@@ -169,6 +169,27 @@ components:
       - Byte-identical isolated metadata-linkage rebuild with PyArrow 25.0.0.
       - Source-combination counts, stable content IDs, conflict retention, manifest checksums, and no-equivalence-claim invariants.
     status: metadata_linkage_verified_byte_deduplication_pending
+  - component_id: biominer-reference-automated-admission-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/references/{licensing.py,downloader.py,schemas.py,admission_eligibility.py}
+    destination_path: scripts/build_reference_admission.py and data/packs/australian_butterflies/v1/references/v1/gated
+    migration_kind: adapter
+    reason: Apply fail-closed rights, provider-host, taxon, decode, and checksum gates to a bounded Australian reference selection without committing source-image collections.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Restrict automated use to CC0 and CC BY media with required attribution.
+      - Block taxon and media mirror conflicts independently from the licence decision.
+      - Approve only the verified iNaturalist open-data HTTPS host; retain compatible GBIF rows as metadata without downloading them.
+      - Select one media row per observation with per-species and global observer caps.
+      - Invoke the pinned downloader for bounded content type, byte count, isolated decode, dimensions, SHA-256, perceptual hash, content-addressed cache, and resumable checkpoints.
+      - Publish evidence metadata only and preserve zero human-verified references.
+    tests:
+      - Byte-identical isolated gate-plan rebuild with PyArrow 25.0.0.
+      - Pinned BioMiner selection-schema validation.
+      - Gate counts, licence lanes, host policy, conflict blocks, observation uniqueness, species quota, observer cap, checksums, decode status, and no-source-media-in-Git invariants.
+    status: automated_gate_verified_2906_provisional_4_quarantined
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
   - Candidate model and workflow contracts remain planned; the live-worker boundary plus ALA Parquet and H3 adapters are now defined.

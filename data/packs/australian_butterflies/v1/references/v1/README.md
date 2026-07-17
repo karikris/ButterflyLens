@@ -51,6 +51,31 @@ selection remain explicitly null until permitted media is acquired and passes
 Task 2.4.3. Provider source records, media IDs, taxon keys, licence assertions,
 and conflicts remain attached to every group.
 
+Task 2.4.3 applies a conservative automated gate to all 24,329 media rows. It
+requires an exact accepted-taxon crosswalk, no observation or media mirror
+conflict, `cc0` or `cc-by` media rights, complete required attribution, no
+import exclusion, and an approved HTTPS provider host. The current host lane
+is limited to iNaturalist's open-data object store. Compatible GBIF licences
+are recorded, but GBIF downloads remain blocked until each relevant media host
+has an approved policy.
+
+The gate finds 22,378 eligible metadata rows and blocks 1,951. A deterministic
+diversity plan selects at most one image per observation, 20 per species, and
+50 per observer across the bank. It selects 2,910 candidates spanning 237
+species; 86 species reach the cap. Every selected label remains an unreviewed
+provider assertion. Downloaded source objects live only in the ignored local
+cache; Git receives checksums, decode evidence, gate decisions, and manifests,
+not the source-image collection.
+
+Pinned BioMiner downloaded this selection in a resumable run. Of 2,910
+outcomes, 2,906 decoded locally and four were quarantined after permanent HTTP
+404 responses. The report records zero retries, 391 checkpoint resumes, 2,905
+unique content SHA-256 values, and 1,127,087,982 content-addressed source bytes.
+The valid inventory contains 2,903 JPEG and three PNG objects. A repeated
+content identity remains attached to both source records; byte/perceptual
+duplicate resolution is a separate gate. Failed rows retain their stable media
+identity and quarantine reason but no invented checksum or dimensions.
+
 Rebuild the query plan:
 
 ```bash
@@ -80,4 +105,39 @@ uv run python scripts/build_reference_import.py deduplicate-metadata \
   --manifest data/packs/australian_butterflies/v1/references/v1/reference_deduplication_manifest.json \
   --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
   --generated-at 2026-07-17T19:55:50Z
+```
+
+Rebuild the deterministic admission plan without network access:
+
+```bash
+uv run python scripts/build_reference_admission.py plan \
+  --crosswalk data/packs/australian_butterflies/v1/crosswalk.jsonl \
+  --observations data/packs/australian_butterflies/v1/references/v1/imported/reference_observations.parquet \
+  --media data/packs/australian_butterflies/v1/references/v1/imported/reference_media_candidates.parquet \
+  --observation-mirrors data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_observation_mirror_groups.parquet \
+  --media-duplicates data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_media_duplicate_candidates.parquet \
+  --import-manifest data/packs/australian_butterflies/v1/references/v1/reference_import_manifest.json \
+  --decisions-output data/packs/australian_butterflies/v1/references/v1/gated/reference_media_gate_decisions.parquet \
+  --selections-output data/packs/australian_butterflies/v1/references/v1/gated/reference_download_selections.parquet \
+  --manifest-output data/packs/australian_butterflies/v1/references/v1/reference_gate_plan_manifest.json \
+  --generated-at 2026-07-17T20:15:00Z
+```
+
+The network download is not claimed to be byte-replayable: provider objects
+can disappear or change. Its frozen command report and media-object inventory
+are the evidence for this run. Rebuild the normalized publication and root
+pack state from those tracked artifacts without reading source-image bytes:
+
+```bash
+uv run python scripts/build_reference_admission.py publish \
+  --plan-manifest data/packs/australian_butterflies/v1/references/v1/reference_gate_plan_manifest.json \
+  --decisions data/packs/australian_butterflies/v1/references/v1/gated/reference_media_gate_decisions.parquet \
+  --selections data/packs/australian_butterflies/v1/references/v1/gated/reference_download_selections.parquet \
+  --media-objects data/packs/australian_butterflies/v1/references/v1/gated/reference_media_objects.parquet \
+  --media-objects-output data/packs/australian_butterflies/v1/references/v1/gated/reference_media_objects.parquet \
+  --download-report data/packs/australian_butterflies/v1/references/v1/reference_media_download_report.json \
+  --download-report-output data/packs/australian_butterflies/v1/references/v1/reference_media_download_report.json \
+  --manifest-output data/packs/australian_butterflies/v1/references/v1/reference_admission_manifest.json \
+  --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
+  --generated-at 2026-07-17T20:36:03.622395Z
 ```

@@ -8,17 +8,19 @@ This document is engineering evidence, not legal advice. Provider terms can chan
 
 ## Gate outcome
 
-No provider credential, boundary geometry, source image, reference bank,
-community review, or export is stored in ButterflyLens at this audit. A selected
-ALA occurrence snapshot now exists under the controls below. The remaining
-statuses define what must be true before later artifacts become eligible.
+No provider credential, boundary geometry, source-image collection in Git,
+human-verified reference bank, community review, or export is stored in
+ButterflyLens at this audit. Permitted reference source objects exist only in
+the ignored local cache. A selected ALA occurrence snapshot now exists under
+the controls below. The remaining statuses define what must be true before
+later artifacts become eligible.
 
 | Source | Current status | Release gate |
 | --- | --- | --- |
 | Flickr API | No key configured or call made. | Register the application/use, accept current API terms, identify commercial status, activate the single global budget, and pass per-photo rights/display/removal checks. |
 | Atlas of Living Australia (ALA) | Selected evidence snapshot frozen on 17 July 2026; downstream public-product release remains blocked for three dataset-rights conflicts. | Preserve the exact query/archive fingerprint, contributing-resource citations, per-row licence, quality/sensitivity state, dataset review state, and downstream eligibility. Resolve or exclude the flagged resources and recheck terms before release. |
-| GBIF | Bounded candidate-reference metadata imported through pinned BioMiner; no media bytes downloaded and no DOI minted. | Apply the 2.4.3 automated licence/decode/taxon gate before any media download or use; retain dataset, publisher, occurrence, media, creator, licence, attribution, and source fingerprints. |
-| iNaturalist | Bounded, one-request-per-second candidate-reference metadata import complete; only `cc0`/`cc-by` photos marked allowed and no media bytes downloaded. | Keep every candidate unreviewed, enforce the commercial-AI-training prohibition, preserve creator/licence/source evidence, and apply later decode/taxon/duplicate gates. |
+| GBIF | Bounded candidate-reference metadata imported; compatible media licences classified, but every GBIF media host remains download-blocked and no DOI was minted. | Approve each required provider host and retain dataset, publisher, occurrence, media, creator, licence, attribution, and source fingerprints before any later byte acquisition. |
+| iNaturalist | Automated `cc0`/`cc-by`, exact-taxon, host, download, and decode gate complete: 2,906 provisional objects valid and four HTTP 404 rows quarantined. | Keep every candidate unreviewed, enforce the commercial-AI-training prohibition, preserve creator/licence/source evidence, and complete later duplicate, routing, embedding, and human-review gates. |
 | ABS ASGS boundaries | ALA-indexed LGA 2023 contextual values selected; no geometry copied. | Retain the ALA layer metadata receipt, CC BY 4.0 attribution, and statistical-boundary qualification; a future geometry file requires its own checksum and gate. |
 | DCCEEW IBRA 7 | ALA-indexed IBRA v7 region values selected; no geometry copied. | Retain the ALA layer metadata receipt and CC BY 4.0 attribution; a future geometry file requires its own checksum and gate. |
 | Community reviews/comments | No accounts, terms acceptance, or review event exists. | Publish participant terms/privacy/moderation, collect versioned acceptance, and bind every event to its licence/consent version. |
@@ -174,6 +176,31 @@ blocked for resolution. Normalizing equivalent Creative Commons code and URL
 spellings is comparison-only and does not broaden permitted use. Because no
 media bytes are present, the linkage asserts neither byte equality nor
 perceptual duplication, and it selects no canonical media row.
+
+Task 2.4.3 admits only `cc0` and `cc-by` media with complete required
+attribution into the automated download lane. NonCommercial, ShareAlike,
+NoDerivatives, combined variants, missing, conflicting, and unrecognized
+licences remain blocked; the policy makes no compatibility conclusion about
+those terms. Exact taxon and mirror-conflict gates apply independently of
+licensing. Provider-host approval is also independent: GBIF metadata may pass
+the licence classifier while remaining blocked from download because its
+publisher host has no approved policy. The current executable lane is limited
+to HTTPS objects on iNaturalist's open-data host.
+
+The selected lane caps each species at 20 independent observations and each
+observer at 50 objects across the bank. Source bytes are content-addressed in
+ignored local cache and are not committed. Checksums and decode evidence do
+not broaden source rights, establish human verification, or authorize public
+display. Cache loss remains a durability risk until permitted objects are
+committed to the configured private object store.
+
+The pinned download run selected 2,910 rows. It produced 2,906 valid local
+decodes and quarantined four permanent HTTP 404 responses; no request retry was
+needed. The valid rows reference 2,905 unique SHA-256 content identities and
+1,127,087,982 content-addressed source bytes. One repeated content identity is
+retained as separate source evidence. All 2,910 outcomes, including the four
+failures, remain in the media-object inventory and command report. None is
+human verified.
 
 - CC0 and compatible CC BY media may enter allowed lanes with provenance and attribution.
 - CC BY-NC, CC BY-ND, CC BY-SA, and combined variants require explicit use-specific gates; no blanket compatibility is asserted.

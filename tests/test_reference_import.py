@@ -147,7 +147,7 @@ class ReferenceImportTests(unittest.TestCase):
         self.assertEqual(state["manifest_sha256"], self.builder.sha256_file(self.manifest_path))
         self.assertEqual(state["observation_rows"], self.observations.num_rows)
         self.assertEqual(state["media_candidate_rows"], self.media.num_rows)
-        self.assertEqual(state["images_downloaded"], 0)
+        self.assertFalse(self.manifest["rights"]["media_bytes_downloaded"])
         self.assertEqual(state["human_verified_media"], 0)
 
     def test_ala_link_and_release_block_are_not_weakened(self) -> None:

@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T19:55:50Z",
+  "generated_at": "2026-07-17T20:36:03.622395Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -182,7 +182,19 @@
       "licence_url": "data/packs/australian_butterflies/v1/references/v1/imported/reference_media_candidates.parquet",
       "terms_url": "DATA_RIGHTS.md",
       "attribution": "GBIF and its contributing datasets; iNaturalist observations and the creators/rights holders retained per candidate media row; BioMiner normalization provenance.",
-      "scope_note": "Provider-labelled metadata only: 12,980 observations and 24,329 media candidates from 742 bounded queries. Exact provider identities link 10,453 observation mirror groups and 93 media duplicate hypotheses without asserting byte or perceptual equivalence. No image bytes were downloaded. All media remains unreviewed; GBIF licence gates are pending; import, taxon, and licence conflicts remain blocked."
+      "scope_note": "Provider-labelled metadata only: 12,980 observations and 24,329 media candidates from 742 bounded queries. Exact provider identities link 10,453 observation mirror groups and 93 media duplicate hypotheses without asserting byte or perceptual equivalence. This import itself downloaded no image bytes. All media remains unreviewed; its later automated gate is recorded separately; import, taxon, and licence conflicts remain blocked."
+    },
+    {
+      "source_id": "butterflylens-reference-admission-v1",
+      "provider": "iNaturalist open-data media processed by BioMiner at the pinned origin commit",
+      "dataset": "Automated provisional reference-media gate and local decode evidence",
+      "source_url": "data/packs/australian_butterflies/v1/references/v1/reference_admission_manifest.json",
+      "retrieved_at": "2026-07-17T20:36:03.622395Z",
+      "licence": "MIXED-CC0-CC-BY-EVIDENCE-NO-SOURCE-BYTES",
+      "licence_url": "data/packs/australian_butterflies/v1/references/v1/gated/reference_media_gate_decisions.parquet",
+      "terms_url": "DATA_RIGHTS.md",
+      "attribution": "iNaturalist photo creators and rights holders retained per candidate row; BioMiner download/decode provenance; ButterflyLens gate provenance.",
+      "scope_note": "A strict CC0/CC-BY, attribution, exact-taxon, mirror-conflict, and approved-host lane selected 2,910 unreviewed provider-labelled rows. Local isolated decoding validated 2,906 objects; four HTTP 404 outcomes remain quarantined. The tracked evidence contains source identities, rights states, checksums, perceptual hashes, dimensions, and command reports but no source-image bytes. GBIF media hosts remain blocked."
     }
   ],
   "artifacts": [
@@ -212,7 +224,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:548590737bd7e98d6598dbc2aa7c01dc5ec29c54f5192f8b0187f26d2d4fd818",
+      "fingerprint": "sha256:e65a25fdf01f680a7a92ef0cae28a58b3e101c8d46d9db12cea993e9fb736626",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
@@ -661,6 +673,78 @@
       "source_id": "biominer-reference-metadata-import-20260718",
       "licence": "MIXED-SEE-SOURCES",
       "attribution": "ALA, GBIF, iNaturalist and contributing sources; BioMiner and ButterflyLens provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/gated/reference_media_gate_decisions.parquet",
+      "fingerprint": "sha256:f8c37938580f80d8743ede9bb372dc2022e4dbd4f247584f845353fe5c104612",
+      "provider": "ButterflyLens derived from frozen GBIF and iNaturalist candidate metadata",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "MIXED-METADATA-ROW-LICENCES-NO-MEDIA-BYTES",
+      "attribution": "GBIF and contributing datasets; iNaturalist photo creators/rights holders; ButterflyLens gate provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/gated/reference_download_selections.parquet",
+      "fingerprint": "sha256:289d9cdfe890eb32f79cfebd7044ff37ae7c84738bc2d003b837a1d046b3b067",
+      "provider": "ButterflyLens derived from iNaturalist open-data media metadata",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "MIXED-CC0-CC-BY-METADATA-NO-MEDIA-BYTES",
+      "attribution": "iNaturalist photo creators and rights holders retained per selected candidate row.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/gated/reference_media_objects.parquet",
+      "fingerprint": "sha256:80ba92faf8f0a5698790b11cee49026348737e7f819b28573e51c9c74243340a",
+      "provider": "iNaturalist open-data media processed locally through pinned BioMiner",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "MIXED-CC0-CC-BY-DECODE-EVIDENCE-NO-SOURCE-BYTES",
+      "attribution": "iNaturalist photo creators and rights holders retained in the joined candidate metadata; BioMiner decode/checksum provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_gate_plan_manifest.json",
+      "fingerprint": "sha256:dd0d3712103d7d6de57d138e4413ca531250f3440312be61ee8419a99326b513",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens automated reference gate plan.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_media_download_report.json",
+      "fingerprint": "sha256:af237ebf5a42c83844ca9b8a0778298abefa2bb27c46a22afbe983eaeb54074c",
+      "provider": "BioMiner",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "MIT",
+      "attribution": "BioMiner reference media download command report at pinned origin commit.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_admission_manifest.json",
+      "fingerprint": "sha256:7b610625e44ad4c70f7a5b65e5b7e48674a63d2ff23793fad7c1f8c166e17b44",
+      "provider": "ButterflyLens derived from pinned BioMiner evidence and frozen provider metadata",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "iNaturalist photo creators and rights holders; BioMiner and ButterflyLens provenance.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,
