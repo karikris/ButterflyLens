@@ -1,0 +1,96 @@
+schema_version: butterflylens-taxalens-migration-v1
+updated_at: "2026-07-17T14:08:54Z"
+source_snapshot:
+  repository: karikris/taxalens
+  commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
+  branch_observed: main
+  working_tree_used: false
+  source_license: MIT
+hosted_snapshot_observed:
+  url: https://karikris.github.io/taxalens/
+  commit: 7d3e70c2ac935600d8f457a42a9c28c481352e74
+  observed_at: "2026-07-17T14:05:48Z"
+  role: static_fixture_replay_only
+components:
+  - component_id: taxalens-verification-campaign-contract-v1
+    source_repository: karikris/taxalens
+    source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
+    source_path: apps/web/src/review/domain/verificationContracts.ts
+    destination_path: packages/contracts/schemas/verification-campaign.schema.json
+    migration_kind: shared_contract
+    reason: Preserve review requirements, sampling design, source identity, rights, and unavailable states across the ButterflyLens API, worker, and web app.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Define ButterflyLens-owned JSON Schema with an explicit compatibility map.
+      - Add Australian butterfly and community-account identifiers without weakening the upstream evidence boundary.
+    tests:
+      - Planned Python, TypeScript, and JSON Schema parity fixtures.
+      - Planned unknown-version and missing-fingerprint rejection tests.
+    status: planned
+  - component_id: taxalens-review-event-consensus-contracts-v1
+    source_repository: karikris/taxalens
+    source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
+    source_path: apps/web/src/review/domain/{verificationEvents.ts,verificationConsensus.ts,verificationAdjudication.ts}
+    destination_path: packages/contracts/schemas/{verification-event,verification-consensus,verification-adjudication}.schema.json
+    migration_kind: shared_contract
+    reason: Retain append-only review lineage, uncertainty, conflicts, supersession, independent adjudication, and separate support and final-test eligibility.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Bind events to ButterflyLens project, run, assignment, media, question, and evidence fingerprints.
+      - Keep model evidence outside human consensus and expose no public reviewer score.
+    tests:
+      - Planned ledger, supersession, conflict, and independent-adjudicator parity tests.
+      - Planned no-model-vote and no-majority-truth policy tests.
+    status: planned
+  - component_id: taxalens-quality-estimation-contracts-v1
+    source_repository: karikris/taxalens
+    source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
+    source_path: apps/web/src/review/domain/{targetPrecisionEstimates.ts,reviewerReliability.ts,verificationQualitySnapshot.ts,verificationReleasePolicy.ts}
+    destination_path: packages/contracts/schemas/verification-quality.schema.json
+    migration_kind: shared_contract_and_algorithm_review
+    reason: Preserve representative-versus-targeted sampling, inclusion probabilities, effective sample size, uncertainty, controls, and fail-closed release gates.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Separate reusable aggregate campaign metrics from ButterflyLens-owned private reviewer reliability.
+      - Require exact algorithm and fixture parity before adapting any estimator implementation.
+    tests:
+      - Planned Wilson, Hajek, grouped-bootstrap, missing-strata, leakage, and unavailable-state fixtures.
+    status: planned
+  - component_id: taxalens-geographic-impact-contract-v1
+    source_repository: karikris/taxalens
+    source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
+    source_path: apps/web/src/impact and docs/architecture/geographic-impact-lens.md
+    destination_path: packages/contracts/schemas/geographic-impact.schema.json
+    migration_kind: contract_and_evidence_facade_pattern
+    reason: Preserve baseline, candidate, reviewed, release-ready, no-geo, provider-union, precision, H3, scope, and unavailable semantics.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Add ButterflyLens-owned ALA baseline comparison and Australian administrative and IBRA scopes.
+      - Keep the MapLibre implementation, national live map, and non-WebGL interface ButterflyLens-owned.
+    tests:
+      - Planned source-identity, provider-union, precision rollup, no-absence, GeoJSON-bound, and accessible-table parity tests.
+    status: planned
+  - component_id: taxalens-evidence-tool-pattern-v1
+    source_repository: karikris/taxalens
+    source_commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
+    source_path: apps/web/src/agent/{researchTools.ts,verificationTools.ts,verificationAnalystContract.ts}
+    destination_path: apps/api/src/butterflylens_api/agents
+    migration_kind: interface_pattern
+    reason: Adapt bounded, read-only, artifact-citing tools without importing stored answers or treating an agent as a scientific authority.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Define ButterflyLens-owned tool inputs over its project, worker, map, review, and quality contracts.
+      - Require server-side execution, strict outputs, budgets, unsupported-claim rejection, and no external actions by default.
+    tests:
+      - Planned deterministic tool, citation, budget, unavailable-evidence, and stored-replay evaluation.
+    status: planned
+notes:
+  - No TaxaLens code, generated data, media, model, build, or runtime artifact has been copied.
+  - Every component remains planned; no destination file exists merely because it is named here.
+  - The static Papilio replay and its measurements are evidence about TaxaLens, not ButterflyLens fixtures or outcomes.
+  - Later migrations must record exact copied or adapted files and retain the MIT notice where required.
