@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:artifact-storage-manifest:v1.0.0",
+  "title": "ButterflyLens immutable artifact storage manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "layout_version",
+    "project_id",
+    "run_id",
+    "created_at",
+    "publication_state",
+    "objects",
+    "manifest_fingerprint"
+  ],
+  "properties": {
+    "schema_version": { "const": "butterflylens-artifact-storage-manifest:v1.0.0" },
+    "layout_version": { "const": "butterflylens-artifact-layout:v1.0.0" },
+    "project_id": { "$ref": "#/$defs/stable_id" },
+    "run_id": { "$ref": "#/$defs/stable_id" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "publication_state": { "const": "complete" },
+    "objects": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/object" }
+    },
+    "manifest_fingerprint": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "stable_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullable_sha256": {
+      "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+    },
+    "artifact_class": {
+      "enum": [
+        "source_metadata",
+        "source_images",
+        "reference_images",
+        "object_crops",
+        "full_frame_inputs",
+        "embeddings",
+        "parquet_shards",
+        "reports",
+        "public_thumbnails",
+        "private_review_media",
+        "manifests"
+      ]
+    },
+    "object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_class",
+        "bucket_class",
+        "key",
+        "b2_version_id",
+        "content_sha256",
+        "byte_count",
+        "media_type",
+        "semantic_fingerprint",
+        "rights_decision_fingerprint",
+        "source_media_fingerprint",
+        "permissions"
+      ],
+      "properties": {
+        "artifact_class": { "$ref": "#/$defs/artifact_class" },
+        "bucket_class": { "enum": ["private", "public"] },
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^butterflylens/v1/[a-z0-9._:/-]+$"
+        },
+        "b2_version_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "content_sha256": { "$ref": "#/$defs/sha256" },
+        "byte_count": { "type": "integer", "minimum": 0 },
+        "media_type": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "semantic_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "rights_decision_fingerprint": { "$ref": "#/$defs/sha256" },
+        "source_media_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metadata_storage",
+            "download",
+            "cache",
+            "transformation",
+            "model_inference",
+            "human_review",
+            "public_display",
+            "redistribution"
+          ],
+          "properties": {
+            "metadata_storage": { "$ref": "#/$defs/permission" },
+            "download": { "$ref": "#/$defs/permission" },
+            "cache": { "$ref": "#/$defs/permission" },
+            "transformation": { "$ref": "#/$defs/permission" },
+            "model_inference": { "$ref": "#/$defs/permission" },
+            "human_review": { "$ref": "#/$defs/permission" },
+            "public_display": { "$ref": "#/$defs/permission" },
+            "redistribution": { "$ref": "#/$defs/permission" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "artifact_class": { "const": "public_thumbnails" } } },
+          "then": {
+            "properties": {
+              "bucket_class": { "const": "public" },
+              "permissions": {
+                "properties": {
+                  "transformation": { "const": "permitted" },
+                  "public_display": { "const": "permitted" },
+                  "redistribution": { "const": "permitted" }
+                }
+              }
+            }
+          },
+          "else": { "properties": { "bucket_class": { "const": "private" } } }
+        },
+        {
+          "if": { "properties": { "artifact_class": { "const": "object_crops" } } },
+          "then": {
+            "properties": {
+              "permissions": {
+                "properties": {
+                  "transformation": { "const": "permitted" },
+                  "model_inference": { "const": "permitted" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "permission": { "enum": ["permitted", "blocked", "unknown", "not_applicable"] }
+  }
+}

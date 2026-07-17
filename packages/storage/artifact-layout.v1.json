@@ -1,0 +1,152 @@
+{
+  "schema_version": "butterflylens-artifact-layout:v1.0.0",
+  "root_prefix": "butterflylens/v1",
+  "buckets": {
+    "private": {
+      "visibility": "private",
+      "required_capabilities": ["listFiles", "readFiles", "writeFiles"],
+      "public_listing": false
+    },
+    "public": {
+      "visibility": "public",
+      "required_capabilities": ["listFiles", "readFiles", "writeFiles"],
+      "public_listing": false
+    }
+  },
+  "artifact_classes": [
+    {
+      "id": "source_metadata",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/source-metadata/{provider}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["json", "jsonl", "json.zst"],
+      "required_permissions": ["metadata_storage"],
+      "cache_ttl_seconds": 86400
+    },
+    {
+      "id": "source_images",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/source-images/{provider}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["jpg", "jpeg", "png", "webp", "tif", "tiff"],
+      "required_permissions": ["download", "cache"],
+      "cache_ttl_seconds": 86400
+    },
+    {
+      "id": "reference_images",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/reference-images/{accepted_taxon_key}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["jpg", "jpeg", "png", "webp", "tif", "tiff"],
+      "required_permissions": ["download", "cache", "model_inference"],
+      "cache_ttl_seconds": 86400
+    },
+    {
+      "id": "object_crops",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/object-crops/{source_media_fingerprint}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "required_permissions": ["cache", "transformation", "model_inference"],
+      "cache_ttl_seconds": 86400,
+      "conditional": "transformation permission must be explicitly permitted; unfinished YOLOE work creates no crops"
+    },
+    {
+      "id": "full_frame_inputs",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/full-frame-inputs/{source_media_fingerprint}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "required_permissions": ["cache", "transformation", "model_inference"],
+      "cache_ttl_seconds": 86400,
+      "conditional": "unfinished BioCLIP work creates no full-frame inputs"
+    },
+    {
+      "id": "embeddings",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/embeddings/{model_fingerprint}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["parquet", "arrow", "npy"],
+      "required_permissions": ["model_inference"],
+      "cache_ttl_seconds": 86400,
+      "conditional": "unfinished BioCLIP work creates no embeddings"
+    },
+    {
+      "id": "parquet_shards",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/parquet/{dataset_id}/{partition_fingerprint}/{digest_prefix_2}/{content_sha256}.parquet",
+      "extensions": ["parquet"],
+      "required_permissions": ["metadata_storage"],
+      "cache_ttl_seconds": 86400
+    },
+    {
+      "id": "reports",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/reports/{report_type}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["json", "html", "md", "parquet"],
+      "required_permissions": ["metadata_storage"],
+      "cache_ttl_seconds": 3600
+    },
+    {
+      "id": "public_thumbnails",
+      "bucket": "public",
+      "key_template": "butterflylens/v1/projects/{project_id}/public-thumbnails/{source_media_fingerprint}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "required_permissions": ["transformation", "public_display", "redistribution"],
+      "cache_ttl_seconds": 604800,
+      "conditional": "separate approved derivative; source access or model permission is insufficient"
+    },
+    {
+      "id": "private_review_media",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/review-media/{campaign_id}/{digest_prefix_2}/{content_sha256}.{extension}",
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "required_permissions": ["cache", "transformation", "human_review"],
+      "cache_ttl_seconds": 3600
+    },
+    {
+      "id": "manifests",
+      "bucket": "private",
+      "key_template": "butterflylens/v1/projects/{project_id}/runs/{run_id}/manifests/{manifest_kind}/{digest_prefix_2}/{content_sha256}.json",
+      "extensions": ["json"],
+      "required_permissions": ["metadata_storage"],
+      "cache_ttl_seconds": 3600
+    }
+  ],
+  "policies": {
+    "write_protocol": [
+      "calculate SHA-256 and byte count before upload",
+      "write local temporary file in the destination filesystem, fsync, rename, then fsync the directory",
+      "upload non-manifest objects to immutable content-addressed final keys with a signed payload hash",
+      "record the returned B2 version ID; HEAD-check key, version, byte count, and media type",
+      "publish subordinate manifests after their objects and the root run manifest last",
+      "advance the database current-manifest pointer with compare-and-swap only after manifest validation"
+    ],
+    "manifest_last": true,
+    "overwrite_final_keys": false,
+    "etag_is_content_checksum": false,
+    "checksum_algorithm": "sha256",
+    "signed_urls": {
+      "methods": ["GET", "HEAD"],
+      "default_ttl_seconds": 300,
+      "maximum_ttl_seconds": 900,
+      "private_bucket_only": true,
+      "persist_url": false,
+      "include_in_fingerprint": false,
+      "log_query_string": false
+    },
+    "local_cache": {
+      "root": "$XDG_CACHE_HOME/butterflylens/v1",
+      "mode": "0700",
+      "file_mode": "0600",
+      "content_addressed": true,
+      "verify_on_read": true,
+      "atomic_writes": true,
+      "removal_purge_immediate": true
+    },
+    "removal": {
+      "quarantine_before_traversal": true,
+      "disable_signing": true,
+      "remove_public_projection": true,
+      "traverse_source_derivatives_reviews_maps_exports": true,
+      "delete_all_object_versions_when_no_active_rights_basis": true,
+      "retain_non_personal_tombstone": true,
+      "object_lock_removable_media": false,
+      "deadline_hours": 24
+    }
+  }
+}
