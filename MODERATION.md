@@ -31,6 +31,8 @@ ButterflyLens exists to strengthen evidence through careful collaboration. Commu
 
 ButterflyLens follows the people- and purpose-oriented [CARE Principles for Indigenous Data Governance](https://www.gida-global.org/careprinciples).
 
+The enforceable name workflow is defined in [First Nations Language-Name Governance](FIRST_NATIONS_NAMES.md).
+
 - Never invent, machine-translate, generalize, or place a name in a generic “Aboriginal name” field.
 - Every assertion must identify the language, stable language identifier where available, Country/community, source, cultural authority or publication, permitted use, attribution, and review state.
 - A name is not eligible for a Flickr query, public label, or export until its use has been reviewed and authorized for that purpose.
@@ -63,4 +65,3 @@ Removal actions require an actor, timestamp, reason category, affected fingerpri
 - Review and moderation controls must be keyboard accessible, clearly labelled, usable without colour alone, and compatible with reduced motion and assistive technology.
 - Harassment, hate, threats, doxxing, deliberate coordinate disclosure, rights abuse, impersonation, and manipulation of independent review are prohibited.
 - Ambiguity and honest mistakes should be resolved with education and evidence before punitive action where safety permits.
-

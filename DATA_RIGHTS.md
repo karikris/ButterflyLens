@@ -156,11 +156,10 @@ No public-domain dedication or Creative Commons licence for community review tex
 
 ## First Nations language names and knowledge
 
-No First Nations name assertion is present or approved. Such assertions require the language, stable identifier where available, Country/community, source, cultural authority/publication, permitted use, query eligibility, attribution, and review state. No machine translation, invented name, pan-Aboriginal generalization, query use, or public release is permitted without the relevant authority and purpose-specific approval. Open-data defaults do not override Indigenous authority.
+No First Nations name assertion is present or approved. Such assertions require the language, stable identifier where available, Country/community, source, cultural authority/publication, permitted use, query eligibility, attribution, and review state. No machine translation, invented name, pan-Aboriginal generalization, query use, or public release is permitted without the relevant authority and purpose-specific approval. Open-data defaults do not override Indigenous authority. The complete field, review-state, independent-permission, query, correction, and withdrawal gates are defined in [First Nations Language-Name Governance](FIRST_NATIONS_NAMES.md).
 
 ## Removal and downstream invalidation
 
 Every removal request receives a stable case ID, requester/authority basis, received timestamp, provider deadline, affected fingerprints, quarantine state, resolution, appeal state, and completion evidence. The removal graph must reach source cache, public display, derivatives, model artifacts, review queues, maps, quality outputs, release packets, exports, mirrors, and signed URLs.
 
 Audit events remain append-only, but removed copyrighted/private content is not retained publicly merely to preserve history. Evidence ledgers may retain the minimum non-content tombstone and cryptographic identifiers permitted by law and policy.
-
