@@ -37,6 +37,20 @@ Current imported metadata:
 - 1,651 GBIF rows awaiting the automated licence gate and 45 quarantined;
 - zero downloaded images and zero human-verified media.
 
+The Task 2.4.2 metadata linkage records 10,453 cross-provider observation
+mirror groups using exact iNaturalist observation identifiers. Of those,
+10,401 link two sources and 52 link ALA, GBIF, and iNaturalist. Five groups
+retain conflicting ButterflyLens taxon keys and require review. It also records
+93 GBIF/iNaturalist media mirror candidates using the exact iNaturalist
+observation-plus-photo identity. Ninety-two have matching normalized licence
+metadata; one retains a `cc-by`/`cc-by-nc` conflict.
+
+These rows are duplicate hypotheses, not proof that media bytes or visual
+content are identical. Byte checks, perceptual checks, and canonical-media
+selection remain explicitly null until permitted media is acquired and passes
+Task 2.4.3. Provider source records, media IDs, taxon keys, licence assertions,
+and conflicts remain attached to every group.
+
 Rebuild the query plan:
 
 ```bash
@@ -52,3 +66,18 @@ into a detached BioMiner worktree at the pinned SHA and rerunning `biominer
 references fetch-metadata` with the checked-in plan. Network replay is not
 byte-stable because provider records can change; the frozen checkpoint archive
 and consolidated artifacts are the evidence for this import.
+
+Rebuild the metadata linkage without network access:
+
+```bash
+uv run python scripts/build_reference_import.py deduplicate-metadata \
+  --crosswalk data/packs/australian_butterflies/v1/crosswalk.jsonl \
+  --ala-occurrences data/packs/australian_butterflies/v1/ala/ala_baseline_occurrences.parquet \
+  --observations data/packs/australian_butterflies/v1/references/v1/imported/reference_observations.parquet \
+  --media data/packs/australian_butterflies/v1/references/v1/imported/reference_media_candidates.parquet \
+  --observation-output data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_observation_mirror_groups.parquet \
+  --media-output data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_media_duplicate_candidates.parquet \
+  --manifest data/packs/australian_butterflies/v1/references/v1/reference_deduplication_manifest.json \
+  --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
+  --generated-at 2026-07-17T19:55:50Z
+```

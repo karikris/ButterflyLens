@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T19:47:17Z",
+  "generated_at": "2026-07-17T19:55:50Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -182,7 +182,7 @@
       "licence_url": "data/packs/australian_butterflies/v1/references/v1/imported/reference_media_candidates.parquet",
       "terms_url": "DATA_RIGHTS.md",
       "attribution": "GBIF and its contributing datasets; iNaturalist observations and the creators/rights holders retained per candidate media row; BioMiner normalization provenance.",
-      "scope_note": "Provider-labelled metadata only: 12,980 observations and 24,329 media candidates from 742 bounded queries. No image bytes were downloaded. All media remains unreviewed; GBIF licence gates are pending; three taxon conflicts and 45 quarantined media rows remain blocked."
+      "scope_note": "Provider-labelled metadata only: 12,980 observations and 24,329 media candidates from 742 bounded queries. Exact provider identities link 10,453 observation mirror groups and 93 media duplicate hypotheses without asserting byte or perceptual equivalence. No image bytes were downloaded. All media remains unreviewed; GBIF licence gates are pending; import, taxon, and licence conflicts remain blocked."
     }
   ],
   "artifacts": [
@@ -212,7 +212,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:6a4e43c5f6f9e6f49415af0d562b5c3cbebf331f937ff2cbea863fde05df5b59",
+      "fingerprint": "sha256:548590737bd7e98d6598dbc2aa7c01dc5ec29c54f5192f8b0187f26d2d4fd818",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
@@ -625,6 +625,42 @@
       "source_id": "biominer-reference-metadata-import-20260718",
       "licence": "MIXED-SEE-SOURCES",
       "attribution": "GBIF, iNaturalist, ALA and contributing sources; BioMiner and ButterflyLens provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_observation_mirror_groups.parquet",
+      "fingerprint": "sha256:296b6f486e3389671870aa61728fcd631c3da96e3c02da0502e72059196760fa",
+      "provider": "ButterflyLens derived from ALA, GBIF, and iNaturalist provider identities",
+      "source_id": "biominer-reference-metadata-import-20260718",
+      "licence": "MIXED-METADATA-ROW-LICENCES-NO-MEDIA-BYTES",
+      "attribution": "ALA and contributing resources; GBIF and contributing datasets; iNaturalist observers; ButterflyLens metadata linkage provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_media_duplicate_candidates.parquet",
+      "fingerprint": "sha256:5a82832287ba30554bdd6281e57c0d4871ed8b725f0d76eb014666505645f0ab",
+      "provider": "ButterflyLens derived from GBIF and iNaturalist provider media identities",
+      "source_id": "biominer-reference-metadata-import-20260718",
+      "licence": "MIXED-METADATA-ROW-LICENCES-NO-MEDIA-BYTES",
+      "attribution": "GBIF and contributing datasets; iNaturalist photo creators/rights holders; exact source records and licence assertions retained.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_deduplication_manifest.json",
+      "fingerprint": "sha256:384e9f2bb1857610ca6f789a79b379b5f7cec42d45387f3274f399662c37b0bc",
+      "provider": "ButterflyLens derived from the pinned BioMiner import and frozen ALA snapshot",
+      "source_id": "biominer-reference-metadata-import-20260718",
+      "licence": "MIXED-SEE-SOURCES",
+      "attribution": "ALA, GBIF, iNaturalist and contributing sources; BioMiner and ButterflyLens provenance.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

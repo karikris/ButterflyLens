@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from collections import Counter
+import argparse
 import importlib.util
 import json
 from pathlib import Path
+import tempfile
 import unittest
 
 
@@ -38,11 +40,27 @@ class ReferenceImportTests(unittest.TestCase):
         cls.checkpoint_path = (
             REFERENCE / "sources/biominer_reference_checkpoints.tar.gz"
         )
+        cls.observation_mirrors_path = (
+            REFERENCE
+            / "deduplicated/reference_observation_mirror_groups.parquet"
+        )
+        cls.media_duplicates_path = (
+            REFERENCE
+            / "deduplicated/reference_media_duplicate_candidates.parquet"
+        )
+        cls.deduplication_manifest_path = (
+            REFERENCE / "reference_deduplication_manifest.json"
+        )
         cls.plan = json.loads(cls.plan_path.read_text())
         cls.manifest = json.loads(cls.manifest_path.read_text())
         cls.pack = json.loads((PACK / "manifest.json").read_text())
         cls.observations = pq.read_table(cls.observation_path)
         cls.media = pq.read_table(cls.media_path)
+        cls.observation_mirrors = pq.read_table(cls.observation_mirrors_path)
+        cls.media_duplicates = pq.read_table(cls.media_duplicates_path)
+        cls.deduplication_manifest = json.loads(
+            cls.deduplication_manifest_path.read_text()
+        )
 
     def test_query_plan_is_exact_bounded_and_rebuildable(self) -> None:
         self.assertEqual(
@@ -143,6 +161,159 @@ class ReferenceImportTests(unittest.TestCase):
         )
         self.assertFalse(self.manifest["rights"]["media_bytes_downloaded"])
         self.assertEqual(self.manifest["counts"]["human_verified_media"], 0)
+
+    def test_metadata_deduplication_links_exact_provider_identities(self) -> None:
+        rows = self.observation_mirrors.to_pylist()
+        self.assertEqual(len(rows), 10_453)
+        self.assertEqual(
+            Counter(
+                tuple(
+                    source
+                    for source, members in (
+                        ("ALA", row["ala_record_ids"]),
+                        ("GBIF", row["gbif_reference_observation_ids"]),
+                        (
+                            "iNaturalist",
+                            row["inaturalist_reference_observation_ids"],
+                        ),
+                    )
+                    if members
+                )
+                for row in rows
+            ),
+            {
+                ("ALA", "iNaturalist"): 10_377,
+                ("ALA", "GBIF", "iNaturalist"): 52,
+                ("ALA", "GBIF"): 16,
+                ("GBIF", "iNaturalist"): 8,
+            },
+        )
+        self.assertEqual(Counter(row["source_count"] for row in rows), {2: 10_401, 3: 52})
+        self.assertEqual(sum(row["taxon_conflict"] for row in rows), 5)
+        self.assertEqual(
+            Counter(row["resolution_state"] for row in rows),
+            {
+                "same_provider_observation_metadata_link": 10_448,
+                "taxon_conflict_review_required": 5,
+            },
+        )
+
+    def test_duplicate_candidates_do_not_claim_media_equivalence(self) -> None:
+        rows = self.media_duplicates.to_pylist()
+        self.assertEqual(len(rows), 93)
+        self.assertEqual(Counter(row["member_count"] for row in rows), {2: 93})
+        self.assertEqual(
+            Counter(tuple(row["canonical_licences"]) for row in rows),
+            {("cc-by",): 78, ("cc0",): 14, ("cc-by", "cc-by-nc"): 1},
+        )
+        self.assertEqual(sum(row["metadata_conflict"] for row in rows), 1)
+        self.assertTrue(
+            all(
+                row["exact_bytes_equal"] is None
+                and row["perceptual_duplicate"] is None
+                and row["canonical_reference_media_id"] is None
+                for row in rows
+            )
+        )
+        self.assertEqual(
+            self.builder._canonical_licence(
+                "http://creativecommons.org/licenses/by/4.0/"
+            ),
+            "cc-by",
+        )
+
+    def test_deduplication_fingerprints_and_manifests_reconcile(self) -> None:
+        for rows, id_field, prefix, payload_fields in (
+            (
+                self.observation_mirrors.to_pylist(),
+                "observation_mirror_group_id",
+                "observation-mirror",
+                (
+                    "provider_identity_type",
+                    "provider_identity",
+                    "ala_record_ids",
+                    "gbif_reference_observation_ids",
+                    "inaturalist_reference_observation_ids",
+                    "butterflylens_taxon_keys",
+                ),
+            ),
+            (
+                self.media_duplicates.to_pylist(),
+                "media_duplicate_candidate_id",
+                "media-duplicate-candidate",
+                (
+                    "provider_observation_id",
+                    "provider_photo_id",
+                    "gbif_reference_media_ids",
+                    "inaturalist_reference_media_ids",
+                    "butterflylens_taxon_keys",
+                    "canonical_licences",
+                ),
+            ),
+        ):
+            ids = []
+            for row in rows:
+                payload = {field: row[field] for field in payload_fields}
+                expected = self.builder._identity(prefix, payload)
+                self.assertEqual(row[id_field], expected)
+                self.assertEqual(
+                    row["evidence_fingerprint"],
+                    "sha256:" + expected.rsplit(":", 1)[1],
+                )
+                ids.append(row[id_field])
+            self.assertEqual(len(ids), len(set(ids)))
+
+        manifest = self.deduplication_manifest
+        self.assertEqual(
+            manifest["schema_version"],
+            self.builder.DEDUPLICATION_MANIFEST_SCHEMA_VERSION,
+        )
+        self.assertFalse(manifest["policy"]["byte_or_perceptual_deduplication_claimed"])
+        self.assertFalse(manifest["policy"]["canonical_media_selected"])
+        paths = {
+            "observation_mirror_groups": self.observation_mirrors_path,
+            "media_duplicate_candidates": self.media_duplicates_path,
+        }
+        for name, path in paths.items():
+            artifact = manifest["artifacts"][name]
+            self.assertEqual(artifact["physical_sha256"], self.builder.sha256_file(path))
+            self.assertEqual(artifact["physical_bytes"], path.stat().st_size)
+        state = self.pack["reference_state"]
+        self.assertEqual(
+            state["deduplication_manifest_sha256"],
+            self.builder.sha256_file(self.deduplication_manifest_path),
+        )
+        self.assertEqual(state["observation_mirror_groups"], 10_453)
+        self.assertEqual(state["media_duplicate_candidates"], 93)
+
+    def test_metadata_deduplication_replay_is_byte_deterministic(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            observation_output = temporary / self.observation_mirrors_path.name
+            media_output = temporary / self.media_duplicates_path.name
+            manifest_output = temporary / self.deduplication_manifest_path.name
+            pack_output = temporary / "manifest.json"
+            pack_output.write_bytes((PACK / "manifest.json").read_bytes())
+            self.builder.deduplicate_metadata(
+                argparse.Namespace(
+                    crosswalk=PACK / "crosswalk.jsonl",
+                    ala_occurrences=PACK / "ala/ala_baseline_occurrences.parquet",
+                    observations=self.observation_path,
+                    media=self.media_path,
+                    observation_output=observation_output,
+                    media_output=media_output,
+                    manifest=manifest_output,
+                    pack_manifest=pack_output,
+                    generated_at=self.deduplication_manifest["generated_at"],
+                )
+            )
+            for actual, rebuilt in (
+                (self.observation_mirrors_path, observation_output),
+                (self.media_duplicates_path, media_output),
+                (self.deduplication_manifest_path, manifest_output),
+                (PACK / "manifest.json", pack_output),
+            ):
+                self.assertEqual(actual.read_bytes(), rebuilt.read_bytes())
 
 
 if __name__ == "__main__":

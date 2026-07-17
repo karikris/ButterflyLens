@@ -166,6 +166,15 @@ reference admission. The archived checkpoint ledger records 769 requests and
 observation evidence but contributes zero reference media because its source
 contract did not capture media metadata; no URL or image label is inferred.
 
+Task 2.4.2 links exact provider identities without collapsing their source or
+rights evidence. It records 10,453 observation mirror groups and 93 media
+mirror candidates. Five observation groups retain taxon conflicts and one
+media candidate retains a `cc-by`/`cc-by-nc` licence conflict; all remain
+blocked for resolution. Normalizing equivalent Creative Commons code and URL
+spellings is comparison-only and does not broaden permitted use. Because no
+media bytes are present, the linkage asserts neither byte equality nor
+perceptual duplication, and it selects no canonical media row.
+
 - CC0 and compatible CC BY media may enter allowed lanes with provenance and attribution.
 - CC BY-NC, CC BY-ND, CC BY-SA, and combined variants require explicit use-specific gates; no blanket compatibility is asserted.
 - All-rights-reserved, unknown, private, embargoed, culturally restricted, or removed media is blocked absent documented permission.

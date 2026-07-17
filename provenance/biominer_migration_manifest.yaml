@@ -150,6 +150,25 @@ components:
       - Byte-identical isolated aggregation rebuild with h3 4.5.0 and PyArrow 25.0.0.
       - Scope inventory, rollup reconciliation, H3 hierarchy, lineage, count decomposition, and sensitive-resolution invariants.
     status: verified
+  - component_id: biominer-reference-metadata-deduplication-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/references/{sources.py,deduplication.py,licensing.py,schemas.py}
+    destination_path: scripts/build_reference_import.py and data/packs/australian_butterflies/v1/references/v1
+    migration_kind: artifact_contract
+    reason: Preserve BioMiner provider-source and duplicate-evidence boundaries while publishing ButterflyLens-owned Australian metadata links before permitted media bytes exist.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Consume pinned normalized observation and media-candidate artifacts without copying upstream source.
+      - Link ALA, GBIF, and iNaturalist rows only through exact iNaturalist observation identities.
+      - Link GBIF and iNaturalist media candidates only through exact observation-plus-photo identities.
+      - Normalize equivalent Creative Commons code and URL spellings for comparison while retaining every source assertion.
+      - Leave byte equality, perceptual duplication, and canonical-media selection null until the later permitted-media gate.
+    tests:
+      - Byte-identical isolated metadata-linkage rebuild with PyArrow 25.0.0.
+      - Source-combination counts, stable content IDs, conflict retention, manifest checksums, and no-equivalence-claim invariants.
+    status: metadata_linkage_verified_byte_deduplication_pending
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
   - Candidate model and workflow contracts remain planned; the live-worker boundary plus ALA Parquet and H3 adapters are now defined.
