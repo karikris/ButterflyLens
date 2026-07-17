@@ -1,0 +1,815 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:verification-contracts:v1.0.0",
+  "title": "ButterflyLens verification contract definitions v1",
+  "$defs": {
+    "taxon_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accepted_taxon_key", "scientific_name", "rank"],
+      "properties": {
+        "accepted_taxon_key": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "scientific_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "rank": {
+          "enum": [
+            "superfamily",
+            "family",
+            "subfamily",
+            "tribe",
+            "genus",
+            "species",
+            "subspecies",
+            "other"
+          ]
+        }
+      }
+    },
+    "nullable_taxon_identity": {
+      "anyOf": [
+        { "$ref": "#/$defs/taxon_identity" },
+        { "type": "null" }
+      ]
+    },
+    "source_provider": {
+      "enum": [
+        "flickr",
+        "ala",
+        "gbif",
+        "inaturalist",
+        "wikimedia_commons",
+        "community_upload",
+        "butterflylens_fixture"
+      ]
+    },
+    "life_stage": {
+      "enum": ["adult", "larva", "pupa", "egg", "unknown"]
+    },
+    "visual_domain": {
+      "enum": [
+        "live_field",
+        "pinned_specimen",
+        "artwork",
+        "logo",
+        "tattoo",
+        "partial_wing",
+        "dead_or_damaged_specimen",
+        "ambiguous",
+        "unsuitable"
+      ]
+    },
+    "view": {
+      "enum": [
+        "dorsal",
+        "ventral",
+        "lateral",
+        "frontal",
+        "oblique",
+        "unknown"
+      ]
+    },
+    "sampling_stratum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stratum_id",
+        "label",
+        "population_count",
+        "target_sample_count",
+        "population_weight"
+      ],
+      "properties": {
+        "stratum_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "label": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "population_count": {
+          "anyOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "target_sample_count": {
+          "anyOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "population_weight": {
+          "anyOf": [
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "campaign_id",
+        "project_id",
+        "run_id",
+        "kind",
+        "status",
+        "target",
+        "source_providers",
+        "question_fingerprint",
+        "manifest_fingerprint",
+        "sampling_plan",
+        "review_requirement",
+        "blind_policy",
+        "public_replay",
+        "scientific_claim_allowed",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-verification-campaign:v1.0.0"
+        },
+        "campaign_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "project_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "run_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_stable_id"
+        },
+        "kind": {
+          "enum": [
+            "flickr_target_verification",
+            "reference_identity_verification",
+            "reference_route_verification",
+            "adjudication",
+            "quality_control"
+          ]
+        },
+        "status": {
+          "enum": ["draft", "ready", "active", "paused", "complete", "archived"]
+        },
+        "target": { "$ref": "#/$defs/nullable_taxon_identity" },
+        "source_providers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/source_provider" }
+        },
+        "question_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "manifest_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "sampling_plan": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "plan_id",
+            "purpose",
+            "design",
+            "representative",
+            "blind",
+            "inclusion_probabilities_recorded",
+            "grouping_keys",
+            "strata",
+            "quality_estimation_eligible",
+            "quality_estimation_blockers"
+          ],
+          "properties": {
+            "plan_id": {
+              "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+            },
+            "purpose": {
+              "enum": [
+                "quality_estimation",
+                "failure_discovery",
+                "reference_readiness",
+                "adjudication",
+                "reviewer_quality_control",
+                "credential_free_fixture"
+              ]
+            },
+            "design": {
+              "enum": [
+                "census",
+                "simple_random",
+                "stratified_random",
+                "clustered_random",
+                "targeted_priority",
+                "control_items",
+                "fixed_fixture"
+              ]
+            },
+            "representative": { "type": "boolean" },
+            "blind": { "type": "boolean" },
+            "inclusion_probabilities_recorded": { "type": "boolean" },
+            "grouping_keys": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1, "maxLength": 120 }
+            },
+            "strata": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/sampling_stratum" }
+            },
+            "quality_estimation_eligible": { "type": "boolean" },
+            "quality_estimation_blockers": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+            }
+          }
+        },
+        "review_requirement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required_independent_reviewers",
+            "second_review_policy",
+            "adjudication_required_on_conflict",
+            "expert_gate_required_for_release"
+          ],
+          "properties": {
+            "required_independent_reviewers": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "second_review_policy": {
+              "enum": [
+                "never",
+                "always",
+                "on_conflict",
+                "on_uncertain",
+                "on_conflict_or_uncertain"
+              ]
+            },
+            "adjudication_required_on_conflict": { "type": "boolean" },
+            "expert_gate_required_for_release": { "type": "boolean" }
+          }
+        },
+        "blind_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "hidden_fields"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "hidden_fields": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "model_score",
+                  "model_label",
+                  "flickr_query_term",
+                  "source_comments",
+                  "other_reviews",
+                  "control_identity"
+                ]
+              }
+            }
+          }
+        },
+        "public_replay": { "type": "boolean" },
+        "scientific_claim_allowed": { "const": false },
+        "created_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        },
+        "updated_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        }
+      }
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "assignment_id",
+        "campaign_id",
+        "item_id",
+        "reviewer_id",
+        "review_round",
+        "reason",
+        "status",
+        "blind",
+        "independence_group_key",
+        "assigned_at",
+        "expires_at",
+        "completed_at",
+        "visibility"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-verification-assignment:v1.0.0"
+        },
+        "assignment_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "campaign_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "item_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "reviewer_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "review_round": { "type": "integer", "minimum": 1 },
+        "reason": {
+          "enum": [
+            "ordinary",
+            "conflict",
+            "potential_gap",
+            "reference",
+            "control",
+            "adjudication"
+          ]
+        },
+        "status": {
+          "enum": ["assigned", "opened", "completed", "expired", "withdrawn"]
+        },
+        "blind": { "type": "boolean" },
+        "independence_group_key": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "assigned_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        },
+        "expires_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_date_time"
+        },
+        "completed_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_date_time"
+        },
+        "visibility": { "const": "private" }
+      }
+    },
+    "review_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "event_id",
+        "project_id",
+        "campaign_id",
+        "assignment_id",
+        "item_id",
+        "reviewer_id",
+        "review_round",
+        "outcome",
+        "non_target_category",
+        "alternative_taxon",
+        "corrected_life_stage",
+        "corrected_visual_domain",
+        "corrected_view",
+        "media_quality",
+        "duplicate_concern",
+        "captive_or_cultivated_concern",
+        "confidence",
+        "comment",
+        "reviewed_at",
+        "duration_ms",
+        "displayed_media_sha256",
+        "source_record_fingerprint",
+        "question_fingerprint",
+        "campaign_manifest_fingerprint",
+        "supersedes_event_fingerprint",
+        "conflicts_with_consensus_fingerprint",
+        "scientific_claim_allowed"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-verification-event:v1.0.0"
+        },
+        "event_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "project_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "campaign_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "assignment_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "item_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "reviewer_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "review_round": { "type": "integer", "minimum": 1 },
+        "outcome": { "enum": ["yes", "no", "cant_tell", "cant_view", "skipped"] },
+        "non_target_category": {
+          "anyOf": [
+            {
+              "enum": [
+                "alternative_species",
+                "other_butterfly",
+                "other_insect",
+                "artifact",
+                "specimen",
+                "no_organism",
+                "insufficient_visual_detail"
+              ]
+            },
+            { "type": "null" }
+          ]
+        },
+        "alternative_taxon": { "$ref": "#/$defs/nullable_taxon_identity" },
+        "corrected_life_stage": {
+          "anyOf": [{ "$ref": "#/$defs/life_stage" }, { "type": "null" }]
+        },
+        "corrected_visual_domain": {
+          "anyOf": [{ "$ref": "#/$defs/visual_domain" }, { "type": "null" }]
+        },
+        "corrected_view": {
+          "anyOf": [{ "$ref": "#/$defs/view" }, { "type": "null" }]
+        },
+        "media_quality": {
+          "enum": ["high", "medium", "low", "unusable", "unknown"]
+        },
+        "duplicate_concern": { "type": "boolean" },
+        "captive_or_cultivated_concern": { "type": "boolean" },
+        "confidence": { "enum": ["high", "medium", "low", "unknown"] },
+        "comment": {
+          "anyOf": [
+            { "type": "string", "maxLength": 2000 },
+            { "type": "null" }
+          ]
+        },
+        "reviewed_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        },
+        "duration_ms": {
+          "anyOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "displayed_media_sha256": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "source_record_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "question_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "campaign_manifest_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "supersedes_event_fingerprint": {
+          "anyOf": [
+            { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "conflicts_with_consensus_fingerprint": {
+          "anyOf": [
+            { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "scientific_claim_allowed": { "const": false }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "outcome": { "const": "no" } },
+            "required": ["outcome"]
+          },
+          "then": { "properties": { "non_target_category": { "type": "string" } } }
+        },
+        {
+          "if": {
+            "properties": { "outcome": { "enum": ["cant_view", "skipped"] } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "properties": {
+              "non_target_category": { "type": "null" },
+              "alternative_taxon": { "type": "null" },
+              "corrected_life_stage": { "type": "null" },
+              "corrected_visual_domain": { "type": "null" },
+              "corrected_view": { "type": "null" }
+            }
+          }
+        }
+      ]
+    },
+    "consensus_layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "outcome", "blockers"],
+      "properties": {
+        "status": {
+          "enum": ["pending", "available", "blocked", "unavailable"]
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "enum": [
+                "supported",
+                "not_supported",
+                "uncertain",
+                "media_failure",
+                "deferred",
+                "release_ready",
+                "not_release_ready"
+              ]
+            },
+            { "type": "null" }
+          ]
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+        }
+      }
+    },
+    "consensus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "consensus_id",
+        "project_id",
+        "campaign_id",
+        "item_id",
+        "revision",
+        "status",
+        "required_review_count",
+        "effective_review_count",
+        "decisive_review_count",
+        "effective_event_fingerprints",
+        "conflicts",
+        "adjudication_event_fingerprint",
+        "community_evidence",
+        "qualified_consensus",
+        "release_consensus",
+        "reviewer_weights_applied",
+        "reliability_snapshot_fingerprint",
+        "model_vote_included",
+        "resolved_at",
+        "consensus_fingerprint"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-verification-consensus:v1.0.0"
+        },
+        "consensus_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "project_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "campaign_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "item_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "revision": { "type": "integer", "minimum": 1 },
+        "status": {
+          "enum": [
+            "pending",
+            "complete_agreement",
+            "unresolved_disagreement",
+            "uncertain_only",
+            "media_failure",
+            "deferred",
+            "adjudicated"
+          ]
+        },
+        "required_review_count": { "type": "integer", "minimum": 1 },
+        "effective_review_count": { "type": "integer", "minimum": 0 },
+        "decisive_review_count": { "type": "integer", "minimum": 0 },
+        "effective_event_fingerprints": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["field", "event_fingerprints"],
+            "properties": {
+              "field": {
+                "enum": [
+                  "outcome",
+                  "non_target_category",
+                  "alternative_taxon",
+                  "life_stage",
+                  "visual_domain",
+                  "view",
+                  "explicit_conflict_pointer"
+                ]
+              },
+              "event_fingerprints": {
+                "type": "array",
+                "minItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+                }
+              }
+            }
+          }
+        },
+        "adjudication_event_fingerprint": {
+          "anyOf": [
+            { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "community_evidence": { "$ref": "#/$defs/consensus_layer" },
+        "qualified_consensus": { "$ref": "#/$defs/consensus_layer" },
+        "release_consensus": { "$ref": "#/$defs/consensus_layer" },
+        "reviewer_weights_applied": { "type": "boolean" },
+        "reliability_snapshot_fingerprint": {
+          "anyOf": [
+            { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "model_vote_included": { "const": false },
+        "resolved_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_date_time"
+        },
+        "consensus_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "reviewer_weights_applied": { "const": true } },
+            "required": ["reviewer_weights_applied"]
+          },
+          "then": {
+            "properties": {
+              "reliability_snapshot_fingerprint": {
+                "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "reviewer_reliability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "reliability_id",
+        "reviewer_id",
+        "domain",
+        "method",
+        "availability",
+        "sample_count",
+        "decisive_count",
+        "control_count",
+        "estimate",
+        "interval",
+        "equal_weight_target",
+        "applied_weight",
+        "shrinkage_fraction",
+        "minimum_evidence",
+        "blockers",
+        "evidence_fingerprint",
+        "visibility",
+        "public_ranking_allowed",
+        "model_agreement_used",
+        "majority_agreement_alone_used",
+        "recorded_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-reviewer-reliability:v1.0.0"
+        },
+        "reliability_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "reviewer_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "domain": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["taxon_group", "source_provider", "life_stage", "visual_domain"],
+          "properties": {
+            "taxon_group": {
+              "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+            },
+            "source_provider": { "$ref": "#/$defs/source_provider" },
+            "life_stage": { "$ref": "#/$defs/life_stage" },
+            "visual_domain": { "$ref": "#/$defs/visual_domain" }
+          }
+        },
+        "method": { "const": "control_calibrated_beta_binomial_v1" },
+        "availability": { "enum": ["estimated", "unavailable"] },
+        "sample_count": { "type": "integer", "minimum": 0 },
+        "decisive_count": { "type": "integer", "minimum": 0 },
+        "control_count": { "type": "integer", "minimum": 0 },
+        "estimate": {
+          "anyOf": [
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            { "type": "null" }
+          ]
+        },
+        "interval": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["lower", "upper", "level"],
+              "properties": {
+                "lower": { "type": "number", "minimum": 0, "maximum": 1 },
+                "upper": { "type": "number", "minimum": 0, "maximum": 1 },
+                "level": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 }
+              }
+            },
+            { "type": "null" }
+          ]
+        },
+        "equal_weight_target": { "const": 1 },
+        "applied_weight": {
+          "anyOf": [
+            { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+            { "type": "null" }
+          ]
+        },
+        "shrinkage_fraction": {
+          "anyOf": [
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            { "type": "null" }
+          ]
+        },
+        "minimum_evidence": { "type": "integer", "minimum": 1 },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+        },
+        "evidence_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "visibility": { "const": "private" },
+        "public_ranking_allowed": { "const": false },
+        "model_agreement_used": { "const": false },
+        "majority_agreement_alone_used": { "const": false },
+        "recorded_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "availability": { "const": "unavailable" } },
+            "required": ["availability"]
+          },
+          "then": {
+            "properties": {
+              "estimate": { "type": "null" },
+              "interval": { "type": "null" },
+              "applied_weight": { "type": "null" },
+              "shrinkage_fraction": { "type": "null" },
+              "blockers": { "minItems": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "availability": { "const": "estimated" } },
+            "required": ["availability"]
+          },
+          "then": {
+            "properties": {
+              "estimate": { "type": "number" },
+              "interval": { "type": "object" },
+              "applied_weight": { "type": "number" },
+              "shrinkage_fraction": { "type": "number" },
+              "blockers": { "maxItems": 0 }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
