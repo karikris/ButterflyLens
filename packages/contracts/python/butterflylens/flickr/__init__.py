@@ -22,6 +22,12 @@ from .query_plan import (
     build_logical_query_association,
     plan_physical_query_requests,
 )
+from .query_lanes import (
+    AUSTRALIA_KNOWN_LANE_ID,
+    AUSTRALIA_KNOWN_LANE_SCHEMA_VERSION,
+    QueryLaneError,
+    build_australia_known_lane,
+)
 
 __all__ = [
     "FLICKR_BUDGET_SCHEMA_VERSION",
@@ -40,4 +46,8 @@ __all__ = [
     "QueryPlanError",
     "build_logical_query_association",
     "plan_physical_query_requests",
+    "AUSTRALIA_KNOWN_LANE_ID",
+    "AUSTRALIA_KNOWN_LANE_SCHEMA_VERSION",
+    "QueryLaneError",
+    "build_australia_known_lane",
 ]

@@ -33,3 +33,17 @@ The planner rejects credentials, authentication material, ambiguous parameter
 names, tampered logical associations, and missing definitions. It emits
 `planned_not_sent` requests only; budget reservation and provider execution
 remain later, separately audited steps.
+
+## Australia-known lane
+
+The `australia_known` lane is derived only from the rebuilt authoritative
+Australian taxonomy/name pack. Tier 1 species terms link to their accepted
+species. Tier 2 genus, tier 3 family, and tier 4 superfamily terms expand
+through the frozen authoritative parent paths to one explicit logical
+association per descendant accepted species. Physical requests then deduplicate
+those associations losslessly.
+
+"Australia-known" describes taxon scope, not photo geography. The lane does
+not add an Australian location filter, does not establish that a discovered
+photo was taken in Australia, and does not permit absence inference. Every
+request remains `planned_not_sent` until a later budgeted execution task.
