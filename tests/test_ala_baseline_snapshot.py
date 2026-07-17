@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import sys
@@ -313,6 +314,200 @@ class AlaNormalizedOccurrenceTests(unittest.TestCase):
                 fingerprint,
                 self.builder.sha256_bytes(self.builder.canonical_json(row)),
             )
+
+
+class AlaAggregatedCellTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        try:
+            import h3
+            import pyarrow.parquet as pq
+        except ImportError as error:
+            raise unittest.SkipTest(
+                "locked H3 and PyArrow dependencies are not installed"
+            ) from error
+        cls.builder = load_builder()
+        cls.h3 = h3
+        cls.pq = pq
+        cls.path = ALA / "ala_baseline_cells.parquet"
+        cls.manifest = json.loads(
+            (ALA / "ala_aggregation_manifest.json").read_text(encoding="utf-8")
+        )
+        cls.normalization_manifest = json.loads(
+            (ALA / "ala_normalization_manifest.json").read_text(encoding="utf-8")
+        )
+        cls.schema_contract = json.loads(
+            (ALA / "schemas/ala_baseline_cell.schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        cls.parquet = pq.ParquetFile(cls.path)
+        cls.table = pq.read_table(cls.path)
+
+    def test_manifest_schema_and_physical_artifact_reconcile(self) -> None:
+        artifact = self.manifest["artifact"]
+        self.assertEqual(
+            self.manifest["snapshot_id"],
+            self.normalization_manifest["snapshot_id"],
+        )
+        self.assertEqual(artifact["physical_sha256"], self.builder.sha256_file(self.path))
+        self.assertEqual(artifact["physical_bytes"], self.path.stat().st_size)
+        self.assertEqual(artifact["row_count"], self.parquet.metadata.num_rows)
+        self.assertEqual(artifact["row_group_count"], self.parquet.metadata.num_row_groups)
+        self.assertEqual(artifact["column_count"], self.parquet.metadata.num_columns)
+        schema_path = ALA / "schemas/ala_baseline_cell.schema.json"
+        self.assertEqual(
+            self.manifest["schema"]["physical_sha256"],
+            self.builder.sha256_file(schema_path),
+        )
+        expected_names = [field["name"] for field in self.schema_contract["fields"]]
+        self.assertEqual(self.parquet.schema_arrow.names, expected_names)
+        metadata = self.parquet.schema_arrow.metadata
+        self.assertEqual(
+            metadata[b"schema_version"].decode(),
+            self.builder.AGGREGATED_SCHEMA_VERSION,
+        )
+        self.assertEqual(metadata[b"h3_resolutions"].decode(), "coarse=3,regional=5,local=7")
+
+    def test_scope_inventory_and_memberships_reconcile(self) -> None:
+        expected_scope_types = {
+            "australia",
+            "state_territory",
+            "ibra_region",
+            "lga_2023_statistical_approximation",
+            "h3_coarse",
+            "h3_regional",
+            "h3_local",
+        }
+        scope_types = self.table.column("scope_type").to_pylist()
+        self.assertEqual(set(scope_types), expected_scope_types)
+        observed_rows = {
+            scope_type: scope_types.count(scope_type)
+            for scope_type in expected_scope_types
+        }
+        self.assertEqual(observed_rows, self.manifest["counts"]["scope_rows"])
+        observed_memberships = {scope_type: 0 for scope_type in expected_scope_types}
+        for scope_type, count in zip(
+            scope_types,
+            self.table.column("record_count").to_pylist(),
+            strict=True,
+        ):
+            observed_memberships[scope_type] += count
+        self.assertEqual(
+            observed_memberships,
+            self.manifest["counts"]["scope_record_memberships"],
+        )
+        self.assertEqual(observed_memberships["australia"], 230_027)
+        self.assertEqual(observed_memberships["h3_coarse"], 230_027)
+        self.assertEqual(observed_memberships["h3_regional"], 229_652)
+        self.assertEqual(observed_memberships["h3_local"], 229_652)
+
+    def test_generalised_rows_are_coarse_only(self) -> None:
+        observed = {}
+        for scope_type in set(self.table.column("scope_type").to_pylist()):
+            observed[scope_type] = sum(
+                row["publicly_generalised_record_count"]
+                for row in self.table.select(
+                    ["scope_type", "publicly_generalised_record_count"]
+                ).to_pylist()
+                if row["scope_type"] == scope_type
+            )
+        self.assertEqual(
+            observed,
+            self.manifest["counts"]["scope_publicly_generalised_memberships"],
+        )
+        self.assertEqual(observed["australia"], 375)
+        self.assertEqual(observed["state_territory"], 375)
+        self.assertEqual(observed["h3_coarse"], 375)
+        for scope_type in (
+            "ibra_region",
+            "lga_2023_statistical_approximation",
+            "h3_regional",
+            "h3_local",
+        ):
+            self.assertEqual(observed[scope_type], 0)
+
+    def test_h3_cells_resolution_centers_and_parents_are_valid(self) -> None:
+        resolution_by_type = {
+            "h3_coarse": 3,
+            "h3_regional": 5,
+            "h3_local": 7,
+        }
+        for row in self.table.select(
+            [
+                "scope_type",
+                "h3_resolution",
+                "h3_cell_id",
+                "parent_h3_cell_id",
+                "cell_center_latitude",
+                "cell_center_longitude",
+            ]
+        ).to_pylist():
+            scope_type = row["scope_type"]
+            if scope_type not in resolution_by_type:
+                self.assertIsNone(row["h3_resolution"])
+                self.assertIsNone(row["h3_cell_id"])
+                continue
+            resolution = resolution_by_type[scope_type]
+            cell_id = row["h3_cell_id"]
+            self.assertEqual(row["h3_resolution"], resolution)
+            self.assertTrue(self.h3.is_valid_cell(cell_id))
+            self.assertEqual(self.h3.get_resolution(cell_id), resolution)
+            self.assertEqual(
+                (row["cell_center_latitude"], row["cell_center_longitude"]),
+                tuple(self.h3.cell_to_latlng(cell_id)),
+            )
+            if resolution == 3:
+                self.assertIsNone(row["parent_h3_cell_id"])
+            else:
+                parent_resolution = 3 if resolution == 5 else 5
+                self.assertEqual(
+                    row["parent_h3_cell_id"],
+                    self.h3.cell_to_parent(cell_id, parent_resolution),
+                )
+
+    def test_aggregate_counts_fingerprints_and_national_lineage(self) -> None:
+        scope_ids = self.table.column("scope_id").to_pylist()
+        self.assertEqual(len(scope_ids), len(set(scope_ids)))
+        rows = self.table.to_pylist()
+        count_fields = list(self.builder.EVIDENCE_COUNT_FIELDS.values())
+        for row in rows:
+            self.assertEqual(
+                row["record_count"],
+                row["matched_taxon_record_count"]
+                + row["unmatched_taxon_assertion_count"],
+            )
+            self.assertEqual(
+                row["record_count"],
+                sum(row[field] for field in count_fields),
+            )
+            self.assertEqual(
+                row["record_count"],
+                row["coordinate_uncertainty_known_count"]
+                + row["coordinate_uncertainty_missing_count"],
+            )
+        for index in (0, len(rows) // 2, len(rows) - 1):
+            row = dict(rows[index])
+            fingerprint = row.pop("aggregate_fingerprint")
+            self.assertEqual(
+                fingerprint,
+                self.builder.sha256_bytes(self.builder.canonical_json(row)),
+            )
+
+        digest = hashlib.sha256()
+        occurrence_table = self.pq.read_table(
+            ALA / "ala_baseline_occurrences.parquet",
+            columns=[
+                "normalized_occurrence_fingerprint",
+                "spatial_aggregation_eligibility",
+            ],
+        )
+        for row in occurrence_table.to_pylist():
+            if row["spatial_aggregation_eligibility"].startswith("eligible_"):
+                digest.update(row["normalized_occurrence_fingerprint"].encode("ascii"))
+                digest.update(b"\n")
+        australia = next(row for row in rows if row["scope_type"] == "australia")
+        self.assertEqual(australia["source_record_fingerprint_digest"], digest.hexdigest())
 
 
 if __name__ == "__main__":

@@ -1,12 +1,23 @@
 {
   "schema_version": "butterflylens-dependency-licenses/v1",
-  "generated_at": "2026-07-17T18:34:32Z",
+  "generated_at": "2026-07-17T18:50:27Z",
   "lockfile": {
     "path": "uv.lock",
     "manager": "uv",
     "resolution": "cross-platform lock for Python >=3.12,<3.15"
   },
   "direct": [
+    {
+      "name": "h3",
+      "version": "4.5.0",
+      "purpose": "Hierarchical coarse, regional, and local spatial-cell projection",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/uber/h3-py/blob/v4.5.0/LICENSE",
+      "source_url": "https://pypi.org/project/h3/4.5.0/",
+      "source_distribution_sha256": "a1e279a1674fc799445c710e35bc4b1b388a406c881d8b5e59a9b8bebeb5bb43",
+      "python_3_14_linux_wheel_sha256": "1bb5ac89a494fa8e4c1594b77ed8a18419b95513c3e586ce1189606df54a38a8",
+      "bundled_notice_required": true
+    },
     {
       "name": "jsonschema",
       "version": "4.26.0",
@@ -82,6 +93,7 @@
   "verification": {
     "source": "official PyPI release metadata retrieved 2026-07-17",
     "locked_direct_versions": [
+      "h3==4.5.0",
       "jsonschema==4.26.0",
       "pyarrow==25.0.0"
     ],

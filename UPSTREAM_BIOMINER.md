@@ -193,6 +193,20 @@ The resulting artifact remains ButterflyLens-owned ALA baseline occurrence
 evidence. This integration does not turn ALA into a BioMiner reference source,
 does not establish human verification, and does not infer absence.
 
+### 8b. H3 projection — adapted interface; no source copied
+
+Task 2.3.3 follows the pinned `src/biominer/geography/cells.py` interface and
+`GeographicResolutions(coarse=3, regional=5, local=7)` ordering demonstrated by
+its committed tests. ButterflyLens calls the locked `h3` 4.5.0 package through
+a native ALA aggregation adapter; it does not import or copy BioMiner source.
+
+ButterflyLens adds product-specific Australia, state/territory, IBRA, LGA, and
+H3 rollups, ordered source-row lineage digests, provider-context caveats, and a
+strict sensitive-membership rule. Publicly generalised ALA values contribute
+only to Australia, state/territory, and H3 resolution 3. No boundary geometry
+is copied, a cell center is not an occurrence coordinate, and an empty cell is
+not evidence of biological absence.
+
 ### 9. Statistical evaluation — implemented components; no audited live result
 
 BioMiner has committed modules for reviewed labels, grouped splits, leakage

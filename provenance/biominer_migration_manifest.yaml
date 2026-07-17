@@ -1,5 +1,5 @@
 schema_version: butterflylens-biominer-migration-v1
-updated_at: "2026-07-17T18:20:23Z"
+updated_at: "2026-07-17T18:50:27Z"
 source_snapshot:
   repository: karikris/BioMiner
   commit: d71bceabf75748a25df39d0025e8da907f295f8c
@@ -132,7 +132,25 @@ components:
       - Byte-identical isolated normalization rebuild with PyArrow 25.0.0.
       - Parquet schema, checksum, row-count, uniqueness, fingerprint, rights, and sensitive-resolution invariants.
     status: verified
+  - component_id: biominer-h3-projection-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/geography/cells.py and src/biominer/geography/schemas.py
+    destination_path: scripts/build_ala_baseline.py and data/packs/australian_butterflies/v1/ala/schemas/ala_baseline_cell.schema.json
+    migration_kind: adapter
+    reason: Adapt the pinned H3 interface and ordered coarse/regional/local resolution contract for ButterflyLens-owned ALA baseline rollups.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Use the locked h3 4.5.0 package directly with configured resolutions 3, 5, and 7.
+      - Add Australia, provider state/territory, IBRA v7, LGA 2023 statistical-approximation, and H3 aggregate scopes.
+      - Bind every aggregate to ordered normalized source-row fingerprints and keep provider-context caveats explicit.
+      - Restrict publicly generalised rows to Australia, state/territory, and H3 resolution 3.
+    tests:
+      - Byte-identical isolated aggregation rebuild with h3 4.5.0 and PyArrow 25.0.0.
+      - Scope inventory, rollup reconciliation, H3 hierarchy, lineage, count decomposition, and sensitive-resolution invariants.
+    status: verified
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
-  - Candidate model and workflow contracts remain planned; the live-worker boundary and ALA Parquet handoff contract are now defined.
+  - Candidate model and workflow contracts remain planned; the live-worker boundary plus ALA Parquet and H3 adapters are now defined.
   - Every later component must pin this or a newer immutable source commit.

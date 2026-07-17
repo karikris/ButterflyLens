@@ -5,6 +5,7 @@ description = "Australia's live butterfly evidence map and community verificatio
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
 dependencies = [
+  "h3==4.5.0",
   "jsonschema==4.26.0",
   "pyarrow==25.0.0",
 ]

@@ -120,6 +120,36 @@ sources and CC BY 4.0 as the licence. The LGA values are ABS Mesh Block
 approximations for statistical use, not official legal boundaries. No boundary
 geometry is copied into this snapshot.
 
+`ala_baseline_cells.parquet` materializes 23,744 deterministic aggregate rows:
+one Australia row, 9 ALA `stateProvince` assertions, 87 IBRA v7 assertions,
+532 LGA 2023 statistical approximations, 630 occupied H3 resolution-3 cells,
+4,986 occupied resolution-5 cells, and 17,499 occupied resolution-7 cells.
+The 230,027 spatially eligible source rows contribute to the Australia and
+coarse H3 rollups; 229,652 all-resolution-eligible rows contribute to regional
+and local H3. Missing scope labels are counted in
+`ala_aggregation_manifest.json` rather than silently assigned.
+
+The configured H3 levels are coarse 3, regional 5, and local 7, following the
+pinned BioMiner geography contract. All 375 publicly generalised rows may
+contribute only to Australia, their supplied state/territory assertion, and H3
+resolution 3. They never enter IBRA, LGA, regional H3, or local H3 aggregates.
+H3 centers are derived cell centers, not occurrence coordinates. Every row
+retains a digest over the exact ordered normalized occurrence fingerprints that
+contributed to it. Counts remain selected ALA baseline occurrence evidence;
+an unoccupied cell is not evidence of biological absence.
+
+Rebuild the aggregate artifact, schema, and manifest without provider access:
+
+```bash
+uv run python scripts/build_ala_baseline.py aggregate \
+  --occurrences data/packs/australian_butterflies/v1/ala/ala_baseline_occurrences.parquet \
+  --normalization-manifest data/packs/australian_butterflies/v1/ala/ala_normalization_manifest.json \
+  --output data/packs/australian_butterflies/v1/ala/ala_baseline_cells.parquet \
+  --schema-output data/packs/australian_butterflies/v1/ala/schemas/ala_baseline_cell.schema.json \
+  --manifest data/packs/australian_butterflies/v1/ala/ala_aggregation_manifest.json \
+  --generated-at 2026-07-17T18:50:27Z
+```
+
 ## Reproduction
 
 Submitting a new provider snapshot is an explicit network action. ALA's bulk

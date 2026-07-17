@@ -31,6 +31,8 @@ SNAPSHOT_SCHEMA_VERSION = "butterflylens-ala-occurrence-snapshot/v1"
 ATTRIBUTION_SCHEMA_VERSION = "butterflylens-ala-attribution/v1"
 NORMALIZED_SCHEMA_VERSION = "butterflylens-ala-normalized-occurrence/v1"
 NORMALIZATION_MANIFEST_SCHEMA_VERSION = "butterflylens-ala-normalization-manifest/v1"
+AGGREGATED_SCHEMA_VERSION = "butterflylens-ala-baseline-cell/v1"
+AGGREGATION_MANIFEST_SCHEMA_VERSION = "butterflylens-ala-aggregation-manifest/v1"
 ALA_PROVIDER = "Atlas of Living Australia"
 ALA_ROOT_NAME = "PAPILIONOIDEA"
 ALA_ROOT_TAXON_ID = (
@@ -153,6 +155,55 @@ NORMALIZED_FIELD_SPECS = (
     ("ibra_region", "string", True, "ALA contextual IBRA v7 region assertion (cl11185)."),
     ("lga_name", "string", True, "ALA contextual LGA 2023 statistical approximation (cl11170)."),
     ("source_reference", "string", True, "Provider source reference URL or identifier."),
+)
+H3_RESOLUTIONS = {"coarse": 3, "regional": 5, "local": 7}
+EVIDENCE_COUNT_FIELDS = {
+    "human_observation": "human_observation_count",
+    "machine_observation": "machine_observation_count",
+    "unspecified_observation": "unspecified_observation_count",
+    "material_sample": "material_sample_count",
+    "preserved_specimen": "preserved_specimen_count",
+    "fossil_specimen": "fossil_specimen_count",
+    "unspecified_occurrence": "unspecified_occurrence_count",
+    "other_or_not_supplied": "other_or_not_supplied_count",
+}
+AGGREGATED_FIELD_SPECS = (
+    ("source_snapshot_id", "string", False, "Frozen ALA snapshot identifier."),
+    ("source_snapshot_fingerprint", "string", False, "Semantic fingerprint of the source snapshot."),
+    ("source_occurrence_artifact_sha256", "string", False, "Physical SHA-256 of the normalized occurrence artifact."),
+    ("scope_type", "string", False, "Closed national, provider-context, or H3 scope type."),
+    ("scope_order", "int32", False, "Stable national-to-local sort order."),
+    ("scope_id", "string", False, "Stable scope identifier."),
+    ("scope_label", "string", False, "Provider label or H3 cell identifier."),
+    ("scope_resolution_class", "string", False, "National, coarse, regional, or local presentation class."),
+    ("sensitive_membership_policy", "string", False, "Whether publicly generalised rows may contribute to this scope."),
+    ("contextual_source", "string", False, "Source of the scope membership assertion."),
+    ("h3_resolution", "int32", True, "H3 resolution for H3 scopes only."),
+    ("h3_cell_id", "string", True, "H3 cell identifier for H3 scopes only."),
+    ("parent_h3_cell_id", "string", True, "Configured parent H3 cell for regional/local scopes."),
+    ("cell_center_latitude", "float64", True, "Derived H3 center latitude; not an occurrence coordinate."),
+    ("cell_center_longitude", "float64", True, "Derived H3 center longitude; not an occurrence coordinate."),
+    ("record_count", "int64", False, "Number of eligible ALA baseline occurrence-evidence rows in the scope."),
+    ("matched_taxon_record_count", "int64", False, "Rows with an exact ALA taxonConceptID crosswalk match."),
+    ("unmatched_taxon_assertion_count", "int64", False, "Rows retaining an unmatched provider taxon assertion."),
+    ("unique_butterflylens_taxon_count", "int64", False, "Distinct exactly crosswalked ButterflyLens taxon keys."),
+    ("unique_data_resource_count", "int64", False, "Distinct contributing ALA data-resource identifiers."),
+    ("human_observation_count", "int64", False, "Provider basis category count; not human verification."),
+    ("machine_observation_count", "int64", False, "Machine-observation basis category count."),
+    ("unspecified_observation_count", "int64", False, "Unspecified observation basis category count."),
+    ("material_sample_count", "int64", False, "Material-sample basis category count."),
+    ("preserved_specimen_count", "int64", False, "Preserved-specimen basis category count."),
+    ("fossil_specimen_count", "int64", False, "Fossil-specimen basis category count."),
+    ("unspecified_occurrence_count", "int64", False, "Unspecified occurrence basis category count."),
+    ("other_or_not_supplied_count", "int64", False, "Other or missing basis category count."),
+    ("earliest_event_year", "int32", True, "Earliest parseable event year in the scope."),
+    ("latest_event_year", "int32", True, "Latest parseable event year in the scope."),
+    ("coordinate_uncertainty_known_count", "int64", False, "Rows with supplied numeric coordinate uncertainty."),
+    ("coordinate_uncertainty_missing_count", "int64", False, "Rows without supplied numeric coordinate uncertainty."),
+    ("maximum_coordinate_uncertainty_meters", "float64", True, "Maximum supplied coordinate uncertainty in the scope."),
+    ("publicly_generalised_record_count", "int64", False, "Rows marked generalised or alreadyGeneralised by ALA."),
+    ("source_record_fingerprint_digest", "string", False, "SHA-256 over ordered normalized source-row fingerprints."),
+    ("aggregate_fingerprint", "string", False, "SHA-256 of the aggregate semantic row before this field is added."),
 )
 
 
@@ -759,6 +810,7 @@ def arrow_type(pa: Any, type_name: str) -> Any:
     return {
         "string": pa.string(),
         "int32": pa.int32(),
+        "int64": pa.int64(),
         "float64": pa.float64(),
         "bool": pa.bool_(),
         "list<string>": pa.list_(pa.string()),
@@ -949,6 +1001,569 @@ def normalize_occurrences(args: argparse.Namespace) -> None:
                 "parquet_bytes": args.output.stat().st_size,
                 "parquet_sha256": sha256_file(args.output),
                 "manifest_sha256": sha256_file(args.manifest),
+            },
+            sort_keys=True,
+        )
+    )
+
+
+class AggregateAccumulator:
+    def __init__(self, metadata: dict[str, Any]) -> None:
+        self.metadata = metadata
+        self.record_count = 0
+        self.matched_taxon_record_count = 0
+        self.unmatched_taxon_assertion_count = 0
+        self.taxon_keys: set[str] = set()
+        self.data_resources: set[str] = set()
+        self.evidence_counts: Counter[str] = Counter()
+        self.earliest_event_year: int | None = None
+        self.latest_event_year: int | None = None
+        self.coordinate_uncertainty_known_count = 0
+        self.coordinate_uncertainty_missing_count = 0
+        self.maximum_coordinate_uncertainty_meters: float | None = None
+        self.publicly_generalised_record_count = 0
+        self.source_record_digest = hashlib.sha256()
+
+    def add(self, row: dict[str, Any]) -> None:
+        self.record_count += 1
+        taxon_key = row["butterflylens_taxon_key"]
+        match_state = row["taxon_match_state"]
+        if taxon_key is not None:
+            if match_state != "exact_ala_taxon_concept_crosswalk":
+                raise AlaBaselineError("matched taxon key has inconsistent match state")
+            self.matched_taxon_record_count += 1
+            self.taxon_keys.add(taxon_key)
+        else:
+            if match_state != "unmatched_provider_taxon_assertion":
+                raise AlaBaselineError("unmatched taxon assertion has inconsistent state")
+            self.unmatched_taxon_assertion_count += 1
+        self.data_resources.add(row["data_resource_uid"])
+        category = row["evidence_category"]
+        if category not in EVIDENCE_COUNT_FIELDS:
+            raise AlaBaselineError(f"unexpected evidence category {category!r}")
+        self.evidence_counts[category] += 1
+        event_year = row["event_year"]
+        if (
+            event_year is not None
+            and row["temporal_evidence_band"]
+            != "outside_declared_valid_year_range"
+        ):
+            self.earliest_event_year = (
+                event_year
+                if self.earliest_event_year is None
+                else min(self.earliest_event_year, event_year)
+            )
+            self.latest_event_year = (
+                event_year
+                if self.latest_event_year is None
+                else max(self.latest_event_year, event_year)
+            )
+        uncertainty = row["coordinate_uncertainty_meters"]
+        if uncertainty is None:
+            self.coordinate_uncertainty_missing_count += 1
+        else:
+            self.coordinate_uncertainty_known_count += 1
+            self.maximum_coordinate_uncertainty_meters = (
+                uncertainty
+                if self.maximum_coordinate_uncertainty_meters is None
+                else max(self.maximum_coordinate_uncertainty_meters, uncertainty)
+            )
+        if row["coordinates_publicly_generalised"]:
+            self.publicly_generalised_record_count += 1
+        self.source_record_digest.update(
+            row["normalized_occurrence_fingerprint"].encode("ascii")
+        )
+        self.source_record_digest.update(b"\n")
+
+    def finish(self, source: dict[str, str]) -> dict[str, Any]:
+        row = {
+            **source,
+            **self.metadata,
+            "record_count": self.record_count,
+            "matched_taxon_record_count": self.matched_taxon_record_count,
+            "unmatched_taxon_assertion_count": self.unmatched_taxon_assertion_count,
+            "unique_butterflylens_taxon_count": len(self.taxon_keys),
+            "unique_data_resource_count": len(self.data_resources),
+            **{
+                output_field: self.evidence_counts.get(category, 0)
+                for category, output_field in EVIDENCE_COUNT_FIELDS.items()
+            },
+            "earliest_event_year": self.earliest_event_year,
+            "latest_event_year": self.latest_event_year,
+            "coordinate_uncertainty_known_count": self.coordinate_uncertainty_known_count,
+            "coordinate_uncertainty_missing_count": self.coordinate_uncertainty_missing_count,
+            "maximum_coordinate_uncertainty_meters": self.maximum_coordinate_uncertainty_meters,
+            "publicly_generalised_record_count": self.publicly_generalised_record_count,
+            "source_record_fingerprint_digest": self.source_record_digest.hexdigest(),
+        }
+        row["aggregate_fingerprint"] = sha256_bytes(canonical_json(row))
+        return row
+
+
+def aggregate_arrow_schema(
+    pa: Any,
+    normalization_manifest: dict[str, Any],
+    h3_version: str,
+) -> Any:
+    metadata = {
+        b"schema_version": AGGREGATED_SCHEMA_VERSION.encode(),
+        b"snapshot_id": normalization_manifest["snapshot_id"].encode(),
+        b"snapshot_fingerprint": normalization_manifest["snapshot_fingerprint"].encode(),
+        b"source_occurrence_artifact_sha256": normalization_manifest["artifact"][
+            "physical_sha256"
+        ].encode(),
+        b"evidence_label": b"aggregated ALA baseline occurrence evidence",
+        b"h3_version": h3_version.encode(),
+        b"h3_resolutions": b"coarse=3,regional=5,local=7",
+    }
+    return pa.schema(
+        [
+            pa.field(name, arrow_type(pa, type_name), nullable=nullable)
+            for name, type_name, nullable, _ in AGGREGATED_FIELD_SPECS
+        ],
+        metadata=metadata,
+    )
+
+
+def aggregated_schema_contract() -> dict[str, Any]:
+    return {
+        "schema_version": "butterflylens-parquet-schema/v1",
+        "artifact_schema_version": AGGREGATED_SCHEMA_VERSION,
+        "format": "parquet",
+        "closed": True,
+        "fields": [
+            {
+                "name": name,
+                "type": type_name,
+                "nullable": nullable,
+                "description": description,
+            }
+            for name, type_name, nullable, description in AGGREGATED_FIELD_SPECS
+        ],
+        "scope_types": [
+            "australia",
+            "state_territory",
+            "ibra_region",
+            "lga_2023_statistical_approximation",
+            "h3_coarse",
+            "h3_regional",
+            "h3_local",
+        ],
+        "h3_resolutions": H3_RESOLUTIONS,
+        "invariants": [
+            "scope_id is unique and rows are sorted by scope_order then scope_id",
+            "every record_count decomposes into matched and unmatched taxon rows",
+            "every record_count decomposes into the closed evidence-category counts",
+            "publicly generalised rows contribute only to Australia, state/territory, and H3 resolution 3",
+            "IBRA and LGA values remain ALA contextual assertions and no boundary geometry is copied",
+            "H3 centers are derived cell centers and are not occurrence coordinates",
+            "source_record_fingerprint_digest binds each aggregate to ordered normalized source rows",
+        ],
+    }
+
+
+def encoded_scope_id(prefix: str, label: str) -> str:
+    return f"{prefix}:{urllib.parse.quote(label, safe='')}"
+
+
+def contextual_scope_metadata(scope_type: str, label: str) -> dict[str, Any]:
+    definitions = {
+        "australia": {
+            "scope_order": 0,
+            "scope_id": "country:AU",
+            "scope_resolution_class": "national",
+            "sensitive_membership_policy": "eligible_all_and_generalised_coarse",
+            "contextual_source": "ALA selected country filter: Australia",
+        },
+        "state_territory": {
+            "scope_order": 1,
+            "scope_id": encoded_scope_id("ala:state_territory", label),
+            "scope_resolution_class": "coarse",
+            "sensitive_membership_policy": "eligible_all_and_generalised_coarse",
+            "contextual_source": "ALA stateProvince provider assertion",
+        },
+        "ibra_region": {
+            "scope_order": 2,
+            "scope_id": encoded_scope_id("ala:ibra_v7", label),
+            "scope_resolution_class": "regional",
+            "sensitive_membership_policy": "eligible_all_configured_resolutions_only",
+            "contextual_source": "ALA cl11185 indexed IBRA v7 contextual assertion",
+        },
+        "lga_2023_statistical_approximation": {
+            "scope_order": 3,
+            "scope_id": encoded_scope_id(
+                "ala:lga_2023_statistical_approximation", label
+            ),
+            "scope_resolution_class": "local",
+            "sensitive_membership_policy": "eligible_all_configured_resolutions_only",
+            "contextual_source": (
+                "ALA cl11170 indexed LGA 2023 Mesh Block statistical "
+                "approximation; not a legal boundary"
+            ),
+        },
+    }
+    try:
+        metadata = definitions[scope_type]
+    except KeyError as error:
+        raise AlaBaselineError(f"unknown contextual scope type {scope_type!r}") from error
+    return {
+        "scope_type": scope_type,
+        "scope_label": label,
+        "h3_resolution": None,
+        "h3_cell_id": None,
+        "parent_h3_cell_id": None,
+        "cell_center_latitude": None,
+        "cell_center_longitude": None,
+        **metadata,
+    }
+
+
+def h3_scope_metadata(h3: Any, resolution_class: str, cell_id: str) -> dict[str, Any]:
+    resolution = H3_RESOLUTIONS[resolution_class]
+    scope_order = {"coarse": 4, "regional": 5, "local": 6}[resolution_class]
+    parent_resolution = {
+        "coarse": None,
+        "regional": H3_RESOLUTIONS["coarse"],
+        "local": H3_RESOLUTIONS["regional"],
+    }[resolution_class]
+    center_latitude, center_longitude = h3.cell_to_latlng(cell_id)
+    return {
+        "scope_type": f"h3_{resolution_class}",
+        "scope_order": scope_order,
+        "scope_id": f"h3:{resolution}:{cell_id}",
+        "scope_label": cell_id,
+        "scope_resolution_class": resolution_class,
+        "sensitive_membership_policy": (
+            "eligible_all_and_generalised_coarse"
+            if resolution_class == "coarse"
+            else "eligible_all_configured_resolutions_only"
+        ),
+        "contextual_source": (
+            f"h3-py {h3.__version__} projection of ALA public processed coordinates"
+        ),
+        "h3_resolution": resolution,
+        "h3_cell_id": cell_id,
+        "parent_h3_cell_id": (
+            h3.cell_to_parent(cell_id, parent_resolution)
+            if parent_resolution is not None
+            else None
+        ),
+        "cell_center_latitude": float(center_latitude),
+        "cell_center_longitude": float(center_longitude),
+    }
+
+
+def add_aggregate_membership(
+    groups: dict[tuple[str, str], AggregateAccumulator],
+    *,
+    scope_type: str,
+    scope_id: str,
+    metadata_factory: Any,
+    row: dict[str, Any],
+) -> None:
+    key = (scope_type, scope_id)
+    accumulator = groups.get(key)
+    if accumulator is None:
+        accumulator = AggregateAccumulator(metadata_factory())
+        groups[key] = accumulator
+    accumulator.add(row)
+
+
+def aggregate_occurrences(args: argparse.Namespace) -> None:
+    try:
+        import h3
+        import pyarrow as pa
+        import pyarrow.compute as pc
+        import pyarrow.parquet as pq
+    except ImportError as error:
+        raise AlaBaselineError(
+            "aggregation requires the locked h3 and PyArrow dependencies; run uv sync --frozen"
+        ) from error
+
+    normalization_manifest = json.loads(
+        args.normalization_manifest.read_text(encoding="utf-8")
+    )
+    if (
+        normalization_manifest.get("schema_version")
+        != NORMALIZATION_MANIFEST_SCHEMA_VERSION
+    ):
+        raise AlaBaselineError("unexpected ALA normalization manifest schema")
+    observed_occurrence_sha = sha256_file(args.occurrences)
+    if observed_occurrence_sha != normalization_manifest["artifact"]["physical_sha256"]:
+        raise AlaBaselineError("normalized occurrence checksum does not match manifest")
+    if h3.__version__ != "4.5.0":
+        raise AlaBaselineError(f"unexpected h3 version {h3.__version__!r}")
+
+    required_columns = [
+        "ala_record_id",
+        "normalized_occurrence_fingerprint",
+        "butterflylens_taxon_key",
+        "taxon_match_state",
+        "data_resource_uid",
+        "decimal_latitude",
+        "decimal_longitude",
+        "coordinate_uncertainty_meters",
+        "coordinates_publicly_generalised",
+        "spatial_aggregation_eligibility",
+        "event_year",
+        "temporal_evidence_band",
+        "evidence_category",
+        "state_territory",
+        "ibra_region",
+        "lga_name",
+    ]
+    table = pq.read_table(args.occurrences, columns=required_columns)
+    if table.num_rows != normalization_manifest["artifact"]["row_count"]:
+        raise AlaBaselineError("normalized occurrence row count does not match manifest")
+    groups: dict[tuple[str, str], AggregateAccumulator] = {}
+    missing_scope_labels: Counter[str] = Counter()
+    eligible_all_count = 0
+    eligible_generalised_count = 0
+    previous_record_id: str | None = None
+
+    for batch in table.to_batches(max_chunksize=65_536):
+        for row in batch.to_pylist():
+            record_id = row["ala_record_id"]
+            if previous_record_id is not None and record_id <= previous_record_id:
+                raise AlaBaselineError("normalized occurrence rows are not uniquely sorted")
+            previous_record_id = record_id
+            eligibility = row["spatial_aggregation_eligibility"]
+            if eligibility not in {
+                "eligible_all_configured_resolutions",
+                "eligible_generalised_coarse_only",
+            }:
+                continue
+            if row["decimal_latitude"] is None or row["decimal_longitude"] is None:
+                raise AlaBaselineError("spatially eligible row has no public coordinates")
+            is_all_resolution = eligibility == "eligible_all_configured_resolutions"
+            if is_all_resolution:
+                eligible_all_count += 1
+                if row["coordinates_publicly_generalised"]:
+                    raise AlaBaselineError(
+                        "publicly generalised row has all-resolution eligibility"
+                    )
+            else:
+                eligible_generalised_count += 1
+                if not row["coordinates_publicly_generalised"]:
+                    raise AlaBaselineError(
+                        "coarse-only row lacks public generalisation evidence"
+                    )
+
+            australia_metadata = contextual_scope_metadata("australia", "Australia")
+            add_aggregate_membership(
+                groups,
+                scope_type="australia",
+                scope_id=australia_metadata["scope_id"],
+                metadata_factory=lambda value=australia_metadata: value,
+                row=row,
+            )
+
+            state = row["state_territory"]
+            if state is None:
+                missing_scope_labels["state_territory"] += 1
+            else:
+                state_metadata = contextual_scope_metadata("state_territory", state)
+                add_aggregate_membership(
+                    groups,
+                    scope_type="state_territory",
+                    scope_id=state_metadata["scope_id"],
+                    metadata_factory=lambda value=state_metadata: value,
+                    row=row,
+                )
+
+            if is_all_resolution:
+                ibra = row["ibra_region"]
+                if ibra is None:
+                    missing_scope_labels["ibra_region"] += 1
+                else:
+                    ibra_metadata = contextual_scope_metadata("ibra_region", ibra)
+                    add_aggregate_membership(
+                        groups,
+                        scope_type="ibra_region",
+                        scope_id=ibra_metadata["scope_id"],
+                        metadata_factory=lambda value=ibra_metadata: value,
+                        row=row,
+                    )
+                lga = row["lga_name"]
+                if lga is None:
+                    missing_scope_labels["lga_2023_statistical_approximation"] += 1
+                else:
+                    lga_metadata = contextual_scope_metadata(
+                        "lga_2023_statistical_approximation", lga
+                    )
+                    add_aggregate_membership(
+                        groups,
+                        scope_type="lga_2023_statistical_approximation",
+                        scope_id=lga_metadata["scope_id"],
+                        metadata_factory=lambda value=lga_metadata: value,
+                        row=row,
+                    )
+
+            latitude = row["decimal_latitude"]
+            longitude = row["decimal_longitude"]
+            for resolution_class in (
+                ("coarse",)
+                if not is_all_resolution
+                else ("coarse", "regional", "local")
+            ):
+                resolution = H3_RESOLUTIONS[resolution_class]
+                cell_id = h3.latlng_to_cell(latitude, longitude, resolution)
+                scope_type = f"h3_{resolution_class}"
+                scope_id = f"h3:{resolution}:{cell_id}"
+                add_aggregate_membership(
+                    groups,
+                    scope_type=scope_type,
+                    scope_id=scope_id,
+                    metadata_factory=lambda value=resolution_class, cell=cell_id: h3_scope_metadata(
+                        h3, value, cell
+                    ),
+                    row=row,
+                )
+
+    source_metadata = {
+        "source_snapshot_id": normalization_manifest["snapshot_id"],
+        "source_snapshot_fingerprint": normalization_manifest[
+            "snapshot_fingerprint"
+        ],
+        "source_occurrence_artifact_sha256": observed_occurrence_sha,
+    }
+    rows = [accumulator.finish(source_metadata) for accumulator in groups.values()]
+    schema = aggregate_arrow_schema(pa, normalization_manifest, h3.__version__)
+    aggregate_table = pa.Table.from_pylist(rows, schema=schema)
+    order = pc.sort_indices(
+        aggregate_table,
+        sort_keys=[("scope_order", "ascending"), ("scope_id", "ascending")],
+    )
+    aggregate_table = pc.take(aggregate_table, order)
+    scope_ids = aggregate_table.column("scope_id").to_pylist()
+    if len(scope_ids) != len(set(scope_ids)):
+        raise AlaBaselineError("aggregate scope IDs are not unique")
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = args.output.with_suffix(args.output.suffix + ".tmp")
+    pq.write_table(
+        aggregate_table,
+        temporary,
+        compression="zstd",
+        compression_level=9,
+        use_dictionary=True,
+        write_statistics=True,
+        row_group_size=65_536,
+        data_page_version="2.0",
+        version="2.6",
+        use_compliant_nested_type=True,
+    )
+    os.replace(temporary, args.output)
+    schema_payload = aggregated_schema_contract()
+    write_bytes(args.schema_output, canonical_json(schema_payload))
+
+    scope_row_counts: Counter[str] = Counter(
+        aggregate_table.column("scope_type").to_pylist()
+    )
+    scope_record_memberships: Counter[str] = Counter()
+    scope_generalised_memberships: Counter[str] = Counter()
+    for scope_type, count, generalised_count in zip(
+        aggregate_table.column("scope_type").to_pylist(),
+        aggregate_table.column("record_count").to_pylist(),
+        aggregate_table.column("publicly_generalised_record_count").to_pylist(),
+        strict=True,
+    ):
+        scope_record_memberships[scope_type] += count
+        scope_generalised_memberships[scope_type] += generalised_count
+    logical_digest = hashlib.sha256()
+    for fingerprint in aggregate_table.column("aggregate_fingerprint").to_pylist():
+        logical_digest.update(fingerprint.encode("ascii"))
+        logical_digest.update(b"\n")
+    parquet_file = pq.ParquetFile(args.output)
+    source_spatial_counts = normalization_manifest["counts"][
+        "spatial_aggregation_eligibility"
+    ]
+    manifest = {
+        "schema_version": AGGREGATION_MANIFEST_SCHEMA_VERSION,
+        "artifact_schema_version": AGGREGATED_SCHEMA_VERSION,
+        "generated_at": args.generated_at or utc_now(),
+        "snapshot_id": normalization_manifest["snapshot_id"],
+        "snapshot_fingerprint": normalization_manifest["snapshot_fingerprint"],
+        "input": {
+            "occurrence_path": args.occurrences.name,
+            "occurrence_sha256": observed_occurrence_sha,
+            "normalization_manifest_path": args.normalization_manifest.name,
+            "normalization_manifest_sha256": sha256_file(
+                args.normalization_manifest
+            ),
+        },
+        "artifact": {
+            "path": args.output.name,
+            "physical_sha256": sha256_file(args.output),
+            "logical_aggregate_fingerprint_sha256": logical_digest.hexdigest(),
+            "row_count": aggregate_table.num_rows,
+            "column_count": aggregate_table.num_columns,
+            "row_group_count": parquet_file.metadata.num_row_groups,
+            "physical_bytes": args.output.stat().st_size,
+            "compression": "zstd",
+            "row_group_size": 65_536,
+            "sort_order": ["scope_order:ascending", "scope_id:ascending"],
+        },
+        "schema": {
+            "path": f"schemas/{args.schema_output.name}",
+            "physical_sha256": sha256_file(args.schema_output),
+            "field_count": len(AGGREGATED_FIELD_SPECS),
+        },
+        "grid": {
+            "name": "H3",
+            "python_package": "h3",
+            "python_version": h3.__version__,
+            "core_version": h3.versions()["c"],
+            "resolutions": H3_RESOLUTIONS,
+            "coordinate_source": "ALA public processed coordinates only",
+        },
+        "counts": {
+            "scope_rows": dict(sorted(scope_row_counts.items())),
+            "scope_record_memberships": dict(
+                sorted(scope_record_memberships.items())
+            ),
+            "scope_publicly_generalised_memberships": dict(
+                sorted(scope_generalised_memberships.items())
+            ),
+            "missing_scope_label_eligible_rows": dict(
+                sorted(missing_scope_labels.items())
+            ),
+            "source_spatial_eligibility": source_spatial_counts,
+            "unique_spatially_eligible_source_rows": (
+                eligible_all_count + eligible_generalised_count
+            ),
+        },
+        "policies": {
+            "generalised_membership": (
+                "publicly generalised rows contribute only to Australia, "
+                "state/territory, and H3 resolution 3"
+            ),
+            "contextual_geography": (
+                "state, IBRA, and LGA values are ALA assertions; LGA is a "
+                "statistical approximation, not a legal boundary"
+            ),
+            "boundary_geometry_copied": False,
+            "cell_center_is_occurrence_coordinate": False,
+            "provider_assertions_are_human_verification": False,
+            "absence_inference_permitted": False,
+        },
+        "build": {
+            "python": ".".join(map(str, __import__("sys").version_info[:3])),
+            "pyarrow": pa.__version__,
+            "h3": h3.__version__,
+        },
+    }
+    write_bytes(args.manifest, canonical_json(manifest))
+    print(
+        json.dumps(
+            {
+                "rows": aggregate_table.num_rows,
+                "columns": aggregate_table.num_columns,
+                "row_groups": parquet_file.metadata.num_row_groups,
+                "parquet_bytes": args.output.stat().st_size,
+                "parquet_sha256": sha256_file(args.output),
+                "manifest_sha256": sha256_file(args.manifest),
+                "scope_rows": dict(sorted(scope_row_counts.items())),
             },
             sort_keys=True,
         )
@@ -1238,6 +1853,16 @@ def parser() -> argparse.ArgumentParser:
     normalize.add_argument("--manifest", type=Path, required=True)
     normalize.add_argument("--generated-at")
     normalize.set_defaults(handler=normalize_occurrences)
+    aggregate = commands.add_parser(
+        "aggregate", help="build deterministic national, contextual, and H3 rollups"
+    )
+    aggregate.add_argument("--occurrences", type=Path, required=True)
+    aggregate.add_argument("--normalization-manifest", type=Path, required=True)
+    aggregate.add_argument("--output", type=Path, required=True)
+    aggregate.add_argument("--schema-output", type=Path, required=True)
+    aggregate.add_argument("--manifest", type=Path, required=True)
+    aggregate.add_argument("--generated-at")
+    aggregate.set_defaults(handler=aggregate_occurrences)
     return value
 
 
