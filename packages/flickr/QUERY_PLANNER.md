@@ -111,6 +111,14 @@ freezes the hourly ledger; an invalid response after sending still consumes the
 reserved unit. The returned execution object retains exact response bytes for
 the evidence-ledger step but never retains the credential.
 
+The evidence-ledger adapter recomputes the canonical request fingerprint, exact
+response-body SHA-256, semantic response fingerprint, execution identity, and
+checkpoint binding before inserting a success row into
+`public.api_requests`. It requires the store acknowledgement to echo those
+hashes exactly. Raw response bytes and credentials are not database fields.
+Only a service-side injected store may perform the insert; the table remains
+RLS-enabled and unavailable to browser roles.
+
 ## Adaptive scheduling
 
 Candidate priority is an availability-weighted combination of unique media per

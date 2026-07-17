@@ -66,6 +66,12 @@ from .execution import (
     SearchTransportResponse,
     execute_search_page,
 )
+from .evidence_ledger import (
+    EVIDENCE_LEDGER_ENTRY_SCHEMA_VERSION,
+    EvidenceLedgerError,
+    EvidenceLedgerStore,
+    persist_execution_hashes,
+)
 
 __all__ = [
     "FLICKR_BUDGET_SCHEMA_VERSION",
@@ -120,4 +126,8 @@ __all__ = [
     "SearchTransportResponse",
     "execute_search_page",
     "validate_pending_page_checkpoint",
+    "EVIDENCE_LEDGER_ENTRY_SCHEMA_VERSION",
+    "EvidenceLedgerError",
+    "EvidenceLedgerStore",
+    "persist_execution_hashes",
 ]
