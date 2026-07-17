@@ -1,5 +1,33 @@
 {
   "schema_version": "butterflylens-contract-parity-fixtures:v1.0.0",
+  "canonicalization_vectors": [
+    {
+      "case_id": "jcs-object-number-vector",
+      "value": {
+        "z": [3, true, null],
+        "a": "butterfly",
+        "numbers": [333333333.33333329, 1e30, 4.50, 2e-3, 1e-27]
+      },
+      "canonical": "{\"a\":\"butterfly\",\"numbers\":[333333333.3333333,1e+30,4.5,0.002,1e-27],\"z\":[3,true,null]}"
+    }
+  ],
+  "fingerprint_vectors": [
+    {
+      "case_id": "semantic-parent-order-vector",
+      "preimage": {
+        "fingerprint_kind": "review_event",
+        "subject_id": "event:canonical",
+        "payload_schema_version": "v1",
+        "payload": { "outcome": "yes", "confidence": 4 },
+        "parents": [
+          { "relationship": "reviews", "fingerprint_kind": "media_object", "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+          { "relationship": "derived_from", "fingerprint_kind": "source_flickr_record", "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }
+        ]
+      },
+      "canonical": "{\"fingerprint_kind\":\"review_event\",\"parents\":[{\"digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"fingerprint_kind\":\"source_flickr_record\",\"relationship\":\"derived_from\"},{\"digest\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"fingerprint_kind\":\"media_object\",\"relationship\":\"reviews\"}],\"payload\":{\"confidence\":4,\"outcome\":\"yes\"},\"payload_schema_version\":\"v1\",\"subject_id\":\"event:canonical\"}",
+      "digest": "919a3bfc043d06fb360057855273964b3e4df0d11f6e315d64ddc4cb52900fdc"
+    }
+  ],
   "schema_version_checks": [
     { "constant": "PROJECT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "pointer": "/properties/schema_version/const" },
     { "constant": "RUN_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/schema_version/const" },

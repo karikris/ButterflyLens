@@ -29,6 +29,13 @@ using ascending Unicode code-point order for the ASCII vocabularies in this
 contract. Duplicate parent objects are rejected. Array order inside the
 domain payload remains meaningful and is never automatically sorted.
 
+The Python implementation uses the pinned `rfc8785` package after recursively
+rejecting values outside the I-JSON domain. The TypeScript implementation uses
+ECMAScript JSON string/number serialization, UTF-16 property ordering, strict
+Unicode checks, and a local SHA-256 implementation. Frozen cross-language
+vectors are release gates. Neither implementation mutates the supplied
+preimage when it orders parent references.
+
 ## Canonical JSON restrictions
 
 The preimage must be I-JSON compatible before hashing:

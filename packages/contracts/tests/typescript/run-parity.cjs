@@ -24,6 +24,20 @@ const schemas = Object.fromEntries(
 )
 const fixtures = JSON.parse(fs.readFileSync(fixturePath, 'utf8'))
 
+for (const vector of fixtures.canonicalization_vectors ?? []) {
+  const observed = declarations.canonicalizeJson(vector.value)
+  if (observed !== vector.canonical) {
+    throw new Error(`canonicalization vector ${vector.case_id} diverged`)
+  }
+}
+for (const vector of fixtures.fingerprint_vectors ?? []) {
+  const canonical = declarations.canonicalizeEvidencePreimage(vector.preimage)
+  const digest = declarations.semanticFingerprintDigest(vector.preimage)
+  if (canonical !== vector.canonical || digest !== vector.digest) {
+    throw new Error(`fingerprint vector ${vector.case_id} diverged`)
+  }
+}
+
 const validById = new Map()
 const results = []
 for (const fixture of fixtures.valid_documents) {

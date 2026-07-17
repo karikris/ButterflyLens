@@ -220,6 +220,22 @@ def main() -> None:
     if fixtures.get("schema_version") != "butterflylens-contract-parity-fixtures:v1.0.0":
         raise ParityFailure("unsupported parity fixture version")
     schemas, registry = load_schemas()
+    sys.path.insert(0, str(PACKAGE / "python"))
+    from butterflylens.contracts import (  # noqa: PLC0415
+        canonicalize_evidence_preimage,
+        canonicalize_json,
+        semantic_fingerprint_digest,
+    )
+
+    for vector in fixtures.get("canonicalization_vectors", []):
+        observed = canonicalize_json(vector["value"]).decode("utf-8")
+        if observed != vector["canonical"]:
+            raise ParityFailure(f"Python canonicalization vector {vector['case_id']} diverged")
+    for vector in fixtures.get("fingerprint_vectors", []):
+        canonical = canonicalize_evidence_preimage(vector["preimage"]).decode("utf-8")
+        digest = semantic_fingerprint_digest(vector["preimage"])
+        if canonical != vector["canonical"] or digest != vector["digest"]:
+            raise ParityFailure(f"Python fingerprint vector {vector['case_id']} diverged")
     python_results = validate_python_cases(fixtures, schemas, registry)
     typescript_results, constants, compiler_version = run_typescript(fixtures)
     expected = {

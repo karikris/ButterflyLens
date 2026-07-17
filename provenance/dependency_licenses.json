@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-dependency-licenses/v1",
-  "generated_at": "2026-07-17T18:50:27Z",
+  "generated_at": "2026-07-17T22:13:00Z",
   "lockfile": {
     "path": "uv.lock",
     "manager": "uv",
@@ -39,6 +39,17 @@
       "source_url": "https://pypi.org/project/pyarrow/25.0.0/",
       "source_distribution_sha256": "d2d697008b5ec06d75952ef260c2e9a8a0f6ccfce24266c04c9c8ade927cb3b4",
       "python_3_14_linux_wheel_sha256": "447df764beb07c544f0178a5f6b70ef44b9ecf382b3cdfad4c2d7867353c3887",
+      "bundled_notice_required": true
+    },
+    {
+      "name": "rfc8785",
+      "version": "0.1.4",
+      "purpose": "RFC 8785 JSON Canonicalization Scheme for semantic fingerprints",
+      "licence": "Apache-2.0",
+      "licence_url": "https://github.com/trailofbits/rfc8785.py/blob/v0.1.4/LICENSE",
+      "source_url": "https://pypi.org/project/rfc8785/0.1.4/",
+      "source_distribution_sha256": "e545841329fe0eee4f6a3b44e7034343100c12b4ec566dc06ca9735681deb4da",
+      "universal_wheel_sha256": "520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48",
       "bundled_notice_required": true
     }
   ],
@@ -95,7 +106,8 @@
     "locked_direct_versions": [
       "h3==4.5.0",
       "jsonschema==4.26.0",
-      "pyarrow==25.0.0"
+      "pyarrow==25.0.0",
+      "rfc8785==0.1.4"
     ],
     "locked_transitive_versions": [
       "attrs==26.1.0",
