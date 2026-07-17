@@ -11,6 +11,9 @@ DATABASE_TEST = ROOT / "supabase/tests/database/002_discovery_schema.test.sql"
 ASSOCIATION_MIGRATION = next(
     (ROOT / "supabase/migrations").glob("*_add_api_request_association_ledger.sql")
 )
+RETRY_MIGRATION = next(
+    (ROOT / "supabase/migrations").glob("*_add_flickr_retry_attempt_ledger.sql")
+)
 
 
 class DiscoveryDatabaseSchemaTests(unittest.TestCase):
@@ -19,6 +22,7 @@ class DiscoveryDatabaseSchemaTests(unittest.TestCase):
         cls.sql = MIGRATION.read_text(encoding="utf-8")
         cls.database_test = DATABASE_TEST.read_text(encoding="utf-8")
         cls.association_sql = ASSOCIATION_MIGRATION.read_text(encoding="utf-8")
+        cls.retry_sql = RETRY_MIGRATION.read_text(encoding="utf-8")
 
     def test_required_discovery_tables_are_closed_and_rls_enabled(self) -> None:
         tables = (
@@ -99,6 +103,16 @@ class DiscoveryDatabaseSchemaTests(unittest.TestCase):
         self.assertNotIn("grant update", sql)
         self.assertNotIn("grant delete", sql)
         self.assertNotIn("create policy", sql)
+        self.assertNotIn("security definer", sql)
+
+    def test_retry_attempts_have_unique_numbers_and_required_lineage(self) -> None:
+        sql = self.retry_sql
+        self.assertIn("drop constraint api_requests_run_fingerprint_key", sql)
+        self.assertIn("api_requests_run_fingerprint_attempt_key", sql)
+        self.assertIn("unique (run_pk, request_fingerprint, retry_count)", sql)
+        self.assertIn("api_requests_retry_lineage_check", sql)
+        self.assertIn("retry_count = 0 and retry_of_request_pk is null", sql)
+        self.assertIn("retry_count > 0 and retry_of_request_pk is not null", sql)
         self.assertNotIn("security definer", sql)
 
 

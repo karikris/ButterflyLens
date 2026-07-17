@@ -128,6 +128,17 @@ privileges, and only `select`/`insert` service-role access. Physical
 deduplication therefore never erases which species/name assertions motivated a
 search, and the query term remains explicitly not a taxon label.
 
+Retry planning is deterministic and does not sleep or send on its own. Only
+HTTP 429 and configured transient 5xx responses are eligible; exponential
+backoff uses deterministic jitter and never shortens `Retry-After`. Retried
+pages consume the 500-call reserve lane with purpose `retry`. Uncertain sends
+are blocked pending accounting reconciliation, malformed successful responses
+are quarantined rather than retried, and every retry is linked to its parent.
+The failed or uncertain parent attempt must be durably acknowledged in
+`public.api_requests` before a scheduled retry may cross the transport boundary.
+The API-request ledger uniquely identifies each `(run, request fingerprint,
+retry count)` attempt and rejects retry rows without parent lineage.
+
 ## Adaptive scheduling
 
 Candidate priority is an availability-weighted combination of unique media per

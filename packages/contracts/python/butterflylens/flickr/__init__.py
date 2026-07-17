@@ -72,6 +72,7 @@ from .evidence_ledger import (
     EVIDENCE_LEDGER_ENTRY_SCHEMA_VERSION,
     EvidenceLedgerError,
     EvidenceLedgerStore,
+    persist_failed_execution,
     persist_execution_hashes,
 )
 from .logical_ledger import (
@@ -79,6 +80,13 @@ from .logical_ledger import (
     LogicalAssociationLedgerError,
     LogicalAssociationLedgerStore,
     persist_logical_associations,
+)
+from .retry import (
+    RETRY_PLAN_SCHEMA_VERSION,
+    RetryPlanError,
+    RetryPolicy,
+    execute_scheduled_retry,
+    plan_search_retry,
 )
 
 __all__ = [
@@ -139,9 +147,15 @@ __all__ = [
     "EVIDENCE_LEDGER_ENTRY_SCHEMA_VERSION",
     "EvidenceLedgerError",
     "EvidenceLedgerStore",
+    "persist_failed_execution",
     "persist_execution_hashes",
     "LOGICAL_ASSOCIATION_LEDGER_SCHEMA_VERSION",
     "LogicalAssociationLedgerError",
     "LogicalAssociationLedgerStore",
     "persist_logical_associations",
+    "RETRY_PLAN_SCHEMA_VERSION",
+    "RetryPlanError",
+    "RetryPolicy",
+    "execute_scheduled_retry",
+    "plan_search_retry",
 ]

@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(40);
+select plan(44);
 
 select has_table('public', 'species', 'species table exists');
 select has_table('public', 'name_assertions', 'name assertions table exists');
@@ -167,6 +167,44 @@ select is(
   (select query_term_is_species_label from public.query_associations where query_association_id = 'association:test'),
   false,
   'stored request association remains linked to non-label logical meaning'
+);
+insert into public.api_requests (
+  api_request_id, run_pk, query_definition_pk, retry_of_request_pk, method,
+  endpoint, normalized_parameters, request_fingerprint, status, started_at,
+  completed_at, http_status, response_sha256, response_fingerprint, retry_count
+) select 'request:retry-1', r.run_pk, r.query_definition_pk, r.id,
+  'flickr.photos.search', r.endpoint, r.normalized_parameters,
+  r.request_fingerprint, 'succeeded', now(), now(), 200,
+  repeat('b', 64), repeat('c', 64), 1
+from public.api_requests r where r.api_request_id = 'request:test';
+select is((select count(*) from public.api_requests), 2::bigint, 'one retry attempt inserts beside its root request');
+select is(
+  (select retry_count from public.api_requests where api_request_id = 'request:retry-1'),
+  1::smallint,
+  'retry attempt number is persisted'
+);
+select throws_ok(
+  $$insert into public.api_requests (
+      api_request_id, run_pk, query_definition_pk, method, endpoint,
+      normalized_parameters, request_fingerprint, status, completed_at,
+      http_status, response_sha256, response_fingerprint, retry_count
+    ) select 'request:retry-without-parent', run_pk, query_definition_pk,
+      method, endpoint, normalized_parameters, request_fingerprint,
+      'succeeded', now(), 200, repeat('d', 64), repeat('e', 64), 2
+    from public.api_requests where api_request_id = 'request:test'$$,
+  '23514', 'retry attempts require parent request lineage'
+);
+select throws_ok(
+  $$insert into public.api_requests (
+      api_request_id, run_pk, query_definition_pk, retry_of_request_pk, method,
+      endpoint, normalized_parameters, request_fingerprint, status,
+      completed_at, http_status, response_sha256, response_fingerprint,
+      retry_count
+    ) select 'request:duplicate-retry-1', run_pk, query_definition_pk, id,
+      method, endpoint, normalized_parameters, request_fingerprint,
+      'succeeded', now(), 200, repeat('f', 64), repeat('0', 64), 1
+    from public.api_requests where api_request_id = 'request:test'$$,
+  '23505', 'one attempt number is allowed per run and physical request'
 );
 
 select * from finish();
