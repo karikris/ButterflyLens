@@ -1,0 +1,482 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:geographic-impact-contracts:v1.0.0",
+  "title": "ButterflyLens geographic-impact definitions v1",
+  "$defs": {
+    "evidence_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value", "reason"],
+      "properties": {
+        "status": {
+          "enum": ["available", "unavailable", "withheld", "not_applicable"]
+        },
+        "value": {
+          "anyOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 500 },
+            { "type": "null" }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "available" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "value": { "type": "integer" },
+              "reason": { "type": "null" }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": { "type": "null" },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      ]
+    },
+    "impact_flag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value", "reason"],
+      "properties": {
+        "status": { "enum": ["available", "unavailable"] },
+        "value": {
+          "anyOf": [{ "type": "boolean" }, { "type": "null" }]
+        },
+        "reason": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 500 },
+            { "type": "null" }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "available" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "value": { "type": "boolean" },
+              "reason": { "type": "null" }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": { "type": "null" },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      ]
+    },
+    "nullable_sha256": {
+      "anyOf": [
+        { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+        { "type": "null" }
+      ]
+    },
+    "nullable_date": {
+      "anyOf": [
+        { "type": "string", "format": "date" },
+        { "type": "null" }
+      ]
+    },
+    "distance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "metres", "reason"],
+      "properties": {
+        "status": { "enum": ["available", "unavailable", "not_applicable"] },
+        "metres": {
+          "anyOf": [
+            { "type": "number", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 500 },
+            { "type": "null" }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "available" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "metres": { "type": "number" },
+              "reason": { "type": "null" }
+            }
+          },
+          "else": {
+            "properties": {
+              "metres": { "type": "null" },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      ]
+    },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "cell_id",
+        "grid",
+        "h3_version",
+        "h3_resolution",
+        "project_id",
+        "run_id",
+        "snapshot_mode",
+        "accepted_taxon_key",
+        "ala_snapshot_fingerprint",
+        "flickr_snapshot_fingerprint",
+        "provider_union_fingerprint",
+        "review_projection_fingerprint",
+        "quality_snapshot_fingerprint",
+        "counts",
+        "impact",
+        "nearest_ala_evidence_distance",
+        "latest_ala_event_date",
+        "latest_flickr_event_date",
+        "data_deficiency_state",
+        "public_geometry",
+        "evidence_fingerprints",
+        "cell_fingerprint",
+        "scientific_claim_allowed"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-geographic-impact-cell:v1.0.0"
+        },
+        "cell_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{15}$"
+        },
+        "grid": { "const": "H3" },
+        "h3_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "h3_resolution": { "type": "integer", "minimum": 0, "maximum": 15 },
+        "project_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "run_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "snapshot_mode": { "enum": ["live", "submitted"] },
+        "accepted_taxon_key": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "ala_snapshot_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "flickr_snapshot_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "provider_union_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "review_projection_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "quality_snapshot_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ala_baseline",
+            "flickr_candidate",
+            "yoloe_butterfly",
+            "bioclip_species_candidate",
+            "community_reviewed",
+            "human_supported",
+            "release_ready"
+          ],
+          "properties": {
+            "ala_baseline": { "$ref": "#/$defs/evidence_count" },
+            "flickr_candidate": { "$ref": "#/$defs/evidence_count" },
+            "yoloe_butterfly": { "$ref": "#/$defs/evidence_count" },
+            "bioclip_species_candidate": { "$ref": "#/$defs/evidence_count" },
+            "community_reviewed": { "$ref": "#/$defs/evidence_count" },
+            "human_supported": { "$ref": "#/$defs/evidence_count" },
+            "release_ready": { "$ref": "#/$defs/evidence_count" }
+          }
+        },
+        "impact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "potential_coverage_gap",
+            "human_supported_additional",
+            "release_ready_additional"
+          ],
+          "properties": {
+            "potential_coverage_gap": { "$ref": "#/$defs/impact_flag" },
+            "human_supported_additional": { "$ref": "#/$defs/impact_flag" },
+            "release_ready_additional": { "$ref": "#/$defs/impact_flag" }
+          }
+        },
+        "nearest_ala_evidence_distance": { "$ref": "#/$defs/distance" },
+        "latest_ala_event_date": { "$ref": "#/$defs/nullable_date" },
+        "latest_flickr_event_date": { "$ref": "#/$defs/nullable_date" },
+        "data_deficiency_state": {
+          "enum": [
+            "baseline_present",
+            "candidate_only",
+            "baseline_and_candidate",
+            "no_eligible_evidence",
+            "baseline_unavailable",
+            "coordinates_withheld",
+            "insufficient_precision"
+          ]
+        },
+        "public_geometry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "source_precision_metres",
+            "published_h3_resolution",
+            "reason"
+          ],
+          "properties": {
+            "status": { "enum": ["available", "generalized", "withheld"] },
+            "source_precision_metres": {
+              "anyOf": [
+                { "type": "number", "minimum": 0 },
+                { "type": "null" }
+              ]
+            },
+            "published_h3_resolution": {
+              "anyOf": [
+                { "type": "integer", "minimum": 0, "maximum": 15 },
+                { "type": "null" }
+              ]
+            },
+            "reason": {
+              "anyOf": [
+                { "type": "string", "minLength": 1, "maxLength": 500 },
+                { "type": "null" }
+              ]
+            }
+          }
+        },
+        "evidence_fingerprints": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+          }
+        },
+        "cell_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "scientific_claim_allowed": { "const": false }
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "snapshot_id",
+        "project_id",
+        "run_id",
+        "mode",
+        "country_code",
+        "status",
+        "generated_at",
+        "last_updated_at",
+        "submitted_source_commit",
+        "worker_heartbeat_fingerprint",
+        "cell_schema_version",
+        "cell_count",
+        "cell_artifact_checksum",
+        "cell_artifact_fingerprint",
+        "query_fingerprint",
+        "map_projection_fingerprint",
+        "blockers",
+        "append_only_revision"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-geographic-impact-snapshot:v1.0.0"
+        },
+        "snapshot_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "project_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "run_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "mode": { "enum": ["live", "submitted"] },
+        "country_code": { "const": "AU" },
+        "status": { "enum": ["available", "stale", "unavailable"] },
+        "generated_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        },
+        "last_updated_at": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+        },
+        "submitted_source_commit": {
+          "anyOf": [
+            { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/git_sha" },
+            { "type": "null" }
+          ]
+        },
+        "worker_heartbeat_fingerprint": { "$ref": "#/$defs/nullable_sha256" },
+        "cell_schema_version": {
+          "const": "butterflylens-geographic-impact-cell:v1.0.0"
+        },
+        "cell_count": { "type": "integer", "minimum": 0 },
+        "cell_artifact_checksum": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "cell_artifact_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "query_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "map_projection_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+        },
+        "append_only_revision": { "type": "integer", "minimum": 1 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "mode": { "const": "submitted" } },
+            "required": ["mode"]
+          },
+          "then": {
+            "properties": {
+              "submitted_source_commit": {
+                "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/git_sha"
+              },
+              "worker_heartbeat_fingerprint": { "type": "null" }
+            }
+          },
+          "else": {
+            "properties": {
+              "submitted_source_commit": { "type": "null" },
+              "worker_heartbeat_fingerprint": {
+                "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "unavailable" } },
+            "required": ["status"]
+          },
+          "then": { "properties": { "blockers": { "minItems": 1 } } }
+        }
+      ]
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "project_id",
+        "accepted_taxon_keys",
+        "snapshot_mode",
+        "h3_resolution",
+        "scope",
+        "event_date_from",
+        "event_date_to",
+        "evidence_maturity",
+        "ala_basis_of_record",
+        "review_states",
+        "page_size",
+        "query_fingerprint"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "butterflylens-geographic-impact-query:v1.0.0"
+        },
+        "project_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+        },
+        "accepted_taxon_keys": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+          }
+        },
+        "snapshot_mode": { "enum": ["live", "submitted"] },
+        "h3_resolution": { "type": "integer", "minimum": 0, "maximum": 15 },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "scope_id"],
+          "properties": {
+            "kind": { "enum": ["national", "state", "territory", "ibra", "lga", "h3"] },
+            "scope_id": {
+              "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+            }
+          }
+        },
+        "event_date_from": { "$ref": "#/$defs/nullable_date" },
+        "event_date_to": { "$ref": "#/$defs/nullable_date" },
+        "evidence_maturity": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ala_baseline",
+              "flickr_candidate",
+              "yoloe_butterfly",
+              "bioclip_species_candidate",
+              "community_reviewed",
+              "human_supported",
+              "release_ready",
+              "uncertain"
+            ]
+          }
+        },
+        "ala_basis_of_record": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 120 }
+        },
+        "review_states": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["pending", "positive", "non_target", "uncertain", "media_failure", "deferred"]
+          }
+        },
+        "page_size": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "query_fingerprint": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+        }
+      }
+    }
+  }
+}
