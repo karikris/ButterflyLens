@@ -79,6 +79,16 @@ def verify_manifest(payloads: set[str]) -> None:
     artifacts = manifest.get("artifacts")
     if not isinstance(artifacts, list):
         raise VerificationError("data rights manifest artifacts must be a list")
+    sources = manifest.get("sources")
+    if not isinstance(sources, list):
+        raise VerificationError("data rights manifest sources must be a list")
+    source_ids = [
+        record.get("source_id") for record in sources if isinstance(record, dict)
+    ]
+    if any(not source_id for source_id in source_ids) or len(source_ids) != len(
+        set(source_ids)
+    ):
+        raise VerificationError("data rights manifest source IDs are missing or duplicated")
     records = {record.get("path"): record for record in artifacts if isinstance(record, dict)}
     absent = sorted(payloads - set(records))
     if absent:
@@ -102,6 +112,17 @@ def verify_manifest(payloads: set[str]) -> None:
             raise VerificationError(f"rights record for {payload} is missing: {missing_fields}")
         if record.get("licence") in {None, "", "unknown"}:
             raise VerificationError(f"rights record for {payload} has an unknown licence")
+        if record.get("source_id") not in source_ids:
+            raise VerificationError(f"rights record for {payload} has an unknown source_id")
+        for permission in (
+            "processing_allowed",
+            "display_allowed",
+            "redistribution_allowed",
+        ):
+            if not isinstance(record.get(permission), bool):
+                raise VerificationError(
+                    f"rights record for {payload} has non-boolean {permission}"
+                )
         fingerprint = record.get("fingerprint", "")
         if not isinstance(fingerprint, str) or not fingerprint.startswith("sha256:"):
             raise VerificationError(f"rights record for {payload} has an invalid fingerprint")

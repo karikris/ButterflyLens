@@ -26,6 +26,32 @@ python3 scripts/build_butterfly_taxonomy.py build-scope \
   --output-dir data/packs/australian_butterflies/v1
 ```
 
+Provider identity acquisition is also explicit. ALA is queried in bounded bulk
+batches, GBIF requests use at most four workers with a per-request delay, and
+iNaturalist is extracted from its provider-published monthly taxonomy archive:
+
+```bash
+python3 scripts/crosswalk_butterfly_taxonomy.py acquire-ala \
+  --taxa data/packs/australian_butterflies/v1/taxa.jsonl \
+  --output data/packs/australian_butterflies/v1/sources/ala_name_matches.json
+
+python3 scripts/crosswalk_butterfly_taxonomy.py acquire-gbif \
+  --taxa data/packs/australian_butterflies/v1/taxa.jsonl \
+  --output data/packs/australian_butterflies/v1/sources/gbif_name_matches.json
+
+python3 scripts/crosswalk_butterfly_taxonomy.py acquire-inaturalist \
+  --taxa data/packs/australian_butterflies/v1/taxa.jsonl \
+  --archive /path/to/inaturalist-taxonomy.dwca.zip \
+  --output data/packs/australian_butterflies/v1/sources/inaturalist_taxonomy_matches.json
+
+python3 scripts/crosswalk_butterfly_taxonomy.py build-crosswalk \
+  --taxa data/packs/australian_butterflies/v1/taxa.jsonl \
+  --ala data/packs/australian_butterflies/v1/sources/ala_name_matches.json \
+  --gbif data/packs/australian_butterflies/v1/sources/gbif_name_matches.json \
+  --inaturalist data/packs/australian_butterflies/v1/sources/inaturalist_taxonomy_matches.json \
+  --output-dir data/packs/australian_butterflies/v1
+```
+
 Default tests make no provider calls. They validate the checked-in snapshot,
 checksums, hierarchy, rank policy, and stable ButterflyLens keys.
 
@@ -39,6 +65,15 @@ checksums, hierarchy, rank policy, and stable ButterflyLens keys.
   decision.
 - ALA, GBIF, and iNaturalist identifiers are a separate reconciliation layer.
   Missing or incompatible concepts remain explicit conflicts.
+- A top-level provider identifier is populated only for an exact, same-rank,
+  classification-compatible current/accepted provider match. Provider-returned
+  alternatives remain in the frozen source receipts even when the top-level ID
+  is null.
+- `complete`, `partial`, and `unresolved` describe identifier availability only;
+  they are not quality, truth, occurrence, or human-review states.
+- A parenthesized AFD subgenus is removed only from the provider query name. The
+  accepted AFD name and full source lineage remain unchanged, and every such
+  normalization is declared on the crosswalk row.
 - Source updates require a new frozen snapshot, review of the diff, and a new
   version or documented compatible revision. Live provider state never mutates
   this checked-in snapshot.
@@ -58,3 +93,10 @@ source images or logos. Attribution: Australian Biological Resources Study,
 Australian Faunal Directory; Department of Climate Change, Energy, the
 Environment and Water. See the [DCCEEW copyright notice](https://www.dcceew.gov.au/about/copyright)
 and [ABRS citation guidance](https://www.dcceew.gov.au/science-research/abrs/online-resources/citation).
+
+The provider crosswalk also retains the [ALA terms](https://www.ala.org.au/terms-of-use/),
+[GBIF terms](https://www.gbif.org/terms), and [iNaturalist terms](https://www.inaturalist.org/pages/terms).
+The iNaturalist source receipt includes the archive's own EML publication date,
+checksum, member CRC, and intellectual-rights statement. Only taxonomic names,
+identifiers, ranks, and classification fields are extracted; no observations,
+accounts, coordinates, common-name files, or media are included.

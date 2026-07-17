@@ -39,6 +39,10 @@ class ButterflyTaxonomyPackTests(unittest.TestCase):
             json.loads(line)
             for line in (PACK / "taxa.jsonl").read_text(encoding="utf-8").splitlines()
         ]
+        cls.crosswalk = [
+            json.loads(line)
+            for line in (PACK / "crosswalk.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
 
     def test_snapshot_integrity(self) -> None:
         self.builder.validate_snapshot(self.snapshot)
@@ -113,8 +117,83 @@ class ButterflyTaxonomyPackTests(unittest.TestCase):
         self.assertIn("Australian Faunal Directory", rights["attribution"])
         self.assertIn("Viewed", rights["citation"])
         self.assertEqual(self.manifest["scope"]["additional_configured_taxa"], [])
-        self.assertEqual(self.manifest["crosswalk_state"], "not_built")
+        self.assertEqual(self.manifest["crosswalk_state"]["status"], "built")
         self.assertEqual(self.manifest["conflict_state"], "not_built")
+
+    def test_crosswalk_covers_every_taxon_in_order(self) -> None:
+        taxon_keys = [record["butterflylens_key"] for record in self.records]
+        crosswalk_keys = [record["butterflylens_key"] for record in self.crosswalk]
+        self.assertEqual(crosswalk_keys, taxon_keys)
+        self.assertEqual(len(crosswalk_keys), len(set(crosswalk_keys)))
+        artifact = self.manifest["artifacts"]["crosswalk.jsonl"]
+        self.assertEqual(artifact["row_count"], len(self.crosswalk))
+        self.assertEqual(artifact["physical_sha256"], sha256(PACK / "crosswalk.jsonl"))
+
+    def test_crosswalk_preserves_afd_identity_and_parent_path(self) -> None:
+        taxa = {record["butterflylens_key"]: record for record in self.records}
+        for row in self.crosswalk:
+            source = taxa[row["butterflylens_key"]]
+            self.assertEqual(row["accepted_scientific_name"], source["accepted_scientific_name"])
+            self.assertEqual(row["rank"], source["rank"])
+            self.assertEqual(row["parent_path"], source["parent_path"])
+            self.assertEqual(row["taxonomic_status"], "accepted")
+
+    def test_provider_ids_exist_only_for_accepted_matches(self) -> None:
+        mappings = (
+            ("ala", "ala_taxon_id"),
+            ("gbif", "gbif_taxon_key"),
+            ("inaturalist", "inaturalist_taxon_id"),
+        )
+        for row in self.crosswalk:
+            matched = 0
+            for provider, field in mappings:
+                state = row["provider_matches"][provider]["state"]
+                self.assertEqual(row[field] is not None, state == "matched")
+                matched += state == "matched"
+            expected = "complete" if matched == 3 else ("partial" if matched else "unresolved")
+            self.assertEqual(row["crosswalk_status"], expected)
+
+    def test_known_crosswalk_and_declared_query_normalization(self) -> None:
+        row = next(
+            row
+            for row in self.crosswalk
+            if row["accepted_scientific_name"] == "Papilio (Princeps) demoleus"
+            and row["rank"] == "species"
+        )
+        self.assertEqual(row["provider_query_name"], "Papilio demoleus")
+        self.assertEqual(row["query_name_normalization"], "parenthesized_subgenus_removed")
+        self.assertEqual(row["ala_taxon_id"], "https://biodiversity.org.au/afd/taxa/345a9663-0926-45de-80eb-6d5d6adada61")
+        self.assertEqual(row["gbif_taxon_key"], 1938069)
+        self.assertEqual(row["inaturalist_taxon_id"], 51583)
+
+    def test_provider_source_receipts_are_complete_and_current_bound(self) -> None:
+        taxa_sha = sha256(PACK / "taxa.jsonl")
+        paths = {
+            source["provider"]: PACK / source["path"]
+            for source in self.manifest["sources"]
+            if source.get("provider")
+        }
+        self.assertEqual(set(paths), {"Atlas of Living Australia", "GBIF", "iNaturalist"})
+        for provider, path in paths.items():
+            snapshot = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(snapshot["input_taxa_sha256"], taxa_sha)
+            manifest_source = next(
+                source for source in self.manifest["sources"] if source.get("provider") == provider
+            )
+            self.assertEqual(manifest_source["physical_sha256"], sha256(path))
+        gbif = json.loads(paths["GBIF"].read_text(encoding="utf-8"))
+        self.assertEqual(len(gbif["entries"]), len(self.records))
+        self.assertIn("created", gbif["source"]["metadata"])
+        inaturalist = json.loads(paths["iNaturalist"].read_text(encoding="utf-8"))
+        self.assertEqual(inaturalist["source"]["publication_date"], "2026-07-01")
+        self.assertRegex(inaturalist["source"]["archive_sha256"], r"^[0-9a-f]{64}$")
+        self.assertIn("Taxonomic information", inaturalist["source"]["intellectual_rights"])
+
+    def test_non_exact_provider_results_are_not_silently_crosswalked(self) -> None:
+        superfamily = next(row for row in self.crosswalk if row["rank"] == "superfamily")
+        self.assertIsNone(superfamily["gbif_taxon_key"])
+        self.assertEqual(superfamily["provider_matches"]["gbif"]["state"], "conflict")
+        self.assertIn("non_exact_match", superfamily["provider_matches"]["gbif"]["reasons"])
 
 
 if __name__ == "__main__":
