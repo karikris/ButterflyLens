@@ -1,5 +1,17 @@
 """Versioned ButterflyLens wire-contract declarations."""
 
+from .fingerprint import (
+    CONTENT_CHECKSUM_SCHEMA_VERSION,
+    EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
+    FINGERPRINT_CANONICALIZATION,
+    FINGERPRINT_HASH_ALGORITHM,
+    FINGERPRINT_KINDS,
+    FINGERPRINT_PARENT_RELATIONSHIPS,
+    ContentChecksum,
+    EvidenceFingerprint,
+    EvidenceFingerprintParent,
+    EvidenceFingerprintPreimage,
+)
 from .project_run import (
     PIPELINE_STAGE_IDS,
     PROJECT_SCHEMA_VERSION,
@@ -15,6 +27,12 @@ from .project_run import (
 )
 
 __all__ = [
+    "CONTENT_CHECKSUM_SCHEMA_VERSION",
+    "EVIDENCE_FINGERPRINT_SCHEMA_VERSION",
+    "FINGERPRINT_CANONICALIZATION",
+    "FINGERPRINT_HASH_ALGORITHM",
+    "FINGERPRINT_KINDS",
+    "FINGERPRINT_PARENT_RELATIONSHIPS",
     "PIPELINE_STAGE_IDS",
     "PROJECT_SCHEMA_VERSION",
     "PROJECT_STATUSES",
@@ -24,6 +42,10 @@ __all__ = [
     "RUN_STATUSES",
     "ButterflyLensProject",
     "ButterflyLensRun",
+    "ContentChecksum",
+    "EvidenceFingerprint",
+    "EvidenceFingerprintParent",
+    "EvidenceFingerprintPreimage",
     "RunArtifact",
     "RunStage",
 ]

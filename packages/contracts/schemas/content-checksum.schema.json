@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:content-checksum:v1.0.0",
+  "title": "ButterflyLens physical content checksum v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm",
+    "digest",
+    "byte_count",
+    "media_type"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "butterflylens-content-checksum:v1.0.0"
+    },
+    "algorithm": { "const": "sha256" },
+    "digest": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+    },
+    "byte_count": { "type": "integer", "minimum": 0 },
+    "media_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$"
+    }
+  }
+}
