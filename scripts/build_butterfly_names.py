@@ -26,6 +26,15 @@ from build_butterfly_taxonomy import canonical_json, sha256_file, utc_now
 
 PROFILE_SCHEMA_VERSION = "butterflylens-ala-species-profiles/v1"
 NAME_SCHEMA_VERSION = "butterflylens-name-assertion/v1"
+FIRST_NATIONS_ASSERTION_SCHEMA_VERSION = (
+    "butterflylens-first-nations-name-assertion/v1"
+)
+FIRST_NATIONS_DECISION_SCHEMA_VERSION = (
+    "butterflylens-first-nations-name-decision/v1"
+)
+FIRST_NATIONS_REVIEW_SCHEMA_VERSION = (
+    "butterflylens-first-nations-name-review-manifest/v1"
+)
 ALA_SPECIES_ENDPOINT = "https://api.ala.org.au/species/species/"
 ALA_OPENAPI_URL = "https://docs.ala.org.au/openapi/specs/bie-index.json"
 USER_AGENT = (
@@ -521,6 +530,161 @@ def build_vernacular_names(
     manifest_path.write_bytes(canonical_json(manifest))
 
 
+def build_empty_first_nations_names(
+    policy_path: Path,
+    assertions_path: Path,
+    output_dir: Path,
+    generated_at: str | None,
+) -> None:
+    existing_assertions = [
+        json.loads(line)
+        for line in assertions_path.read_text(encoding="utf-8").splitlines()
+    ]
+    if any(
+        assertion.get("name_type") == "first_nations_language"
+        for assertion in existing_assertions
+    ):
+        raise NamePackError(
+            "empty First Nations build cannot discard an existing assertion"
+        )
+    schema_dir = output_dir / "schemas"
+    assertion_schema_path = schema_dir / "first_nations_name_assertion.schema.json"
+    decision_schema_path = schema_dir / "first_nations_name_decision.schema.json"
+    for path in (assertion_schema_path, decision_schema_path):
+        if not path.is_file():
+            raise NamePackError(f"missing First Nations name contract: {path}")
+        json.loads(path.read_text(encoding="utf-8"))
+    first_nations_path = output_dir / "first_nations_name_assertions.jsonl"
+    decisions_path = output_dir / "first_nations_name_decisions.jsonl"
+    first_nations_path.write_bytes(b"")
+    decisions_path.write_bytes(b"")
+    timestamp = generated_at or utc_now()
+    review = {
+        "schema_version": FIRST_NATIONS_REVIEW_SCHEMA_VERSION,
+        "generated_at": timestamp,
+        "status": "empty_no_authorized_source",
+        "policy": {
+            "path": "FIRST_NATIONS_NAMES.md",
+            "sha256": sha256_file(policy_path),
+        },
+        "contracts": {
+            "assertion_schema": {
+                "path": "schemas/first_nations_name_assertion.schema.json",
+                "schema_version": FIRST_NATIONS_ASSERTION_SCHEMA_VERSION,
+                "sha256": sha256_file(assertion_schema_path),
+            },
+            "decision_schema": {
+                "path": "schemas/first_nations_name_decision.schema.json",
+                "schema_version": FIRST_NATIONS_DECISION_SCHEMA_VERSION,
+                "sha256": sha256_file(decision_schema_path),
+            },
+        },
+        "datasets": {
+            "assertions": {
+                "path": "first_nations_name_assertions.jsonl",
+                "sha256": sha256_file(first_nations_path),
+                "row_count": 0,
+            },
+            "decisions": {
+                "path": "first_nations_name_decisions.jsonl",
+                "sha256": sha256_file(decisions_path),
+                "row_count": 0,
+                "append_only": True,
+            },
+        },
+        "counts": {
+            "approved_assertions": 0,
+            "pending_assertions": 0,
+            "authorized_sources": 0,
+            "query_eligible_assertions": 0,
+        },
+        "permission_defaults": {
+            "private_storage": "blocked",
+            "public_display": "blocked",
+            "query_use": "blocked",
+            "redistribution": "blocked",
+            "research_export": "blocked",
+            "derived_model_use": "blocked",
+        },
+        "review_states": [
+            "proposed",
+            "source_review",
+            "authority_contact_pending",
+            "authority_review",
+            "authorized_limited",
+            "authorized_public",
+            "suspended",
+            "withdrawn",
+            "rejected",
+        ],
+        "admission_gate": {
+            "public_pack_requires": [
+                "reproducible_taxon_link_and_source",
+                "specific_language_and_country_community",
+                "documented_authority_and_decision_scope",
+                "authorized_public_display",
+                "authorized_redistribution",
+                "complete_attribution_and_protocols",
+                "current_non_withdrawn_permission",
+                "rights_privacy_cultural_homonym_and_integrity_checks",
+            ],
+            "query_additionally_requires": [
+                "authorized_query_use_for_provider_and_purpose",
+                "query_eligible_decision",
+                "no_unresolved_cross_taxon_or_cross_community_conflict",
+            ],
+        },
+        "claims": {
+            "authorized_name_imported": False,
+            "empty_dataset_is_governance_result": True,
+            "absence_is_not_evidence_of_no_first_nations_names": True,
+        },
+    }
+    review_path = output_dir / "first_nations_name_review_manifest.json"
+    review_path.write_bytes(canonical_json(review))
+    manifest_path = output_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    artifacts = manifest["artifacts"]
+    artifacts["schemas/first_nations_name_assertion.schema.json"] = {
+        "schema_version": "https://json-schema.org/draft/2020-12/schema",
+        "physical_sha256": sha256_file(assertion_schema_path),
+        "row_count": 1,
+    }
+    artifacts["schemas/first_nations_name_decision.schema.json"] = {
+        "schema_version": "https://json-schema.org/draft/2020-12/schema",
+        "physical_sha256": sha256_file(decision_schema_path),
+        "row_count": 1,
+    }
+    artifacts["first_nations_name_assertions.jsonl"] = {
+        "schema_version": FIRST_NATIONS_ASSERTION_SCHEMA_VERSION,
+        "physical_sha256": sha256_file(first_nations_path),
+        "row_count": 0,
+    }
+    artifacts["first_nations_name_decisions.jsonl"] = {
+        "schema_version": FIRST_NATIONS_DECISION_SCHEMA_VERSION,
+        "physical_sha256": sha256_file(decisions_path),
+        "row_count": 0,
+        "append_only": True,
+    }
+    artifacts["first_nations_name_review_manifest.json"] = {
+        "schema_version": FIRST_NATIONS_REVIEW_SCHEMA_VERSION,
+        "physical_sha256": sha256_file(review_path),
+        "row_count": 1,
+        "approved_assertions": 0,
+        "pending_assertions": 0,
+    }
+    manifest["name_state"].update(
+        {
+            "status": "built",
+            "generated_at": timestamp,
+            "first_nations_names": "built_empty_no_authorized_source",
+            "first_nations_approved_count": 0,
+            "first_nations_pending_count": 0,
+        }
+    )
+    manifest_path.write_bytes(canonical_json(manifest))
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     commands = root.add_subparsers(dest="command", required=True)
@@ -541,6 +705,11 @@ def parser() -> argparse.ArgumentParser:
     vernacular.add_argument("--assertions", type=Path, required=True)
     vernacular.add_argument("--output-dir", type=Path, required=True)
     vernacular.add_argument("--generated-at")
+    first_nations = commands.add_parser("build-first-nations-empty")
+    first_nations.add_argument("--policy", type=Path, required=True)
+    first_nations.add_argument("--assertions", type=Path, required=True)
+    first_nations.add_argument("--output-dir", type=Path, required=True)
+    first_nations.add_argument("--generated-at")
     return root
 
 
@@ -565,6 +734,13 @@ def main() -> None:
         build_vernacular_names(
             arguments.taxa,
             arguments.profiles,
+            arguments.assertions,
+            arguments.output_dir,
+            arguments.generated_at,
+        )
+    elif arguments.command == "build-first-nations-empty":
+        build_empty_first_nations_names(
+            arguments.policy,
             arguments.assertions,
             arguments.output_dir,
             arguments.generated_at,

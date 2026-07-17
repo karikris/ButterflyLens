@@ -72,6 +72,11 @@ python3 scripts/build_butterfly_names.py build-vernacular \
   --profiles data/packs/australian_butterflies/v1/sources/ala_species_profiles.json \
   --assertions data/packs/australian_butterflies/v1/name_assertions.jsonl \
   --output-dir data/packs/australian_butterflies/v1
+
+python3 scripts/build_butterfly_names.py build-first-nations-empty \
+  --policy FIRST_NATIONS_NAMES.md \
+  --assertions data/packs/australian_butterflies/v1/name_assertions.jsonl \
+  --output-dir data/packs/australian_butterflies/v1
 ```
 
 Default tests make no provider calls. They validate the checked-in snapshot,
@@ -117,6 +122,13 @@ checksums, hierarchy, rank policy, and stable ButterflyLens keys.
   Cross-taxon collisions and single-token vernaculars are excluded from query
   use as a conservative homonym policy; exclusion is not a claim that a name
   is incorrect. Query terms explain retrieval and never label returned media.
+- The First Nations language-name assertion and decision datasets are empty in
+  v1 because no authorized source and purpose-specific permission were
+  supplied. Their JSON Schemas and review manifest make all six use permissions
+  blocked by default, preserve append-only decision requirements, and record
+  zero approved, pending, and query-eligible assertions. See
+  `FIRST_NATIONS_NAMES.md`; the empty result must not be interpreted as absence
+  of names or knowledge.
 - Source updates require a new frozen snapshot, review of the diff, and a new
   version or documented compatible revision. Live provider state never mutates
   this checked-in snapshot.

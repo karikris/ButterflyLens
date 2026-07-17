@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T16:49:39Z",
+  "generated_at": "2026-07-17T17:05:00Z",
   "sources": [
     {
       "source_id": "afd-papilionoidea-3bd6b5ba3d8b",
@@ -74,6 +74,18 @@
       "terms_url": "DATA_RIGHTS.md",
       "attribution": "Australian Biological Resources Study/Australian Faunal Directory; Atlas of Living Australia; GBIF Backbone Taxonomy; iNaturalist Taxonomy.",
       "scope_note": "Derived factual names and identifiers. Each provider source retains its own rights basis and exact snapshot receipt."
+    },
+    {
+      "source_id": "butterflylens-first-nations-name-governance-v1",
+      "provider": "ButterflyLens",
+      "dataset": "Empty First Nations language-name contracts and review workflow",
+      "source_url": "FIRST_NATIONS_NAMES.md",
+      "retrieved_at": "2026-07-17T17:05:00Z",
+      "licence": "AGPL-3.0-only",
+      "licence_url": "LICENSE",
+      "terms_url": "FIRST_NATIONS_NAMES.md",
+      "attribution": "ButterflyLens First Nations Language-Name Governance; AIATSIS, CARE, AustLang, and Local Contexts principles are cited but no community name or knowledge is copied.",
+      "scope_note": "Original schemas, an empty assertion dataset, an empty append-only decision dataset, and a zero-count review manifest. No First Nations language name, cultural knowledge, community contact, authority decision, or permission evidence is included."
     }
   ],
   "artifacts": [
@@ -103,7 +115,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:6b1458070ff751c63ad85f0a229a7afb218612c874b43672f57b6a9cd99fcc4a",
+      "fingerprint": "sha256:f4b7ef4fc04fb8a4e48791f771656d6126701488a8a3281ac79d00d506158372",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "mixed-taxonomy-crosswalk-20260717",
       "licence": "MIXED-SEE-SOURCES",
@@ -144,6 +156,66 @@
       "source_id": "ala-species-profiles-20260717-82f8c346",
       "licence": "MIXED-SEE-SOURCES",
       "attribution": "Australian Biological Resources Study/Australian Faunal Directory and Atlas of Living Australia species index; per-assertion sources are retained.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/schemas/first_nations_name_assertion.schema.json",
+      "fingerprint": "sha256:4a61f09a4dd34dfc0408c127441de92877a37666215b7ecd201b35f90101edda",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-first-nations-name-governance-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens First Nations Language-Name Governance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/schemas/first_nations_name_decision.schema.json",
+      "fingerprint": "sha256:f2106b7ddf7c5a48a2826e2dd388bee06595754d599e8be50d3da9dad277a0ea",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-first-nations-name-governance-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens First Nations Language-Name Governance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/first_nations_name_assertions.jsonl",
+      "fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-first-nations-name-governance-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens First Nations Language-Name Governance; intentionally empty.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/first_nations_name_decisions.jsonl",
+      "fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-first-nations-name-governance-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens First Nations Language-Name Governance; intentionally empty.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/first_nations_name_review_manifest.json",
+      "fingerprint": "sha256:50eaf716f7bc520b07f26700011fd0a76fb6a4f77a87b7e4d891d21c6fd502b7",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-first-nations-name-governance-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens First Nations Language-Name Governance; zero-count review state.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

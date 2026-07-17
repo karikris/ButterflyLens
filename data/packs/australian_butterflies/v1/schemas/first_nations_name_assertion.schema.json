@@ -1,0 +1,299 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://butterflylens.org/schemas/first-nations-name-assertion/v1",
+  "title": "ButterflyLens First Nations language-name assertion",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "assertion_id",
+    "butterflylens_key",
+    "name",
+    "language",
+    "country_community",
+    "source",
+    "cultural_authority",
+    "permissions",
+    "attribution",
+    "query_eligibility",
+    "homonym_risk",
+    "scientific_review",
+    "cultural_review",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "butterflylens-first-nations-name-assertion/v1"
+    },
+    "assertion_id": {
+      "type": "string",
+      "pattern": "^blfn:v1:[0-9a-f]{24}$"
+    },
+    "butterflylens_key": {
+      "type": "string",
+      "pattern": "^bltx:v1:[0-9a-f]{24}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "language": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display_name", "identifier", "identifier_scheme", "authority_confirmed"],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "identifier": {"type": "string", "minLength": 1},
+        "identifier_scheme": {
+          "enum": ["AustLang", "BCP47", "Glottocode", "community_defined"]
+        },
+        "identifier_source": {"type": ["string", "null"], "format": "uri-reference"},
+        "identifier_version": {"type": ["string", "null"]},
+        "authority_confirmed": {"type": "boolean"}
+      }
+    },
+    "country_community": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preferred_name", "stable_identifier", "authority_confirmed"],
+      "properties": {
+        "preferred_name": {"type": "string", "minLength": 1},
+        "stable_identifier": {"type": ["string", "null"]},
+        "authority_confirmed": {"type": "boolean"},
+        "public_scope_note": {"type": ["string", "null"]}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "citation", "reference", "retrieved_at", "fingerprint"],
+      "properties": {
+        "source_type": {
+          "enum": ["cultural_authority", "authorized_publication", "delegated_decision_process"]
+        },
+        "citation": {"type": "string", "minLength": 1},
+        "reference": {"type": "string", "minLength": 1},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "fingerprint": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "controlled_access": {"type": "boolean", "default": false}
+      }
+    },
+    "cultural_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_type", "public_name", "scope", "private_contact_reference", "decision_evidence_refs"],
+      "properties": {
+        "authority_type": {
+          "enum": ["cultural_authority", "authorized_publication", "delegated_decision_process"]
+        },
+        "public_name": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "private_contact_reference": {
+          "type": "string",
+          "pattern": "^private:[A-Za-z0-9._:-]+$"
+        },
+        "decision_evidence_refs": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "private_storage",
+        "public_display",
+        "query_use",
+        "redistribution",
+        "research_export",
+        "derived_model_use"
+      ],
+      "properties": {
+        "private_storage": {"$ref": "#/$defs/permission"},
+        "public_display": {"$ref": "#/$defs/permission"},
+        "query_use": {"$ref": "#/$defs/queryPermission"},
+        "redistribution": {"$ref": "#/$defs/permission"},
+        "research_export": {"$ref": "#/$defs/permission"},
+        "derived_model_use": {"$ref": "#/$defs/permission"}
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_text", "protocols", "local_contexts_identifiers"],
+      "properties": {
+        "public_text": {"type": "string", "minLength": 1},
+        "protocols": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "local_contexts_identifiers": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "query_eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "reason"],
+      "properties": {
+        "eligible": {"type": "boolean"},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "homonym_risk": {
+      "enum": ["not_assessed", "none_detected_in_pack", "cross_taxon_collision", "cross_community_conflict", "other"]
+    },
+    "scientific_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "taxon_link_rationale"],
+      "properties": {
+        "state": {"enum": ["pending", "source_supported", "conflict", "rejected"]},
+        "taxon_link_rationale": {"type": "string", "minLength": 1},
+        "evidence_fingerprints": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "cultural_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "decision_date", "permission_version", "review_due_at"],
+      "properties": {
+        "state": {
+          "enum": [
+            "proposed",
+            "source_review",
+            "authority_contact_pending",
+            "authority_review",
+            "authorized_limited",
+            "authorized_public",
+            "suspended",
+            "withdrawn",
+            "rejected"
+          ]
+        },
+        "decision_date": {"type": ["string", "null"], "format": "date"},
+        "permission_version": {"type": ["string", "null"]},
+        "review_due_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_sha256", "pack_version", "created_at"],
+      "properties": {
+        "policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "pack_version": {"const": "v1"},
+        "created_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+  "$defs": {
+    "permission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "scope", "decision_id", "expires_at"],
+      "properties": {
+        "state": {"enum": ["blocked", "authorized"]},
+        "scope": {"type": ["string", "null"]},
+        "decision_id": {"type": ["string", "null"]},
+        "expires_at": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "authorized"}}},
+          "then": {
+            "properties": {
+              "scope": {"type": "string", "minLength": 1},
+              "decision_id": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ]
+    },
+    "queryPermission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "scope", "decision_id", "expires_at", "provider_purposes"],
+      "properties": {
+        "state": {"enum": ["blocked", "authorized"]},
+        "scope": {"type": ["string", "null"]},
+        "decision_id": {"type": ["string", "null"]},
+        "expires_at": {"type": ["string", "null"], "format": "date-time"},
+        "provider_purposes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["provider", "purpose"],
+            "properties": {
+              "provider": {"type": "string", "minLength": 1},
+              "purpose": {"type": "string", "minLength": 1}
+            }
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "authorized"}}},
+          "then": {
+            "properties": {
+              "scope": {"type": "string", "minLength": 1},
+              "decision_id": {"type": "string", "minLength": 1},
+              "provider_purposes": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "query_eligibility": {
+            "properties": {"eligible": {"const": true}}
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "permissions": {
+            "properties": {
+              "query_use": {
+                "properties": {
+                  "state": {"const": "authorized"},
+                  "provider_purposes": {"minItems": 1}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "cultural_review": {
+            "properties": {
+              "state": {"enum": ["authorized_limited", "authorized_public"]}
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "cultural_authority": {
+            "properties": {"decision_evidence_refs": {"minItems": 1}}
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://butterflylens.org/schemas/first-nations-name-decision/v1",
+  "title": "ButterflyLens First Nations language-name review decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "assertion_id",
+    "event_sequence",
+    "previous_state",
+    "new_state",
+    "decided_at",
+    "authority",
+    "permissions",
+    "attribution",
+    "evidence_references",
+    "policy_sha256",
+    "supersedes_decision_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "butterflylens-first-nations-name-decision/v1"
+    },
+    "decision_id": {"type": "string", "pattern": "^blfd:v1:[0-9a-f]{24}$"},
+    "assertion_id": {"type": "string", "pattern": "^blfn:v1:[0-9a-f]{24}$"},
+    "event_sequence": {"type": "integer", "minimum": 1},
+    "previous_state": {"$ref": "#/$defs/reviewStateOrNull"},
+    "new_state": {"$ref": "#/$defs/reviewState"},
+    "decided_at": {"type": "string", "format": "date-time"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_name", "scope", "private_contact_reference"],
+      "properties": {
+        "public_name": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "private_contact_reference": {
+          "type": "string",
+          "pattern": "^private:[A-Za-z0-9._:-]+$"
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["private_storage", "public_display", "query_use", "redistribution", "research_export", "derived_model_use"],
+      "properties": {
+        "private_storage": {"enum": ["blocked", "authorized"]},
+        "public_display": {"enum": ["blocked", "authorized"]},
+        "query_use": {"enum": ["blocked", "authorized"]},
+        "redistribution": {"enum": ["blocked", "authorized"]},
+        "research_export": {"enum": ["blocked", "authorized"]},
+        "derived_model_use": {"enum": ["blocked", "authorized"]}
+      }
+    },
+    "attribution": {"type": "string", "minLength": 1},
+    "evidence_references": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "permission_version": {"type": ["string", "null"]},
+    "expires_at": {"type": ["string", "null"], "format": "date-time"},
+    "review_due_at": {"type": ["string", "null"], "format": "date-time"},
+    "policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "supersedes_decision_id": {
+      "type": ["string", "null"],
+      "pattern": "^blfd:v1:[0-9a-f]{24}$"
+    }
+  },
+  "$defs": {
+    "reviewState": {
+      "enum": [
+        "proposed",
+        "source_review",
+        "authority_contact_pending",
+        "authority_review",
+        "authorized_limited",
+        "authorized_public",
+        "suspended",
+        "withdrawn",
+        "rejected"
+      ]
+    },
+    "reviewStateOrNull": {
+      "oneOf": [
+        {"$ref": "#/$defs/reviewState"},
+        {"type": "null"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "new_state": {"enum": ["authorized_limited", "authorized_public"]}
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence_references": {"minItems": 1},
+          "permission_version": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "new_state": {"enum": ["withdrawn", "rejected"]}
+        }
+      },
+      "then": {
+        "properties": {
+          "permissions": {
+            "properties": {
+              "public_display": {"const": "blocked"},
+              "query_use": {"const": "blocked"},
+              "redistribution": {"const": "blocked"},
+              "research_export": {"const": "blocked"},
+              "derived_model_use": {"const": "blocked"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

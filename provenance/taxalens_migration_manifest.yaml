@@ -113,9 +113,11 @@ butterflylens_owned_changes:
       - Frozen Australian Faunal Directory Papilionoidea hierarchy across the seven configured ranks.
       - Conservative ALA, GBIF and iNaturalist identifier crosswalk with immutable provider receipts.
       - Open conflict ledger for every missing, non-exact, incompatible or provider-status relationship.
+      - Sourced accepted scientific names, provider-linked synonyms and English Australian vernacular assertions with collision-safe query eligibility.
+      - First Nations language-name policy, assertion/decision contracts and an intentionally empty zero-approved review manifest.
     remaining_scope:
-      - Task 2.2 synonym, English vernacular and culturally governed name assertions.
       - Human taxonomic resolution evidence for open cross-provider conflicts.
+      - Authorized First Nations language-name assertions only if a relevant community later grants purpose-specific permission.
   - ownership_id: community-accounts
     status: planned
     upstream_boundary: Credential-free local IndexedDB review and optional static repository snapshots.
