@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T20:47:49Z",
+  "generated_at": "2026-07-17T20:56:05Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -224,7 +224,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:21ae9a405f71f2015a8379641afef3733630f4a9ed1463f878a33d6646d085e4",
+      "fingerprint": "sha256:7d24a99994c61637851bef3b2e07fb042f4276cbaacb7183813bbacba9e1f2fb",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
@@ -769,6 +769,18 @@
       "source_id": "butterflylens-reference-admission-v1",
       "licence": "AGPL-3.0-only",
       "attribution": "ButterflyLens YOLOE readiness status; no model execution or output.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json",
+      "fingerprint": "sha256:c4f93d219a08113387ec1728f18683f9556bbff000a93610d3be7b801dd6a5a7",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens BioCLIP unfinished status; no model execution or output.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

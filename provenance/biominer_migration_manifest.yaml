@@ -210,6 +210,21 @@ components:
       - Byte-identical isolated readiness-ledger and pack-manifest rebuild with PyArrow 25.0.0.
       - Full selected-identity coverage, media-state reconciliation, stable fingerprints, explicit blockers, and no-model-output invariants.
     status: blocked_live_gbif_bank_and_audited_yoloe_runtime_pending
+  - component_id: biominer-reference-bioclip-status-v1
+    source_repository: karikris/BioMiner
+    source_commit: d71bceabf75748a25df39d0025e8da907f295f8c
+    source_path: src/biominer/bioclip/bioclip_worker.py
+    destination_path: data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json
+    migration_kind: status_only
+    reason: Preserve the user-directed unfinished state without loading BioCLIP or creating embeddings, support rows, or prototypes.
+    build_week_scope: skipped
+    source_license: MIT
+    changes:
+      - Record zero model artifacts and null model, revision, checkpoint, and weight identities.
+      - Keep missing embedding evidence distinct from negative biological evidence.
+    tests:
+      - Status artifact checksum, zero-count, null-model, and root-manifest binding invariants.
+    status: skipped_unfinished_by_goal_instruction
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
   - Candidate model and workflow contracts remain planned; the live-worker boundary plus ALA Parquet and H3 adapters are now defined.

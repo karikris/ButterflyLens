@@ -85,6 +85,12 @@ separate media blocker. BioMiner commit
 committed report says the live GBIF support bank remains pending and no
 copyable live artifact or active build was found. No Flickr API call was made.
 
+Task 2.4.5 is also explicitly unfinished for this goal. BioCLIP was not loaded,
+no weights or checkpoint were acquired, and zero embeddings, support rows, or
+species prototypes were produced. The checked-in status record preserves that
+skip decision so downstream diagnostics cannot mistake missing model evidence
+for negative biological evidence.
+
 Rebuild the query plan:
 
 ```bash
