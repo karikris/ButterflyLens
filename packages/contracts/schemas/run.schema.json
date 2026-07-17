@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:run:v1.0.0",
+  "title": "ButterflyLens run v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "project_id",
+    "run_kind",
+    "mode",
+    "status",
+    "requested_by",
+    "requested_at",
+    "started_at",
+    "finished_at",
+    "updated_at",
+    "engine",
+    "input_fingerprints",
+    "stages",
+    "artifacts",
+    "error",
+    "revision"
+  ],
+  "properties": {
+    "schema_version": { "const": "butterflylens-run:v1.0.0" },
+    "run_id": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+    },
+    "project_id": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+    },
+    "run_kind": {
+      "enum": [
+        "taxonomy_pack",
+        "ala_baseline",
+        "reference_bank",
+        "flickr_discovery",
+        "vision_pipeline",
+        "geographic_impact",
+        "quality_snapshot",
+        "release_export",
+        "full_pipeline"
+      ]
+    },
+    "mode": { "enum": ["live", "submitted", "replay"] },
+    "status": {
+      "enum": [
+        "queued",
+        "leased",
+        "running",
+        "paused",
+        "cancelling",
+        "cancelled",
+        "succeeded",
+        "failed"
+      ]
+    },
+    "requested_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor_type", "actor_id"],
+      "properties": {
+        "actor_type": { "enum": ["system", "account", "operator"] },
+        "actor_id": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_stable_id"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "actor_type": { "const": "system" } },
+            "required": ["actor_type"]
+          },
+          "then": { "properties": { "actor_id": { "type": "null" } } },
+          "else": {
+            "properties": {
+              "actor_id": {
+                "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "requested_at": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+    },
+    "started_at": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_date_time"
+    },
+    "finished_at": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_date_time"
+    },
+    "updated_at": {
+      "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+    },
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "interface_version", "command"],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "commit": {
+          "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/git_sha"
+        },
+        "interface_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "input_fingerprints": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+      }
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stage_id",
+          "status",
+          "started_at",
+          "finished_at",
+          "checkpoint_fingerprint",
+          "records_processed",
+          "records_total"
+        ],
+        "properties": {
+          "stage_id": {
+            "enum": [
+              "taxonomy",
+              "names",
+              "ala_baseline",
+              "reference_admission",
+              "flickr_plan",
+              "flickr_fetch",
+              "media",
+              "yoloe",
+              "bioclip",
+              "scoring",
+              "review",
+              "geographic_impact",
+              "quality",
+              "release",
+              "export"
+            ]
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "blocked",
+              "running",
+              "paused",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "unavailable"
+            ]
+          },
+          "started_at": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_date_time"
+          },
+          "finished_at": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_date_time"
+          },
+          "checkpoint_fingerprint": {
+            "anyOf": [
+              {
+                "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+              },
+              { "type": "null" }
+            ]
+          },
+          "records_processed": { "type": "integer", "minimum": 0 },
+          "records_total": {
+            "anyOf": [
+              { "type": "integer", "minimum": 0 },
+              { "type": "null" }
+            ]
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "kind",
+          "object_key",
+          "sha256",
+          "byte_count",
+          "schema_version",
+          "semantic_fingerprint"
+        ],
+        "properties": {
+          "artifact_id": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "object_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?!/)(?!.*\\.\\.).+$"
+          },
+          "sha256": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+          },
+          "byte_count": { "type": "integer", "minimum": 0 },
+          "schema_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "semantic_fingerprint": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+          }
+        }
+      }
+    },
+    "error": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "message", "retryable", "stage_id"],
+          "properties": {
+            "code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "retryable": { "type": "boolean" },
+            "stage_id": {
+              "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_stable_id"
+            }
+          }
+        }
+      ]
+    },
+    "revision": { "type": "integer", "minimum": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "queued" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "started_at": { "type": "null" },
+          "finished_at": { "type": "null" },
+          "error": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["running", "paused", "cancelling"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "started_at": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+          },
+          "finished_at": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": { "enum": ["cancelled", "succeeded", "failed"] }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "finished_at": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "failed" } },
+        "required": ["status"]
+      },
+      "then": { "properties": { "error": { "type": "object" } } }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "succeeded" } },
+        "required": ["status"]
+      },
+      "then": { "properties": { "error": { "type": "null" } } }
+    }
+  ]
+}
