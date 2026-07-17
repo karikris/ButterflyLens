@@ -18,6 +18,12 @@ only so their blocked or `skipped_unfinished` state can be represented. This
 migration does not acquire model weights or produce routes, embeddings,
 prototypes, scores, or human-verification claims.
 
+The review schema separates pseudonymous profiles, blind campaigns,
+independent assignments, append-only review events, layered consensus, private
+domain-specific reliability estimates, and quality snapshots. Review
+corrections supersede earlier events, reliability cannot use BioCLIP or
+majority agreement as truth, and release consensus requires an expert gate.
+
 Every public table has row-level security enabled immediately. The
 `anon` and `authenticated` roles have no table or sequence privileges until
 Task 3.1.6 defines project membership and least-privilege policies. The
