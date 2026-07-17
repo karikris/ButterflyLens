@@ -1,0 +1,24 @@
+{
+  "schema_version": "butterflylens-flickr-hourly-budget:v1.0.0",
+  "provider_documented_ceiling_calls_per_hour_per_key": 3600,
+  "butterflylens_envelope_calls_per_utc_hour": 3500,
+  "normal_lane_maximum_calls": 3000,
+  "reserve_lane_maximum_calls": 500,
+  "hard_safety_remainder_calls": 100,
+  "credential_strategy": "one_project_key_fingerprint",
+  "bucket_scope": "all_flickr_methods",
+  "window": "utc_clock_hour",
+  "retries_consume_quota": true,
+  "comments_consume_quota": true,
+  "manual_calls_consume_quota": true,
+  "judge_calls_consume_quota": true,
+  "uncertain_accounting": "consume_and_freeze_window",
+  "reserve_purposes": [
+    "retry",
+    "comment",
+    "manual",
+    "judge",
+    "accounting_reconciliation"
+  ],
+  "settlement_outcomes": ["consumed", "not_sent", "uncertain"]
+}
