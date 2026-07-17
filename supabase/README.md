@@ -24,6 +24,13 @@ domain-specific reliability estimates, and quality snapshots. Review
 corrections supersede earlier events, reliability cannot use BioCLIP or
 majority agreement as truth, and release consensus requires an expert gate.
 
+The map-impact schema stores immutable submitted/live comparisons against the
+authoritative rebuilt ButterflyLens ALA baseline. Every count and flag carries
+an availability state so missing Flickr, YOLOE, or BioCLIP evidence cannot
+become a misleading zero. Release candidates are append-only, blocked by
+default, coordinate-coarsened, and require every scientific gate plus qualified
+authorization before approval.
+
 Every public table has row-level security enabled immediately. The
 `anon` and `authenticated` roles have no table or sequence privileges until
 Task 3.1.6 defines project membership and least-privilege policies. The
