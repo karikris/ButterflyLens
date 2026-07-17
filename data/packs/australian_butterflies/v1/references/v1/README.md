@@ -99,6 +99,12 @@ missing YOLOE and BioCLIP dimensions are explicit flags. No quality score,
 accuracy estimate, model inference, source-image byte, or absence claim is
 created.
 
+Task 2.4.7 closes the tracked reference inventory with bank fingerprint
+`6f23e1ec04d0297797439973aea98d9b45bc989ce9ec61db35064824621bdc3d`.
+The manifest covers 20 child artifacts and binds their byte checksums, schemas,
+row counts, origin, policy, unfinished states, and release blockers. It is a
+provisional evidence-pack receipt, not a verified reference-bank release.
+
 Rebuild the query plan:
 
 ```bash
@@ -193,4 +199,18 @@ uv run python scripts/build_reference_quality_diagnostics.py \
   --manifest-output data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json \
   --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
   --generated-at 2026-07-17T21:05:00Z
+```
+
+Republish the closed reference-bank inventory and root fingerprint:
+
+```bash
+uv run python scripts/publish_reference_pack.py \
+  --reference-dir data/packs/australian_butterflies/v1/references/v1 \
+  --admission-manifest data/packs/australian_butterflies/v1/references/v1/reference_admission_manifest.json \
+  --yoloe-manifest data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json \
+  --bioclip-status data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json \
+  --quality-manifest data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json \
+  --output data/packs/australian_butterflies/v1/references/v1/reference_bank_manifest.json \
+  --pack-manifest data/packs/australian_butterflies/v1/manifest.json \
+  --generated-at 2026-07-17T21:12:00Z
 ```

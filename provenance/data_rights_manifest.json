@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T21:05:00Z",
+  "generated_at": "2026-07-17T21:12:00Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -224,7 +224,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:00059c2b282a8613c31480512e7588370a7d42c642416f6744a3bae3e81ac023",
+      "fingerprint": "sha256:41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
@@ -805,6 +805,18 @@
       "source_id": "butterflylens-reference-admission-v1",
       "licence": "AGPL-3.0-only",
       "attribution": "ButterflyLens reference-quality diagnostics manifest.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_bank_manifest.json",
+      "fingerprint": "sha256:628c6fd5851b5157cae601eec65cb764e77e166dfcc8dbb3a34ccfd5d1076ded",
+      "provider": "ButterflyLens",
+      "source_id": "butterflylens-reference-admission-v1",
+      "licence": "AGPL-3.0-only",
+      "attribution": "ButterflyLens provisional reference-bank inventory; child artifacts retain their source-specific rights and attribution.",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

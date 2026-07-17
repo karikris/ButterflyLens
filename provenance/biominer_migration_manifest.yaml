@@ -242,6 +242,22 @@ components:
     tests:
       - Full species coverage, exact aggregate reconciliation, semantic fingerprints, root-manifest binding, and byte-identical replay.
     status: verified_unfinished_model_dimensions_explicit
+  - component_id: butterflylens-reference-bank-manifest-v1
+    source_repository: karikris/ButterflyLens
+    source_commit: null
+    source_path: scripts/publish_reference_pack.py
+    destination_path: data/packs/australian_butterflies/v1/references/v1/reference_bank_manifest.json
+    migration_kind: original
+    reason: Close the provisional reference artifact inventory with deterministic byte fingerprints and explicit scientific and release states.
+    build_week_scope: new
+    source_license: AGPL-3.0-only
+    changes:
+      - Inventory all 20 child artifacts without self-reference.
+      - Bind the pinned BioMiner origin, rebuilt authoritative ALA baseline, zero Flickr-call state, and unfinished model dimensions.
+      - Publish the bank manifest checksum and semantic bank fingerprint into the root pack.
+    tests:
+      - Closed inventory, physical checksums, row/schema metadata, truthful counts, root binding, and byte-identical replay.
+    status: verified_provisional_unreleased
 notes:
   - No BioMiner code, generated data, media, model, or runtime artifact has been copied.
   - Candidate model and workflow contracts remain planned; the live-worker boundary plus ALA Parquet and H3 adapters are now defined.
