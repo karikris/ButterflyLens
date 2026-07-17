@@ -102,6 +102,15 @@ stable observed totals, response fingerprints, no page over 250 rows, and
 returned row counts reconciling to the count checkpoint. Planning and
 checkpoint functions make no Flickr request.
 
+Search-page execution is a separate, budget-fenced boundary. It validates a
+pending page before reserving one normal-lane call, passes the credential only
+to an injected transport, validates the exact Flickr page envelope, and
+completes the checkpoint only after the response is internally consistent.
+This repository deliberately supplies no HTTP transport. Transport uncertainty
+freezes the hourly ledger; an invalid response after sending still consumes the
+reserved unit. The returned execution object retains exact response bytes for
+the evidence-ledger step but never retains the credential.
+
 ## Adaptive scheduling
 
 Candidate priority is an availability-weighted combination of unique media per

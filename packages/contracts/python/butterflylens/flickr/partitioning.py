@@ -252,9 +252,7 @@ def complete_page_checkpoint(
 ) -> dict[str, object]:
     """Complete one planned page without allowing total drift or oversize pages."""
 
-    _validate_page_checkpoint(checkpoint)
-    if checkpoint.get("status") != "pending":
-        raise PartitionError("page checkpoint is not pending")
+    validate_pending_page_checkpoint(checkpoint)
     _validate_sha256(source_response_fingerprint, "page response fingerprint")
     if (
         not isinstance(observed_total, int)
@@ -279,6 +277,14 @@ def complete_page_checkpoint(
         }
     )
     return completed
+
+
+def validate_pending_page_checkpoint(checkpoint: Mapping[str, object]) -> None:
+    """Fail closed before any transport sees a malformed or completed page plan."""
+
+    _validate_page_checkpoint(checkpoint)
+    if checkpoint.get("status") != "pending":
+        raise PartitionError("page checkpoint is not pending")
 
 
 def validate_partition_completion(

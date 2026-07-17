@@ -47,6 +47,7 @@ from .partitioning import (
     seed_australia_state_partitions,
     split_saturated_partition,
     validate_australia_partition_scope,
+    validate_pending_page_checkpoint,
     validate_partition_completion,
 )
 from .scheduler import (
@@ -57,6 +58,13 @@ from .scheduler import (
     SchedulingError,
     allocate_schedule,
     score_candidate,
+)
+from .execution import (
+    SEARCH_PAGE_EXECUTION_SCHEMA_VERSION,
+    SearchPageExecutionError,
+    SearchPageTransport,
+    SearchTransportResponse,
+    execute_search_page,
 )
 
 __all__ = [
@@ -106,4 +114,10 @@ __all__ = [
     "SchedulingError",
     "allocate_schedule",
     "score_candidate",
+    "SEARCH_PAGE_EXECUTION_SCHEMA_VERSION",
+    "SearchPageExecutionError",
+    "SearchPageTransport",
+    "SearchTransportResponse",
+    "execute_search_page",
+    "validate_pending_page_checkpoint",
 ]
