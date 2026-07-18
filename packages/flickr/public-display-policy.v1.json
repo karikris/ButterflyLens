@@ -1,0 +1,67 @@
+{
+  "schema_version": "butterflylens-flickr-public-display-policy:v1.0.0",
+  "effective_at": "2026-07-18T04:59:50Z",
+  "terms_checked_at": "2026-07-18T04:59:50Z",
+  "authoritative_sources": [
+    "https://www.flickr.com/help/terms/api",
+    "https://www.flickr.com/help/terms",
+    "https://www.flickr.com/services/developer/api/",
+    "https://www.flickr.com/services/developer/attributions/"
+  ],
+  "release_gate": {
+    "application_approval_evidence": "required",
+    "commercial_use_determination": "required",
+    "privacy_disclosure": "required",
+    "public_photo_display": "conditional_all_gates"
+  },
+  "page": {
+    "maximum_flickr_photos": 30,
+    "flickr_notice": "This product uses the Flickr API but is not endorsed or certified by SmugMug, Inc.",
+    "privacy_disclosure_required": true
+  },
+  "photo": {
+    "allowed_visibility_states": ["public"],
+    "require_current_source_record": true,
+    "require_display_permission": true,
+    "require_redistribution_permission": true,
+    "required_attribution_fields": [
+      "source_url",
+      "photographer",
+      "licence_id",
+      "licence_url",
+      "attribution"
+    ],
+    "source_host": "www.flickr.com",
+    "source_path_prefix": "/photos/",
+    "public_thumbnail_path_prefix": "/media/flickr/"
+  },
+  "branding": {
+    "flickr_logo_permitted": false,
+    "endorsement_claim_permitted": false,
+    "replicate_essential_experience_permitted": false
+  },
+  "cache": {
+    "maximum_age_seconds": 86400,
+    "maximum_revalidation_age_seconds": 86400,
+    "purge_if_private": "immediate",
+    "purge_on_removal_case": "immediate"
+  },
+  "removal": {
+    "owner_request_deadline_hours": 24,
+    "quarantine_before_traversal": true,
+    "retain_non_personal_tombstone": true,
+    "dependency_kinds": [
+      "source_cache",
+      "public_display",
+      "thumbnail",
+      "model_input",
+      "embedding",
+      "review",
+      "public_cell",
+      "packet",
+      "export",
+      "mirror",
+      "signed_url"
+    ]
+  }
+}

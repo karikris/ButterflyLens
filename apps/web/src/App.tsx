@@ -4,6 +4,7 @@ import { QualityDashboard } from './quality/QualityDashboard'
 import { submittedQualityDashboard } from './quality/qualityDashboardModel'
 import { PublicShell, RoutePreview } from './shell/PublicShell'
 import { SpeciesDirectory } from './species/SpeciesDirectory'
+import { FlickrDisplayBoundary } from './flickr/FlickrDisplayBoundary'
 
 export function App() {
   return (
@@ -40,6 +41,7 @@ export function App() {
         title="Live"
         description="Committed worker state and acquisition budgets will appear here without making a live worker a judging dependency."
       />
+      <FlickrDisplayBoundary />
       <QualityDashboard snapshot={submittedQualityDashboard} />
       <RoutePreview
         id="contributors"

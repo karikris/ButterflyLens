@@ -43,6 +43,11 @@ Unknown is a blocking value, never equivalent to allowed. Source identity and ri
 
 ## Flickr
 
+The executable public-display contract is
+`packages/flickr/public-display-policy.v1.json`. A parallel BioMiner Flickr
+fetch is active, but no partial output from that run is admitted to this public
+application and ButterflyLens makes no Flickr API call in this goal.
+
 Authoritative sources inspected:
 
 - [Flickr API Terms of Use](https://www.flickr.com/help/terms/api)
@@ -64,7 +69,9 @@ Authoritative sources inspected:
 - Flickr/SmugMug does not own user photos; the user/photographer does. API access does not override an all-rights-reserved notice, Creative Commons licence, private state, or owner-specific condition.
 - Discovery metadata may be retained only under the API/provider terms and its source identity. A photo enters download, transformation, inference, display, or redistribution lanes only when the rights manifest records a compatible basis for that exact use.
 - Show the source link, photographer/owner attribution, exact photo licence, and required Flickr notice with each public display context.
-- Cache photos only for a reasonable service period. Revalidate visibility/licence and remove cached copies that become private as soon as reasonably possible.
+- Cache photos only for a reasonable service period. ButterflyLens uses a
+  stricter 24-hour maximum for Flickr display caches and visibility/licence
+  revalidation. Remove cached copies that become private immediately.
 - Remove a Flickr user’s photo or other information from the application within 24 hours of an owner request; quarantine downstream thumbnails, model inputs, embeddings, reviews, public cells, packets, and exports until the removal graph is resolved.
 - Never include private media. Do not use Flickr data for unlawful discrimination, surveillance, rights violations, or other prohibited purposes.
 

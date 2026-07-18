@@ -63,3 +63,19 @@ This append-oriented record captures product or governance decisions made by Kri
 - Defer the supplied GBIF occurrence download handoff while BioMiner is actively
   building the overlapping fingerprinted evidence database. Copy its published
   Parquet artifact into ButterflyLens only after that work completes.
+
+## 2026-07-18 — Active Flickr run and public display
+
+- The user reports that the parallel Flickr fetch is active, has returned
+  50,000 unique images, and is estimated to require about 20 more hours.
+- Defer Task 10.4 because its live metrics overlap that incomplete run. Do not
+  call Flickr, inspect or copy partial outputs, or portray the run as committed
+  public evidence.
+- Enforce Flickr public-display terms independently in Task 10.5: at most 30
+  photos per page; exact source, photographer, licence, and attribution; the
+  required non-endorsement notice; no private images or logo misuse; a 24-hour
+  cache/revalidation maximum; immediate quarantine; and the 24-hour owner
+  removal workflow.
+- Keep public Flickr photo display blocked until application approval evidence,
+  commercial-use determination, a privacy disclosure, current per-photo rights,
+  and an admitted public thumbnail all exist.
