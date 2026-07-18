@@ -38,6 +38,13 @@ decision only to their own open assignment; consensus stays blind until they
 respond. Curators receive project-scoped inspection and campaign-management
 policies, while raw evidence and scientific releases remain server-written.
 
+The community-account migration adds an idempotent registration RPC for
+permanent Supabase Auth users. It creates only a pseudonymous base reviewer and
+self-service membership in an active project. Anonymous Auth users cannot
+register, and expert, curator, or administrator authority still requires a
+trusted server-controlled path. Guest browsing continues through the `anon`
+public projections without creating an Auth account.
+
 Every public table has row-level security. The `anon` role can read only safe
 columns through four security-invoker public views. Authenticated access is
 further constrained by self, assignment, and project-role policies; raw writes
