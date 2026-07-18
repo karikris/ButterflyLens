@@ -92,9 +92,50 @@ where c.verification_campaign_id = 'campaign:map-test'
 insert into public.quality_snapshots (
   quality_snapshot_id, project_pk, run_pk, snapshot_kind, scope_kind,
   sampling_frame_fingerprint, reviewed_sample, decisive_reviews,
-  release_blockers, snapshot_fingerprint
-) select 'quality:map-test', p.id, r.id, 'operational', 'national', repeat('4',64),
-  0, 0, array['no_human_review'], repeat('5',64)
+  release_blockers, snapshot_fingerprint, estimator_version, policy_version,
+  sampling_plan_id, audit_evidence_fingerprint, sampling_design,
+  representative, blind,
+  interval_method, bootstrap_replicates, bootstrap_seed_fingerprint,
+  resampling_group_count, population_estimate_allowed, estimate_payload
+) select 'quality:map-test', p.id, r.id, 'targeted_failure_discovery', 'national',
+  repeat('4',64), 0, 0, array['no_human_review'], repeat('5',64),
+  'butterflylens-dataset-quality-estimator:v1.0.0',
+  'butterflylens-representative-audit-policy:v1.0.0',
+  'plan:map-targeted', repeat('7',64), 'targeted_priority', false, true,
+  'stratified_owner_observation_group_bootstrap_v1', 200, repeat('6',64),
+  0, false, jsonb_build_object(
+    'schema_version', 'butterflylens-quality-snapshot:v1.0.0',
+    'estimator_version', 'butterflylens-dataset-quality-estimator:v1.0.0',
+    'policy_version', 'butterflylens-representative-audit-policy:v1.0.0',
+    'quality_snapshot_id', 'quality:map-test',
+    'project_id', 'project:map-test', 'run_id', 'run:map-test',
+    'audit_kind', 'targeted_failure_discovery', 'availability', 'unavailable',
+    'sampling_plan_id', 'plan:map-targeted', 'sampling_design', 'targeted_priority',
+    'audit_evidence_fingerprint', repeat('7',64),
+    'audit_records', jsonb_build_array(),
+    'sampling_strata', jsonb_build_array(jsonb_build_object(
+      'stratum_id', 'stratum:targeted', 'population_count', null,
+      'population_weight', null, 'sample_count', 0, 'decisive_count', 0,
+      'supported_count', 0, 'failure_count', 0, 'analysis_weight', null,
+      'precision_estimate', null, 'resampling_group_count', 0
+    )),
+    'grouping_keys', jsonb_build_array('owner_id', 'observation_id'),
+    'sampling_frame_fingerprint', repeat('4',64),
+    'snapshot_fingerprint', repeat('5',64),
+    'reviewed_sample', 0, 'decisive_reviews', 0,
+    'supported_count', 0, 'failure_count', 0, 'unresolved_count', 0,
+    'precision_estimate', null, 'effective_sample_size', null, 'interval', null,
+    'inclusion_probability_method', null,
+    'interval_method', 'stratified_owner_observation_group_bootstrap_v1',
+    'representative', false, 'blind', true,
+    'bootstrap_replicates', 200,
+    'bootstrap_seed_fingerprint', repeat('6',64),
+    'resampling_group_count', 0,
+    'blockers', jsonb_build_array('no_human_review'),
+    'population_estimate_allowed', false,
+    'targeted_queue_separate', true, 'model_vote_included', false,
+    'scientific_claim_allowed', false, 'generated_at', now()
+  )
 from public.projects p join public.runs r on r.project_pk = p.id
 where p.project_id = 'project:map-test';
 insert into public.geographic_impact (

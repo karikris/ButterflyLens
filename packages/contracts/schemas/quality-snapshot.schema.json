@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:quality-snapshot:v1.0.0",
+  "title": "ButterflyLens representative audit quality snapshot v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "estimator_version",
+    "quality_snapshot_id",
+    "project_id",
+    "run_id",
+    "audit_kind",
+    "availability",
+    "sampling_plan_id",
+    "sampling_frame_fingerprint",
+    "sampling_design",
+    "representative",
+    "blind",
+    "inclusion_probability_method",
+    "interval_method",
+    "audit_records",
+    "audit_evidence_fingerprint",
+    "sampling_strata",
+    "grouping_keys",
+    "reviewed_sample",
+    "decisive_reviews",
+    "supported_count",
+    "failure_count",
+    "unresolved_count",
+    "precision_estimate",
+    "interval",
+    "effective_sample_size",
+    "bootstrap_replicates",
+    "bootstrap_seed_fingerprint",
+    "resampling_group_count",
+    "blockers",
+    "population_estimate_allowed",
+    "targeted_queue_separate",
+    "model_vote_included",
+    "scientific_claim_allowed",
+    "generated_at",
+    "snapshot_fingerprint"
+  ],
+  "properties": {
+    "schema_version": { "const": "butterflylens-quality-snapshot:v1.0.0" },
+    "policy_version": { "const": "butterflylens-representative-audit-policy:v1.0.0" },
+    "estimator_version": { "const": "butterflylens-dataset-quality-estimator:v1.0.0" },
+    "quality_snapshot_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+    "project_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+    "run_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+    "audit_kind": { "enum": ["representative_audit", "targeted_failure_discovery"] },
+    "availability": { "enum": ["estimated", "unavailable"] },
+    "sampling_plan_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+    "sampling_frame_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+    "sampling_design": { "enum": ["simple_random", "stratified_random", "clustered_random", "targeted_priority"] },
+    "representative": { "type": "boolean" },
+    "blind": { "type": "boolean" },
+    "inclusion_probability_method": {
+      "anyOf": [
+        { "const": "hajek_inverse_inclusion_probability_v1" },
+        { "type": "null" }
+      ]
+    },
+    "interval_method": { "const": "stratified_owner_observation_group_bootstrap_v1" },
+    "audit_records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "record_id",
+          "stratum_id",
+          "inclusion_probability",
+          "owner_group_fingerprint",
+          "observation_group_fingerprint",
+          "outcome",
+          "consensus_status",
+          "review_fingerprint",
+          "consensus_fingerprint"
+        ],
+        "properties": {
+          "record_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+          "stratum_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+          "inclusion_probability": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+          "owner_group_fingerprint": {
+            "anyOf": [
+              { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+              { "type": "null" }
+            ]
+          },
+          "observation_group_fingerprint": {
+            "anyOf": [
+              { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+              { "type": "null" }
+            ]
+          },
+          "outcome": { "enum": ["supported", "not_supported", "uncertain", "media_failure", "deferred"] },
+          "consensus_status": { "enum": ["pending", "complete_agreement", "unresolved_disagreement", "uncertain_only", "media_failure", "deferred", "adjudicated"] },
+          "review_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+          "consensus_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" }
+        }
+      }
+    },
+    "audit_evidence_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+    "sampling_strata": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stratum_id",
+          "population_count",
+          "population_weight",
+          "sample_count",
+          "decisive_count",
+          "supported_count",
+          "failure_count",
+          "analysis_weight",
+          "precision_estimate",
+          "resampling_group_count"
+        ],
+        "properties": {
+          "stratum_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+          "population_count": {
+            "anyOf": [
+              { "type": "integer", "minimum": 1 },
+              { "type": "null" }
+            ]
+          },
+          "population_weight": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+          "sample_count": { "type": "integer", "minimum": 0 },
+          "decisive_count": { "type": "integer", "minimum": 0 },
+          "supported_count": { "type": "integer", "minimum": 0 },
+          "failure_count": { "type": "integer", "minimum": 0 },
+          "analysis_weight": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+          "precision_estimate": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+          "resampling_group_count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "grouping_keys": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 120 }
+    },
+    "reviewed_sample": { "type": "integer", "minimum": 0 },
+    "decisive_reviews": { "type": "integer", "minimum": 0 },
+    "supported_count": { "type": "integer", "minimum": 0 },
+    "failure_count": { "type": "integer", "minimum": 0 },
+    "unresolved_count": { "type": "integer", "minimum": 0 },
+    "precision_estimate": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+    "interval": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lower", "upper", "level", "method"],
+          "properties": {
+            "lower": { "type": "number", "minimum": 0, "maximum": 1 },
+            "upper": { "type": "number", "minimum": 0, "maximum": 1 },
+            "level": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+            "method": { "const": "stratified_owner_observation_group_bootstrap_v1" }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "effective_sample_size": {
+      "anyOf": [
+        { "type": "number", "exclusiveMinimum": 0 },
+        { "type": "null" }
+      ]
+    },
+    "bootstrap_replicates": { "type": "integer", "minimum": 200 },
+    "bootstrap_seed_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+    "resampling_group_count": { "type": "integer", "minimum": 0 },
+    "blockers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+    },
+    "population_estimate_allowed": { "type": "boolean" },
+    "targeted_queue_separate": { "const": true },
+    "model_vote_included": { "const": false },
+    "scientific_claim_allowed": { "const": false },
+    "generated_at": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/date_time" },
+    "snapshot_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "availability": { "const": "estimated" } },
+        "required": ["availability"]
+      },
+      "then": {
+        "properties": {
+          "audit_kind": { "const": "representative_audit" },
+          "representative": { "const": true },
+          "blind": { "const": true },
+          "inclusion_probability_method": { "const": "hajek_inverse_inclusion_probability_v1" },
+          "precision_estimate": { "type": "number" },
+          "interval": { "type": "object" },
+          "effective_sample_size": { "type": "number" },
+          "blockers": { "maxItems": 0 },
+          "population_estimate_allowed": { "const": true }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "availability": { "const": "unavailable" } },
+        "required": ["availability"]
+      },
+      "then": {
+        "properties": {
+          "precision_estimate": { "type": "null" },
+          "interval": { "type": "null" },
+          "effective_sample_size": { "type": "null" },
+          "blockers": { "minItems": 1 },
+          "population_estimate_allowed": { "const": false }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "audit_kind": { "const": "targeted_failure_discovery" } },
+        "required": ["audit_kind"]
+      },
+      "then": {
+        "properties": {
+          "availability": { "const": "unavailable" },
+          "representative": { "const": false },
+          "precision_estimate": { "type": "null" },
+          "interval": { "type": "null" },
+          "effective_sample_size": { "type": "null" },
+          "population_estimate_allowed": { "const": false }
+        }
+      }
+    }
+  ]
+}

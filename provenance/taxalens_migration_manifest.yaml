@@ -232,6 +232,23 @@ components:
       - Deterministic tests cover layer separation, fallback weights, weighted conflict, adjudication, supersession, release gates, ordering, contracts, and storage mapping.
       - Static migration tests and twenty-five pgTAP assertions define columns, FK/index coverage, triggers, helpers, privileges, RLS, and append-only state.
     status: implemented_original_adapter
+  - component_id: taxalens-representative-audit-pattern-v1
+    source_repository: karikris/taxalens
+    source_commit: c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc
+    source_path: apps/web/src/review/domain/targetPrecisionEstimates.ts
+    destination_path: packages/verification/python/butterflylens_verification/dataset_quality.py
+    migration_kind: interface_pattern
+    reason: Implement a ButterflyLens-owned representative audit while retaining inclusion-probability, stratum, effective-sample-size, and grouped-resampling precedent without copying upstream code, fixtures, records, estimates, or data.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Separate representative probability audits from targeted failure-discovery counts.
+      - Calculate a stratified Hájek proportion, labelled Kish weight-inequality ESS, and deterministic owner/observation connected-group bootstrap interval.
+      - Fail closed on missing design evidence and persist append-only versioned quality snapshots through service-only fixed-search-path admission.
+    tests:
+      - Synthetic deterministic tests cover weighted estimates, ESS, grouped intervals, order stability, targeted separation, missing evidence, cross-stratum groups, contracts, and storage mapping.
+      - Static migration tests and twenty-six pgTAP assertions define columns, indexes, triggers, helpers, privileges, RLS, and append-only state.
+    status: implemented_original_adapter
 butterflylens_owned_changes:
   - ownership_id: australia-wide-community-product
     status: planned
@@ -283,6 +300,6 @@ butterflylens_owned_changes:
 notes:
   - One exact rights-cleared Wikimedia Commons review fixture was copied from an immutable TaxaLens commit; no TaxaLens code, generated data, model, build, broad fixture bundle, or runtime artifact was copied.
   - Completed entries are original ButterflyLens contract adaptations bound to the immutable TaxaLens source; they are not broad source copies.
-  - Quality estimation is partial and the evidence-tool adapter remains planned; neither may be reported as implemented.
+  - The representative-audit estimator is implemented, but no live populated quality estimate or dashboard exists; the evidence-tool adapter remains planned.
   - The static Papilio replay and its measurements are evidence about TaxaLens, not ButterflyLens fixtures or outcomes.
   - Later migrations must record exact copied or adapted files and retain the MIT notice where required.

@@ -21,6 +21,7 @@ VERIFICATION_CONSENSUS_SCHEMA_VERSION = (
 REVIEWER_RELIABILITY_SCHEMA_VERSION = (
     "butterflylens-reviewer-reliability:v1.0.0"
 )
+QUALITY_SNAPSHOT_SCHEMA_VERSION = "butterflylens-quality-snapshot:v1.0.0"
 
 VERIFICATION_OUTCOMES = ("yes", "no", "cant_tell", "cant_view", "skipped")
 CONSENSUS_STATUSES = (
@@ -192,3 +193,56 @@ class ReviewerReliability(TypedDict):
     model_agreement_used: Literal[False]
     majority_agreement_alone_used: Literal[False]
     recorded_at: str
+
+
+class QualityStratumSummary(TypedDict):
+    stratum_id: str
+    population_count: int | None
+    population_weight: float | None
+    sample_count: int
+    decisive_count: int
+    supported_count: int
+    failure_count: int
+    analysis_weight: float | None
+    precision_estimate: float | None
+    resampling_group_count: int
+
+
+class QualitySnapshot(TypedDict):
+    schema_version: Literal["butterflylens-quality-snapshot:v1.0.0"]
+    policy_version: Literal["butterflylens-representative-audit-policy:v1.0.0"]
+    estimator_version: Literal["butterflylens-dataset-quality-estimator:v1.0.0"]
+    quality_snapshot_id: str
+    project_id: str
+    run_id: str
+    audit_kind: Literal["representative_audit", "targeted_failure_discovery"]
+    availability: Literal["estimated", "unavailable"]
+    sampling_plan_id: str
+    sampling_frame_fingerprint: str
+    sampling_design: str
+    representative: bool
+    blind: bool
+    inclusion_probability_method: str | None
+    interval_method: Literal["stratified_owner_observation_group_bootstrap_v1"]
+    audit_records: list[dict[str, object]]
+    audit_evidence_fingerprint: str
+    sampling_strata: list[QualityStratumSummary]
+    grouping_keys: list[str]
+    reviewed_sample: int
+    decisive_reviews: int
+    supported_count: int
+    failure_count: int
+    unresolved_count: int
+    precision_estimate: float | None
+    interval: dict[str, object] | None
+    effective_sample_size: float | None
+    bootstrap_replicates: int
+    bootstrap_seed_fingerprint: str
+    resampling_group_count: int
+    blockers: list[str]
+    population_estimate_allowed: bool
+    targeted_queue_separate: Literal[True]
+    model_vote_included: Literal[False]
+    scientific_claim_allowed: Literal[False]
+    generated_at: str
+    snapshot_fingerprint: str

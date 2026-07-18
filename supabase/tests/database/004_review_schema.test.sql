@@ -156,9 +156,58 @@ where rp.reviewer_profile_id = 'reviewer:test' and p.project_id = 'project:revie
 insert into public.quality_snapshots (
   quality_snapshot_id, project_pk, run_pk, snapshot_kind, scope_kind,
   sampling_frame_fingerprint, reviewed_sample, decisive_reviews,
-  release_blockers, snapshot_fingerprint
-) select 'quality:test', p.id, r.id, 'operational', 'national', repeat('8', 64),
-  1, 1, array['not_release_ready'], repeat('9', 64)
+  release_blockers, snapshot_fingerprint, estimator_version, policy_version,
+  sampling_plan_id, audit_evidence_fingerprint, sampling_design,
+  representative, blind,
+  interval_method, bootstrap_replicates, bootstrap_seed_fingerprint,
+  resampling_group_count, population_estimate_allowed, estimate_payload
+) select 'quality:test', p.id, r.id, 'targeted_failure_discovery', 'national',
+  repeat('8', 64), 1, 1, array['not_population_representative'], repeat('9', 64),
+  'butterflylens-dataset-quality-estimator:v1.0.0',
+  'butterflylens-representative-audit-policy:v1.0.0',
+  'plan:review-targeted', repeat('b', 64), 'targeted_priority', false, true,
+  'stratified_owner_observation_group_bootstrap_v1', 200, repeat('a', 64),
+  0, false, jsonb_build_object(
+    'schema_version', 'butterflylens-quality-snapshot:v1.0.0',
+    'estimator_version', 'butterflylens-dataset-quality-estimator:v1.0.0',
+    'policy_version', 'butterflylens-representative-audit-policy:v1.0.0',
+    'quality_snapshot_id', 'quality:test',
+    'project_id', 'project:review-test', 'run_id', 'run:review-test',
+    'audit_kind', 'targeted_failure_discovery', 'availability', 'unavailable',
+    'sampling_plan_id', 'plan:review-targeted',
+    'audit_evidence_fingerprint', repeat('b', 64),
+    'audit_records', jsonb_build_array(jsonb_build_object(
+      'record_id', 'record:test', 'stratum_id', 'stratum:targeted',
+      'inclusion_probability', null, 'owner_group_fingerprint', null,
+      'observation_group_fingerprint', null, 'outcome', 'not_supported',
+      'consensus_status', 'complete_agreement',
+      'review_fingerprint', repeat('c', 64),
+      'consensus_fingerprint', repeat('d', 64)
+    )),
+    'sampling_strata', jsonb_build_array(jsonb_build_object(
+      'stratum_id', 'stratum:targeted', 'population_count', null,
+      'population_weight', null, 'sample_count', 1, 'decisive_count', 1,
+      'supported_count', 0, 'failure_count', 1, 'analysis_weight', null,
+      'precision_estimate', null, 'resampling_group_count', 0
+    )),
+    'grouping_keys', jsonb_build_array('owner_id', 'observation_id'),
+    'sampling_design', 'targeted_priority',
+    'sampling_frame_fingerprint', repeat('8', 64),
+    'snapshot_fingerprint', repeat('9', 64),
+    'reviewed_sample', 1, 'decisive_reviews', 1,
+    'supported_count', 0, 'failure_count', 1, 'unresolved_count', 0,
+    'precision_estimate', null, 'effective_sample_size', null, 'interval', null,
+    'inclusion_probability_method', null,
+    'interval_method', 'stratified_owner_observation_group_bootstrap_v1',
+    'representative', false, 'blind', true,
+    'bootstrap_replicates', 200,
+    'bootstrap_seed_fingerprint', repeat('a', 64),
+    'resampling_group_count', 0,
+    'blockers', jsonb_build_array('not_population_representative'),
+    'population_estimate_allowed', false,
+    'targeted_queue_separate', true, 'model_vote_included', false,
+    'scientific_claim_allowed', false, 'generated_at', now()
+  )
 from public.projects p join public.runs r on r.project_pk = p.id
 where p.project_id = 'project:review-test';
 
@@ -214,11 +263,11 @@ select throws_ok(
 );
 select throws_ok(
   $$update public.quality_snapshots set snapshot_kind = 'representative_audit'$$,
-  '23514', 'representative audit requires inclusion-probability method'
+  '55000', 'append-only quality audit lane cannot be mutated'
 );
 select throws_ok(
   $$update public.quality_snapshots set precision_estimate = 0.8, interval_lower = 0.9, interval_upper = 1$$,
-  '23514', 'quality interval must contain its estimate'
+  '55000', 'append-only quality estimates cannot be mutated'
 );
 
 select * from finish();

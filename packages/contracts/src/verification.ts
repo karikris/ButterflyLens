@@ -10,6 +10,8 @@ export const VERIFICATION_CONSENSUS_SCHEMA_VERSION =
   'butterflylens-verification-consensus:v1.0.0' as const
 export const REVIEWER_RELIABILITY_SCHEMA_VERSION =
   'butterflylens-reviewer-reliability:v1.0.0' as const
+export const QUALITY_SNAPSHOT_SCHEMA_VERSION =
+  'butterflylens-quality-snapshot:v1.0.0' as const
 
 export const VERIFICATION_OUTCOMES = [
   'yes',
@@ -270,4 +272,72 @@ export interface ReviewerReliability {
   readonly model_agreement_used: false
   readonly majority_agreement_alone_used: false
   readonly recorded_at: string
+}
+
+export interface QualityStratumSummary {
+  readonly stratum_id: string
+  readonly population_count: number | null
+  readonly population_weight: number | null
+  readonly sample_count: number
+  readonly decisive_count: number
+  readonly supported_count: number
+  readonly failure_count: number
+  readonly analysis_weight: number | null
+  readonly precision_estimate: number | null
+  readonly resampling_group_count: number
+}
+
+export interface QualitySnapshot {
+  readonly schema_version: typeof QUALITY_SNAPSHOT_SCHEMA_VERSION
+  readonly policy_version: 'butterflylens-representative-audit-policy:v1.0.0'
+  readonly estimator_version: 'butterflylens-dataset-quality-estimator:v1.0.0'
+  readonly quality_snapshot_id: string
+  readonly project_id: string
+  readonly run_id: string
+  readonly audit_kind: 'representative_audit' | 'targeted_failure_discovery'
+  readonly availability: 'estimated' | 'unavailable'
+  readonly sampling_plan_id: string
+  readonly sampling_frame_fingerprint: string
+  readonly sampling_design: 'simple_random' | 'stratified_random' | 'clustered_random' | 'targeted_priority'
+  readonly representative: boolean
+  readonly blind: boolean
+  readonly inclusion_probability_method: 'hajek_inverse_inclusion_probability_v1' | null
+  readonly interval_method: 'stratified_owner_observation_group_bootstrap_v1'
+  readonly audit_records: readonly {
+    readonly record_id: string
+    readonly stratum_id: string
+    readonly inclusion_probability: number | null
+    readonly owner_group_fingerprint: string | null
+    readonly observation_group_fingerprint: string | null
+    readonly outcome: 'supported' | 'not_supported' | 'uncertain' | 'media_failure' | 'deferred'
+    readonly consensus_status: ConsensusStatus
+    readonly review_fingerprint: string
+    readonly consensus_fingerprint: string
+  }[]
+  readonly audit_evidence_fingerprint: string
+  readonly sampling_strata: readonly QualityStratumSummary[]
+  readonly grouping_keys: readonly string[]
+  readonly reviewed_sample: number
+  readonly decisive_reviews: number
+  readonly supported_count: number
+  readonly failure_count: number
+  readonly unresolved_count: number
+  readonly precision_estimate: number | null
+  readonly interval: {
+    readonly lower: number
+    readonly upper: number
+    readonly level: number
+    readonly method: 'stratified_owner_observation_group_bootstrap_v1'
+  } | null
+  readonly effective_sample_size: number | null
+  readonly bootstrap_replicates: number
+  readonly bootstrap_seed_fingerprint: string
+  readonly resampling_group_count: number
+  readonly blockers: readonly string[]
+  readonly population_estimate_allowed: boolean
+  readonly targeted_queue_separate: true
+  readonly model_vote_included: false
+  readonly scientific_claim_allowed: false
+  readonly generated_at: string
+  readonly snapshot_fingerprint: string
 }
