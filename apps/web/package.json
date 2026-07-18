@@ -14,7 +14,7 @@
     "licenses:check": "node scripts/dependency-licenses.mjs --check",
     "licenses:generate": "node scripts/dependency-licenses.mjs --generate",
     "media:check": "node scripts/verify-review-media.mjs",
-    "test": "vitest run"
+    "test": "vitest run && node --test scripts/dependency-licenses.node-test.mjs"
   },
   "dependencies": {
     "react": "19.2.7",

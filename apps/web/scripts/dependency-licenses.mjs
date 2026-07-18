@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process'
-import { readFileSync, writeFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { readFileSync, realpathSync, writeFileSync } from 'node:fs'
+import { dirname, isAbsolute, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -28,6 +28,28 @@ function dependencyTree() {
   )
 }
 
+export function resolveDependencyLicense(node, dependencyRoot = resolve(root, 'node_modules')) {
+  if (typeof node.license === 'string') {
+    return node.license
+  }
+  if (typeof node.path !== 'string') {
+    return null
+  }
+
+  const trustedRoot = realpathSync(dependencyRoot)
+  const installedPath = realpathSync(node.path)
+  const relativePath = relative(trustedRoot, installedPath)
+  if (relativePath === '..' || relativePath.startsWith(`..${sep}`) || isAbsolute(relativePath)) {
+    throw new Error(`${node.name}@${node.version} resolved outside node_modules`)
+  }
+
+  const manifest = JSON.parse(readFileSync(resolve(installedPath, 'package.json'), 'utf8'))
+  if (manifest.name !== node.name || manifest.version !== node.version) {
+    throw new Error(`${node.name}@${node.version} does not match its installed package manifest`)
+  }
+  return typeof manifest.license === 'string' ? manifest.license : null
+}
+
 function collectPackages() {
   const tree = dependencyTree()
   const records = new Map()
@@ -39,7 +61,7 @@ function collectPackages() {
       return
     }
     const key = `${node.name}@${node.version}`
-    const license = typeof node.license === 'string' ? node.license : null
+    const license = resolveDependencyLicense(node)
     if (license === null || !allowedLicenses.has(license)) {
       throw new Error(`${key} has unapproved or missing licence: ${String(license)}`)
     }
@@ -87,24 +109,30 @@ function comparable(report) {
   })
 }
 
-const packages = collectPackages()
-const report = {
-  schema_version: 'butterflylens-npm-dependency-licenses/v1',
-  generated_at: new Date().toISOString(),
-  lockfile: 'package-lock.json',
-  allowed_licenses: [...allowedLicenses].sort(),
-  packages,
+function main(argv) {
+  const packages = collectPackages()
+  const report = {
+    schema_version: 'butterflylens-npm-dependency-licenses/v1',
+    generated_at: new Date().toISOString(),
+    lockfile: 'package-lock.json',
+    allowed_licenses: [...allowedLicenses].sort(),
+    packages,
+  }
+
+  if (argv.includes('--generate')) {
+    writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8')
+    console.log(`dependency licence report generated (${packages.length} packages)`)
+  } else if (argv.includes('--check')) {
+    const expected = JSON.parse(readFileSync(reportPath, 'utf8'))
+    if (comparable(expected) !== comparable(report)) {
+      throw new Error('dependency licence report is stale; run npm run licenses:generate')
+    }
+    console.log(`dependency licence report verified (${packages.length} packages)`)
+  } else {
+    throw new Error('use --generate or --check')
+  }
 }
 
-if (process.argv.includes('--generate')) {
-  writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8')
-  console.log(`dependency licence report generated (${packages.length} packages)`)
-} else if (process.argv.includes('--check')) {
-  const expected = JSON.parse(readFileSync(reportPath, 'utf8'))
-  if (comparable(expected) !== comparable(report)) {
-    throw new Error('dependency licence report is stale; run npm run licenses:generate')
-  }
-  console.log(`dependency licence report verified (${packages.length} packages)`)
-} else {
-  throw new Error('use --generate or --check')
+if (process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main(process.argv.slice(2))
 }
