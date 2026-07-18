@@ -29,6 +29,7 @@ EXPECTED_PYTHON_NETWORK_FILES = {
     "scripts/build_ala_baseline.py",
     "scripts/build_butterfly_names.py",
     "scripts/build_butterfly_taxonomy.py",
+    "scripts/build_gbif_evidence.py",
     "scripts/crosswalk_butterfly_taxonomy.py",
 }
 EXPECTED_BROWSER_NETWORK_FILES = {

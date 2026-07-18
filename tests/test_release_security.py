@@ -14,7 +14,7 @@ class ReleaseSecurityTests(unittest.TestCase):
         self.assertEqual(self.audit.public_rls_tables, 50)
         self.assertEqual(self.audit.security_invoker_views, 11)
         self.assertEqual(self.audit.security_definer_functions, 60)
-        self.assertEqual(self.audit.external_network_boundary_files, 10)
+        self.assertEqual(self.audit.external_network_boundary_files, 11)
 
     def test_tracked_text_has_no_high_signal_secret(self) -> None:
         self.assertGreaterEqual(self.audit.tracked_files_scanned_for_secrets, 535)
