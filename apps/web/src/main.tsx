@@ -5,6 +5,7 @@ import { App } from './App'
 import './design-system/foundations.css'
 import './design-system/primitives.css'
 import './shell/publicShell.css'
+import './species/speciesDirectory.css'
 import './styles.css'
 
 const root = document.getElementById('root')

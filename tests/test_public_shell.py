@@ -43,6 +43,7 @@ class PublicShellTests(unittest.TestCase):
                 WEB / "App.tsx",
                 WEB / "review/ReviewLanding.tsx",
                 WEB / "quality/QualityDashboard.tsx",
+                WEB / "species/SpeciesDirectory.tsx",
                 SHELL,
             )
         )

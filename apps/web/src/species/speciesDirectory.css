@@ -1,0 +1,537 @@
+.species-directory {
+  width: min(var(--bl-content-wide), calc(100% - 2rem));
+  margin-inline: auto;
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  border-top: 1px solid var(--bl-line);
+  scroll-margin-top: var(--bl-space-4);
+}
+
+.species-directory__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(1rem, 5vw, 4rem);
+  margin-bottom: var(--bl-space-6);
+}
+
+.species-directory__intro h2 {
+  max-width: 16ch;
+  margin-bottom: var(--bl-space-4);
+  font-size: var(--bl-text-section);
+  line-height: 1;
+}
+
+.species-directory__intro p:not(.eyebrow) {
+  max-width: var(--bl-reading-width);
+  margin-bottom: 0;
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-lede);
+}
+
+.species-controls {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) minmax(11rem, 0.42fr) auto;
+  align-items: end;
+  gap: var(--bl-space-4);
+  margin-block: var(--bl-space-6);
+  padding: var(--bl-space-5);
+  background: var(--bl-surface);
+  border: 1px solid var(--bl-line);
+  border-radius: var(--bl-radius-panel);
+  box-shadow: var(--bl-shadow-paper);
+}
+
+.species-controls label {
+  display: grid;
+  gap: var(--bl-space-2);
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-sm);
+  font-weight: 800;
+}
+
+.species-controls input,
+.species-controls select {
+  width: 100%;
+  min-height: var(--bl-target-min);
+  padding: 0.7rem 0.85rem;
+  color: var(--bl-ink);
+  background: var(--bl-paperbark-050);
+  border: 1px solid var(--bl-line);
+  border-radius: var(--bl-radius-small);
+}
+
+.species-controls__clear {
+  min-height: var(--bl-target-min);
+  padding: 0.65rem 1rem;
+  color: var(--bl-surface);
+  font-weight: 800;
+  background: var(--bl-brand);
+  border: 1px solid var(--bl-brand);
+  border-radius: var(--bl-radius-small);
+  cursor: pointer;
+}
+
+.species-controls__clear:disabled {
+  color: var(--bl-ink-muted);
+  background: var(--bl-surface-muted);
+  border-color: var(--bl-line);
+  cursor: not-allowed;
+}
+
+.species-controls output {
+  grid-column: 1 / -1;
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-sm);
+}
+
+.species-directory__layout {
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.42fr) minmax(0, 1.58fr);
+  align-items: start;
+  gap: var(--bl-space-6);
+}
+
+.species-results {
+  position: sticky;
+  top: var(--bl-space-4);
+  overflow: hidden;
+  background: var(--bl-surface);
+  border: 1px solid var(--bl-line);
+  border-radius: var(--bl-radius-panel);
+}
+
+.species-results > header {
+  padding: var(--bl-space-5);
+  border-bottom: 1px solid var(--bl-line);
+}
+
+.species-results h3 {
+  margin-bottom: 0;
+  font-size: 1.6rem;
+}
+
+.species-results ol {
+  max-height: min(64rem, calc(100vh - 8rem));
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-gutter: stable;
+}
+
+.species-results li + li {
+  border-top: 1px solid var(--bl-line);
+}
+
+.species-results button {
+  display: grid;
+  width: 100%;
+  min-height: var(--bl-target-min);
+  gap: 0.05rem;
+  padding: 0.8rem 1rem;
+  color: var(--bl-ink);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-left: 4px solid transparent;
+  cursor: pointer;
+}
+
+.species-results button:hover {
+  background: var(--bl-surface-muted);
+}
+
+.species-results button[aria-pressed="true"] {
+  background: var(--bl-eucalypt-100);
+  border-left-color: var(--bl-brand-active);
+}
+
+.species-results button strong {
+  font-size: var(--bl-text-sm);
+}
+
+.species-results button i {
+  color: var(--bl-ink-muted);
+  font-family: var(--bl-font-editorial);
+}
+
+.species-results button small,
+.species-result__gap {
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-xs);
+}
+
+.species-result__gap {
+  font-weight: 700;
+}
+
+.species-results__empty {
+  padding: var(--bl-space-6) var(--bl-space-5);
+}
+
+.species-results__empty p {
+  margin-bottom: 0;
+  color: var(--bl-ink-muted);
+}
+
+.species-profile {
+  min-width: 0;
+  overflow: hidden;
+  background: var(--bl-surface);
+  border: 1px solid var(--bl-line);
+  border-radius: var(--bl-radius-panel);
+  box-shadow: var(--bl-shadow-paper);
+}
+
+.species-profile__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--bl-space-5);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-top: 5px solid var(--bl-brand-active);
+}
+
+.species-profile__header h3 {
+  margin-bottom: var(--bl-space-2);
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  line-height: 1;
+}
+
+.species-profile__header p:last-child {
+  margin-bottom: 0;
+  color: var(--bl-ink-muted);
+}
+
+.species-profile__states {
+  display: grid;
+  flex: 0 0 auto;
+  gap: var(--bl-space-2);
+  justify-items: end;
+}
+
+.species-profile__lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 0.9fr);
+  align-items: stretch;
+  border-block: 1px solid var(--bl-line);
+}
+
+.species-profile__lead > section {
+  padding: var(--bl-space-6);
+}
+
+.species-profile h4 {
+  margin-block: 0 var(--bl-space-4);
+  font-family: var(--bl-font-editorial);
+  font-size: 1.65rem;
+}
+
+.species-profile h5 {
+  margin-block: 0 var(--bl-space-3);
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.species-photo {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+  margin: 0;
+}
+
+.species-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 22rem;
+  object-fit: cover;
+}
+
+.species-photo figcaption {
+  padding: var(--bl-space-3) var(--bl-space-4);
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-xs);
+  background: var(--bl-surface-muted);
+}
+
+.species-photo--unavailable {
+  min-height: 28rem;
+  background: var(--bl-photo-matte);
+  border-right: 1px solid var(--bl-line);
+}
+
+.species-photo--unavailable > div {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--bl-space-3);
+  min-height: 24rem;
+  padding: var(--bl-space-6);
+  color: var(--bl-ink-muted);
+  text-align: center;
+}
+
+.species-photo--unavailable > div > span {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid currentcolor;
+  border-radius: 50%;
+  place-items: center;
+}
+
+.species-taxonomy,
+.species-provenance dl {
+  display: grid;
+  gap: var(--bl-space-3);
+  margin: 0;
+}
+
+.species-taxonomy div,
+.species-provenance dl div {
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.55fr) minmax(0, 1fr);
+  gap: var(--bl-space-3);
+  padding-bottom: var(--bl-space-2);
+  border-bottom: 1px solid var(--bl-line);
+}
+
+.species-profile__source {
+  margin-block: var(--bl-space-5) 0;
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-sm);
+}
+
+.species-profile__detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--bl-line);
+}
+
+.species-panel {
+  display: grid;
+  align-content: start;
+  gap: var(--bl-space-5);
+  min-width: 0;
+  padding: var(--bl-space-6);
+}
+
+.species-panel + .species-panel {
+  border-left: 1px solid var(--bl-line);
+}
+
+.species-names {
+  display: grid;
+  gap: var(--bl-space-5);
+}
+
+.species-names ul {
+  display: grid;
+  gap: var(--bl-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.species-names li {
+  display: grid;
+  padding: var(--bl-space-3);
+  background: var(--bl-surface-muted);
+  border-left: 3px solid var(--bl-brand-active);
+}
+
+.species-names li small {
+  color: var(--bl-ink-muted);
+}
+
+.species-names p {
+  margin-bottom: 0;
+  color: var(--bl-ink-muted);
+}
+
+.species-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.species-panel table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: var(--bl-text-sm);
+}
+
+.species-panel caption {
+  padding-bottom: var(--bl-space-3);
+  color: var(--bl-ink-muted);
+  text-align: left;
+}
+
+.species-panel th,
+.species-panel td {
+  padding: 0.65rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--bl-line);
+}
+
+.species-panel td code {
+  overflow-wrap: anywhere;
+}
+
+.species-panel tr[data-state="conflict"] td {
+  color: var(--bl-state-caution-ink);
+  background: var(--bl-state-caution-bg);
+}
+
+.species-evidence {
+  padding: var(--bl-space-6);
+  border-bottom: 1px solid var(--bl-line);
+}
+
+.species-evidence > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--bl-space-5);
+}
+
+.species-evidence dl {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--bl-space-3);
+  margin-block: var(--bl-space-5);
+}
+
+.species-evidence dl div {
+  display: grid;
+  gap: var(--bl-space-2);
+  padding: var(--bl-space-3);
+  background: var(--bl-surface-muted);
+}
+
+.species-evidence dt {
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-xs);
+}
+
+.species-evidence dd {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.species-evidence > p {
+  max-width: var(--bl-reading-width);
+  color: var(--bl-ink-muted);
+}
+
+.species-evidence > ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bl-space-2);
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.species-evidence > ul li {
+  padding: 0.35rem 0.65rem;
+  color: var(--bl-state-caution-ink);
+  font-size: var(--bl-text-xs);
+  font-weight: 800;
+  background: var(--bl-state-caution-bg);
+  border: 1px solid var(--bl-state-caution-line);
+  border-radius: 999px;
+}
+
+.species-profile > .bl-evidence-notice {
+  margin: var(--bl-space-6);
+}
+
+.species-provenance {
+  margin: var(--bl-space-6);
+  padding: var(--bl-space-4);
+  background: var(--bl-surface-muted);
+  border: 1px solid var(--bl-line);
+  border-radius: var(--bl-radius-small);
+}
+
+.species-provenance summary {
+  min-height: var(--bl-target-min);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.species-provenance code {
+  overflow-wrap: anywhere;
+}
+
+.species-provenance p {
+  margin-block: var(--bl-space-4) 0;
+  color: var(--bl-ink-muted);
+}
+
+@media (max-width: 820px) {
+  .species-directory__intro,
+  .species-controls,
+  .species-directory__layout,
+  .species-profile__lead,
+  .species-profile__detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .species-results {
+    position: static;
+  }
+
+  .species-results ol {
+    max-height: 22rem;
+  }
+
+  .species-panel + .species-panel {
+    border-top: 1px solid var(--bl-line);
+    border-left: 0;
+  }
+
+  .species-photo--unavailable {
+    border-right: 0;
+  }
+
+  .species-evidence dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .species-profile__header,
+  .species-evidence > header {
+    display: grid;
+  }
+
+  .species-profile__states {
+    justify-items: start;
+  }
+
+  .species-photo img {
+    min-height: 15rem;
+  }
+
+  .species-evidence dl {
+    grid-template-columns: 1fr;
+  }
+
+  .species-taxonomy div,
+  .species-provenance dl div {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (forced-colors: active) {
+  .species-results button[aria-pressed="true"] {
+    border-left-color: CanvasText;
+  }
+}

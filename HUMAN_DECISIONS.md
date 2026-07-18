@@ -46,3 +46,20 @@ This append-oriented record captures product or governance decisions made by Kri
   focusable skip target and a real document landmark for every link.
 - Until their numbered implementation tasks are complete, show future surfaces
   as explicitly scheduled previews rather than dead links or completion claims.
+
+## 2026-07-18 — Public species evidence boundaries
+
+- Build public species pages from the rebuilt ButterflyLens Australian Faunal
+  Directory baseline and treat that baseline as authoritative.
+- Present English names and provider crosswalks as sourced assertions, retain
+  unresolved conflicts, and publish no inferred provider identifier.
+- Keep First Nations language names empty until the governed authorization gate
+  is satisfied; the empty state is not evidence that no such names exist.
+- Withhold ALA occurrence counts while dataset-rights conflicts remain open;
+  missing displayed evidence is not biological absence.
+- Treat reference counts as provisional workflow diagnostics only. Human review
+  is absent, and YOLOE and BioCLIP remain explicitly unfinished.
+- Do not call GitHits again during this goal because it is unavailable.
+- Defer the supplied GBIF occurrence download handoff while BioMiner is actively
+  building the overlapping fingerprinted evidence database. Copy its published
+  Parquet artifact into ButterflyLens only after that work completes.

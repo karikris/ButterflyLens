@@ -3,6 +3,7 @@ import { submittedReviewItem } from './review/reviewLandingModel'
 import { QualityDashboard } from './quality/QualityDashboard'
 import { submittedQualityDashboard } from './quality/qualityDashboardModel'
 import { PublicShell, RoutePreview } from './shell/PublicShell'
+import { SpeciesDirectory } from './species/SpeciesDirectory'
 
 export function App() {
   return (
@@ -32,12 +33,7 @@ export function App() {
         </dl>
       </section>
       <ReviewLanding item={submittedReviewItem} qualifiedReviewer={false} />
-      <RoutePreview
-        id="species"
-        kicker="Australian field guide"
-        title="Species"
-        description="Australian butterfly species pages will connect accepted taxonomy, names, evidence coverage, and explicit data gaps."
-      />
+      <SpeciesDirectory />
       <RoutePreview
         id="live"
         kicker="Pipeline observatory"
