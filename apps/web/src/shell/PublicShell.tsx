@@ -61,6 +61,11 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
             ButterflyLens keeps candidate discovery, human review, quality
             estimation, and scientific release as separate evidence stages.
           </p>
+          <p>
+            <a href="https://github.com/karikris/ButterflyLens/blob/main/PRIVACY.md">
+              Community privacy policy
+            </a>
+          </p>
         </div>
       </footer>
     </div>

@@ -1,0 +1,69 @@
+{
+  "schema_version": "butterflylens-community-privacy-policy:v1.0.0",
+  "policy_version": "butterflylens-community-privacy:v1.0.0",
+  "status": "prelaunch_blocked",
+  "last_reviewed": "2026-07-18",
+  "jurisdiction_reference": "Australia",
+  "community_write_access": false,
+  "live_analyst_enabled": false,
+  "launch_blockers": [
+    "legal_operator_identity",
+    "private_privacy_contact",
+    "overseas_recipient_countries_or_regions",
+    "category_retention_schedule",
+    "versioned_participant_acceptance",
+    "moderation_and_removal_workflows"
+  ],
+  "anonymous_site": {
+    "anonymous_browsing": true,
+    "application_cookies": false,
+    "browser_local_storage": false,
+    "browser_session_storage": false,
+    "product_analytics": false,
+    "advertising": false,
+    "hosting_request_metadata_possible": true
+  },
+  "identity": {
+    "pseudonymous_contribution": true,
+    "real_name_required": false,
+    "permanent_account_required_for_contribution": true,
+    "auth_uuid_public": false,
+    "login_identifier_public": false
+  },
+  "data_categories": [
+    "pseudonymous_accounts",
+    "private_user_ids",
+    "review_history",
+    "retained_comments",
+    "private_reviewer_reliability",
+    "self_visible_contribution_summaries",
+    "flickr_owner_source_data",
+    "service_and_security_metadata",
+    "explicit_live_analyst_requests",
+    "privacy_correction_complaint_and_removal_requests",
+    "sensitive_occurrence_locations"
+  ],
+  "service_boundaries": {
+    "github_pages": "static_hosting",
+    "supabase": "authentication_database_edge_functions",
+    "backblaze_b2": "governed_media_storage",
+    "openai": "explicit_live_analyst_invocation_only"
+  },
+  "unresolved_production_details": {
+    "legal_operator": null,
+    "private_privacy_contact": null,
+    "supabase_region": null,
+    "backblaze_b2_region": null,
+    "overseas_recipient_countries_or_regions": null,
+    "category_retention_schedule": null
+  },
+  "public_exclusions": [
+    "auth_uuid",
+    "login_identifiers",
+    "reviewer_reliability",
+    "private_storage_fields",
+    "unapproved_review_comments",
+    "sensitive_occurrence_coordinates"
+  ],
+  "automated_decision_review_due": "2026-12-10"
+}

@@ -21,3 +21,7 @@ Phase 0 repository governance is in progress. No live pipeline, quality metric, 
 ButterflyLens code and configuration are licensed under `AGPL-3.0-only` because the intended YOLOE path is AGPL-covered and no Ultralytics Enterprise licence is documented. Data, media, model weights, community content, and third-party software retain their own terms. See [the licence decision](LICENSE_DECISION.md), [third-party audit](THIRD_PARTY_LICENSES.md), and [data-rights audit](DATA_RIGHTS.md).
 
 Release remains blocked unless the executable licence and rights verifiers pass at the release SHA.
+
+Community account creation and write access remain blocked until the prelaunch
+[community privacy policy](PRIVACY.md) identifies the operator and private
+request channel and closes its retention and overseas-processing prerequisites.

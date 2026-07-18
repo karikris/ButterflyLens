@@ -37,6 +37,10 @@ describe('public application shell', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument()
     expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content')
     expect(screen.getByRole('contentinfo')).toHaveAttribute('id', 'about')
+    expect(screen.getByRole('link', { name: 'Community privacy policy' })).toHaveAttribute(
+      'href',
+      'https://github.com/karikris/ButterflyLens/blob/main/PRIVACY.md',
+    )
   })
 
   it('resolves every application navigation fragment to a real landmark', () => {
