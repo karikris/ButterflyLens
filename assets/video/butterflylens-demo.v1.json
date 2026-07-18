@@ -1,0 +1,250 @@
+{
+  "schema_version": "butterflylens-demo-video/v1",
+  "title": "ButterflyLens — Discover, review, and strengthen Australia’s butterfly data",
+  "language": "en-AU",
+  "source_commit": "c6037ca37871c3db819f7fd780158ef352e85e51",
+  "submitted_snapshot_id": "butterflylens-submitted-20260718-v1",
+  "submitted_snapshot_fingerprint": "sha256:27a256934a1ac1a9fb0d27b75a0fe805bf12224df42d7e6b7d235991d26fb9de",
+  "duration_ms": 168000,
+  "target_duration_ms": {
+    "minimum": 165000,
+    "maximum": 170000
+  },
+  "required_working_product_fraction": 0.6666666667,
+  "working_product_ms": 160000,
+  "working_product_fraction": 0.9523809524,
+  "capture": {
+    "status": "not_recorded",
+    "viewport": "1920x1080",
+    "frame_rate": 30,
+    "product_url": "https://karikris.github.io/ButterflyLens/",
+    "network_policy": "block all requests except the pinned local or public ButterflyLens build",
+    "credentials_permitted": false,
+    "private_worker_telemetry_permitted": false,
+    "active_flickr_output_permitted": false
+  },
+  "audio": {
+    "status": "scripted_not_recorded",
+    "voice": "human narrator, clear Australian English",
+    "captions": "assets/video/butterflylens-demo.en-AU.srt",
+    "music_required": false
+  },
+  "publication": {
+    "status": "not_uploaded",
+    "youtube_url": null,
+    "human_approval_required": true,
+    "requirements": [
+      "record the actual pinned product rather than a mockup",
+      "record and mix clear narration",
+      "review the final cut for scientific, rights, privacy, and provenance accuracy",
+      "upload the approved sub-three-minute cut to public YouTube"
+    ]
+  },
+  "evidence_sources": [
+    {
+      "path": "data/submission/v1/submitted_snapshot.json",
+      "sha256": "16713ce4b1f4caad19e515ed2cf6d9d30ab1592e925a8a5281a6184f5d28bc2b"
+    },
+    {
+      "path": "apps/web/src/operations/submittedOperationsSnapshot.json",
+      "sha256": "5d0cc36d481b0618a76f320dc3370ea4c3522592671f3e86466062bba0b779ab"
+    },
+    {
+      "path": "apps/web/src/operations/submittedMonitoringSnapshot.json",
+      "sha256": "2233cf3f00b6926bcdd96d584629823f39ff84fd765290949f67a4ff9020271a"
+    },
+    {
+      "path": "apps/web/src/review/reviewMediaManifest.json",
+      "sha256": "7c66b7178c117e3349a6b0767dce5590c10621561d046ebc5ac44de25dd8420f"
+    },
+    {
+      "path": "apps/web/src/community/submittedContributorImpact.json",
+      "sha256": "bd91f704296577c8067ee1474f4c1d4316488c69dd95b4ad11f02e7dfc0b0e1a"
+    },
+    {
+      "path": "apps/web/src/quality/submittedQualityProjection.json",
+      "sha256": "2022327e885ad344948dcb20a9f7545cc6eff76e37f64671629d782bf0247928"
+    },
+    {
+      "path": "packages/openai/submitted-replays.v1.json",
+      "sha256": "1d029dc54fa1e540aa11cdbaa5163bc2d912250ed4846e0e4db78763feaf4178"
+    },
+    {
+      "path": "packages/openai/submitted-artifacts.v1.json",
+      "sha256": "fe56e55b2046dbd3d88c8a63f96ac5a7e2f6b0135f1d2c71813962f83d280a3d"
+    }
+  ],
+  "shots": [
+    {
+      "sequence": 1,
+      "id": "ala_baseline",
+      "label": "ALA baseline",
+      "start_ms": 0,
+      "end_ms": 18000,
+      "working_product": true,
+      "route": "#live",
+      "visual_proof": [
+        "ButterflyLens rebuilt baseline",
+        "Submitted Australian butterfly catalogue",
+        "463 species",
+        "Occurrence layer withheld"
+      ],
+      "truth_boundary": "ALA is authoritative baseline occurrence evidence for this build, not complete ground truth; the public occurrence layer remains withheld."
+    },
+    {
+      "sequence": 2,
+      "id": "flickr_live_stream",
+      "label": "Flickr live stream",
+      "start_ms": 18000,
+      "end_ms": 34000,
+      "working_product": true,
+      "route": "#flickr-display-policy",
+      "visual_proof": [
+        "Flickr public display gate",
+        "0 Flickr photos displayed",
+        "Display remains blocked",
+        "active parallel fetch and its partial outputs are not public evidence"
+      ],
+      "truth_boundary": "The external stream is not attached to the Submitted snapshot; discovery candidates are not occurrences and partial fetch output is not shown."
+    },
+    {
+      "sequence": 3,
+      "id": "m5_pipeline",
+      "label": "M5 pipeline",
+      "start_ms": 34000,
+      "end_ms": 48000,
+      "working_product": true,
+      "route": "#live",
+      "visual_proof": [
+        "Pipeline observatory",
+        "Worker status unavailable",
+        "YOLOE unfinished · BioCLIP unfinished"
+      ],
+      "truth_boundary": "No authenticated M5 heartbeat, model fingerprint, committed batch, or model result is attached."
+    },
+    {
+      "sequence": 4,
+      "id": "butterfly_verification",
+      "label": "Butterfly verification",
+      "start_ms": 48000,
+      "end_ms": 72000,
+      "working_product": true,
+      "route": "#verify",
+      "visual_proof": [
+        "Review without hints",
+        "Can’t tell",
+        "Draft only",
+        "Show source context"
+      ],
+      "truth_boundary": "The review is blind and local; revealing permitted context does not submit a decision or verify a species."
+    },
+    {
+      "sequence": 5,
+      "id": "map_update",
+      "label": "Map update",
+      "start_ms": 72000,
+      "end_ms": 87000,
+      "working_product": true,
+      "route": "#live",
+      "visual_proof": [
+        "Current contribution",
+        "Worker-independent evidence",
+        "No committed live replacement is attached"
+      ],
+      "truth_boundary": "A local draft cannot update the public map; only a reviewed, rights-cleared, committed artifact can do so."
+    },
+    {
+      "sequence": 6,
+      "id": "repeated_reviewers",
+      "label": "Repeated reviewers",
+      "start_ms": 87000,
+      "end_ms": 103000,
+      "working_product": true,
+      "route": "#contributors",
+      "visual_proof": [
+        "Contributor evidence unavailable",
+        "No authenticated contribution snapshot is attached"
+      ],
+      "truth_boundary": "Independent repeated review is required for stronger evidence; the replay contains no stored community reviews or contributor identities."
+    },
+    {
+      "sequence": 7,
+      "id": "quality_interval",
+      "label": "Quality interval",
+      "start_ms": 103000,
+      "end_ms": 119000,
+      "working_product": true,
+      "route": "#quality",
+      "visual_proof": [
+        "Precision unavailable",
+        "Agreement unavailable",
+        "2,906 valid decodes",
+        "0 human-verified species"
+      ],
+      "truth_boundary": "An unavailable representative interval is not zero; reference diagnostics are not population quality estimates."
+    },
+    {
+      "sequence": 8,
+      "id": "gpt_5_6_analysis",
+      "label": "GPT-5.6 analysis",
+      "start_ms": 119000,
+      "end_ms": 140000,
+      "working_product": true,
+      "route": "#ask-butterflylens",
+      "visual_proof": [
+        "Which species should receive the next reference review?",
+        "Hypochrysops sandrae",
+        "Lacturnea lacturnus",
+        "Charaxes andrewsi",
+        "Model not invoked"
+      ],
+      "truth_boundary": "The Submitted answer is a deterministic stored replay; GPT-5.6 is the bounded live analyst target and did not run for this replay."
+    },
+    {
+      "sequence": 9,
+      "id": "geographic_impact",
+      "label": "Geographic impact",
+      "start_ms": 140000,
+      "end_ms": 151000,
+      "working_product": true,
+      "route": "#live",
+      "visual_proof": [
+        "Australia scope",
+        "Occurrence layer withheld",
+        "geographic impact unavailable"
+      ],
+      "truth_boundary": "No selectable impact cell is released, and withheld coverage must not be interpreted as biological absence."
+    },
+    {
+      "sequence": 10,
+      "id": "evidence_export",
+      "label": "Evidence export",
+      "start_ms": 151000,
+      "end_ms": 160000,
+      "working_product": true,
+      "route": "#about",
+      "visual_proof": [
+        "Darwin Core export",
+        "Occurrence release",
+        "Search results are hypotheses—not biodiversity records"
+      ],
+      "truth_boundary": "The product exposes governed export documentation, not a downloadable public occurrence archive; unreviewed Flickr candidates remain excluded."
+    },
+    {
+      "sequence": 11,
+      "id": "codex_provenance",
+      "label": "Codex provenance",
+      "start_ms": 160000,
+      "end_ms": 168000,
+      "working_product": false,
+      "route": "repository provenance",
+      "visual_proof": [
+        "CODEX_COLLABORATION.md",
+        "provenance/commits.jsonl",
+        "provenance/model_usage.jsonl",
+        "exact tests and source commit"
+      ],
+      "truth_boundary": "Codex built and tested product code and evidence contracts; it did not create butterfly identities, community votes, or scientific ground truth."
+    }
+  ]
+}
