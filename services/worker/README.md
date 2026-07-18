@@ -20,3 +20,44 @@ heartbeat and explicitly tells the worker to stop fenced work.
 YOLOE and BioCLIP are unfinished and skipped for the current goal. Keep
 `configured_models` and heartbeat model health empty until separately approved,
 fingerprinted model artifacts actually exist; this task performs no model work.
+
+## Development launchd agent
+
+On the target Mac, create the pinned `.venv` first, then run:
+
+```sh
+services/worker/launchd/install.sh
+```
+
+The installer renders a mode-`0600` plist into the current user's
+`Library/LaunchAgents`, validates it with `plutil`, and uses `launchctl
+bootstrap`, `enable`, and `kickstart`. It writes stdout/stderr under
+`~/Library/Logs/ButterflyLens` and private registration/heartbeat state under
+`~/Library/Application Support/ButterflyLens/worker`.
+
+`KeepAlive.SuccessfulExit=false` restarts crashes but does not relaunch a clean
+graceful exit. The worker stays in the foreground and converts `SIGTERM` into a
+final draining heartbeat. `ThrottleInterval=30` limits crash-loop churn and
+`ExitTimeOut=60` bounds the drain before launchd may force termination.
+
+`worker.env` is parsed as data, never sourced as shell. It accepts only the four
+documented numeric tuning fields and rejects secret-like names, unknown keys,
+shell metacharacters, symlinks, and group/world permissions. Provider secrets
+belong in macOS Keychain. `KeychainSecretProvider` retrieves a specifically
+named generic-password item on demand with `/usr/bin/security`, without a
+shell, plist entry, environment variable, command-line secret, or log value.
+Use Keychain Access to create and control those items; the current heartbeat
+service does not request any secret.
+
+Uninstall with:
+
+```sh
+services/worker/launchd/uninstall.sh
+```
+
+Uninstalling boots out the exact user agent and removes only its rendered plist.
+It retains state, non-secret configuration, and logs for recovery/audit.
+
+This is an unsigned development LaunchAgent. A distributable production helper
+must move into a signed app bundle and use Apple's Service Management path; this
+script does not claim production signing or notarization.
