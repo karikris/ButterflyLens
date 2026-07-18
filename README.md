@@ -28,3 +28,6 @@ request channel and closes its retention and overseas-processing prerequisites.
 The versioned [community safeguards and moderation policy](MODERATION.md)
 preserves review evidence while supporting private reports, scoped enforcement,
 review audit, appeal, and curator notes.
+The [sensitive butterfly location policy](SENSITIVE_LOCATIONS.md) now makes
+provider-permission and resolution receipts mandatory before any map or release
+location is publicly readable; missing or unknown evidence is withheld.

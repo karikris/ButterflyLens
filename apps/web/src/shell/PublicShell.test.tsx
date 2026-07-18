@@ -45,6 +45,10 @@ describe('public application shell', () => {
       'href',
       'https://github.com/karikris/ButterflyLens/blob/main/MODERATION.md',
     )
+    expect(screen.getByRole('link', { name: 'Sensitive locations' })).toHaveAttribute(
+      'href',
+      'https://github.com/karikris/ButterflyLens/blob/main/SENSITIVE_LOCATIONS.md',
+    )
   })
 
   it('resolves every application navigation fragment to a real landmark', () => {

@@ -1,0 +1,54 @@
+begin;
+
+create extension if not exists pgtap with schema extensions;
+set search_path = public, extensions;
+
+select plan(44);
+
+select has_table('public', 'location_source_constraints', 'provider location constraints exist');
+select has_table('public', 'location_publication_receipts', 'location publication receipts exist');
+select ok((select relrowsecurity from pg_class where oid = 'public.location_source_constraints'::regclass), 'provider constraints have RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.location_publication_receipts'::regclass), 'publication receipts have RLS');
+select has_column('public', 'location_source_constraints', 'provider_snapshot_fingerprint', 'provider snapshot is bound');
+select has_column('public', 'location_source_constraints', 'disclosure_state', 'provider disclosure is explicit');
+select has_column('public', 'location_source_constraints', 'maximum_public_h3_resolution', 'provider resolution ceiling is explicit');
+select has_column('public', 'location_source_constraints', 'flickr_accuracy', 'Flickr accuracy evidence is retained');
+select has_column('public', 'location_publication_receipts', 'source_constraint_fingerprints', 'receipt retains provider lineage');
+select has_column('public', 'location_publication_receipts', 'policy_evidence_fingerprint', 'receipt retains policy evidence');
+select has_column('public', 'location_publication_receipts', 'effective_maximum_h3_resolution', 'receipt records strictest ceiling');
+select has_column('public', 'location_publication_receipts', 'scientific_claim_allowed', 'receipt cannot imply scientific truth');
+select col_type_is('public', 'location_source_constraints', 'flickr_accuracy', 'smallint', 'Flickr accuracy is bounded integer evidence');
+select col_type_is('public', 'location_publication_receipts', 'source_constraint_fingerprints', 'text[]', 'constraint lineage is an array');
+select has_index('public', 'location_source_constraints', 'location_source_constraints_project_species_idx', 'provider constraint scope is indexed');
+select has_index('public', 'location_publication_receipts', 'location_publication_receipts_geographic_impact_idx', 'map receipt FK is indexed');
+select has_index('public', 'location_publication_receipts', 'location_publication_receipts_release_candidate_idx', 'release receipt FK is indexed');
+select has_constraint('public', 'release_candidates', 'release_candidates_public_cell_h3_check', 'public release cells are H3-only');
+select has_trigger('public', 'location_source_constraints', 'location_source_constraints_validate', 'provider constraint lineage is validated');
+select has_trigger('public', 'location_source_constraints', 'location_source_constraints_reject_mutation', 'provider constraints are immutable');
+select has_trigger('public', 'location_publication_receipts', 'location_publication_receipts_validate', 'publication receipts are validated');
+select has_trigger('public', 'location_publication_receipts', 'location_publication_receipts_reject_mutation', 'publication receipts are immutable');
+select has_function('private', 'validate_location_source_constraint', array[]::text[], 'provider validation function exists');
+select has_function('private', 'validate_location_publication_receipt', array[]::text[], 'receipt validation function exists');
+select has_function('private', 'reject_sensitive_location_ledger_mutation', array[]::text[], 'append-only guard exists');
+select has_function('private', 'has_publishable_location_receipt', array['text', 'bigint'], 'public RLS helper exists');
+select ok(not has_table_privilege('anon', 'public.location_source_constraints', 'select'), 'anon cannot inspect provider constraints');
+select ok(not has_table_privilege('anon', 'public.location_publication_receipts', 'select'), 'anon cannot inspect private receipts');
+select ok(not has_table_privilege('anon', 'public.location_source_constraints', 'insert'), 'anon cannot write provider constraints');
+select ok(not has_table_privilege('anon', 'public.location_publication_receipts', 'insert'), 'anon cannot write receipts');
+select ok(has_table_privilege('authenticated', 'public.location_source_constraints', 'select'), 'authenticated role has RLS-scoped constraint reads');
+select ok(has_table_privilege('authenticated', 'public.location_publication_receipts', 'select'), 'authenticated role has RLS-scoped receipt reads');
+select ok(not has_table_privilege('authenticated', 'public.location_source_constraints', 'insert'), 'community users cannot write provider constraints');
+select ok(not has_table_privilege('authenticated', 'public.location_publication_receipts', 'insert'), 'community users cannot write receipts');
+select ok(has_table_privilege('service_role', 'public.location_source_constraints', 'insert'), 'service role can append provider constraints');
+select ok(has_table_privilege('service_role', 'public.location_publication_receipts', 'insert'), 'service role can append receipts');
+select ok(not has_table_privilege('service_role', 'public.location_source_constraints', 'update'), 'service role cannot update provider constraints');
+select ok(not has_table_privilege('service_role', 'public.location_publication_receipts', 'delete'), 'service role cannot delete receipts');
+select ok(exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'geographic_impact' and policyname = 'geographic_impact_public_read' and qual like '%has_publishable_location_receipt%'), 'public map policy requires a receipt');
+select ok(exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'release_candidates' and policyname = 'release_candidates_public_read' and qual like '%has_publishable_location_receipt%'), 'public release policy requires a receipt');
+select ok(has_function_privilege('anon', 'private.has_publishable_location_receipt(text,bigint)', 'execute'), 'anon can invoke only the fixed RLS helper');
+select ok(not has_function_privilege('anon', 'private.validate_location_publication_receipt()', 'execute'), 'anon cannot invoke receipt validation directly');
+select is((select count(*) from information_schema.columns where table_schema = 'public' and table_name in ('location_source_constraints', 'location_publication_receipts') and lower(column_name) ~ '(latitude|longitude)'), 0::bigint, 'sensitive ledgers contain no source coordinate columns');
+select ok(position('set search_path = ''''' in pg_get_functiondef('private.has_publishable_location_receipt(text,bigint)'::regprocedure)) > 0, 'RLS helper has an empty fixed search path');
+
+select * from finish();
+rollback;
