@@ -65,6 +65,10 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
             <a href="https://github.com/karikris/ButterflyLens/blob/main/PRIVACY.md">
               Community privacy policy
             </a>
+            {' · '}
+            <a href="https://github.com/karikris/ButterflyLens/blob/main/MODERATION.md">
+              Community safeguards
+            </a>
           </p>
         </div>
       </footer>

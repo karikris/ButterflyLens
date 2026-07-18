@@ -1,5 +1,11 @@
 # ButterflyLens Community Safeguards
 
+Policy version: `butterflylens-community-moderation:v1.0.0`
+
+Status: normative prelaunch policy. Community writes remain blocked until the
+privacy, retention, consent, operator-contact, and overseas-processing launch
+gates are closed.
+
 ButterflyLens exists to strengthen evidence through careful collaboration. Community participation must be safe, scientifically useful, accessible, and respectful of people, knowledge authorities, media owners, and sensitive species.
 
 ## Reviewer dignity
@@ -59,6 +65,45 @@ Every public comment and eligible media item must provide a report or rights-req
 6. notify downstream release workflows that earlier evidence is no longer eligible.
 
 Removal actions require an actor, timestamp, reason category, affected fingerprints, visibility effect, downstream effect, and resolution or appeal state. Public explanations must minimize personal information and never expose private reviewer-quality data.
+
+## Moderation workflow
+
+The versioned database workflow separates moderation from the immutable review
+event. It supports the following audited actions:
+
+1. An active project member may report a non-empty review comment once per
+   comment. The public case retains only a bounded reason category and a
+   server-generated generic summary;
+   reporter identity and detailed report remain in a private table.
+2. An active curator or administrator may hide or restore comment text through
+   the moderated projection. Hiding never updates or deletes the underlying
+   review decision, comment, fingerprint, dissent, or supersession lineage.
+3. A curator may suspend a reviewer or expert by pausing only that project
+   membership. Other project memberships and all earlier evidence remain
+   intact. This workflow cannot suspend a curator or administrator and cannot
+   be used by a curator against their own membership.
+4. A curator may open and complete a review audit. Completion requires an exact
+   audit-evidence fingerprint. An audit is not a reliability estimate,
+   scientific decision, or automatic misconduct finding.
+5. The affected reviewer may appeal an active hide or suspension even while
+   the membership is paused. An upheld appeal restores hidden content and/or
+   reinstates the paused membership in the same transaction where applicable;
+   a denied appeal changes neither. One exact appeal fingerprint is retained.
+6. Curators may add append-only notes. Note text is visible only to authorized
+   project curators and administrators; reporters and affected reviewers can
+   see that a note event occurred but not its content.
+
+Cases, events, appeals, reporter records, and curator notes are append-only.
+Every event has a contiguous per-case sequence, actor, bounded reason, sorted
+unique evidence fingerprints, explicit visibility and membership effects, and
+its own fingerprint. Closed cases reject further actions. Browser roles cannot
+insert, update, or delete ledger rows directly; exact authenticated RPCs enforce
+reporter, affected-reviewer, and curator authority.
+
+Moderation is not scientific truth. It must not alter reviewer reliability,
+manufacture consensus, erase minority dissent, approve an occurrence, or grant
+scientific authority. Evidence exclusion or release correction requires the
+separate governed audit, consensus, quality, and release workflows.
 
 ## Accessibility and conduct
 

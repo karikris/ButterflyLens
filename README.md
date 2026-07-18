@@ -25,3 +25,6 @@ Release remains blocked unless the executable licence and rights verifiers pass 
 Community account creation and write access remain blocked until the prelaunch
 [community privacy policy](PRIVACY.md) identifies the operator and private
 request channel and closes its retention and overseas-processing prerequisites.
+The versioned [community safeguards and moderation policy](MODERATION.md)
+preserves review evidence while supporting private reports, scoped enforcement,
+review audit, appeal, and curator notes.
