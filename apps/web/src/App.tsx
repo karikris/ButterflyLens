@@ -9,6 +9,7 @@ import { ContributorExperience } from './community/ContributorExperience'
 import { submittedContributorImpact } from './community/contributorImpactModel'
 import { AskButterflyLens } from './analyst/AskButterflyLens'
 import { OperationsDashboard } from './operations/OperationsDashboard'
+import { SubmittedEvidenceMap } from './map/SubmittedEvidenceMap'
 
 export function App() {
   const monitoringUrl = import.meta.env.VITE_BUTTERFLYLENS_MONITORING_URL || null
@@ -38,6 +39,7 @@ export function App() {
           </div>
         </dl>
       </section>
+      <SubmittedEvidenceMap />
       <ReviewLanding item={submittedReviewItem} qualifiedReviewer={false} />
       <SpeciesDirectory />
       <OperationsDashboard monitoringUrl={monitoringUrl} />
