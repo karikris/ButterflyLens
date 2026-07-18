@@ -28,6 +28,16 @@ from .media_pipeline import (
     MediaPipelinePolicy,
     run_bounded_media_pipeline,
 )
+from .restart import (
+    PUBLIC_OFFLINE_SCHEMA_VERSION,
+    RESTART_JOURNAL_SCHEMA_VERSION,
+    RESUME_PLAN_SCHEMA_VERSION,
+    CommittedWorkJournal,
+    RestartError,
+    WorkItem,
+    build_public_offline_projection,
+    build_resume_plan,
+)
 
 __all__ = [
     "HeartbeatError",
@@ -54,6 +64,14 @@ __all__ = [
     "MediaPipelineError",
     "MediaPipelinePolicy",
     "run_bounded_media_pipeline",
+    "PUBLIC_OFFLINE_SCHEMA_VERSION",
+    "RESTART_JOURNAL_SCHEMA_VERSION",
+    "RESUME_PLAN_SCHEMA_VERSION",
+    "CommittedWorkJournal",
+    "RestartError",
+    "WorkItem",
+    "build_public_offline_projection",
+    "build_resume_plan",
     "load_or_create_registration",
     "probe_machine_profile",
 ]

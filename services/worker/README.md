@@ -74,3 +74,19 @@ source paths.
 Rolling prefetch is disabled until an M5 measurement demonstrates a useful
 bounded setting. YOLOE, full-frame model inputs, BioCLIP, and scoring are
 recorded only as `unfinished_not_run`; no placeholder model evidence is made.
+
+## Interruption and offline behavior
+
+`restart.py` reconstructs a private append-only committed-work journal before
+resuming a lease/checkpoint pair. API calls, downloads, embeddings, and
+artifact commits use semantic input fingerprints: acknowledged committed work
+is reused, while interrupted work with no commit remains executable. The
+journal is fingerprint-checked, mode-`0600`, symlink-rejecting, and locked while
+appending; identical artifact recommits are idempotent and conflicting outputs
+fail closed.
+
+Public availability is independent of worker liveness. The offline projection
+keeps the immutable submitted snapshot queryable and continues serving the
+latest committed live snapshot as current-but-stale when heartbeats expire.
+This module defines and tests that domain contract; it does not deploy the web
+host or a remote journal, contact a provider, download media, or run a model.
