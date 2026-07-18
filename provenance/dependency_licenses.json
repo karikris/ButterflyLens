@@ -6,6 +6,13 @@
     "manager": "uv",
     "resolution": "cross-platform lock for Python >=3.12,<3.15"
   },
+  "additional_lockfiles": [
+    {
+      "path": "apps/web/package-lock.json",
+      "manager": "npm",
+      "resolution": "exact Vite/React application and test dependency tree"
+    }
+  ],
   "direct": [
     {
       "name": "h3",
@@ -51,6 +58,96 @@
       "source_distribution_sha256": "e545841329fe0eee4f6a3b44e7034343100c12b4ec566dc06ca9735681deb4da",
       "universal_wheel_sha256": "520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48",
       "bundled_notice_required": true
+    },
+    {
+      "name": "react",
+      "version": "19.2.7",
+      "purpose": "Public review user interface",
+      "licence": "MIT",
+      "scope": "production",
+      "source_url": "https://www.npmjs.com/package/react/v/19.2.7",
+      "bundled_notice_required": true
+    },
+    {
+      "name": "react-dom",
+      "version": "19.2.7",
+      "purpose": "Browser DOM rendering",
+      "licence": "MIT",
+      "scope": "production",
+      "source_url": "https://www.npmjs.com/package/react-dom/v/19.2.7",
+      "bundled_notice_required": true
+    },
+    {
+      "name": "@testing-library/jest-dom",
+      "version": "6.9.1",
+      "purpose": "Accessible DOM assertions",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/@testing-library/jest-dom/v/6.9.1"
+    },
+    {
+      "name": "@testing-library/react",
+      "version": "16.3.2",
+      "purpose": "React component interaction tests",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/@testing-library/react/v/16.3.2"
+    },
+    {
+      "name": "@types/react",
+      "version": "19.2.17",
+      "purpose": "React TypeScript declarations",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/@types/react/v/19.2.17"
+    },
+    {
+      "name": "@types/react-dom",
+      "version": "19.2.3",
+      "purpose": "React DOM TypeScript declarations",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/@types/react-dom/v/19.2.3"
+    },
+    {
+      "name": "@vitejs/plugin-react",
+      "version": "6.0.3",
+      "purpose": "Pinned Vite React transformation",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/@vitejs/plugin-react/v/6.0.3"
+    },
+    {
+      "name": "jsdom",
+      "version": "29.1.1",
+      "purpose": "Deterministic browser DOM test environment",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/jsdom/v/29.1.1"
+    },
+    {
+      "name": "typescript",
+      "version": "7.0.2",
+      "purpose": "Strict static type checking",
+      "licence": "Apache-2.0",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/typescript/v/7.0.2"
+    },
+    {
+      "name": "vite",
+      "version": "8.1.4",
+      "purpose": "Static application build",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/vite/v/8.1.4"
+    },
+    {
+      "name": "vitest",
+      "version": "4.1.10",
+      "purpose": "Component and interaction tests",
+      "licence": "MIT",
+      "scope": "development",
+      "source_url": "https://www.npmjs.com/package/vitest/v/4.1.10"
     }
   ],
   "transitive": [
@@ -99,6 +196,14 @@
       "source_distribution_sha256": "dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5",
       "universal_wheel_sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
       "environment_marker": "python_full_version < '3.13'"
+    },
+    {
+      "name": "scheduler",
+      "version": "0.27.0",
+      "required_by": ["react-dom"],
+      "licence": "MIT",
+      "source_url": "https://www.npmjs.com/package/scheduler/v/0.27.0",
+      "bundled_notice_required": true
     }
   ],
   "verification": {
@@ -107,15 +212,28 @@
       "h3==4.5.0",
       "jsonschema==4.26.0",
       "pyarrow==25.0.0",
-      "rfc8785==0.1.4"
+      "rfc8785==0.1.4",
+      "react==19.2.7",
+      "react-dom==19.2.7",
+      "@testing-library/jest-dom==6.9.1 (development)",
+      "@testing-library/react==16.3.2 (development)",
+      "@types/react==19.2.17 (development)",
+      "@types/react-dom==19.2.3 (development)",
+      "@vitejs/plugin-react==6.0.3 (development)",
+      "jsdom==29.1.1 (development)",
+      "typescript==7.0.2 (development)",
+      "vite==8.1.4 (development)",
+      "vitest==4.1.10 (development)"
     ],
     "locked_transitive_versions": [
       "attrs==26.1.0",
       "jsonschema-specifications==2025.9.1",
       "referencing==0.37.0",
       "rpds-py==2026.6.3",
-      "typing-extensions==4.16.0 (conditional)"
+      "typing-extensions==4.16.0 (conditional)",
+      "scheduler==0.27.0"
     ],
+    "additional_report": "apps/web/dependency-licenses.json (116 installed npm packages, exact versions and licences)",
     "unknown_or_unreviewed": []
   }
 }

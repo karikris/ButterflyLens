@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-17T21:12:00Z",
+  "generated_at": "2026-07-18T01:34:00Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -195,6 +195,18 @@
       "terms_url": "DATA_RIGHTS.md",
       "attribution": "iNaturalist photo creators and rights holders retained per candidate row; BioMiner download/decode provenance; ButterflyLens gate provenance.",
       "scope_note": "A strict CC0/CC-BY, attribution, exact-taxon, mirror-conflict, and approved-host lane selected 2,910 unreviewed provider-labelled rows. Local isolated decoding validated 2,906 objects; four HTTP 404 outcomes remain quarantined. The tracked evidence contains source identities, rights states, checksums, perceptual hashes, dimensions, and command reports but no source-image bytes. GBIF media hosts remain blocked."
+    },
+    {
+      "source_id": "wikimedia-commons-review-fixture-47248e36944c",
+      "provider": "Wikimedia Commons via an immutable TaxaLens fixture",
+      "dataset": "Single credential-free butterfly review fixture",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Common_Lime_Butterfly_Papilio_demoleus_UP_by_Kadavoor.jpg",
+      "retrieved_at": "2026-07-18T01:30:00Z",
+      "licence": "CC-BY-SA-4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "terms_url": "https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia",
+      "attribution": "Common Lime Butterfly Papilio demoleus UP by Kadavoor by Jeevan Jose, CC BY-SA 4.0",
+      "scope_note": "One exact JPEG was copied from karikris/taxalens commit c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc for a credential-free review replay. The provider identity is an assertion; the fixture is not representative and permits no scientific claim. The asset was renamed without altering its bytes."
     }
   ],
   "artifacts": [
@@ -817,6 +829,18 @@
       "source_id": "butterflylens-reference-admission-v1",
       "licence": "AGPL-3.0-only",
       "attribution": "ButterflyLens provisional reference-bank inventory; child artifacts retain their source-specific rights and attribution.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active"
+    },
+    {
+      "path": "apps/web/public/media/review-fixture-47248e36944c.jpg",
+      "fingerprint": "sha256:47248e36944cf91256c906e8454adcad99121da049260745d57f4cbffae65a78",
+      "provider": "Wikimedia Commons via karikris/taxalens@c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc",
+      "source_id": "wikimedia-commons-review-fixture-47248e36944c",
+      "licence": "CC-BY-SA-4.0",
+      "attribution": "Common Lime Butterfly Papilio demoleus UP by Kadavoor by Jeevan Jose, CC BY-SA 4.0",
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,

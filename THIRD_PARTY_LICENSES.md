@@ -57,11 +57,11 @@ The initial public map should render ButterflyLens-owned evidence layers and sep
 | Component | Candidate role | Licence | Evidence and obligation |
 | --- | --- | --- | --- |
 | jsonschema 4.26.0 | Draft 2020-12 Python contract and fixture validation | MIT | [jsonschema release](https://github.com/python-jsonschema/jsonschema/tree/v4.26.0). Preserve the licence notice. Exact direct and transitive versions, licences, and distribution hashes are recorded in `uv.lock` and `provenance/dependency_licenses.json`. |
-| React / React DOM | Public application UI | MIT | [React licence](https://github.com/facebook/react/blob/main/LICENSE). Preserve notice. |
+| React / React DOM 19.2.7 | Pinned public application UI | MIT | [React licence](https://github.com/facebook/react/blob/main/LICENSE). The exact npm resolution is committed in `apps/web/package-lock.json`; the production notice is bundled at `apps/web/public/THIRD_PARTY_LICENSES.txt`. |
 | React Aria Components | Accessible interaction primitives | Apache-2.0 | [React Spectrum repository](https://github.com/adobe/react-spectrum). Preserve licence and `NOTICE`. |
-| Vite and official React plugin | Build system | MIT | [Vite repository](https://github.com/vitejs/vite). Generate and publish the production dependency licence report. |
-| TypeScript | Type checking and compiler | Apache-2.0 | [TypeScript repository](https://github.com/microsoft/TypeScript). Preserve applicable notice when redistributed. |
-| Vitest | Unit/component tests | MIT | [Vitest repository](https://github.com/vitest-dev/vitest). Development-only unless a production bundle proves otherwise. |
+| Vite 8.1.4 and official React plugin 6.0.3 | Pinned build system | MIT | [Vite repository](https://github.com/vitejs/vite). The generated dependency report covers the complete installed build tree. |
+| TypeScript 7.0.2 | Pinned type checking and compiler | Apache-2.0 | [TypeScript repository](https://github.com/microsoft/TypeScript). Preserve applicable notice when redistributed. |
+| Vitest 4.1.10 | Pinned unit/component tests | MIT | [Vitest repository](https://github.com/vitest-dev/vitest). Development-only; it is absent from the production bundle. |
 | Playwright | Chromium/Firefox/WebKit E2E and visual testing | Apache-2.0 | [Playwright repository](https://github.com/microsoft/playwright). Preserve licence and `NOTICE`; browser binaries carry their own terms/notices. |
 | OpenAI JavaScript/TypeScript SDK | Server-side Responses API client | Apache-2.0 | [Official SDK licence](https://github.com/openai/openai-node/blob/main/LICENSE). API/service terms and model availability are separate runtime gates. |
 

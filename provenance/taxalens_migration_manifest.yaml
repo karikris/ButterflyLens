@@ -1,5 +1,5 @@
 schema_version: butterflylens-taxalens-migration-v1
-updated_at: "2026-07-17T14:50:42Z"
+updated_at: "2026-07-18T01:34:00Z"
 source_snapshot:
   repository: karikris/taxalens
   commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -92,6 +92,24 @@ components:
     tests:
       - Planned deterministic tool, citation, budget, unavailable-evidence, and stored-replay evaluation.
     status: planned
+  - component_id: taxalens-wikimedia-review-fixture-47248e36944c
+    source_repository: karikris/taxalens
+    source_commit: c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc
+    source_path: apps/web/src/review/assets/papilio-demoleus-open-wing.jpg
+    destination_path: apps/web/public/media/review-fixture-47248e36944c.jpg
+    migration_kind: copied
+    reason: Provide one credential-free, rights-cleared image for the review-first landing experience without importing the Papilio campaign bundle.
+    build_week_scope: modified-existing
+    source_license: CC-BY-SA-4.0
+    changes:
+      - Preserve the exact JPEG bytes and SHA-256 while renaming the file to avoid leaking a provider label through its public path.
+      - Retain creator, source, licence, attribution, immutable origin commit, provider-assertion, non-representative, and no-scientific-claim metadata.
+      - Ask a generic blinded butterfly question and enable scientific responses only after the integrity-checked image loads.
+    tests:
+      - Exact media SHA-256, byte count, rights fields, and no-scientific-claim verification.
+      - Component tests for attribution, blinded readiness, successful load, and unavailable-media fallback.
+      - Repository rights-manifest fingerprint and permission verification.
+    status: verified
 butterflylens_owned_changes:
   - ownership_id: australia-wide-community-product
     status: planned
@@ -119,7 +137,7 @@ butterflylens_owned_changes:
       - Human taxonomic resolution evidence for open cross-provider conflicts.
       - Authorized First Nations language-name assertions only if a relevant community later grants purpose-specific permission.
   - ownership_id: community-accounts
-    status: planned
+    status: partially_implemented
     upstream_boundary: Credential-free local IndexedDB review and optional static repository snapshots.
     butterflylens_responsibility: Supabase Auth, least-privilege RLS, roles, assignments, consent, private metadata, moderation, and audit.
   - ownership_id: private-reviewer-reliability
@@ -127,7 +145,7 @@ butterflylens_owned_changes:
     upstream_boundary: Aggregate anonymous agreement and control-set metrics with unweighted human consensus.
     butterflylens_responsibility: Private domain-specific uncertainty-aware estimates shrunk toward equal weight, with no public ranking or model-vote shortcut.
   - ownership_id: contributor-experience
-    status: planned
+    status: partially_implemented
     upstream_boundary: Researcher-oriented fixture mission, evidence, local review, dashboard, and replay.
     butterflylens_responsibility: Accessible onboarding, consent, attribution, history, correction, escalation, adjudication, moderation, takedown, and dignity safeguards.
   - ownership_id: ala-comparison
@@ -135,7 +153,7 @@ butterflylens_owned_changes:
     upstream_boundary: GBIF and optional direct-iNaturalist provider-union architecture; no ALA baseline adapter or comparison.
     butterflylens_responsibility: Rights-aware ALA snapshots, sensitive-data controls, taxon reconciliation, conservative provider union, and explicit candidate/review/release comparison.
 notes:
-  - No TaxaLens code, generated data, media, model, build, or runtime artifact has been copied.
+  - One exact rights-cleared Wikimedia Commons review fixture was copied from an immutable TaxaLens commit; no TaxaLens code, generated data, model, build, broad fixture bundle, or runtime artifact was copied.
   - Completed entries are original ButterflyLens contract adaptations bound to the immutable TaxaLens source; they are not broad source copies.
   - Quality estimation is partial and the evidence-tool adapter remains planned; neither may be reported as implemented.
   - The static Papilio replay and its measurements are evidence about TaxaLens, not ButterflyLens fixtures or outcomes.

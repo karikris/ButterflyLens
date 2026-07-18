@@ -249,10 +249,9 @@ application copying. The candidate order is:
 
 ButterflyLens will not import the TaxaLens React shell, Papilio judge bundle,
 fixture measurements, local IndexedDB repository, static deployment identity,
-or broad source directories. Every accepted component remains `planned` in
-`provenance/taxalens_migration_manifest.yaml` until a later focused commit
-records an exact destination, copied or adapted content, licence handling, and
-tests.
+or broad source directories. Each accepted component must be recorded in
+`provenance/taxalens_migration_manifest.yaml` with an exact destination,
+copied or adapted content, licence handling, and tests.
 
 ## Verification performed
 
@@ -270,7 +269,30 @@ same pinned source then passed all 111 tests. The failed infrastructure attempt
 is not counted as a product failure or hidden as a successful run.
 
 No TaxaLens source, data, media, model, build output, or runtime artifact was
-copied into ButterflyLens during this audit.
+copied into ButterflyLens during this initial audit.
+
+## Task 8.2 focused media integration
+
+A later focused inspection used immutable TaxaLens commit
+`c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc`; its dirty working tree was not
+used. ButterflyLens copied exactly one asset from
+`apps/web/src/review/assets/papilio-demoleus-open-wing.jpg` to
+`apps/web/public/media/review-fixture-47248e36944c.jpg`. The bytes are unchanged:
+180,698-byte JPEG, SHA-256
+`47248e36944cf91256c906e8454adcad99121da049260745d57f4cbffae65a78`.
+
+The corresponding immutable campaign manifest records creator and rights
+holder Jeevan Jose, the Wikimedia Commons source, and CC BY-SA 4.0. Those
+details were independently rechecked against the current Wikimedia Commons
+file page and Creative Commons deed on 18 July 2026. Attribution is visible in
+the interface and recorded in the data-rights manifest.
+
+Only the image was copied. No TaxaLens component, campaign bundle, target
+label, review history, measurement, generated data, model, build, or runtime
+artifact was imported. The public filename and generic question avoid leaking
+the provider label before review. Provider identity remains an assertion; the
+fixture is non-representative and permits no scientific claim. Scientific
+choices remain disabled until the fingerprinted image actually loads.
 
 ## ButterflyLens product ownership boundary
 

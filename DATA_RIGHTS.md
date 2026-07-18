@@ -223,6 +223,26 @@ and human-review evidence as applicable.
 - Model embeddings do not erase source rights. Removal propagation may invalidate or require rebuilding an embedding, prototype, score, review item, map cell, quality snapshot, release candidate, or export.
 - ButterflyLens never redistributes provider training datasets or represents model weights as licensing their training images.
 
+## Bundled review fixture
+
+The review-first landing page bundles one credential-free JPEG from Wikimedia
+Commons, copied byte-for-byte from immutable TaxaLens commit
+`c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc` and renamed to its content
+fingerprint. Its SHA-256 is
+`47248e36944cf91256c906e8454adcad99121da049260745d57f4cbffae65a78`.
+
+Attribution: “Common Lime Butterfly Papilio demoleus UP by Kadavoor by Jeevan
+Jose, CC BY-SA 4.0.” The [Wikimedia Commons source](https://commons.wikimedia.org/wiki/File:Common_Lime_Butterfly_Papilio_demoleus_UP_by_Kadavoor.jpg)
+identifies Jeevan Jose as author and copyright holder and offers the file under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The page shows
+the attribution and both links next to the image.
+
+This is a provider-labelled fixture, not occurrence evidence, a representative
+sample, or verified taxonomic truth. Its target label stays hidden from the
+review question, `scientificClaimAllowed` is false, and scientific controls
+remain disabled until the integrity-checked image loads. Removal or rights
+withdrawal blocks display and requires removal of the bundled derivative.
+
 ## Australian boundary datasets
 
 ### ABS ASGS

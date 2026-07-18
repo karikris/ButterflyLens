@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "butterflylens-review-media/v1",
+  "assetPath": "public/media/review-fixture-47248e36944c.jpg",
+  "publicSrc": "/media/review-fixture-47248e36944c.jpg",
+  "sha256": "47248e36944cf91256c906e8454adcad99121da049260745d57f4cbffae65a78",
+  "byteCount": 180698,
+  "mediaType": "image/jpeg",
+  "width": 960,
+  "height": 634,
+  "origin": {
+    "repository": "karikris/taxalens",
+    "commit": "c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc",
+    "sourcePath": "apps/web/src/review/assets/papilio-demoleus-open-wing.jpg"
+  },
+  "provider": "Wikimedia Commons",
+  "sourceObservationId": "commons-file:Common_Lime_Butterfly_Papilio_demoleus_UP_by_Kadavoor.jpg",
+  "sourceMediaId": "commons-file:Common_Lime_Butterfly_Papilio_demoleus_UP_by_Kadavoor.jpg",
+  "identityState": "provider_asserted",
+  "representative": false,
+  "scientificClaimAllowed": false,
+  "rights": {
+    "creator": "Jeevan Jose",
+    "rightsHolder": "Jeevan Jose",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUri": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": "Common Lime Butterfly Papilio demoleus UP by Kadavoor by Jeevan Jose, CC BY-SA 4.0",
+    "sourceUri": "https://commons.wikimedia.org/wiki/File:Common_Lime_Butterfly_Papilio_demoleus_UP_by_Kadavoor.jpg"
+  }
+}

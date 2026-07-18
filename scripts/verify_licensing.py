@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -94,6 +95,74 @@ def verify() -> None:
         )
         if not manifest.get("direct"):
             raise VerificationError("dependency licence manifest has no direct dependencies")
+
+    web_manifest_path = "apps/web/package.json"
+    if web_manifest_path in tracked:
+        required_web_files = {
+            "apps/web/package-lock.json",
+            "apps/web/dependency-licenses.json",
+            "apps/web/public/THIRD_PARTY_LICENSES.txt",
+        }
+        missing_web_files = sorted(required_web_files - tracked)
+        if missing_web_files:
+            raise VerificationError(
+                f"web dependency evidence is incomplete: {missing_web_files}"
+            )
+
+        web_manifest = require_json_object(
+            web_manifest_path, ("dependencies", "devDependencies")
+        )
+        direct_web_dependencies = {
+            **web_manifest["dependencies"],
+            **web_manifest["devDependencies"],
+        }
+        non_exact = {
+            name: version
+            for name, version in direct_web_dependencies.items()
+            if not isinstance(version, str)
+            or re.fullmatch(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?", version) is None
+        }
+        if non_exact:
+            raise VerificationError(
+                f"web dependencies must use exact versions: {non_exact}"
+            )
+
+        web_lock = require_json_object(
+            "apps/web/package-lock.json", ("lockfileVersion", "packages")
+        )
+        locked_root = web_lock["packages"].get("", {})
+        for section in ("dependencies", "devDependencies"):
+            if locked_root.get(section) != web_manifest[section]:
+                raise VerificationError(
+                    f"web lock root {section} does not match package.json"
+                )
+
+        web_licenses = require_json_object(
+            "apps/web/dependency-licenses.json",
+            ("schema_version", "lockfile", "allowed_licenses", "packages"),
+        )
+        packages = web_licenses["packages"]
+        if not isinstance(packages, list) or not packages:
+            raise VerificationError("web dependency licence report is empty")
+        allowed = set(web_licenses["allowed_licenses"])
+        invalid_packages = [
+            package.get("name", "<unknown>")
+            if isinstance(package, dict)
+            else "<invalid>"
+            for package in packages
+            if not isinstance(package, dict)
+            or package.get("license") not in allowed
+            or not package.get("version")
+        ]
+        if invalid_packages:
+            raise VerificationError(
+                f"web dependency licence report has invalid rows: {invalid_packages}"
+            )
+
+        require_text(
+            "apps/web/public/THIRD_PARTY_LICENSES.txt",
+            ("react 19.2.7", "react-dom 19.2.7", "scheduler 0.27.0", "MIT License"),
+        )
 
     model_files = {
         path
