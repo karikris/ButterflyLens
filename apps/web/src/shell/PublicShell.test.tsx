@@ -1,0 +1,54 @@
+import { render, screen, within } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
+import { App } from '../App'
+import { PublicShell, primaryNavigation } from './PublicShell'
+
+describe('public application shell', () => {
+  it('publishes the exact primary navigation once and in order', () => {
+    render(
+      <PublicShell>
+        <p>Test content</p>
+      </PublicShell>,
+    )
+
+    const navigation = screen.getByRole('navigation', { name: 'Primary' })
+    const links = within(navigation).getAllByRole('link')
+    expect(links.map((link) => link.textContent)).toEqual(
+      primaryNavigation.map((item) => item.label),
+    )
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(
+      primaryNavigation.map((item) => item.href),
+    )
+    expect(links[0]).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('provides one skip target and the expected page landmarks', () => {
+    render(
+      <PublicShell>
+        <p>Test content</p>
+      </PublicShell>,
+    )
+
+    expect(screen.getByRole('link', { name: 'Skip to main content' })).toHaveAttribute(
+      'href',
+      '#main-content',
+    )
+    expect(screen.getByRole('banner')).toBeInTheDocument()
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content')
+    expect(screen.getByRole('contentinfo')).toHaveAttribute('id', 'about')
+  })
+
+  it('resolves every application navigation fragment to a real landmark', () => {
+    render(<App />)
+
+    const navigation = screen.getByRole('navigation', { name: 'Primary' })
+    for (const link of within(navigation).getAllByRole('link')) {
+      const href = link.getAttribute('href')
+      expect(href).toMatch(/^#[a-z-]+$/u)
+      expect(document.querySelector(href!)).not.toBeNull()
+    }
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
+    expect(screen.getAllByText('Surface scheduled')).toHaveLength(4)
+  })
+})

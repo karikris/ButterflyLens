@@ -67,11 +67,11 @@ export function ReviewLanding({
   }
 
   return (
-    <article className="review-landing" aria-labelledby="review-heading">
+    <article id="verify" className="review-landing" aria-labelledby="review-heading">
       <header className="review-intro">
         <div>
           <p className="eyebrow">Help verify Australia’s butterfly evidence</p>
-          <h1 id="review-heading">One careful look can strengthen the record.</h1>
+          <h2 id="review-heading">One careful look can strengthen the record.</h2>
           <p className="review-intro__lede">
             Review what is visible, abstain when evidence is weak, and leave the
             scientific release decision to the full evidence process.

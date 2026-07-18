@@ -10,6 +10,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "apps/web/src"
 DESIGN = WEB / "design-system"
+SHELL = WEB / "shell"
 CONTRACT = DESIGN / "visualSystem.json"
 
 
@@ -19,8 +20,11 @@ class WebVisualSystemTests(unittest.TestCase):
         cls.contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
         cls.foundation = (DESIGN / "foundations.css").read_text(encoding="utf-8")
         cls.primitives = (DESIGN / "primitives.css").read_text(encoding="utf-8")
+        cls.shell = (SHELL / "publicShell.css").read_text(encoding="utf-8")
         cls.page = (WEB / "styles.css").read_text(encoding="utf-8")
-        cls.all_css = "\n".join((cls.foundation, cls.primitives, cls.page))
+        cls.all_css = "\n".join(
+            (cls.foundation, cls.primitives, cls.shell, cls.page)
+        )
 
     def test_contract_palette_is_exactly_projected_to_css(self) -> None:
         self.assertEqual(

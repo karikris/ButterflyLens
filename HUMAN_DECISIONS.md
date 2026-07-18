@@ -37,3 +37,12 @@ This append-oriented record captures product or governance decisions made by Kri
   scientific-editorial, optimistic, evidence-disciplined, responsive, and
   accessible.
 - Do not use generic AI gradients or an admin-template appearance.
+
+## 2026-07-18 — Public application navigation
+
+- Publish the main navigation in this order: Explore, Verify, Species, Live,
+  Quality, Contributors, Ask ButterflyLens, and About.
+- Use one responsive semantic navigation for desktop and mobile, with a
+  focusable skip target and a real document landmark for every link.
+- Until their numbered implementation tasks are complete, show future surfaces
+  as explicitly scheduled previews rather than dead links or completion claims.

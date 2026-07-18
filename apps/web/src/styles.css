@@ -1,71 +1,7 @@
-.skip-link {
-  position: fixed;
-  z-index: 20;
-  top: 0.75rem;
-  left: 0.75rem;
-  padding: 0.7rem 1rem;
-  color: white;
-  background: var(--green);
-  border-radius: 0.5rem;
-  transform: translateY(-150%);
-}
-
-.skip-link:focus {
-  transform: translateY(0);
-}
-
-.app-shell {
-  min-height: 100vh;
-}
-
-.site-header,
-.site-footer,
 .review-landing,
 .quality-dashboard {
   width: min(var(--bl-content-wide), calc(100% - 2rem));
   margin-inline: auto;
-}
-
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 1.2rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.brand-mark {
-  display: grid;
-  width: 2.65rem;
-  height: 2.65rem;
-  color: #fff;
-  font-family: var(--bl-font-editorial);
-  font-weight: 700;
-  background: var(--green);
-  border-radius: 50% 42% 48% 44%;
-  place-items: center;
-}
-
-.brand strong,
-.brand small {
-  display: block;
-}
-
-.brand small {
-  margin-top: 0.1rem;
-  color: var(--ink-soft);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .review-landing {
@@ -88,7 +24,7 @@
   text-transform: uppercase;
 }
 
-.review-intro h1 {
+.review-intro h2 {
   max-width: 790px;
   margin-bottom: 1rem;
   font-size: var(--bl-text-display);
@@ -741,20 +677,6 @@ dd {
   overflow-wrap: anywhere;
 }
 
-.site-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 1.5rem 2.5rem;
-  color: var(--ink-soft);
-  font-size: 0.82rem;
-  border-top: 1px solid var(--line);
-}
-
-.site-footer p {
-  margin: 0;
-}
-
 @media (max-width: 820px) {
   .review-intro,
   .review-grid,
@@ -783,19 +705,6 @@ dd {
 }
 
 @media (max-width: 520px) {
-  .site-header {
-    align-items: flex-start;
-  }
-
-  .brand small {
-    display: none;
-  }
-
-  .site-header > .bl-state-badge {
-    max-width: 7rem;
-    text-align: center;
-  }
-
   .review-landing {
     padding-top: 2rem;
   }
@@ -811,7 +720,7 @@ dd {
     grid-template-columns: 1fr;
   }
 
-  .review-intro h1 {
+  .review-intro h2 {
     font-size: 2.7rem;
   }
 
@@ -833,9 +742,6 @@ dd {
     gap: 0.25rem;
   }
 
-  .site-footer {
-    display: grid;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

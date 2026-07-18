@@ -9,7 +9,7 @@ export function QualityDashboard({
   const qualityAvailable = snapshot.precision.availability === 'estimated'
   return (
     <section
-      id="quality-dashboard"
+      id="quality"
       className="quality-dashboard"
       aria-labelledby="quality-dashboard-heading"
     >
