@@ -1,0 +1,107 @@
+{
+  "schema_version": "butterflylens-codex-session/v1",
+  "session_id": "019f7038-92ae-7021-8318-53ca97648404",
+  "session_id_source": "CODEX_THREAD_ID environment variable observed directly in the primary repository session",
+  "feedback": {
+    "command": "/feedback",
+    "session_id": "019f7038-92ae-7021-8318-53ca97648404",
+    "command_invoked": false,
+    "feedback_submission_observed": false,
+    "status": "identifier_recorded_command_unavailable",
+    "limitation": "This API tool surface exposes the non-secret primary session identifier but no slash-command invocation mechanism. The /feedback Session ID is recorded without claiming that feedback was opened or submitted."
+  },
+  "audit_boundary": {
+    "repository": "karikris/ButterflyLens",
+    "branch": "main",
+    "first_commit": "db0657fd432b698c167d559328a57b0befef6664",
+    "audited_through_commit": "8ebbd37a7169d1b0a38e1f6fb6a3e0aac39bbb97",
+    "audited_through_tree": "5054e8e11aed89b0ce1517f788a033546d158090",
+    "audited_remote_sha": "8ebbd37a7169d1b0a38e1f6fb6a3e0aac39bbb97",
+    "containing_finalization_commit": null,
+    "containing_commit_limitation": "A Git commit cannot embed its own full commit SHA without a self-reference. The exact Task 17.5 containing commit must be verified from remote main after push."
+  },
+  "codex": {
+    "provider": "OpenAI Codex",
+    "requested_primary_model": "gpt-5.6-sol",
+    "requested_reasoning_effort": "xhigh",
+    "reasoning_mode": "standard",
+    "runtime_model_identity_observed": false,
+    "supporting_models": [],
+    "subagents_used": false,
+    "activity_records": 105,
+    "activity_record_scope": "Every model-usage record through Task 17.5 names this session, requested model, and requested effort. These records do not independently prove runtime model identity."
+  },
+  "application_analyst": {
+    "live_target_model": "gpt-5.6-sol",
+    "submitted_replay_model_calls": 0,
+    "submitted_replay_network_calls": 0,
+    "live_evaluation_completed": false,
+    "live_deployment_verified": false,
+    "boundary": "The application's GPT-5.6 analyst target is separate from Codex repository work. Submitted answers are project-authored, fingerprinted, model-free stored replays."
+  },
+  "provenance_counts": {
+    "audited_git_commits": 120,
+    "commit_receipts": 120,
+    "push_receipts": 77,
+    "task_reports_after_finalization_patch": 65,
+    "task_plans_after_finalization_patch": 39,
+    "biominer_component_records": 15,
+    "taxalens_component_records": 17,
+    "copied_upstream_assets": 1,
+    "human_decision_sections_after_finalization_patch": 15,
+    "human_review_attestations": 0
+  },
+  "provenance_artifacts": [
+    {
+      "path": "BUILD_WEEK_BASELINE.md",
+      "sha256": "db897fd4f1ce9a8c2b32031344924ab7eb4aa46031c8fb629e2fe65cc7c86a1d"
+    },
+    {
+      "path": "provenance/commits.jsonl",
+      "sha256": "f863e108f8fb3f0acdd38fa20a2b7a40191953c51ef4deefee430ce63a0ca02e"
+    },
+    {
+      "path": "provenance/model_usage.jsonl",
+      "sha256": "d8f06384300002310976799a15caeef31d302b5517d3e3e302793ebd0de837b4"
+    },
+    {
+      "path": "provenance/githits.jsonl",
+      "sha256": "0f9e657c7a757391e13a774466d7d419bc056c4d93c5d54995b3b64a07ce9549"
+    },
+    {
+      "path": "provenance/valyu.jsonl",
+      "sha256": "ea76bb589aaff9b8e6dde50d6b8ef26eb7fbf6beef6d413d2a4eec4175b054d4"
+    },
+    {
+      "path": "provenance/biominer_migration_manifest.yaml",
+      "sha256": "68a5d5cdd314844fa200916764334453c28532f476e13198e4beb7ae3921e9bb"
+    },
+    {
+      "path": "provenance/taxalens_migration_manifest.yaml",
+      "sha256": "6bb61fe70c044d168d24d57ce0141e6c32be33483a82d5e54bcf911760ca77b5"
+    }
+  ],
+  "headroom": {
+    "skill_used": true,
+    "compression_hashes": [
+      "504a09159e203964093d4131",
+      "7621abd7c83707de1ab1f539",
+      "6f5fcc419eaba18612635562"
+    ],
+    "exact_source_retrieval_required_for_omitted_details": true
+  },
+  "human_boundary": {
+    "product_owner": "Kris Kari",
+    "decisions_recorded_separately": true,
+    "post_change_review_attested": false,
+    "submission_approved": false,
+    "public_video_approved": false
+  },
+  "security": {
+    "contains_credentials": false,
+    "contains_access_tokens": false,
+    "contains_private_keys": false,
+    "contains_reviewer_identity": false,
+    "contains_private_worker_telemetry": false
+  }
+}

@@ -145,3 +145,35 @@ This append-oriented record captures product or governance decisions made by Kri
   self-test must remain labelled synthetic and `model_invoked: false`.
 - Do not change the frozen prompt, model, effort, or budgets on the strength of
   offline oracle success alone; live evaluation and human review remain needed.
+
+## 2026-07-18 — Execution, parallel handoff, and immutable sources
+
+- Commit after each numbered subtask, push each completed task, and continue to
+  the next safe task without waiting.
+- Acknowledge and follow the updated ignored `AGENTS.md` and `docs/agents/`
+  instruction pack while preserving those user-owned untracked paths.
+- Inspect BioMiner only when work overlaps. If its work is still active, record
+  the state and continue; copy only a complete immutable handoff after it is
+  published. Do not copy partial worktree outputs.
+- Treat the user-supplied GBIF occurrence download
+  `0004170-260715120105164.zip` as the authoritative future GBIF source after
+  that handoff. The user supplied 571,755 Australian Papilionoidea records, DOI
+  `10.15468/dl.7uut3k`, creation time `2026-07-18T01:42:19`, and citation
+  “GBIF.org (18 July 2026) GBIF Occurrence Download
+  https://doi.org/10.15468/dl.7uut3k”. These are operator-supplied source details,
+  not evidence that the archive has been copied, fingerprinted, converted to
+  Parquet, or admitted to ButterflyLens.
+- Keep the rebuilt ButterflyLens ALA baseline authoritative after inspecting
+  legacy ALA alternatives; do not let a legacy repository silently supersede
+  it.
+- Do not call GitHits again for the rest of the goal because it is unavailable.
+  Do not make a Flickr API call during this goal.
+
+## 2026-07-18 — Supabase MCP authorization boundary
+
+- Open and complete Supabase MCP OAuth for project
+  `ujfsrohgsrmssmfqgdsp`.
+- Authorization alone does not approve a database, Edge Function, B2, auth,
+  storage, or production mutation. The current client session requires an MCP
+  reload before Supabase tools can appear, so no live-state or deployment claim
+  may be inferred from OAuth success.

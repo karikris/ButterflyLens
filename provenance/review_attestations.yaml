@@ -1,11 +1,11 @@
 schema_version: 1
-updated_at: "2026-07-17T13:28:43Z"
+updated_at: "2026-07-18T15:22:01Z"
 
 attestations: []
 
 pending_review:
-  - scope: "Phase 0 repository initialization"
-    reason: "No post-change human review has yet been explicitly attested."
+  - scope: "ButterflyLens Build Week delta through Task 17.5"
+    reason: "No post-change human review, final submission approval, or public-video approval has yet been explicitly attested."
 
 human_decisions:
   - decided_at: "2026-07-17"
@@ -16,4 +16,3 @@ human_decisions:
     decided_by: "Kris Kari"
     decision: "Add AGENTS.md to .gitignore."
     source: "Direct chat instruction in the primary Codex session."
-

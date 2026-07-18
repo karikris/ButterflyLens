@@ -1,6 +1,9 @@
 # Codex Collaboration Record
 
-ButterflyLens is being created with OpenAI Codex under the product and scientific requirements supplied by Kris Kari. This record explains what is machine-authored, what is human-directed, and which runtime facts have direct evidence.
+ButterflyLens was built with OpenAI Codex under the product and scientific
+requirements supplied by Kris Kari. This record explains what is
+machine-authored, what is human-directed, and which runtime facts have direct
+evidence.
 
 ## Primary session
 
@@ -14,6 +17,64 @@ ButterflyLens is being created with OpenAI Codex under the product and scientifi
 | Repository start | `2026-07-17T13:25:55Z` |
 
 The thread ID is read directly from the execution environment. The model and reasoning values are the required configuration in the supplied build contract. This repository does not claim a separately observed runtime model identifier because the execution environment has not exposed one beyond that contract.
+
+## Final session and activity receipt
+
+The non-secret primary environment identifier is also the recorded `/feedback`
+Session ID:
+
+```text
+019f7038-92ae-7021-8318-53ca97648404
+```
+
+The API tool surface used for this work does not expose slash-command
+invocation. The identifier is therefore recorded without claiming `/feedback`
+was opened or submitted. The machine-readable
+[session receipt](provenance/sessions/019f7038-92ae-7021-8318-53ca97648404.json)
+preserves that boundary.
+
+At the Task 17.5 audit boundary:
+
+| Evidence | Exact state |
+| --- | --- |
+| Audited Git range | `db0657fd432b698c167d559328a57b0befef6664` through `8ebbd37a7169d1b0a38e1f6fb6a3e0aac39bbb97` |
+| Pre-finalization commits | 120 non-merge commits |
+| Commit receipts / task push receipts | 120 / 77 |
+| Model-usage activity records | 105, including Task 17.5 |
+| Session IDs in model ledger | 105 records use the one ID above |
+| Requested model / effort | 105 × `gpt-5.6-sol` / `xhigh` |
+| Runtime model identity observed | 0 records; all 105 are `false` |
+| Supporting models or subagents | none |
+| Human post-change attestations | 0 |
+
+The exact Task 17.5 commit cannot embed its own full Git SHA without
+self-reference. Its parent/audit input is fixed above; the containing commit and
+remote `main` SHA are verified after push.
+
+## Authorship and responsibility
+
+Kris Kari supplied the product goal, competition specification, scientific and
+governance constraints, exact winning line, authoritative-source decisions,
+parallel-work boundaries, and commit/push instructions. These are human
+decisions, not human review attestations.
+
+Codex authored or adapted the ButterflyLens repository code, contracts,
+database migrations, data builders, application, deterministic fixtures, tests,
+policies, release gates, documentation, and append-only provenance under those
+instructions. Codex also ran the documented local and public verification
+steps. It did not supply butterfly identities, provider rights, community
+reviews, expert decisions, scientific ground truth, live-worker observations,
+or human approval.
+
+The application-level GPT-5.6 analyst is a separate bounded runtime target. The
+Submitted experience contains project-authored, fingerprinted stored replays
+with zero model and network calls. No live GPT-5.6 evaluation or production
+analyst deployment is claimed.
+
+The user required exact commit subjects. That explicit instruction took
+precedence over the repository's longer trailer template; the append-only
+commit, model, tool, plan, and task-report ledgers carry the corresponding
+machine-readable provenance without inventing human review.
 
 ## Collaboration rules
 
@@ -69,3 +130,9 @@ GitHits was invoked before Task 0.1. The single request remained pending without
 ## Human review
 
 Human instructions and human review attestations are different evidence. Product decisions supplied in the build contract and subsequent chat messages are recorded as decisions. Post-change review is recorded only when a human explicitly performs or confirms it. An empty attestation ledger therefore does not imply review.
+
+The final attestation ledger remains empty. Kris Kari still needs to review and
+approve the product state, scientific wording, media/rights presentation,
+competition copy, final video, and external submission. OAuth authorization,
+user directions, test success, Codex verification, and public deployment do not
+substitute for that approval.
