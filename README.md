@@ -12,7 +12,7 @@
   </a>
 </p>
 
-[**Help Verify →**](https://karikris.github.io/ButterflyLens/#verify) · [**Open Live Map →**](https://karikris.github.io/ButterflyLens/#live) · [**Run Submitted Replay →**](https://karikris.github.io/ButterflyLens/)
+[**Help Verify →**](https://karikris.github.io/ButterflyLens/#verify) · [**Open Live Map →**](https://karikris.github.io/ButterflyLens/#live) · [**Run Submitted Replay →**](https://karikris.github.io/ButterflyLens/) · [**Judge Guide →**](JUDGE_GUIDE.md)
 
 | Submitted replay | Current worker status | Measured result |
 | --- | --- | --- |
