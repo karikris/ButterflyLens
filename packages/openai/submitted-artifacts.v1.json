@@ -1,0 +1,116 @@
+{
+  "schema_version": "butterflylens-openai-artifact-registry:v1.0.0",
+  "snapshot_mode": "submitted",
+  "repository": "karikris/ButterflyLens",
+  "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+  "artifacts": [
+    {
+      "key": "species_catalogue",
+      "artifact_id": "butterflylens:submitted-species-catalogue",
+      "path": "apps/web/src/species/submittedSpeciesCatalogue.json",
+      "sha256": "6d774e68abd6f29affb5dcfc220d0c5e4759e74c434f0f720f655e19f9a5d6f9"
+    },
+    {
+      "key": "quality_projection",
+      "artifact_id": "butterflylens:submitted-quality-projection",
+      "path": "apps/web/src/quality/submittedQualityProjection.json",
+      "sha256": "2022327e885ad344948dcb20a9f7545cc6eff76e37f64671629d782bf0247928"
+    },
+    {
+      "key": "contributor_projection",
+      "artifact_id": "butterflylens:submitted-contributor-impact",
+      "path": "apps/web/src/community/submittedContributorImpact.json",
+      "sha256": "bd91f704296577c8067ee1474f4c1d4316488c69dd95b4ad11f02e7dfc0b0e1a"
+    },
+    {
+      "key": "taxonomy_pack",
+      "artifact_id": "butterflylens:australian-butterflies-v1",
+      "path": "data/packs/australian_butterflies/v1/manifest.json",
+      "sha256": "41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a"
+    },
+    {
+      "key": "ala_snapshot",
+      "artifact_id": "butterflylens:ala-submitted-snapshot",
+      "path": "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json",
+      "sha256": "f16cb0939721b40b941caa5a7e2cd6767b20774750f56208b799422bde758b7e"
+    },
+    {
+      "key": "ala_aggregation",
+      "artifact_id": "butterflylens:ala-submitted-aggregation",
+      "path": "data/packs/australian_butterflies/v1/ala/ala_aggregation_manifest.json",
+      "sha256": "c0a99c2e9a1d8353e00b37e898aa8a33404cd7db973e786701e56b9a5447bde0"
+    },
+    {
+      "key": "reference_bank",
+      "artifact_id": "butterflylens:reference-bank-v1",
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_bank_manifest.json",
+      "sha256": "628c6fd5851b5157cae601eec65cb764e77e166dfcc8dbb3a34ccfd5d1076ded"
+    },
+    {
+      "key": "reference_quality",
+      "artifact_id": "butterflylens:reference-quality-v1",
+      "path": "data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json",
+      "sha256": "4cfc41de9908dbe7f0997e5dc59fd964606d3127d5af24e660868eabc7367d91"
+    },
+    {
+      "key": "flickr_global_status",
+      "artifact_id": "butterflylens:flickr-global-out-of-range-status",
+      "path": "packages/flickr/global_out_of_range_status.json",
+      "sha256": "7215fd7895bd1cf207da28501fd8bbb43768a545df9659b0f026631f271b3cd7"
+    },
+    {
+      "key": "flickr_budget",
+      "artifact_id": "butterflylens:flickr-budget-policy-v1",
+      "path": "packages/flickr/hourly-budget.v1.json",
+      "sha256": "77cd5e684853f15c9ca3aa3ae6cd5a433b231c840e9047ada4adccc055a11719"
+    },
+    {
+      "key": "rights_manifest",
+      "artifact_id": "butterflylens:data-rights-manifest",
+      "path": "provenance/data_rights_manifest.json",
+      "sha256": "d4af0b623f9eb875bd88073aaa13fddfdb7e0063698ebb258cb334508a415201"
+    },
+    {
+      "key": "classification_contract",
+      "artifact_id": "butterflylens:classification-maturity-contract",
+      "path": "packages/contracts/schemas/classification-maturity.schema.json",
+      "sha256": "637c604a334fad8e1e1368477726e7404fb5d8704b8e2d18f6abfb394ce28dab"
+    },
+    {
+      "key": "consensus_contract",
+      "artifact_id": "butterflylens:review-consensus-contract",
+      "path": "packages/contracts/schemas/verification-consensus.schema.json",
+      "sha256": "4c00bcd9e176d4108f61e1c2170b4d7fae072f74babc77135a7f67c83bcf407d"
+    },
+    {
+      "key": "reviewer_quality_contract",
+      "artifact_id": "butterflylens:reviewer-quality-contract",
+      "path": "packages/contracts/schemas/reviewer-reliability.schema.json",
+      "sha256": "f604a73b053c0da52717136e89aa65a6196c9e54bcd9ced8c4a29235430060c1"
+    },
+    {
+      "key": "geographic_impact_contract",
+      "artifact_id": "butterflylens:geographic-impact-contract",
+      "path": "packages/contracts/schemas/geographic-impact-snapshot.schema.json",
+      "sha256": "7db45a246d6d8f00165465027b7ec1a7486c55409cc94f11052e586ff4abd5b3"
+    },
+    {
+      "key": "worker_contract",
+      "artifact_id": "butterflylens:live-worker-contract",
+      "path": "packages/contracts/schemas/live-worker-contracts.schema.json",
+      "sha256": "e47f4a67c3d3fb896a6df14aeb5ac7d3f72dd05658634e10df36c6737805e447"
+    },
+    {
+      "key": "worker_policy",
+      "artifact_id": "butterflylens:live-worker-policy",
+      "path": "packages/contracts/LIVE_WORKER.md",
+      "sha256": "96a0ed673d66e678adfd97ba6db3a02c8425e3161481de0a71c4b0dc7fd252f6"
+    },
+    {
+      "key": "geographic_impact_policy",
+      "artifact_id": "butterflylens:geographic-impact-policy",
+      "path": "packages/contracts/GEOGRAPHIC_IMPACT.md",
+      "sha256": "521b3bde28ae1995ebe90fbef495bf1a4d5557c6a55b5f09731564efc2c047f6"
+    }
+  ]
+}

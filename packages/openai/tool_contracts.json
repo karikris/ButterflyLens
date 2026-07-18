@@ -1,0 +1,790 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "deterministic": true,
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "citations": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_id": {
+              "maxLength": 180,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+              "type": "string"
+            },
+            "commit": {
+              "pattern": "^[0-9a-f]{40}$",
+              "type": "string"
+            },
+            "fingerprint": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "path": {
+              "maxLength": 300,
+              "minLength": 1,
+              "type": "string"
+            },
+            "repository": {
+              "const": "karikris/ButterflyLens",
+              "type": "string"
+            }
+          },
+          "required": [
+            "artifact_id",
+            "repository",
+            "commit",
+            "path",
+            "fingerprint"
+          ],
+          "type": "object"
+        },
+        "maxItems": 12,
+        "minItems": 1,
+        "type": "array"
+      },
+      "facts": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "citation_ids": {
+              "items": {
+                "maxLength": 180,
+                "minLength": 1,
+                "type": "string"
+              },
+              "maxItems": 12,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "interpretation": {
+              "maxLength": 600,
+              "minLength": 1,
+              "type": "string"
+            },
+            "name": {
+              "maxLength": 100,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_]*$",
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "observed",
+                "derived",
+                "unavailable",
+                "withheld",
+                "unfinished",
+                "conflict",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            "unit": {
+              "maxLength": 80,
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "integer",
+                "number",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "state",
+            "value",
+            "unit",
+            "interpretation",
+            "citation_ids"
+          ],
+          "type": "object"
+        },
+        "maxItems": 40,
+        "type": "array"
+      },
+      "limitations": {
+        "items": {
+          "maxLength": 600,
+          "minLength": 1,
+          "type": "string"
+        },
+        "maxItems": 12,
+        "type": "array"
+      },
+      "query": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "citation_ids": {
+              "items": {
+                "maxLength": 180,
+                "minLength": 1,
+                "type": "string"
+              },
+              "maxItems": 12,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "interpretation": {
+              "maxLength": 600,
+              "minLength": 1,
+              "type": "string"
+            },
+            "name": {
+              "maxLength": 100,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_]*$",
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "observed",
+                "derived",
+                "unavailable",
+                "withheld",
+                "unfinished",
+                "conflict",
+                "not_applicable"
+              ],
+              "type": "string"
+            },
+            "unit": {
+              "maxLength": 80,
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "integer",
+                "number",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "state",
+            "value",
+            "unit",
+            "interpretation",
+            "citation_ids"
+          ],
+          "type": "object"
+        },
+        "maxItems": 12,
+        "type": "array"
+      },
+      "records": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "citation_ids": {
+              "items": {
+                "maxLength": 180,
+                "minLength": 1,
+                "type": "string"
+              },
+              "maxItems": 12,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "facts": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "citation_ids": {
+                    "items": {
+                      "maxLength": 180,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "maxItems": 12,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "interpretation": {
+                    "maxLength": 600,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "name": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": "string"
+                  },
+                  "state": {
+                    "enum": [
+                      "observed",
+                      "derived",
+                      "unavailable",
+                      "withheld",
+                      "unfinished",
+                      "conflict",
+                      "not_applicable"
+                    ],
+                    "type": "string"
+                  },
+                  "unit": {
+                    "maxLength": 80,
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "integer",
+                      "number",
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "state",
+                  "value",
+                  "unit",
+                  "interpretation",
+                  "citation_ids"
+                ],
+                "type": "object"
+              },
+              "maxItems": 30,
+              "type": "array"
+            },
+            "record_id": {
+              "maxLength": 180,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+              "type": "string"
+            },
+            "record_type": {
+              "maxLength": 80,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9_]*$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "record_id",
+            "record_type",
+            "facts",
+            "citation_ids"
+          ],
+          "type": "object"
+        },
+        "maxItems": 20,
+        "type": "array"
+      },
+      "result_fingerprint": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "schema_version": {
+        "const": "butterflylens-openai-tool-result:v1.0.0",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "available",
+          "partial",
+          "unavailable",
+          "not_found",
+          "forbidden"
+        ],
+        "type": "string"
+      },
+      "summary": {
+        "maxLength": 600,
+        "minLength": 1,
+        "type": "string"
+      },
+      "tool_name": {
+        "enum": [
+          "inspect_map_scope",
+          "compare_ala_and_flickr",
+          "inspect_species",
+          "inspect_flickr_candidate",
+          "trace_record_evidence",
+          "explain_classification",
+          "inspect_review_consensus",
+          "inspect_reviewer_quality",
+          "inspect_pipeline_status",
+          "inspect_worker_status",
+          "recommend_next_review_batch",
+          "recommend_next_species",
+          "explain_geographic_contribution",
+          "prepare_impact_report"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "schema_version",
+      "tool_name",
+      "status",
+      "summary",
+      "query",
+      "facts",
+      "records",
+      "citations",
+      "limitations",
+      "result_fingerprint"
+    ],
+    "type": "object"
+  },
+  "read_only": true,
+  "schema_version": "butterflylens-openai-tool-contracts:v1.0.0",
+  "semantic_rules": {
+    "inspect_species": "exactly one of species_key and scientific_name must be non-null; scientific_name is an exact accepted-name lookup",
+    "private_tools": "reviewer quality, geographic contribution, and impact report are bound to server authorization context; arguments cannot name or authorize another person",
+    "scope": "scope_id must be null for national scope and non-null for state, IBRA, LGA, and H3 scopes"
+  },
+  "strict": true,
+  "tool_count": 14,
+  "tools": [
+    {
+      "description": "Inspect the governed submitted map scope and its ALA/Flickr evidence availability. Missing counts are unavailable, never biological absence.",
+      "name": "inspect_map_scope",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "scope_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "scope_type": {
+            "enum": [
+              "national",
+              "state",
+              "ibra",
+              "lga",
+              "h3"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope_type",
+          "scope_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Compare admitted ALA baseline and Flickr candidate counts only when both exist for the same exact scope and optional accepted species.",
+      "name": "compare_ala_and_flickr",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "scope_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "scope_type": {
+            "enum": [
+              "national",
+              "state",
+              "ibra",
+              "lga",
+              "h3"
+            ],
+            "type": "string"
+          },
+          "species_key": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "scope_type",
+          "scope_id",
+          "species_key"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Inspect one accepted ButterflyLens species by stable key or exact accepted scientific name, including sourced names, conflicts, and evidence maturity.",
+      "name": "inspect_species",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "scientific_name": {
+            "maxLength": 240,
+            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "species_key": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "species_key",
+          "scientific_name"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Inspect one governed Flickr candidate by immutable candidate ID; never fetch Flickr or infer a species from imagery or metadata.",
+      "name": "inspect_flickr_candidate",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "candidate_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "candidate_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Trace the stored artifact lineage for one record without inventing missing steps or treating source assertions as verification.",
+      "name": "trace_record_evidence",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "record_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": "string"
+          },
+          "record_type": {
+            "enum": [
+              "species",
+              "ala_occurrence",
+              "flickr_candidate",
+              "classification",
+              "review_consensus",
+              "worker",
+              "contribution"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "record_type",
+          "record_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Explain one stored classification and its evidence maturity. Raw scores are not probabilities and no classification is made by this tool.",
+      "name": "explain_classification",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "classification_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "classification_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Inspect one stored review consensus without exposing reviewer identities, private controls, or treating vote count alone as accuracy.",
+      "name": "inspect_review_consensus",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "item_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Inspect the authenticated reviewer's own governed quality snapshot. Model arguments cannot select another reviewer or grant access.",
+      "name": "inspect_reviewer_quality",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "domain_key": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subject": {
+            "enum": [
+              "self"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "subject",
+          "domain_key"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Inspect committed submitted pipeline stages and explicit unfinished or unavailable live lanes; never inspect an active provider run.",
+      "name": "inspect_pipeline_status",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "pipeline_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "pipeline_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Inspect a committed governed worker heartbeat. No heartbeat means unavailable, not silently online or offline.",
+      "name": "inspect_worker_status",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "worker_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "worker_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Recommend a bounded deterministic species-level reference-review batch from committed diagnostics; it is targeted work, not a quality or species ranking.",
+      "name": "recommend_next_review_batch",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "maximum": 20,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "scope_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "scope_type": {
+            "enum": [
+              "national",
+              "state",
+              "ibra",
+              "lga",
+              "h3"
+            ],
+            "type": "string"
+          },
+          "species_key": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "scope_type",
+          "scope_id",
+          "species_key",
+          "limit"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Recommend bounded accepted-species priorities using one explicit committed workflow criterion; never infer rarity, presence, or scientific importance.",
+      "name": "recommend_next_species",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "criterion": {
+            "enum": [
+              "reference_gap",
+              "open_conflicts",
+              "reviewable_reference"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "maximum": 20,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "criterion",
+          "limit"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Explain the authenticated contributor's governed aggregate contribution for one public scope; potential contribution is not a new occurrence.",
+      "name": "explain_geographic_contribution",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "scope_id": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "scope_type": {
+            "enum": [
+              "national",
+              "state",
+              "ibra",
+              "lga",
+              "h3"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope_type",
+          "scope_id"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    },
+    {
+      "description": "Prepare the authenticated contributor's evidence-based self report without rankings, speed metrics, private controls, or scientific authority.",
+      "name": "prepare_impact_report",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "report_scope": {
+            "enum": [
+              "self"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "report_scope"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "function"
+    }
+  ],
+  "transport": "openai_responses_function_tools"
+}
