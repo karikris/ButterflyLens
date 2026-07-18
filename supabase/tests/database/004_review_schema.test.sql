@@ -91,10 +91,15 @@ where c.verification_campaign_id = 'campaign:test'
 insert into public.review_events (
   review_event_id, assignment_pk, verification_campaign_pk, media_object_pk,
   reviewer_profile_pk, question, image_sha256, decision, confidence,
-  decided_at, duration_ms, source_version, event_fingerprint
+  decided_at, duration_ms, source_version, model_version, review_context,
+  event_fingerprint
 ) select 'review-event:test', a.id, a.verification_campaign_pk, a.media_object_pk,
   a.reviewer_profile_pk, 'Is this a butterfly?', repeat('e', 64), 'yes', 4,
-  now(), 1500, 'review-source:v1', repeat('5', 64)
+  now(), 1500, 'review-source:v1', 'unavailable:test', jsonb_build_object(
+    'blind_payload_fingerprint', repeat('3', 64),
+    'assignment_policy_version', 'repeated-independent-v1',
+    'blind_state', 'blind', 'scientific_claim_allowed', false
+  ), repeat('5', 64)
 from public.assignments a where a.assignment_id = 'assignment:test';
 insert into public.consensus (
   consensus_id, verification_campaign_pk, media_object_pk, consensus_layer,

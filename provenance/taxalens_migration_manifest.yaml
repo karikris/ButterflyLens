@@ -1,5 +1,5 @@
 schema_version: butterflylens-taxalens-migration-v1
-updated_at: "2026-07-18T01:51:00Z"
+updated_at: "2026-07-18T02:00:00Z"
 source_snapshot:
   repository: karikris/taxalens
   commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -144,6 +144,23 @@ components:
       - Static database tests for the blind campaign trigger, allowlisted projection, event-bound disclosure, grants, and identity-free shape.
       - Eighteen pgTAP assertions define privileges, views, RLS, and hidden base-table access.
       - Six component tests cover pre-decision absence, locked reveal, unavailable context, reset, attribution, and media readiness.
+    status: implemented_original_adapter
+  - component_id: taxalens-append-only-review-event-pattern-v1
+    source_repository: karikris/taxalens
+    source_commit: c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc
+    source_path: apps/web/src/review/domain/verificationEvents.ts
+    destination_path: supabase/migrations/20260718015500_append_only_review_submission.sql
+    migration_kind: interface_pattern
+    reason: Preserve append-only correction lineage while making authenticated identity derivation, atomic assignment completion, blind-state capture, and database authorization ButterflyLens-owned.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Add one fixed-search-path authenticated RPC that derives reviewer, campaign, item, question, and image identity from the assigned row.
+      - Require comment, confidence, decision time, duration, source version, explicit model version/unavailable state, context, and event fingerprint on every new event.
+      - Revoke direct browser inserts and require corrections to supersede the current same-assignment event without mutation or deletion.
+    tests:
+      - Static database tests cover identity derivation, required fields, atomic completion, direct-insert closure, and supersession lineage.
+      - Fourteen pgTAP assertions define RPC privileges, append-only table privileges, trigger presence, and core non-null event fields.
     status: implemented_original_adapter
 butterflylens_owned_changes:
   - ownership_id: australia-wide-community-product
