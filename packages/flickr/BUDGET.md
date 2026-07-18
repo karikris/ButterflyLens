@@ -27,3 +27,9 @@ Planning stops when the normal lane, reserve lane, total envelope, fencing
 lease, credential identity, or accounting certainty gate fails.
 
 This contract performs no Flickr API call and contains no credential.
+
+`tests/test_flickr_rate_limit_simulation.py` stress-tests the full 3,500-call
+envelope with mixed Flickr methods, retry and comment contention, reserve
+exhaustion, uncertain accounting, UTC rollover, and credential-rotation
+rejection. The simulation constructs ledger events only; it has no transport
+and sends no provider request.
