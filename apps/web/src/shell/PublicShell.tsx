@@ -77,6 +77,10 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
             <a href="https://github.com/karikris/ButterflyLens/blob/main/MEDIA_RIGHTS.md">
               Media rights
             </a>
+            {' · '}
+            <a href="https://github.com/karikris/ButterflyLens/blob/main/OCCURRENCE_RELEASE.md">
+              Occurrence release
+            </a>
           </p>
         </div>
       </footer>

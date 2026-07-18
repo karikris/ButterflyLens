@@ -53,6 +53,10 @@ describe('public application shell', () => {
       'href',
       'https://github.com/karikris/ButterflyLens/blob/main/MEDIA_RIGHTS.md',
     )
+    expect(screen.getByRole('link', { name: 'Occurrence release' })).toHaveAttribute(
+      'href',
+      'https://github.com/karikris/ButterflyLens/blob/main/OCCURRENCE_RELEASE.md',
+    )
   })
 
   it('resolves every application navigation fragment to a real landmark', () => {

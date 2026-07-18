@@ -41,6 +41,12 @@ Every dataset, API response, source object, media object, boundary, review event
 
 Unknown is a blocking value, never equivalent to allowed. Source identity and rights state remain attached when records are deduplicated, aggregated, embedded, reviewed, or exported.
 
+The [occurrence release policy](OCCURRENCE_RELEASE.md) and its immutable
+database receipt require the exact candidate/media rights fingerprint, an
+allowed committed media state, no takedown, a publishable sensitive-location
+receipt, and all non-rights scientific gates before public release. A release-
+ready candidate remains distinct from publication or provider submission.
+
 ## Flickr
 
 The executable public-display contract is

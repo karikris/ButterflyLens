@@ -34,3 +34,6 @@ location is publicly readable; missing or unknown evidence is withheld.
 The [media rights and removal policy](MEDIA_RIGHTS.md) defines immediate
 quarantine, private requester handling, dependency traversal, and auditable
 takedown completion without claiming a live prelaunch request channel.
+The [occurrence release policy](OCCURRENCE_RELEASE.md) requires exact human,
+qualified, expert, validity, independence, rights, quality, conflict, and
+evidence-packet receipts while keeping release-ready distinct from published.

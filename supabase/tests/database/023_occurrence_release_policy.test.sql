@@ -1,0 +1,54 @@
+begin;
+
+create extension if not exists pgtap with schema extensions;
+set search_path = public, extensions;
+
+select plan(44);
+
+select has_table('public', 'occurrence_release_receipts', 'occurrence release receipts exist');
+select ok((select relrowsecurity from pg_class where oid = 'public.occurrence_release_receipts'::regclass), 'release receipts have RLS');
+select has_column('public', 'occurrence_release_receipts', 'release_candidate_pk', 'candidate lineage is bound');
+select has_column('public', 'occurrence_release_receipts', 'human_supported_consensus_pk', 'human support is bound');
+select has_column('public', 'occurrence_release_receipts', 'qualified_consensus_pk', 'qualified consensus is bound');
+select has_column('public', 'occurrence_release_receipts', 'expert_review_event_pk', 'configured expert evidence is bindable');
+select has_column('public', 'occurrence_release_receipts', 'location_publication_receipt_pk', 'sensitive location receipt is bound');
+select has_column('public', 'occurrence_release_receipts', 'quality_snapshot_pk', 'quality snapshot is bound');
+select has_column('public', 'occurrence_release_receipts', 'coordinate_evidence_fingerprint', 'coordinate evidence is fingerprinted');
+select has_column('public', 'occurrence_release_receipts', 'date_evidence_fingerprint', 'date evidence is fingerprinted');
+select has_column('public', 'occurrence_release_receipts', 'duplicate_independence_evidence_fingerprint', 'duplicate independence is fingerprinted');
+select has_column('public', 'occurrence_release_receipts', 'rights_fingerprint', 'rights lineage is fingerprinted');
+select has_column('public', 'occurrence_release_receipts', 'quality_threshold_fingerprint', 'quality threshold is fingerprinted');
+select has_column('public', 'occurrence_release_receipts', 'conflict_audit_fingerprint', 'conflict audit is fingerprinted');
+select has_column('public', 'occurrence_release_receipts', 'evidence_packet_fingerprint', 'packet is fingerprinted');
+select has_column('public', 'occurrence_release_receipts', 'gate_results', 'exact gate results are retained');
+select has_column('public', 'occurrence_release_receipts', 'evidence_fingerprints', 'canonical lineage is retained');
+select has_column('public', 'occurrence_release_receipts', 'published_occurrence', 'publication remains distinct');
+select has_column('public', 'occurrence_release_receipts', 'scientific_claim_allowed', 'receipt cannot imply scientific truth');
+select col_type_is('public', 'occurrence_release_receipts', 'gate_results', 'jsonb', 'gate results use JSON object');
+select col_type_is('public', 'occurrence_release_receipts', 'evidence_fingerprints', 'text[]', 'lineage is an array');
+select has_index('public', 'occurrence_release_receipts', 'occurrence_release_receipts_project_species_idx', 'project species reads are indexed');
+select has_index('public', 'occurrence_release_receipts', 'occurrence_release_receipts_media_object_idx', 'media FK is indexed');
+select has_index('public', 'occurrence_release_receipts', 'occurrence_release_receipts_human_consensus_idx', 'human consensus FK is indexed');
+select has_index('public', 'occurrence_release_receipts', 'occurrence_release_receipts_qualified_consensus_idx', 'qualified consensus FK is indexed');
+select has_index('public', 'occurrence_release_receipts', 'occurrence_release_receipts_expert_event_idx', 'expert event FK is indexed');
+select has_index('public', 'occurrence_release_receipts', 'occurrence_release_receipts_location_idx', 'location receipt FK is indexed');
+select has_index('public', 'occurrence_release_receipts', 'occurrence_release_receipts_quality_idx', 'quality snapshot FK is indexed');
+select has_trigger('public', 'occurrence_release_receipts', 'occurrence_release_receipts_validate', 'receipt lineage is validated');
+select has_trigger('public', 'occurrence_release_receipts', 'occurrence_release_receipts_reject_mutation', 'receipt is immutable');
+select has_function('private', 'validate_occurrence_release_receipt', array[]::text[], 'receipt validator exists');
+select has_function('private', 'reject_occurrence_release_receipt_mutation', array[]::text[], 'append-only guard exists');
+select has_function('private', 'has_occurrence_release_receipt', array['bigint'], 'public RLS helper exists');
+select ok(not has_table_privilege('anon', 'public.occurrence_release_receipts', 'select'), 'anon cannot inspect release receipts');
+select ok(not has_table_privilege('authenticated', 'public.occurrence_release_receipts', 'insert'), 'browser cannot insert release receipts');
+select ok(has_table_privilege('authenticated', 'public.occurrence_release_receipts', 'select'), 'curator reads are RLS-scoped');
+select ok(has_table_privilege('service_role', 'public.occurrence_release_receipts', 'insert'), 'service may append release receipts');
+select ok(not has_table_privilege('service_role', 'public.occurrence_release_receipts', 'update'), 'service cannot update release receipts');
+select ok(not has_table_privilege('service_role', 'public.occurrence_release_receipts', 'delete'), 'service cannot delete release receipts');
+select ok(exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'release_candidates' and policyname = 'release_candidates_public_read' and qual like '%has_occurrence_release_receipt%'), 'public release requires exact receipt');
+select ok(has_function_privilege('anon', 'private.has_occurrence_release_receipt(bigint)', 'execute'), 'anon can invoke only fixed RLS helper');
+select ok(not has_function_privilege('anon', 'private.validate_occurrence_release_receipt()', 'execute'), 'anon cannot invoke validator');
+select ok(position('set search_path = ''''' in pg_get_functiondef('private.has_occurrence_release_receipt(bigint)'::regprocedure)) > 0, 'RLS helper has fixed empty search path');
+select ok(position('release_ready_occurrence_candidate' in pg_get_constraintdef((select oid from pg_constraint where conname = 'occurrence_release_receipts_state_check'))) > 0, 'receipt state is release-ready candidate only');
+
+select * from finish();
+rollback;

@@ -54,6 +54,14 @@ from .sensitive_locations import (
     SensitiveLocationRule,
     plan_public_location,
 )
+from .occurrence_release import (
+    OCCURRENCE_RELEASE_DECISION_SCHEMA_VERSION,
+    OCCURRENCE_RELEASE_POLICY_VERSION,
+    RELEASE_GATE_NAMES,
+    OccurrenceReleaseDecision,
+    ReleaseGateEvidence,
+    plan_occurrence_release,
+)
 from .project_run import (
     PIPELINE_STAGE_IDS,
     PROJECT_SCHEMA_VERSION,
@@ -123,6 +131,9 @@ __all__ = [
     "GEOGRAPHIC_IMPACT_SNAPSHOT_SCHEMA_VERSION",
     "PUBLIC_LOCATION_DECISION_SCHEMA_VERSION",
     "SENSITIVE_LOCATION_POLICY_VERSION",
+    "OCCURRENCE_RELEASE_DECISION_SCHEMA_VERSION",
+    "OCCURRENCE_RELEASE_POLICY_VERSION",
+    "RELEASE_GATE_NAMES",
     "PIPELINE_STAGE_IDS",
     "PROJECT_SCHEMA_VERSION",
     "PROJECT_STATUSES",
@@ -167,6 +178,8 @@ __all__ = [
     "ProviderLocationConstraint",
     "PublicLocationDecision",
     "PublicLocationRequest",
+    "OccurrenceReleaseDecision",
+    "ReleaseGateEvidence",
     "ReviewerReliability",
     "QualitySnapshot",
     "QualityStratumSummary",
@@ -188,6 +201,7 @@ __all__ = [
     "canonicalize_json",
     "normalize_evidence_preimage",
     "plan_public_location",
+    "plan_occurrence_release",
     "semantic_fingerprint_digest",
     "assert_same_fingerprint_identity",
     "validate_evidence_fingerprint",
