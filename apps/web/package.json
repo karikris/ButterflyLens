@@ -14,13 +14,17 @@
     "licenses:check": "node scripts/dependency-licenses.mjs --check",
     "licenses:generate": "node scripts/dependency-licenses.mjs --generate",
     "media:check": "node scripts/verify-review-media.mjs",
-    "test": "vitest run && node --test scripts/dependency-licenses.node-test.mjs"
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run && node --test scripts/dependency-licenses.node-test.mjs",
+    "test:browser": "npm run build && playwright test",
+    "test:browser:update": "npm run build && playwright test --update-snapshots"
   },
   "dependencies": {
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
   "devDependencies": {
+    "@playwright/test": "1.61.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@types/react": "19.2.17",

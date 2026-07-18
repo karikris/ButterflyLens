@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-npm-dependency-licenses/v1",
-  "generated_at": "2026-07-18T01:19:24.048Z",
+  "generated_at": "2026-07-18T12:55:15.905Z",
   "lockfile": "package-lock.json",
   "allowed_licenses": [
     "Apache-2.0",
@@ -172,6 +172,15 @@
       "version": "0.139.0",
       "license": "MIT",
       "direct": false,
+      "scopes": [
+        "development"
+      ]
+    },
+    {
+      "name": "@playwright/test",
+      "version": "1.61.1",
+      "license": "Apache-2.0",
+      "direct": true,
       "scopes": [
         "development"
       ]
@@ -729,6 +738,24 @@
       "name": "picomatch",
       "version": "4.0.5",
       "license": "MIT",
+      "direct": false,
+      "scopes": [
+        "development"
+      ]
+    },
+    {
+      "name": "playwright-core",
+      "version": "1.61.1",
+      "license": "Apache-2.0",
+      "direct": false,
+      "scopes": [
+        "development"
+      ]
+    },
+    {
+      "name": "playwright",
+      "version": "1.61.1",
+      "license": "Apache-2.0",
       "direct": false,
       "scopes": [
         "development"
