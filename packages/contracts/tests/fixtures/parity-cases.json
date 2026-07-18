@@ -238,7 +238,8 @@
     { "constant": "WORKER_HEARTBEAT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/heartbeat/properties/schema_version/const" },
     { "constant": "WORKER_LEASE_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/lease/properties/schema_version/const" },
     { "constant": "WORKER_COMMAND_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/command/properties/schema_version/const" },
-    { "constant": "WORKER_EVENT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/event/properties/schema_version/const" }
+    { "constant": "WORKER_EVENT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/event/properties/schema_version/const" },
+    { "constant": "CLASSIFICATION_MATURITY_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:classification-maturity:v1.0.0", "pointer": "/properties/schema_version/const" }
   ],
   "vocabulary_checks": [
     { "constant": "PROJECT_STATUSES", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "pointer": "/properties/status/enum" },
@@ -253,7 +254,9 @@
     { "constant": "CONSENSUS_STATUSES", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/consensus/properties/status/enum" },
     { "constant": "EVIDENCE_COUNT_STATUSES", "schema_id": "urn:butterflylens:schema:geographic-impact-contracts:v1.0.0", "pointer": "/$defs/evidence_count/properties/status/enum" },
     { "constant": "WORKER_COMMAND_KINDS", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/command/properties/kind/enum" },
-    { "constant": "WORKER_EVENT_KINDS", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/event/properties/kind/enum" }
+    { "constant": "WORKER_EVENT_KINDS", "schema_id": "urn:butterflylens:schema:live-worker-contracts:v1.0.0", "pointer": "/$defs/event/properties/kind/enum" },
+    { "constant": "CLASSIFICATION_MATURITY_FIELDS", "schema_id": "urn:butterflylens:schema:classification-maturity:v1.0.0", "pointer": "/properties/maturity/required" },
+    { "constant": "CLASSIFICATION_MATURITY_STATUSES", "schema_id": "urn:butterflylens:schema:classification-maturity:v1.0.0", "pointer": "/$defs/evidence_state/properties/status/enum" }
   ],
   "valid_documents": [
     {
@@ -620,6 +623,26 @@
       }
     },
     {
+      "case_id": "classification-maturity-valid",
+      "schema_id": "urn:butterflylens:schema:classification-maturity:v1.0.0",
+      "document": {
+        "schema_version": "butterflylens-classification-maturity:v1.0.0",
+        "image_id": "flickr:photo:fixture",
+        "source_record_fingerprint": "{{sha256}}",
+        "observed_at": "{{now}}",
+        "maturity": {
+          "butterfly_detected": { "status": "unavailable", "value": null, "reason": "YOLOE unfinished", "evidence_fingerprints": [] },
+          "species_candidate_available": { "status": "unavailable", "value": null, "reason": "BioCLIP unfinished", "evidence_fingerprints": [] },
+          "community_reviewed": { "status": "available", "value": false, "reason": null, "evidence_fingerprints": ["{{sha256}}"] },
+          "quality_estimate_available": { "status": "available", "value": false, "reason": null, "evidence_fingerprints": ["{{sha256}}"] },
+          "expert_reviewed": { "status": "available", "value": false, "reason": null, "evidence_fingerprints": ["{{sha256}}"] },
+          "release_ready": { "status": "available", "value": false, "reason": null, "evidence_fingerprints": ["{{sha256}}"] }
+        },
+        "projection_fingerprint": "{{sha256}}",
+        "scientific_claim_allowed": false
+      }
+    },
+    {
       "case_id": "worker-identity-valid",
       "schema_id": "urn:butterflylens:schema:worker-identity:v1.0.0",
       "document": {
@@ -765,6 +788,7 @@
     { "case_id": "heartbeat-rejects-zero-sequence", "base_case_id": "worker-heartbeat-valid", "schema_id": "urn:butterflylens:schema:worker-heartbeat:v1.0.0", "changes": [{ "op": "set", "path": "/sequence", "value": 0 }] },
     { "case_id": "active-lease-requires-acquisition", "base_case_id": "worker-lease-valid", "schema_id": "urn:butterflylens:schema:worker-lease:v1.0.0", "changes": [{ "op": "set", "path": "/acquired_at", "value": null }] },
     { "case_id": "worker-command-rejects-shell", "base_case_id": "worker-command-valid", "schema_id": "urn:butterflylens:schema:worker-command:v1.0.0", "changes": [{ "op": "set", "path": "/shell", "value": "rm -rf" }] },
-    { "case_id": "artifact-event-requires-artifact", "base_case_id": "worker-event-valid", "schema_id": "urn:butterflylens:schema:worker-event:v1.0.0", "changes": [{ "op": "set", "path": "/kind", "value": "artifact_committed" }] }
+    { "case_id": "artifact-event-requires-artifact", "base_case_id": "worker-event-valid", "schema_id": "urn:butterflylens:schema:worker-event:v1.0.0", "changes": [{ "op": "set", "path": "/kind", "value": "artifact_committed" }] },
+    { "case_id": "release-ready-requires-all-maturity", "base_case_id": "classification-maturity-valid", "schema_id": "urn:butterflylens:schema:classification-maturity:v1.0.0", "changes": [{ "op": "set", "path": "/maturity/release_ready/value", "value": true }] }
   ]
 }

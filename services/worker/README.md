@@ -90,3 +90,13 @@ keeps the immutable submitted snapshot queryable and continues serving the
 latest committed live snapshot as current-but-stale when heartbeats expire.
 This module defines and tests that domain contract; it does not deploy the web
 host or a remote journal, contact a provider, download media, or run a model.
+
+## Classification maturity
+
+`classification_maturity.py` emits a fingerprinted per-image projection for
+butterfly detection, species-candidate availability, community review, quality
+estimation, expert review, and release readiness. Each fact is independently
+`available` with a boolean and evidence, or `unavailable` with a null value and
+reason. Missing model work is therefore never represented as a negative model
+result. Release readiness can be true only when every preceding fact is
+explicitly available and true.

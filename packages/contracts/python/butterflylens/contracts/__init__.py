@@ -1,5 +1,13 @@
 """Versioned ButterflyLens wire-contract declarations."""
 
+from .classification_maturity import (
+    CLASSIFICATION_MATURITY_FIELDS,
+    CLASSIFICATION_MATURITY_SCHEMA_VERSION,
+    CLASSIFICATION_MATURITY_STATUSES,
+    ClassificationEvidenceState,
+    ClassificationMaturity,
+)
+
 from .fingerprint import (
     CONTENT_CHECKSUM_SCHEMA_VERSION,
     EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
@@ -84,6 +92,9 @@ from .verification import (
 )
 
 __all__ = [
+    "CLASSIFICATION_MATURITY_FIELDS",
+    "CLASSIFICATION_MATURITY_SCHEMA_VERSION",
+    "CLASSIFICATION_MATURITY_STATUSES",
     "CONTENT_CHECKSUM_SCHEMA_VERSION",
     "CONSENSUS_STATUSES",
     "EVIDENCE_FINGERPRINT_SCHEMA_VERSION",
@@ -123,6 +134,8 @@ __all__ = [
     "ButterflyLensRun",
     "ContentChecksum",
     "CanonicalizationError",
+    "ClassificationEvidenceState",
+    "ClassificationMaturity",
     "FingerprintIntegrityError",
     "FingerprintCollisionError",
     "FingerprintValidationError",

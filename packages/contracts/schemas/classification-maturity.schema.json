@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:butterflylens:schema:classification-maturity:v1.0.0",
+  "title": "ButterflyLens per-image classification maturity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "image_id",
+    "source_record_fingerprint",
+    "observed_at",
+    "maturity",
+    "projection_fingerprint",
+    "scientific_claim_allowed"
+  ],
+  "properties": {
+    "schema_version": { "const": "butterflylens-classification-maturity:v1.0.0" },
+    "image_id": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id" },
+    "source_record_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "maturity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "butterfly_detected",
+        "species_candidate_available",
+        "community_reviewed",
+        "quality_estimate_available",
+        "expert_reviewed",
+        "release_ready"
+      ],
+      "properties": {
+        "butterfly_detected": { "$ref": "#/$defs/evidence_state" },
+        "species_candidate_available": { "$ref": "#/$defs/evidence_state" },
+        "community_reviewed": { "$ref": "#/$defs/evidence_state" },
+        "quality_estimate_available": { "$ref": "#/$defs/evidence_state" },
+        "expert_reviewed": { "$ref": "#/$defs/evidence_state" },
+        "release_ready": { "$ref": "#/$defs/evidence_state" }
+      }
+    },
+    "projection_fingerprint": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" },
+    "scientific_claim_allowed": { "const": false }
+  },
+  "$defs": {
+    "evidence_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value", "reason", "evidence_fingerprints"],
+      "properties": {
+        "status": { "enum": ["available", "unavailable"] },
+        "value": { "anyOf": [{ "type": "boolean" }, { "type": "null" }] },
+        "reason": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+        "evidence_fingerprints": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "available" } }, "required": ["status"] },
+          "then": {
+            "properties": {
+              "value": { "type": "boolean" },
+              "reason": { "type": "null" },
+              "evidence_fingerprints": { "minItems": 1 }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": { "type": "null" },
+              "reason": { "type": "string", "minLength": 1, "maxLength": 500 }
+            }
+          }
+        }
+      ]
+    },
+    "true_state": {
+      "type": "object",
+      "properties": {
+        "status": { "const": "available" },
+        "value": { "const": true }
+      },
+      "required": ["status", "value"]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "maturity": {
+            "properties": {
+              "release_ready": {
+                "properties": {
+                  "status": { "const": "available" },
+                  "value": { "const": true }
+                },
+                "required": ["status", "value"]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "maturity": {
+            "properties": {
+              "butterfly_detected": { "$ref": "#/$defs/true_state" },
+              "species_candidate_available": { "$ref": "#/$defs/true_state" },
+              "community_reviewed": { "$ref": "#/$defs/true_state" },
+              "quality_estimate_available": { "$ref": "#/$defs/true_state" },
+              "expert_reviewed": { "$ref": "#/$defs/true_state" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

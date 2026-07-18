@@ -1,5 +1,13 @@
 """ButterflyLens persistent-worker runtime primitives."""
 
+from .classification_maturity import (
+    ClassificationMaturityError,
+    available_state,
+    build_classification_maturity,
+    unavailable_state,
+    validate_classification_maturity,
+)
+
 from .heartbeat import (
     HeartbeatError,
     HeartbeatSink,
@@ -40,6 +48,7 @@ from .restart import (
 )
 
 __all__ = [
+    "ClassificationMaturityError",
     "HeartbeatError",
     "HeartbeatSink",
     "ConfigurationError",
@@ -52,6 +61,8 @@ __all__ = [
     "WorkerRegistration",
     "WorkerServiceConfiguration",
     "build_worker_identity",
+    "available_state",
+    "build_classification_maturity",
     "collect_resources",
     "load_environment_file",
     "LocalJsonlHeartbeatSink",
@@ -64,6 +75,8 @@ __all__ = [
     "MediaPipelineError",
     "MediaPipelinePolicy",
     "run_bounded_media_pipeline",
+    "unavailable_state",
+    "validate_classification_maturity",
     "PUBLIC_OFFLINE_SCHEMA_VERSION",
     "RESTART_JOURNAL_SCHEMA_VERSION",
     "RESUME_PLAN_SCHEMA_VERSION",
