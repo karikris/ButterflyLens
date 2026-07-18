@@ -43,7 +43,10 @@ EXPECTED_EDGE_SUPABASE_FILES = {
     "supabase/functions/operations-status/index.ts",
     "supabase/functions/sign-b2-object/index.ts",
 }
-EXPECTED_OPENAI_FILES = {"supabase/functions/ask-butterflylens/index.ts"}
+EXPECTED_OPENAI_FILES = {
+    "scripts/run_openai_live_evaluation.ts",
+    "supabase/functions/ask-butterflylens/index.ts",
+}
 
 
 class SecurityVerificationError(RuntimeError):
@@ -217,19 +220,25 @@ def verify_external_network_inventory() -> int:
         )
 
     edge_supabase: set[str] = set()
-    openai_clients: set[str] = set()
     for path in source_files(ROOT / "supabase" / "functions", (".ts",)):
         if "tests" in path.parts:
             continue
         text = path.read_text(encoding="utf-8")
         if "withSupabase" in text:
             edge_supabase.add(relative(path))
-        if "new OpenAI(" in text:
-            openai_clients.add(relative(path))
     if edge_supabase != EXPECTED_EDGE_SUPABASE_FILES:
         raise SecurityVerificationError(
             f"Edge Supabase boundary inventory changed: {sorted(edge_supabase)}"
         )
+
+    openai_clients: set[str] = set()
+    for directory in (ROOT / "scripts", ROOT / "supabase" / "functions"):
+        for path in source_files(directory, (".ts",)):
+            if "tests" in path.parts:
+                continue
+            text = path.read_text(encoding="utf-8")
+            if "new OpenAI(" in text:
+                openai_clients.add(relative(path))
     if openai_clients != EXPECTED_OPENAI_FILES:
         raise SecurityVerificationError(
             f"OpenAI boundary inventory changed: {sorted(openai_clients)}"

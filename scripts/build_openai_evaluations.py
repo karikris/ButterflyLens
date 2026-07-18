@@ -848,7 +848,7 @@ def trace_schema(response_schema: dict[str, Any]) -> dict[str, Any]:
             "case_id": {"type": "string", "pattern": r"^[a-z][a-z0-9_]{2,79}$"},
             "tool_calls": {
                 "type": "array",
-                "minItems": 1,
+                "minItems": 0,
                 "maxItems": 8,
                 "items": tool_call,
             },

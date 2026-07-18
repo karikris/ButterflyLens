@@ -303,6 +303,16 @@ class OpenAIEvaluationTests(unittest.TestCase):
         self._refingerprint(false_live)
         self._assert_grade_fails(false_live)
 
+    def test_trace_schema_records_zero_tool_failures_for_grader_rejection(self) -> None:
+        no_tool = self._synthetic_trace()
+        no_tool["cases"][0]["tool_calls"] = []
+        self._refingerprint(no_tool)
+        Draft202012Validator(
+            self.trace_schema,
+            format_checker=Draft202012Validator.FORMAT_CHECKER,
+        ).validate(no_tool)
+        self._assert_grade_fails(no_tool)
+
     def _synthetic_trace(self) -> dict[str, object]:
         cases: list[dict[str, object]] = []
         for case in self.suite["cases"]:

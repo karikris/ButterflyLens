@@ -123,6 +123,14 @@ fingerprints, required fact states, citations, replay labels, privacy, and
 claim-prohibition contracts. A strict complete-trace grader is ready for a
 later credentialed run.
 
+Task 18.6 adds the corresponding credentialed trace recorder. It uses the exact
+production analyst and submitted tool executor, requires an explicit
+`--confirm-live`, reads its key and private evaluation subject only from the
+process environment, fingerprints an atomic per-case checkpoint, and resumes
+the frozen suite without repeating completed cases. The transport schema
+allows a zero-tool case so refusal or failure can be preserved and rejected by
+the grader instead of being omitted. The runner does not weaken any pass rule.
+
 This is not a live model benchmark. No GPT-5.6 output, Responses request, or
 scripted substitute was used to produce `agent_evaluation.json`. Consequently,
 live final-answer accuracy, tool-selection accuracy, and unsupported-claim rate
@@ -135,5 +143,6 @@ Tasks 11.2 and 11.3 added the fourteen deterministic tools and authenticated
 server route with exact SDK pins. Task 11.4 added a credential-free replay of
 three stored tool traces. Task 11.5 adds the 48-case deterministic evaluation
 suite, offline result, and recorded-trace grader. The live route has not been
-deployed and no live OpenAI API call or model output exists; live-model
-evaluation remains not run.
+verified as deployed, and Task 18.6 adds the resumable operator recorder. There
+is no live OpenAI API call, model output, or complete recorded trace in the
+repository; live-model evaluation remains not run.

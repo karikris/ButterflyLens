@@ -112,3 +112,48 @@ Grade a complete trace with:
 ```bash
 uv run --locked python scripts/grade_openai_evaluation.py path/to/trace.json
 ```
+
+### Credentialed trace recorder
+
+`scripts/run_openai_live_evaluation.ts` is the explicit-opt-in operator path
+that produces the complete recorded trace. It imports the same `runAnalyst`
+loop and submitted tool executor as the authenticated Edge Function; it does
+not duplicate the prompt, request policy, tool dispatch, grounding checks, or
+response validation.
+
+Prepare `OPENAI_API_KEY` and a stable private `BUTTERFLYLENS_EVAL_SUBJECT` in a
+secure process environment. Do not place either value on the command line, in
+the checkpoint, or in the repository. Then run:
+
+```bash
+deno run --config supabase/functions/deno.json \
+  --allow-env=OPENAI_API_KEY,BUTTERFLYLENS_EVAL_SUBJECT \
+  --allow-read --allow-write --allow-net=api.openai.com \
+  scripts/run_openai_live_evaluation.ts \
+  --confirm-live \
+  --checkpoint /private/path/butterflylens-live-eval.checkpoint.json \
+  --output /private/path/butterflylens-live-eval.trace.json
+```
+
+The command runs the 48 frozen questions in order. It hashes the private
+subject before any request, retains `gpt-5.6-sol`, `xhigh`, `store: false`, the
+six-response/eight-tool budgets, and counts every Responses request. After each
+case it atomically fingerprints and replaces the checkpoint. Re-running the
+same command resumes only the unrecorded suffix and never silently repeats a
+checkpointed case. The final output path must not already exist.
+
+A model refusal, failed request, or no-tool answer can be retained as a
+zero-tool trace case. That preserves the observed failure; it does not make the
+evaluation pass. Grade the exact output separately:
+
+```bash
+uv run --locked python scripts/grade_openai_evaluation.py \
+  /private/path/butterflylens-live-eval.trace.json \
+  --output /private/path/butterflylens-live-eval.grade.json
+```
+
+Keep both files outside the repository until the trace passes the strict
+grader and receives privacy, scientific-language, cost, and human review. The
+recorder prints only paths and aggregate request counts, never model content,
+the API key, or the private subject. A runner implementation or synthetic test
+is not evidence that GPT-5.6 ran.
