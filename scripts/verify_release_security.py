@@ -310,27 +310,32 @@ def verify_privacy_and_release_blocks() -> tuple[str, bool, bool, tuple[str, ...
 
 
 def verify_completion_boundary() -> None:
-    result = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "verify_completion_audit.py")],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
+    verifiers = (
+        "verify_completion_audit.py",
+        "verify_current_completion_audit.py",
     )
-    if result.returncode != 0:
-        detail = result.stdout.strip() or result.stderr.strip() or "unknown failure"
-        raise SecurityVerificationError(
-            f"completion boundary verification failed: {detail}"
+    for verifier in verifiers:
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / verifier)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
         )
-    try:
-        completion = json.loads(result.stdout)
-    except json.JSONDecodeError as error:
-        raise SecurityVerificationError(
-            "completion boundary verifier returned invalid JSON"
-        ) from error
-    if completion.get("goal_complete") is not False:
-        raise SecurityVerificationError(
-            "completion boundary no longer blocks the release claim"
-        )
+        if result.returncode != 0:
+            detail = result.stdout.strip() or result.stderr.strip() or "unknown failure"
+            raise SecurityVerificationError(
+                f"completion boundary verification failed for {verifier}: {detail}"
+            )
+        try:
+            completion = json.loads(result.stdout)
+        except json.JSONDecodeError as error:
+            raise SecurityVerificationError(
+                f"completion boundary verifier returned invalid JSON: {verifier}"
+            ) from error
+        if completion.get("goal_complete") is not False:
+            raise SecurityVerificationError(
+                f"completion boundary no longer blocks the release claim: {verifier}"
+            )
 
 
 def run_audit() -> SecurityAudit:

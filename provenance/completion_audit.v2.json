@@ -1,0 +1,1673 @@
+{
+  "schema_version": "butterflylens-completion-audit/v1.0.0",
+  "audit_id": "butterflylens-18.5.1",
+  "generated_at": "2026-07-18T18:24:16Z",
+  "repository": "karikris/ButterflyLens",
+  "branch": "main",
+  "audited_commit": "45fb5ac07dcd51852c9e92217667f3f5052868fe",
+  "audited_tree": "aa93a6abf058d15c0ef80c7bde241a3355cfe024",
+  "source_goal_sha256": "898dbe5ec3520d1425bf5d0f891c49d6f7615318ed28b35b16f7513684a3fa40",
+  "primary_session_id": "019f7038-92ae-7021-8318-53ca97648404",
+  "requested_model": "gpt-5.6-sol",
+  "requested_reasoning_effort": "xhigh",
+  "goal_complete": false,
+  "completion_rule": "goal_complete may be true only when all 100 criteria are satisfied and every minimum artifact is present or an explicitly accepted equivalent",
+  "status_definitions": {
+    "satisfied": "direct implementation or artifact evidence exists at the audited commit",
+    "partial": "a contract or partial implementation exists but the criterion lacks required execution, data, or public-product evidence",
+    "blocked_by_user_instruction": "the operator explicitly deferred the model work required by the criterion",
+    "blocked_external": "completion requires an immutable upstream handoff, rights decision, live infrastructure receipt, credentialed run, or human production action"
+  },
+  "criteria_summary": {
+    "total": 100,
+    "satisfied": 80,
+    "partial": 8,
+    "blocked_by_user_instruction": 7,
+    "blocked_external": 5
+  },
+  "artifact_summary": {
+    "total": 46,
+    "present": 14,
+    "present_equivalent": 7,
+    "blocked_by_user_instruction": 5,
+    "blocked_external": 20
+  },
+  "authoritative_boundaries": {
+    "ala": "The rebuilt ButterflyLens ALA baseline remains authoritative; the public map is a separate conservative rights-screened aggregate.",
+    "gbif": "The fingerprinted GBIF Parquet pack is complementary and is not silently merged into or substituted for the ALA baseline.",
+    "biominer": "BioMiner is still fetching Flickr metadata; no partial output was inspected or copied.",
+    "flickr": "No Flickr API call was made by this goal.",
+    "models": "YOLOE and BioCLIP remain unfinished_not_run by explicit user direction."
+  },
+  "criteria": [
+    {
+      "id": 1,
+      "category": "repository_and_provenance",
+      "criterion": "ButterflyLens is a new public repository.",
+      "status": "satisfied",
+      "evidence": [
+        "BUILD_WEEK_BASELINE.md",
+        "provenance/commits.jsonl"
+      ],
+      "rationale": "The immutable baseline and non-force push receipts identify the new GitHub repository.",
+      "next_action": null
+    },
+    {
+      "id": 2,
+      "category": "repository_and_provenance",
+      "criterion": "All work is committed directly to main.",
+      "status": "satisfied",
+      "evidence": [
+        "CODEX_COLLABORATION.md",
+        "provenance/commits.jsonl"
+      ],
+      "rationale": "The workflow and receipts record direct main commits.",
+      "next_action": null
+    },
+    {
+      "id": 3,
+      "category": "repository_and_provenance",
+      "criterion": "Every subtask has its own commit.",
+      "status": "satisfied",
+      "evidence": [
+        "provenance/commits.jsonl",
+        "BUILD_WEEK_DELTA.md"
+      ],
+      "rationale": "Completed subtasks have distinct commit receipts; deferred work is not misreported as completed.",
+      "next_action": null
+    },
+    {
+      "id": 4,
+      "category": "repository_and_provenance",
+      "criterion": "Main is pushed after every task.",
+      "status": "satisfied",
+      "evidence": [
+        "provenance/commits.jsonl"
+      ],
+      "rationale": "Task push receipts identify local and remote main SHAs.",
+      "next_action": null
+    },
+    {
+      "id": 5,
+      "category": "repository_and_provenance",
+      "criterion": "No force push occurs.",
+      "status": "satisfied",
+      "evidence": [
+        "provenance/commits.jsonl"
+      ],
+      "rationale": "Every push receipt records forced=false.",
+      "next_action": null
+    },
+    {
+      "id": 6,
+      "category": "repository_and_provenance",
+      "criterion": "Every imported component has source repository and SHA.",
+      "status": "satisfied",
+      "evidence": [
+        "provenance/biominer_migration_manifest.yaml",
+        "provenance/taxalens_migration_manifest.yaml"
+      ],
+      "rationale": "Both upstream migration manifests bind imported or adapted components to exact origins.",
+      "next_action": null
+    },
+    {
+      "id": 7,
+      "category": "repository_and_provenance",
+      "criterion": "Build Week baseline and delta are clear.",
+      "status": "satisfied",
+      "evidence": [
+        "BUILD_WEEK_BASELINE.md",
+        "BUILD_WEEK_DELTA.md"
+      ],
+      "rationale": "The two documents freeze the before state and quantified delta separately.",
+      "next_action": null
+    },
+    {
+      "id": 8,
+      "category": "repository_and_provenance",
+      "criterion": "Primary GPT-5.6 Codex Session ID is recorded.",
+      "status": "satisfied",
+      "evidence": [
+        "provenance/sessions/019f7038-92ae-7021-8318-53ca97648404.json",
+        "provenance/model_usage.jsonl"
+      ],
+      "rationale": "The exact session ID and requested model configuration are recorded without claiming runtime identity observation.",
+      "next_action": null
+    },
+    {
+      "id": 9,
+      "category": "data_and_evidence",
+      "criterion": "Every taxon has a stable identity.",
+      "status": "satisfied",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/taxa.jsonl",
+        "data/packs/australian_butterflies/v1/crosswalk.jsonl"
+      ],
+      "rationale": "Accepted taxa and crosswalk assertions use stable ButterflyLens taxon keys.",
+      "next_action": null
+    },
+    {
+      "id": 10,
+      "category": "data_and_evidence",
+      "criterion": "Every name assertion has provenance and trust.",
+      "status": "satisfied",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/name_assertions.jsonl",
+        "data/packs/australian_butterflies/v1/manifest.json"
+      ],
+      "rationale": "The authoritative name pack retains source, trust, region, language, and query eligibility.",
+      "next_action": null
+    },
+    {
+      "id": 11,
+      "category": "data_and_evidence",
+      "criterion": "First Nations names are never invented or generalized.",
+      "status": "satisfied",
+      "evidence": [
+        "FIRST_NATIONS_NAMES.md",
+        "data/packs/australian_butterflies/v1/first_nations_name_review_manifest.json"
+      ],
+      "rationale": "The policy forbids invention and generalisation; no unapproved name is query eligible.",
+      "next_action": null
+    },
+    {
+      "id": 12,
+      "category": "data_and_evidence",
+      "criterion": "Every Flickr request is fingerprinted.",
+      "status": "partial",
+      "evidence": [
+        "packages/contracts/python/butterflylens/flickr/evidence_ledger.py",
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "rationale": "The ledger fails closed on request identity, but the active BioMiner stream has no admitted immutable request artifact.",
+      "next_action": "Admit a completed BioMiner Flickr handoff and verify every physical request against the ledger without making new Flickr calls in this goal."
+    },
+    {
+      "id": 13,
+      "category": "data_and_evidence",
+      "criterion": "Logical and physical queries remain separate.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/python/butterflylens/flickr/query_plan.py",
+        "packages/contracts/python/butterflylens/flickr/logical_ledger.py"
+      ],
+      "rationale": "Separate logical definitions, physical requests, and association records are enforced.",
+      "next_action": null
+    },
+    {
+      "id": 14,
+      "category": "data_and_evidence",
+      "criterion": "Every source photo has immutable source identity.",
+      "status": "partial",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/imported/reference_media_candidates.parquet",
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "rationale": "Admitted reference media has source identity; the active Flickr stream has no immutable handoff in this repository.",
+      "next_action": "Validate immutable provider identities when the completed Flickr handoff is available."
+    },
+    {
+      "id": 15,
+      "category": "data_and_evidence",
+      "criterion": "Every downloaded image has SHA-256.",
+      "status": "partial",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/gated/reference_media_objects.parquet",
+        "services/worker/python/butterflylens_worker/media_pipeline.py"
+      ],
+      "rationale": "Current admitted reference objects and the media pipeline require SHA-256, but no completed Flickr media inventory is attached.",
+      "next_action": "Verify hashes for every admitted Flickr media object after the immutable handoff."
+    },
+    {
+      "id": 16,
+      "category": "data_and_evidence",
+      "criterion": "Duplicate groups are preserved.",
+      "status": "satisfied",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_media_duplicate_candidates.parquet",
+        "data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_observation_mirror_groups.parquet"
+      ],
+      "rationale": "Reference duplicate and mirror relationships are retained as explicit evidence.",
+      "next_action": null
+    },
+    {
+      "id": 17,
+      "category": "data_and_evidence",
+      "criterion": "Every model artifact is fingerprinted.",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json",
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "rationale": "There are no admitted model artifacts because YOLOE and BioCLIP were explicitly skipped.",
+      "next_action": "Resume only under a later instruction authorising YOLOE and BioCLIP, then fingerprint every weight, configuration, input, and output."
+    },
+    {
+      "id": 18,
+      "category": "data_and_evidence",
+      "criterion": "Every review event is append-only.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260718015500_append_only_review_submission.sql",
+        "tests/test_append_only_review_submission.py"
+      ],
+      "rationale": "Database authorization and mutation guards preserve append-only review lineage.",
+      "next_action": null
+    },
+    {
+      "id": 19,
+      "category": "data_and_evidence",
+      "criterion": "Every map cell links to evidence.",
+      "status": "satisfied",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/map/geographic_impact_cells.parquet",
+        "data/packs/australian_butterflies/v1/map/map_manifest.json",
+        "tests/test_public_ala_map.py"
+      ],
+      "rationale": "All 630 submitted ALA H3 cells carry one or more exact evidence fingerprints, validate against the geographic-impact contract, and retain a cell fingerprint.",
+      "next_action": null
+    },
+    {
+      "id": 20,
+      "category": "data_and_evidence",
+      "criterion": "No candidate is silently promoted to an occurrence.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/python/butterflylens/contracts/occurrence_release.py",
+        "supabase/migrations/20260718110000_occurrence_release_policy.sql"
+      ],
+      "rationale": "Release requires explicit human, quality, rights, and expert gates.",
+      "next_action": null
+    },
+    {
+      "id": 21,
+      "category": "flickr",
+      "criterion": "One token bucket covers all Flickr methods.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/python/butterflylens/flickr/budget.py",
+        "tests/test_flickr_rate_limit_simulation.py"
+      ],
+      "rationale": "A single method-agnostic hourly ledger controls search, metadata, comments, and retry work.",
+      "next_action": null
+    },
+    {
+      "id": 22,
+      "category": "flickr",
+      "criterion": "Hard usage never exceeds 3,500 calls/hour.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/flickr/hourly-budget.v1.json",
+        "tests/test_flickr_rate_limit_simulation.py"
+      ],
+      "rationale": "The hard ceiling is enforced and tested across mixed methods.",
+      "next_action": null
+    },
+    {
+      "id": 23,
+      "category": "flickr",
+      "criterion": "Normal planned usage does not exceed 3,000.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/flickr/hourly-budget.v1.json",
+        "packages/contracts/python/butterflylens/flickr/budget.py"
+      ],
+      "rationale": "The normal lane is separately capped at 3,000.",
+      "next_action": null
+    },
+    {
+      "id": 24,
+      "category": "flickr",
+      "criterion": "Reserve is tracked.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/flickr/BUDGET.md",
+        "packages/contracts/python/butterflylens/flickr/budget.py"
+      ],
+      "rationale": "Reserve reservations, commits, releases, and retry use are explicit ledger state.",
+      "next_action": null
+    },
+    {
+      "id": 25,
+      "category": "flickr",
+      "criterion": "Geo pages use the provider limit.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/python/butterflylens/flickr/execution.py",
+        "tests/test_flickr_search_page_execution.py"
+      ],
+      "rationale": "Geo page execution uses the configured provider page limit and validates receipts.",
+      "next_action": null
+    },
+    {
+      "id": 26,
+      "category": "flickr",
+      "criterion": "Queries reaching the search-result ceiling are partitioned.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/python/butterflylens/flickr/partitioning.py",
+        "tests/test_flickr_australia_partitioning.py"
+      ],
+      "rationale": "Ceiling detection and deterministic Australian partitions fail closed on incomplete coverage.",
+      "next_action": null
+    },
+    {
+      "id": 27,
+      "category": "flickr",
+      "criterion": "Search terms are not treated as labels.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/flickr/QUERY_PLANNER.md",
+        "packages/contracts/python/butterflylens/flickr/query_compiler.py"
+      ],
+      "rationale": "Query associations remain retrieval reasons, never scientific labels.",
+      "next_action": null
+    },
+    {
+      "id": 28,
+      "category": "flickr",
+      "criterion": "Australia-known species run first.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/python/butterflylens/flickr/scheduler.py",
+        "tests/test_flickr_australia_known_lane.py"
+      ],
+      "rationale": "The scheduler closes Australian lanes before the separately reserved global lane.",
+      "next_action": null
+    },
+    {
+      "id": 29,
+      "category": "flickr",
+      "criterion": "Global out-of-range species use a separate hypothesis lane.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/flickr/global_out_of_range_status.json",
+        "tests/test_flickr_global_out_of_range_lane.py"
+      ],
+      "rationale": "The fail-closed global lane is explicitly a novel-presence hypothesis, not Australian occurrence evidence.",
+      "next_action": null
+    },
+    {
+      "id": 30,
+      "category": "flickr",
+      "criterion": "Public pages display no more than 30 Flickr images.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/flickr/public-display-policy.v1.json",
+        "tests/test_flickr_public_display_policy.py"
+      ],
+      "rationale": "Public payloads and page rendering are capped at 30 Flickr images.",
+      "next_action": null
+    },
+    {
+      "id": 31,
+      "category": "flickr",
+      "criterion": "Attribution and required notice are visible.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/flickr/public-display-policy.v1.json",
+        "apps/web/src/flickr/FlickrDisplayBoundary.tsx"
+      ],
+      "rationale": "The public component displays source, creator, licence, provider link, and required notice.",
+      "next_action": null
+    },
+    {
+      "id": 32,
+      "category": "models",
+      "criterion": "BioCLIP runs locally from Hugging Face weights by default.",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json",
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "rationale": "BioCLIP execution and weights were explicitly skipped.",
+      "next_action": "Authorise and audit a later local BioCLIP runtime and weight receipt."
+    },
+    {
+      "id": 33,
+      "category": "models",
+      "criterion": "Flickr images are not uploaded to Hugging Face by default.",
+      "status": "satisfied",
+      "evidence": [
+        "DATA_RIGHTS.md",
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "rationale": "The architecture permits local-only model processing and no Flickr image upload occurred.",
+      "next_action": null
+    },
+    {
+      "id": 34,
+      "category": "models",
+      "criterion": "YOLOE is a router, not a species classifier.",
+      "status": "satisfied",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json",
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "rationale": "The admitted contract limits YOLOE to routing and records the runtime as unfinished.",
+      "next_action": null
+    },
+    {
+      "id": 35,
+      "category": "models",
+      "criterion": "BioCLIP loads once per worker.",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "rationale": "Persistent model workers were explicitly left unfinished.",
+      "next_action": "Implement and observe one-load worker lifecycle only after model work is authorised."
+    },
+    {
+      "id": 36,
+      "category": "models",
+      "criterion": "Embeddings are reused.",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-5.4.md",
+        "services/worker/python/butterflylens_worker/restart.py"
+      ],
+      "rationale": "Embedding identity metadata exists, but no embedding was computed or reused.",
+      "next_action": "Authorise model work and attach immutable cache-hit evidence."
+    },
+    {
+      "id": 37,
+      "category": "models",
+      "criterion": "Candidate unions preserve query, geography and visual reasons.",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-6.3.md"
+      ],
+      "rationale": "Candidate retrieval depends on the explicitly skipped YOLOE and BioCLIP stages.",
+      "next_action": "Build and fingerprint the reason-preserving union after model execution is authorised."
+    },
+    {
+      "id": 38,
+      "category": "models",
+      "criterion": "Higher-rank scores do not catastrophically prune species.",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-6.3.md"
+      ],
+      "rationale": "No candidate scoring or pruning run exists.",
+      "next_action": "Run authorised candidate retrieval and prove species retention with real artifacts."
+    },
+    {
+      "id": 39,
+      "category": "models",
+      "criterion": "Raw similarities are not displayed as probabilities.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/schemas/classification-maturity.schema.json",
+        "apps/web/src/species/speciesCatalogueModel.ts"
+      ],
+      "rationale": "Public evidence maturity uses explicit availability and does not expose raw model similarity as probability.",
+      "next_action": null
+    },
+    {
+      "id": 40,
+      "category": "models",
+      "criterion": "Evidence maturity is visible.",
+      "status": "satisfied",
+      "evidence": [
+        "services/worker/python/butterflylens_worker/classification_maturity.py",
+        "apps/web/src/species/SpeciesDirectory.tsx"
+      ],
+      "rationale": "Per-image and species views expose evidence availability and unavailable reasons.",
+      "next_action": null
+    },
+    {
+      "id": 41,
+      "category": "community_review",
+      "criterion": "Multiple independent reviewers can receive the same image.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260718013600_repeated_independent_assignments.sql",
+        "tests/test_repeated_assignment_schema.py"
+      ],
+      "rationale": "Assignment policy supports repeated independent allocation and disagreement escalation.",
+      "next_action": null
+    },
+    {
+      "id": 42,
+      "category": "community_review",
+      "criterion": "Reviews are blinded where required.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260718014600_blind_review_disclosure.sql",
+        "tests/test_blind_review_schema.py"
+      ],
+      "rationale": "Blind campaigns hide model, query, source-comment, and peer evidence until decision.",
+      "next_action": null
+    },
+    {
+      "id": 43,
+      "category": "community_review",
+      "criterion": "Review events bind user, image, question and version.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260718015500_append_only_review_submission.sql",
+        "packages/contracts/schemas/verification-event.schema.json"
+      ],
+      "rationale": "Review events bind authenticated identity, image hash, question, campaign, and version lineage.",
+      "next_action": null
+    },
+    {
+      "id": 44,
+      "category": "community_review",
+      "criterion": "Skip is not decisive.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/verification/python/butterflylens_verification/consensus.py",
+        "tests/test_layered_consensus.py"
+      ],
+      "rationale": "Skip is excluded from decisive consensus evidence.",
+      "next_action": null
+    },
+    {
+      "id": 45,
+      "category": "community_review",
+      "criterion": "Can't view is not decisive.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/verification/python/butterflylens_verification/consensus.py",
+        "tests/test_layered_consensus.py"
+      ],
+      "rationale": "Can't-view events are operational evidence, not identity votes.",
+      "next_action": null
+    },
+    {
+      "id": 46,
+      "category": "community_review",
+      "criterion": "Conflicts are preserved.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260718021000_conflict_adjudication_workflow.sql",
+        "packages/contracts/schemas/verification-consensus.schema.json"
+      ],
+      "rationale": "Consensus and adjudication preserve conflicting and minority evidence.",
+      "next_action": null
+    },
+    {
+      "id": 47,
+      "category": "community_review",
+      "criterion": "Expert adjudication exists.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260718021000_conflict_adjudication_workflow.sql",
+        "packages/contracts/schemas/verification-adjudication.schema.json"
+      ],
+      "rationale": "Qualified expert adjudication is an explicit append-only workflow.",
+      "next_action": null
+    },
+    {
+      "id": 48,
+      "category": "community_review",
+      "criterion": "Guests cannot release scientific records.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260717215002_rls_role_policies.sql",
+        "supabase/migrations/20260718110000_occurrence_release_policy.sql"
+      ],
+      "rationale": "RLS and release procedures deny guest scientific release authority.",
+      "next_action": null
+    },
+    {
+      "id": 49,
+      "category": "community_review",
+      "criterion": "Contributor celebration does not reward speed.",
+      "status": "satisfied",
+      "evidence": [
+        "supabase/migrations/20260718052000_contributor_impact_experience.sql",
+        "apps/web/src/community/ContributorExperience.tsx"
+      ],
+      "rationale": "Contributor summaries celebrate evidence impact and exclude speed rankings.",
+      "next_action": null
+    },
+    {
+      "id": 50,
+      "category": "community_review",
+      "criterion": "Reviewer reliability is private and domain-specific.",
+      "status": "satisfied",
+      "evidence": [
+        "policies/reviewer-reliability.md",
+        "supabase/migrations/20260718023500_reviewer_reliability_estimates.sql"
+      ],
+      "rationale": "Reliability remains private and scoped by family, life stage, and visual domain.",
+      "next_action": null
+    },
+    {
+      "id": 51,
+      "category": "community_review",
+      "criterion": "Reviewer reliability never uses model agreement as truth.",
+      "status": "satisfied",
+      "evidence": [
+        "policies/reviewer-reliability.md",
+        "packages/verification/python/butterflylens_verification/reliability.py"
+      ],
+      "rationale": "The estimator rejects model agreement and majority agreement as reliability truth.",
+      "next_action": null
+    },
+    {
+      "id": 52,
+      "category": "community_review",
+      "criterion": "Reliability weighting begins only after sufficient evidence.",
+      "status": "satisfied",
+      "evidence": [
+        "policies/reviewer-reliability.md",
+        "tests/test_reviewer_reliability_estimator.py"
+      ],
+      "rationale": "Insufficient evidence preserves equal weight with explicit blockers.",
+      "next_action": null
+    },
+    {
+      "id": 53,
+      "category": "quality",
+      "criterion": "Representative audit and failure discovery are separate.",
+      "status": "satisfied",
+      "evidence": [
+        "policies/representative-audit.md",
+        "packages/contracts/schemas/quality-snapshot.schema.json"
+      ],
+      "rationale": "Separate audit kinds and claim boundaries are structural requirements.",
+      "next_action": null
+    },
+    {
+      "id": 54,
+      "category": "quality",
+      "criterion": "Sampling probabilities are retained.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/verification/python/butterflylens_verification/dataset_quality.py",
+        "packages/contracts/schemas/quality-snapshot.schema.json"
+      ],
+      "rationale": "Each representative audit row retains its inclusion probability and sampling frame.",
+      "next_action": null
+    },
+    {
+      "id": 55,
+      "category": "quality",
+      "criterion": "Confidence intervals identify their method.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/verification/python/butterflylens_verification/dataset_quality.py",
+        "tests/test_dataset_quality_estimator.py"
+      ],
+      "rationale": "Interval method, level, grouping, and resampling evidence are explicit.",
+      "next_action": null
+    },
+    {
+      "id": 56,
+      "category": "quality",
+      "criterion": "Effective sample size is reported.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/schemas/quality-snapshot.schema.json",
+        "apps/web/src/quality/QualityDashboard.tsx"
+      ],
+      "rationale": "The contract and dashboard retain effective sample size separately from reviewed rows.",
+      "next_action": null
+    },
+    {
+      "id": 57,
+      "category": "quality",
+      "criterion": "Reviewer agreement is calculated only when valid.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/verification/python/butterflylens_verification/reliability.py",
+        "tests/test_reviewer_reliability_estimator.py"
+      ],
+      "rationale": "Overlap, independence, sufficient evidence, and adjudication lineage fail closed.",
+      "next_action": null
+    },
+    {
+      "id": 58,
+      "category": "quality",
+      "criterion": "Species-level quality is visible.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/quality/QualityDashboard.tsx",
+        "apps/web/src/quality/submittedQualityProjection.json"
+      ],
+      "rationale": "The dashboard exposes species quality or an exact unavailable state rather than a fabricated zero.",
+      "next_action": null
+    },
+    {
+      "id": 59,
+      "category": "quality",
+      "criterion": "Release requires configured quality gates.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/python/butterflylens/contracts/occurrence_release.py",
+        "supabase/migrations/20260718110000_occurrence_release_policy.sql"
+      ],
+      "rationale": "Release procedures require configured representative quality and consensus gates.",
+      "next_action": null
+    },
+    {
+      "id": 60,
+      "category": "quality",
+      "criterion": "No \"more votes guarantee accuracy\" claim exists.",
+      "status": "satisfied",
+      "evidence": [
+        "policies/reviewer-reliability.md",
+        "README.md"
+      ],
+      "rationale": "Project language distinguishes repeated evidence from guaranteed accuracy.",
+      "next_action": null
+    },
+    {
+      "id": 61,
+      "category": "map",
+      "criterion": "ALA is the blue baseline.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/submittedEvidenceMap.css",
+        "apps/web/src/map/SubmittedEvidenceMap.test.tsx"
+      ],
+      "rationale": "The rights-screened Submitted map renders ALA baseline evidence as blue filled H3 cells with an exact accessible table.",
+      "next_action": null
+    },
+    {
+      "id": 62,
+      "category": "map",
+      "criterion": "Flickr is amber.",
+      "status": "blocked_external",
+      "evidence": [
+        "packages/contracts/GEOGRAPHIC_IMPACT.md",
+        "provenance/task_reports/butterflylens-7.3.md"
+      ],
+      "rationale": "No completed Flickr handoff or public impact cell set is available.",
+      "next_action": "Admit the completed Flickr handoff and render rights-cleared amber candidate evidence."
+    },
+    {
+      "id": 63,
+      "category": "map",
+      "criterion": "National view uses a heat map.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json",
+        "apps/web/src/map/SubmittedEvidenceMap.test.tsx"
+      ],
+      "rationale": "The national Submitted view renders all 630 coarse H3 cells as an offline aggregate heatmap backed by 213,310 map-eligible ALA rows.",
+      "next_action": null
+    },
+    {
+      "id": 64,
+      "category": "map",
+      "criterion": "Lower scopes support bubbles and records.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/SubmittedEvidenceMap.test.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "rationale": "Lower scopes expose proportional bubbles, exact tables, selected scope details, and coordinate-free provider-record samples.",
+      "next_action": null
+    },
+    {
+      "id": 65,
+      "category": "map",
+      "criterion": "State drilldown works.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/SubmittedEvidenceMap.test.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "rationale": "The public map provides nine exact state and territory rows with filtering, selection, counts, and synchronized details.",
+      "next_action": null
+    },
+    {
+      "id": 66,
+      "category": "map",
+      "criterion": "IBRA drilldown works.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/SubmittedEvidenceMap.test.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "rationale": "The public map provides 87 exact IBRA v7 rows with filtering, selection, counts, and synchronized details.",
+      "next_action": null
+    },
+    {
+      "id": 67,
+      "category": "map",
+      "criterion": "LGA drilldown works.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/SubmittedEvidenceMap.test.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "rationale": "The public map provides 532 exact LGA 2023 statistical-approximation rows with filtering, selection, counts, and a visible qualification.",
+      "next_action": null
+    },
+    {
+      "id": 68,
+      "category": "map",
+      "criterion": "H3 drilldown works.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/SubmittedEvidenceMap.test.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "rationale": "The public map provides 630 exact coarse H3 rows synchronized with the selectable map and selected-cell evidence card.",
+      "next_action": null
+    },
+    {
+      "id": 69,
+      "category": "map",
+      "criterion": "Candidate, reviewed and release-ready states differ.",
+      "status": "partial",
+      "evidence": [
+        "packages/contracts/schemas/geographic-impact-cell.schema.json",
+        "supabase/migrations/20260717214211_map_impact_schema.sql"
+      ],
+      "rationale": "Distinct maturity fields are enforced, but no real public impact cells demonstrate the states.",
+      "next_action": "Materialize and render evidence-backed state differences after upstream and rights gates clear."
+    },
+    {
+      "id": 70,
+      "category": "map",
+      "criterion": "Potential contribution is not called a new occurrence.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/contracts/GEOGRAPHIC_IMPACT.md",
+        "packages/contracts/python/butterflylens/contracts/occurrence_release.py"
+      ],
+      "rationale": "The geographic contract and public-claims policy consistently label candidate contribution as potential.",
+      "next_action": null
+    },
+    {
+      "id": 71,
+      "category": "map",
+      "criterion": "Submitted and live snapshots are distinct.",
+      "status": "satisfied",
+      "evidence": [
+        "data/submission/v1/submitted_snapshot.json",
+        "apps/web/src/operations/submittedMonitoringSnapshot.json"
+      ],
+      "rationale": "Immutable submitted state and optional timestamped live state are separate modes.",
+      "next_action": null
+    },
+    {
+      "id": 72,
+      "category": "map",
+      "criterion": "The map continues working when the M5 is offline.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/App.tsx",
+        "apps/web/src/communityJourney.e2e.test.tsx",
+        "apps/web/e2e/public-experience.browser.spec.ts"
+      ],
+      "rationale": "The committed map is bundled with the static site and passes the credential-free journey and seven worker-independent browser variants.",
+      "next_action": null
+    },
+    {
+      "id": 73,
+      "category": "openai",
+      "criterion": "GPT-5.6 is a meaningful runtime component.",
+      "status": "blocked_external",
+      "evidence": [
+        "packages/openai/implementation-requirements.v1.json",
+        "provenance/task_reports/butterflylens-11.5.md"
+      ],
+      "rationale": "A bounded server runtime exists, but no credentialed live GPT-5.6 invocation or deployment receipt is claimed.",
+      "next_action": "Run the bounded representative live evaluation with approved credentials, retain the trace, and obtain human review."
+    },
+    {
+      "id": 74,
+      "category": "openai",
+      "criterion": "GPT-5.6 uses deterministic evidence tools.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/tool_contracts.json",
+        "packages/openai/python/butterflylens_openai/tools.py"
+      ],
+      "rationale": "Fourteen strict read-only tools return bounded fingerprinted results.",
+      "next_action": null
+    },
+    {
+      "id": 75,
+      "category": "openai",
+      "criterion": "GPT-5.6 cites artifacts.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/analyst-response.schema.json",
+        "packages/openai/python/butterflylens_openai/repository.py"
+      ],
+      "rationale": "Every factual live response must cite allowlisted commit-bound artifacts.",
+      "next_action": null
+    },
+    {
+      "id": 76,
+      "category": "openai",
+      "criterion": "GPT-5.6 does not identify species from memory.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/implementation-requirements.v1.json",
+        "tests/test_openai_evaluations.py"
+      ],
+      "rationale": "Unknown taxon identities and model-memory claims fail closed.",
+      "next_action": null
+    },
+    {
+      "id": 77,
+      "category": "openai",
+      "criterion": "GPT-5.6 cannot fabricate map counts.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/implementation-requirements.v1.json",
+        "tests/test_openai_evidence_tools.py"
+      ],
+      "rationale": "Unavailable evidence remains unavailable and counts must come from cited deterministic results.",
+      "next_action": null
+    },
+    {
+      "id": 78,
+      "category": "openai",
+      "criterion": "GPT-5.6 can explain community impact.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/tool_contracts.json",
+        "packages/openai/analyst-eval-cases.v1.json"
+      ],
+      "rationale": "A deterministic community-impact tool and evaluation cases exist, with unavailable-state abstention.",
+      "next_action": null
+    },
+    {
+      "id": 79,
+      "category": "openai",
+      "criterion": "GPT-5.6 can recommend the next review batch.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/tool_contracts.json",
+        "packages/openai/python/butterflylens_openai/tools.py"
+      ],
+      "rationale": "The bounded recommendation tool returns workflow priority from cited repository evidence.",
+      "next_action": null
+    },
+    {
+      "id": 80,
+      "category": "openai",
+      "criterion": "Stored judge replay works without credentials.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/submitted-replays.v1.json",
+        "tests/test_openai_replay.py"
+      ],
+      "rationale": "Credential-free replay validates complete traces and fingerprints without network fallback.",
+      "next_action": null
+    },
+    {
+      "id": 81,
+      "category": "openai",
+      "criterion": "Agent evaluations pass.",
+      "status": "partial",
+      "evidence": [
+        "packages/openai/agent_evaluation.json",
+        "provenance/task_reports/butterflylens-11.5.md"
+      ],
+      "rationale": "All deterministic grader cases pass, but every live_model_status remains not_run.",
+      "next_action": "Run and grade the representative live GPT-5.6 traces before claiming the agent evaluation complete."
+    },
+    {
+      "id": 82,
+      "category": "operations",
+      "criterion": "M5 worker has a heartbeat.",
+      "status": "partial",
+      "evidence": [
+        "services/worker/python/butterflylens_worker/heartbeat.py",
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "rationale": "The signed heartbeat contract and tests exist, but no live M5 heartbeat receipt is attached.",
+      "next_action": "Attach a committed live worker heartbeat after the BioMiner handoff and deployment are stable."
+    },
+    {
+      "id": 83,
+      "category": "operations",
+      "criterion": "Worker restarts automatically.",
+      "status": "partial",
+      "evidence": [
+        "services/worker/launchd/com.karikris.butterflylens.worker.plist.in",
+        "tests/test_worker_launchd_service.py"
+      ],
+      "rationale": "The launchd service is rendered and tested, but installation and observed restart are not evidenced.",
+      "next_action": "Install on the target M5 and retain an observed restart receipt without exposing secrets."
+    },
+    {
+      "id": 84,
+      "category": "operations",
+      "criterion": "Pipeline resumes after interruption.",
+      "status": "satisfied",
+      "evidence": [
+        "services/worker/python/butterflylens_worker/restart.py",
+        "tests/test_worker_interruption_resume.py"
+      ],
+      "rationale": "Append-only journals and fingerprinted resume plans reconstruct committed work and retry only uncommitted work.",
+      "next_action": null
+    },
+    {
+      "id": 85,
+      "category": "operations",
+      "criterion": "No committed API request is repeated.",
+      "status": "satisfied",
+      "evidence": [
+        "services/worker/python/butterflylens_worker/restart.py",
+        "packages/contracts/python/butterflylens/flickr/evidence_ledger.py"
+      ],
+      "rationale": "Committed request identities are reused and conflicting repeats fail closed.",
+      "next_action": null
+    },
+    {
+      "id": 86,
+      "category": "operations",
+      "criterion": "No committed image is redownloaded unnecessarily.",
+      "status": "satisfied",
+      "evidence": [
+        "services/worker/python/butterflylens_worker/restart.py",
+        "services/worker/python/butterflylens_worker/media_pipeline.py"
+      ],
+      "rationale": "Committed source and content identities prevent unnecessary redownloads.",
+      "next_action": null
+    },
+    {
+      "id": 87,
+      "category": "operations",
+      "criterion": "No unchanged embedding is recomputed.",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "services/worker/python/butterflylens_worker/restart.py",
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "rationale": "Idempotency metadata exists, but embeddings were explicitly not computed.",
+      "next_action": "After model work is authorised, attach a real unchanged-input cache-hit receipt."
+    },
+    {
+      "id": 88,
+      "category": "operations",
+      "criterion": "The public site is not hosted from the M5.",
+      "status": "satisfied",
+      "evidence": [
+        "infra/supabase/production.v1.json",
+        "tests/test_worker_independent_site.py"
+      ],
+      "rationale": "The public site and submitted artifacts remain independently hosted and queryable.",
+      "next_action": null
+    },
+    {
+      "id": 89,
+      "category": "operations",
+      "criterion": "Submitted snapshot remains immutable.",
+      "status": "satisfied",
+      "evidence": [
+        "data/submission/v1/submitted_snapshot.json",
+        "tests/test_submitted_snapshot_freeze.py"
+      ],
+      "rationale": "The canonical submitted snapshot is fingerprinted and reproducibly frozen.",
+      "next_action": null
+    },
+    {
+      "id": 90,
+      "category": "operations",
+      "criterion": "Live updates are append-only and timestamped.",
+      "status": "partial",
+      "evidence": [
+        "supabase/migrations/20260718090000_operational_monitoring.sql",
+        "packages/operations/LIVE_SERVICE_RESILIENCE.md"
+      ],
+      "rationale": "The database and projection contracts require append-only timestamped updates, but no live update receipt exists.",
+      "next_action": "Attach a verified live snapshot lineage after deployment rather than inferring it from the contract."
+    },
+    {
+      "id": 91,
+      "category": "competition",
+      "criterion": "README clearly explains Codex and GPT-5.6.",
+      "status": "satisfied",
+      "evidence": [
+        "README.md",
+        "CODEX_COLLABORATION.md"
+      ],
+      "rationale": "The README separates Codex engineering from the bounded GPT-5.6 analyst.",
+      "next_action": null
+    },
+    {
+      "id": 92,
+      "category": "competition",
+      "criterion": "Public demo requires no private credentials.",
+      "status": "satisfied",
+      "evidence": [
+        "README.md",
+        "packages/openai/submitted-replays.v1.json"
+      ],
+      "rationale": "The Submitted site and analyst replay are credential-free and fail closed without live services.",
+      "next_action": null
+    },
+    {
+      "id": 93,
+      "category": "competition",
+      "criterion": "Video is under three minutes.",
+      "status": "blocked_external",
+      "evidence": [
+        "assets/video/butterflylens-demo.v1.json",
+        "provenance/task_reports/butterflylens-17.3.md"
+      ],
+      "rationale": "The 2:48 production packet is verified, but no recorded and approved public video exists.",
+      "next_action": "Record, edit, approve, caption, and publish the real-product cut at no more than 2:50."
+    },
+    {
+      "id": 94,
+      "category": "competition",
+      "criterion": "Video shows the real product.",
+      "status": "blocked_external",
+      "evidence": [
+        "DEMO_VIDEO.md",
+        "provenance/task_reports/butterflylens-17.3.md"
+      ],
+      "rationale": "The script is bound to real routes, but the real-product footage has not been recorded.",
+      "next_action": "Capture only the pinned public product, complete human review, and publish the approved video."
+    },
+    {
+      "id": 95,
+      "category": "competition",
+      "criterion": "Judges can review an image.",
+      "status": "satisfied",
+      "evidence": [
+        "apps/web/src/review/ReviewLanding.tsx",
+        "tests/test_judge_guide.py"
+      ],
+      "rationale": "The credential-free Submitted experience supports a local evidence-review interaction with honest persistence limits.",
+      "next_action": null
+    },
+    {
+      "id": 96,
+      "category": "competition",
+      "criterion": "Judges can explore the map.",
+      "status": "satisfied",
+      "evidence": [
+        "JUDGE_GUIDE.md",
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/e2e/public-experience.browser.spec.ts"
+      ],
+      "rationale": "The public judge route opens the submitted national heatmap, exact lower-scope drilldowns, and selected-cell evidence without credentials.",
+      "next_action": null
+    },
+    {
+      "id": 97,
+      "category": "competition",
+      "criterion": "Judges can inspect the live worker.",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md",
+        "apps/web/src/operations/submittedMonitoringSnapshot.json"
+      ],
+      "rationale": "The page truthfully reports worker evidence unavailable; no live M5 receipt is attached.",
+      "next_action": "Connect a rights-safe committed live status feed after the external fetch and worker deployment are complete."
+    },
+    {
+      "id": 98,
+      "category": "competition",
+      "criterion": "Judges can use GPT-5.6 replay.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/submitted-replays.v1.json",
+        "apps/web/src/analyst/AskButterflyLens.tsx"
+      ],
+      "rationale": "Judges can run the integrity-checked credential-free analyst replay.",
+      "next_action": null
+    },
+    {
+      "id": 99,
+      "category": "competition",
+      "criterion": "All displayed metrics come from artifacts.",
+      "status": "satisfied",
+      "evidence": [
+        "packages/openai/submitted-artifacts.v1.json",
+        "data/submission/v1/submitted_snapshot.json"
+      ],
+      "rationale": "Submitted metrics and analyst facts are bound to fingerprinted local artifacts; unavailable evidence is not rendered as zero.",
+      "next_action": null
+    },
+    {
+      "id": 100,
+      "category": "competition",
+      "criterion": "ButterflyLens is demonstrably distinct from BioMiner and TaxaLens.",
+      "status": "satisfied",
+      "evidence": [
+        "UPSTREAM_TAXALENS.md",
+        "provenance/biominer_migration_manifest.yaml",
+        "provenance/taxalens_migration_manifest.yaml"
+      ],
+      "rationale": "Product, repository, ownership, and component boundaries distinguish the community platform from both upstream projects.",
+      "next_action": null
+    }
+  ],
+  "minimum_artifacts": [
+    {
+      "category": "taxonomy",
+      "required": "australian_butterfly_taxa.parquet",
+      "status": "present_equivalent",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/taxa.jsonl"
+      ],
+      "note": "Authoritative stable rows are committed as JSONL rather than Parquet."
+    },
+    {
+      "category": "taxonomy",
+      "required": "taxon_crosswalk.parquet",
+      "status": "present_equivalent",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/crosswalk.jsonl"
+      ],
+      "note": "Authoritative crosswalk rows are committed as JSONL rather than Parquet."
+    },
+    {
+      "category": "taxonomy",
+      "required": "name_assertions.parquet",
+      "status": "present_equivalent",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/name_assertions.jsonl"
+      ],
+      "note": "Authoritative name rows are committed as JSONL rather than Parquet."
+    },
+    {
+      "category": "taxonomy",
+      "required": "First Nations name-review manifest",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/first_nations_name_review_manifest.json"
+      ],
+      "note": "Exact semantic artifact is present."
+    },
+    {
+      "category": "taxonomy",
+      "required": "pack_manifest.json",
+      "status": "present_equivalent",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/manifest.json"
+      ],
+      "note": "The version-root manifest is the pack manifest."
+    },
+    {
+      "category": "ala",
+      "required": "ala_baseline_occurrences.parquet",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/ala/ala_baseline_occurrences.parquet"
+      ],
+      "note": "Authoritative rebuilt baseline."
+    },
+    {
+      "category": "ala",
+      "required": "ala_baseline_cells.parquet",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/ala/ala_baseline_cells.parquet"
+      ],
+      "note": "Authoritative rebuilt baseline cells."
+    },
+    {
+      "category": "ala",
+      "required": "ala_dataset_manifest.parquet",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/ala/ala_dataset_manifest.parquet"
+      ],
+      "note": "Exact artifact is present."
+    },
+    {
+      "category": "ala",
+      "required": "ala_attribution.json",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/ala/ala_attribution.json"
+      ],
+      "note": "Exact artifact is present."
+    },
+    {
+      "category": "ala",
+      "required": "ala_snapshot_manifest.json",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json"
+      ],
+      "note": "Exact artifact is present."
+    },
+    {
+      "category": "flickr",
+      "required": "flickr_query_definitions.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "note": "BioMiner metadata fetch is active; no immutable handoff exists."
+    },
+    {
+      "category": "flickr",
+      "required": "flickr_physical_requests.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "note": "No completed fingerprinted request handoff exists."
+    },
+    {
+      "category": "flickr",
+      "required": "flickr_query_associations.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "note": "No completed logical-to-physical association handoff exists."
+    },
+    {
+      "category": "flickr",
+      "required": "flickr_api_ledger.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "note": "No completed API ledger handoff exists."
+    },
+    {
+      "category": "flickr",
+      "required": "flickr_photos.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "note": "Partial BioMiner metadata was deliberately not copied."
+    },
+    {
+      "category": "flickr",
+      "required": "flickr_geography.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-7.1.md"
+      ],
+      "note": "No quality-complete Flickr geography handoff exists."
+    },
+    {
+      "category": "flickr",
+      "required": "flickr_comments.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "note": "No completed comments handoff exists and this goal made no Flickr call."
+    },
+    {
+      "category": "media_and_models",
+      "required": "media_objects.parquet",
+      "status": "present_equivalent",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/gated/reference_media_objects.parquet"
+      ],
+      "note": "The admitted reference-media object table is present; Flickr media is not."
+    },
+    {
+      "category": "media_and_models",
+      "required": "duplicate_groups.parquet",
+      "status": "present_equivalent",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_media_duplicate_candidates.parquet",
+        "data/packs/australian_butterflies/v1/references/v1/deduplicated/reference_observation_mirror_groups.parquet"
+      ],
+      "note": "Duplicate and mirror groups are retained in two typed tables."
+    },
+    {
+      "category": "media_and_models",
+      "required": "yoloe_routes.parquet",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "note": "YOLOE is unfinished_not_run."
+    },
+    {
+      "category": "media_and_models",
+      "required": "full_frame_inputs.parquet",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-6.3.md"
+      ],
+      "note": "Model inputs were explicitly skipped."
+    },
+    {
+      "category": "media_and_models",
+      "required": "bioclip_embeddings.parquet",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-5.4.md"
+      ],
+      "note": "BioCLIP is unfinished_not_run."
+    },
+    {
+      "category": "media_and_models",
+      "required": "species_prototypes.parquet",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-6.1.md"
+      ],
+      "note": "Prototype construction was explicitly skipped."
+    },
+    {
+      "category": "media_and_models",
+      "required": "candidate_scores.parquet",
+      "status": "blocked_by_user_instruction",
+      "evidence": [
+        "provenance/task_reports/butterflylens-6.3.md"
+      ],
+      "note": "Candidate scoring was explicitly skipped."
+    },
+    {
+      "category": "media_and_models",
+      "required": "reference_quality_diagnostics.parquet",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/references/v1/gated/reference_quality_diagnostics.parquet"
+      ],
+      "note": "Exact artifact is present."
+    },
+    {
+      "category": "verification",
+      "required": "verification_campaigns.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "supabase/migrations/20260717213515_review_schema.sql"
+      ],
+      "note": "Contract and database table exist, but no immutable live campaign snapshot is attached."
+    },
+    {
+      "category": "verification",
+      "required": "verification_assignments.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "supabase/migrations/20260718013600_repeated_independent_assignments.sql"
+      ],
+      "note": "Assignment implementation exists, but no immutable live assignment snapshot is attached."
+    },
+    {
+      "category": "verification",
+      "required": "review_events.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "supabase/migrations/20260718015500_append_only_review_submission.sql"
+      ],
+      "note": "Append-only storage exists, but no real community event snapshot is attached."
+    },
+    {
+      "category": "verification",
+      "required": "review_consensus.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "supabase/migrations/20260718030042_layered_consensus_policy.sql"
+      ],
+      "note": "Consensus implementation exists, but no real consensus snapshot is attached."
+    },
+    {
+      "category": "verification",
+      "required": "reviewer_reliability.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "supabase/migrations/20260718023500_reviewer_reliability_estimates.sql"
+      ],
+      "note": "Private estimator storage exists, but no eligible live snapshot is attached."
+    },
+    {
+      "category": "verification",
+      "required": "quality_snapshots.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "apps/web/src/quality/submittedQualityProjection.json"
+      ],
+      "note": "The Submitted state explicitly reports that no representative audit snapshot is available."
+    },
+    {
+      "category": "map",
+      "required": "geographic_impact_cells.parquet",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/map/geographic_impact_cells.parquet",
+        "data/packs/australian_butterflies/v1/map/map_manifest.json",
+        "tests/test_public_ala_map.py"
+      ],
+      "note": "The named artifact contains 630 contract-valid rights-screened ALA H3 cells with exact evidence fingerprints."
+    },
+    {
+      "category": "map",
+      "required": "geographic_impact_summary.parquet",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/map/geographic_impact_summary.parquet",
+        "data/packs/australian_butterflies/v1/map/map_manifest.json",
+        "tests/test_public_ala_map.py"
+      ],
+      "note": "The named artifact contains 23,484 exact Australia, state/territory, IBRA, LGA-approximation, and H3 aggregate rows."
+    },
+    {
+      "category": "map",
+      "required": "map_manifest.json",
+      "status": "present",
+      "evidence": [
+        "data/packs/australian_butterflies/v1/map/map_manifest.json",
+        "apps/web/src/map/submittedMapSnapshot.json",
+        "tests/test_public_ala_map.py"
+      ],
+      "note": "The named manifest fingerprints the two Parquets and browser snapshot while preserving the authoritative baseline and rights exclusions."
+    },
+    {
+      "category": "release",
+      "required": "release_candidates.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "packages/contracts/python/butterflylens/contracts/occurrence_release.py"
+      ],
+      "note": "No candidate has passed the configured human, quality, rights, and expert gates."
+    },
+    {
+      "category": "release",
+      "required": "evidence_packets/",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-14.2.md"
+      ],
+      "note": "Builder capability exists, but no release-ready evidence packet is published."
+    },
+    {
+      "category": "release",
+      "required": "Darwin Core export",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-14.2.md"
+      ],
+      "note": "A deterministic builder exists, but no release-ready archive is published."
+    },
+    {
+      "category": "release",
+      "required": "release_manifest.json",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-14.3.md"
+      ],
+      "note": "No accepted release is available to manifest."
+    },
+    {
+      "category": "operations",
+      "required": "worker_heartbeats.parquet or database view",
+      "status": "blocked_external",
+      "evidence": [
+        "provenance/task_reports/butterflylens-10.4.md"
+      ],
+      "note": "Heartbeat contracts exist, but no live M5 receipt or connected view is attached."
+    },
+    {
+      "category": "operations",
+      "required": "stage_metrics.parquet",
+      "status": "blocked_external",
+      "evidence": [
+        "apps/web/src/operations/submittedOperationsSnapshot.json"
+      ],
+      "note": "Submitted operations truthfully reports unavailable live stages."
+    },
+    {
+      "category": "operations",
+      "required": "live_status.json",
+      "status": "blocked_external",
+      "evidence": [
+        "apps/web/src/operations/submittedMonitoringSnapshot.json"
+      ],
+      "note": "Only the immutable Submitted unavailable-state projection exists."
+    },
+    {
+      "category": "operations",
+      "required": "submitted_snapshot.json",
+      "status": "present",
+      "evidence": [
+        "data/submission/v1/submitted_snapshot.json"
+      ],
+      "note": "Exact artifact is present and fingerprinted."
+    },
+    {
+      "category": "openai",
+      "required": "tool_contracts.json",
+      "status": "present",
+      "evidence": [
+        "packages/openai/tool_contracts.json"
+      ],
+      "note": "Exact artifact is present."
+    },
+    {
+      "category": "openai",
+      "required": "stored_analyst_replay.json",
+      "status": "present_equivalent",
+      "evidence": [
+        "packages/openai/submitted-replays.v1.json"
+      ],
+      "note": "The versioned submitted replay catalogue is the credential-free stored analyst replay."
+    },
+    {
+      "category": "openai",
+      "required": "agent_evaluation.json",
+      "status": "present",
+      "evidence": [
+        "packages/openai/agent_evaluation.json"
+      ],
+      "note": "Exact artifact is present; live_model_status remains not_run."
+    },
+    {
+      "category": "openai",
+      "required": "model_usage.jsonl",
+      "status": "present",
+      "evidence": [
+        "provenance/model_usage.jsonl"
+      ],
+      "note": "Exact append-only configuration and activity ledger is present."
+    }
+  ]
+}
