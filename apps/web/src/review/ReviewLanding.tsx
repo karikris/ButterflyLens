@@ -1,5 +1,6 @@
 import { useId, useMemo, useState } from 'react'
 
+import { EvidenceNotice } from '../design-system/EvidencePrimitives'
 import {
   blindReviewFieldLabels,
   blindReviewFields,
@@ -82,10 +83,13 @@ export function ReviewLanding({
         </div>
       </header>
 
-      <p className="evidence-boundary">
-        <strong>Independent review:</strong> model labels, model scores, search
-        terms, source comments, and other reviewers’ decisions are hidden.
-      </p>
+      <EvidenceNotice
+        className="review-evidence-notice"
+        title="Independent review"
+      >
+        model labels, model scores, search terms, source comments, and other
+        reviewers’ decisions are hidden.
+      </EvidenceNotice>
 
       <div className="review-grid">
         <section className="media-card" aria-labelledby="review-image-heading">
@@ -93,7 +97,7 @@ export function ReviewLanding({
             <span>{item.campaignName}</span>
             <span>Awaiting review</span>
           </div>
-          <div className="media-frame">
+          <div className="media-frame bl-photo-frame">
             {item.media.state === 'verified' ? (
               <img
                 src={item.media.src}

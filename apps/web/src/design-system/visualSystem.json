@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "butterflylens-visual-system:v1.0.0",
+  "browserThemeColor": "#19463a",
+  "principles": [
+    "photographic",
+    "distinctly_australian",
+    "scientific_editorial",
+    "optimistic_evidence_disciplined",
+    "no_generic_gradient",
+    "no_admin_template"
+  ],
+  "palette": {
+    "bl-eucalypt-950": "#17312b",
+    "bl-eucalypt-850": "#19463a",
+    "bl-eucalypt-700": "#2c6758",
+    "bl-eucalypt-200": "#aac4ba",
+    "bl-eucalypt-100": "#dde9e3",
+    "bl-paperbark-050": "#fffdf7",
+    "bl-paperbark-100": "#f3efe4",
+    "bl-paperbark-200": "#ece7d9",
+    "bl-paperbark-300": "#d9d4c6",
+    "bl-paperbark-line": "#c9c5b8",
+    "bl-charcoal-700": "#52645f",
+    "bl-charcoal-500": "#737b76",
+    "bl-clay-800": "#85501e",
+    "bl-clay-600": "#bf6d2f",
+    "bl-clay-100": "#f1ddc7",
+    "bl-coast-700": "#0b6688",
+    "bl-critical-800": "#7a3028",
+    "bl-critical-100": "#f6e0d9",
+    "bl-wattle-500": "#c48b18"
+  },
+  "normalTextContrastPairs": [
+    ["bl-eucalypt-950", "bl-paperbark-100"],
+    ["bl-charcoal-700", "bl-paperbark-050"],
+    ["bl-clay-800", "bl-paperbark-100"],
+    ["bl-coast-700", "bl-paperbark-050"],
+    ["bl-critical-800", "bl-paperbark-050"],
+    ["bl-eucalypt-700", "bl-paperbark-050"]
+  ],
+  "evidenceStates": [
+    "submitted",
+    "verified",
+    "caution",
+    "unavailable",
+    "unfinished",
+    "critical"
+  ],
+  "accessibility": {
+    "normalTextMinimumContrast": 4.5,
+    "minimumTargetCssPixels": 44,
+    "minimumViewportCssPixels": 320,
+    "focusOutlineCssPixels": 3,
+    "responsiveViewports": [
+      { "width": 1280, "height": 720, "label": "desktop_judge_replay" },
+      { "width": 390, "height": 844, "label": "mobile_portrait" }
+    ],
+    "responsiveBreakpointsCssPixels": [820, 520],
+    "forcedColours": true,
+    "reducedMotion": true
+  },
+  "photography": {
+    "pixelAlterationAllowed": false,
+    "rightsMetadataRequired": true,
+    "sourceAttributionRequired": true
+  }
+}

@@ -1,3 +1,4 @@
+import { EvidenceNotice, StateBadge } from '../design-system/EvidencePrimitives'
 import type { QualityDashboardSnapshot } from './qualityDashboardModel'
 
 export function QualityDashboard({
@@ -22,21 +23,27 @@ export function QualityDashboard({
             probabilities, strata, and owner/observation groups.
           </p>
         </div>
-        <span className="quality-state" data-state={snapshot.status}>
+        <StateBadge
+          state={snapshot.status === 'estimated' ? 'verified' : 'unavailable'}
+        >
           {snapshot.status === 'estimated'
             ? 'Representative estimate available'
             : 'Representative estimate unavailable'}
-        </span>
+        </StateBadge>
       </header>
 
       {!qualityAvailable ? (
-        <p className="quality-boundary" role="status">
-          <strong>No population estimate is shown.</strong>{' '}
+        <EvidenceNotice
+          className="quality-evidence-notice"
+          title="No population estimate is shown"
+          tone="caution"
+          announce
+        >
           {snapshot.precision.reason}{' '}
           {snapshot.reviewedSample === 0
             ? 'Zero reviewed records is a workflow count—not 0% precision.'
             : 'The reviewed-record count is workflow evidence, not a precision estimate.'}
-        </p>
+        </EvidenceNotice>
       ) : null}
 
       <div className="quality-metrics" aria-label="Quality summary">

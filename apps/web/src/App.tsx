@@ -1,3 +1,4 @@
+import { StateBadge } from './design-system/EvidencePrimitives'
 import { ReviewLanding } from './review/ReviewLanding'
 import { submittedReviewItem } from './review/reviewLandingModel'
 import { QualityDashboard } from './quality/QualityDashboard'
@@ -19,7 +20,7 @@ export function App() {
             <small>Australian butterfly evidence</small>
           </span>
         </a>
-        <span className="snapshot-badge">Submitted replay</span>
+        <StateBadge state="submitted">Submitted replay</StateBadge>
       </header>
       <main id="review-workspace">
         <ReviewLanding item={submittedReviewItem} qualifiedReviewer={false} />

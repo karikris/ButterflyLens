@@ -30,3 +30,10 @@ This append-oriented record captures product or governance decisions made by Kri
 - Do not run Flickr API calls during this goal.
 - Skip all YOLOE and BioCLIP work, mark both lanes unfinished, and continue with
   the next safe task.
+
+## 2026-07-18 — Public visual direction
+
+- Make the public website photographic, distinctly Australian,
+  scientific-editorial, optimistic, evidence-disciplined, responsive, and
+  accessible.
+- Do not use generic AI gradients or an admin-template appearance.

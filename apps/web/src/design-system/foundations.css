@@ -1,0 +1,193 @@
+:root {
+  color: #17312b;
+  background: #f3efe4;
+  font-family: var(--bl-font-interface);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  /* Australian field palette: eucalypt canopy, paperbark, clay and coast. */
+  --bl-eucalypt-950: #17312b;
+  --bl-eucalypt-850: #19463a;
+  --bl-eucalypt-700: #2c6758;
+  --bl-eucalypt-200: #aac4ba;
+  --bl-eucalypt-100: #dde9e3;
+  --bl-paperbark-050: #fffdf7;
+  --bl-paperbark-100: #f3efe4;
+  --bl-paperbark-200: #ece7d9;
+  --bl-paperbark-300: #d9d4c6;
+  --bl-paperbark-line: #c9c5b8;
+  --bl-charcoal-700: #52645f;
+  --bl-charcoal-500: #737b76;
+  --bl-clay-800: #85501e;
+  --bl-clay-600: #bf6d2f;
+  --bl-clay-100: #f1ddc7;
+  --bl-coast-700: #0b6688;
+  --bl-critical-800: #7a3028;
+  --bl-critical-100: #f6e0d9;
+  --bl-wattle-500: #c48b18;
+
+  /* Semantic colour aliases keep evidence meaning independent of hue names. */
+  --bl-ink: var(--bl-eucalypt-950);
+  --bl-ink-muted: var(--bl-charcoal-700);
+  --bl-canvas: var(--bl-paperbark-100);
+  --bl-surface: var(--bl-paperbark-050);
+  --bl-surface-muted: var(--bl-paperbark-200);
+  --bl-photo-matte: var(--bl-paperbark-300);
+  --bl-line: var(--bl-paperbark-line);
+  --bl-brand: var(--bl-eucalypt-850);
+  --bl-brand-active: var(--bl-eucalypt-700);
+  --bl-accent: var(--bl-clay-800);
+  --bl-accent-bright: var(--bl-clay-600);
+  --bl-accent-soft: var(--bl-clay-100);
+  --bl-focus: var(--bl-coast-700);
+  --bl-danger: var(--bl-critical-800);
+
+  --bl-state-submitted-ink: var(--bl-eucalypt-850);
+  --bl-state-submitted-bg: var(--bl-eucalypt-100);
+  --bl-state-submitted-line: var(--bl-eucalypt-200);
+  --bl-state-verified-ink: var(--bl-eucalypt-850);
+  --bl-state-verified-bg: #e4eee8;
+  --bl-state-verified-line: #99bbaa;
+  --bl-state-caution-ink: #69401f;
+  --bl-state-caution-bg: var(--bl-clay-100);
+  --bl-state-caution-line: #d3a373;
+  --bl-state-unavailable-ink: #5a544c;
+  --bl-state-unavailable-bg: #eee9df;
+  --bl-state-unavailable-line: #bdb4a5;
+  --bl-state-unfinished-ink: #4f4942;
+  --bl-state-unfinished-bg: #e6e1d8;
+  --bl-state-unfinished-line: #a69d90;
+  --bl-state-critical-ink: var(--bl-critical-800);
+  --bl-state-critical-bg: var(--bl-critical-100);
+  --bl-state-critical-line: #c99082;
+
+  --bl-font-interface: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bl-font-editorial: Georgia, "Times New Roman", serif;
+  --bl-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --bl-text-xs: 0.75rem;
+  --bl-text-sm: 0.875rem;
+  --bl-text-body: 1rem;
+  --bl-text-lede: clamp(1rem, 2vw, 1.2rem);
+  --bl-text-section: clamp(2.2rem, 5vw, 4.3rem);
+  --bl-text-display: clamp(2.4rem, 6vw, 5.5rem);
+  --bl-leading-tight: 0.98;
+  --bl-leading-body: 1.6;
+  --bl-reading-width: 72ch;
+
+  --bl-space-1: 0.25rem;
+  --bl-space-2: 0.5rem;
+  --bl-space-3: 0.75rem;
+  --bl-space-4: 1rem;
+  --bl-space-5: 1.5rem;
+  --bl-space-6: 2rem;
+  --bl-space-7: 3rem;
+  --bl-space-8: 4.5rem;
+  --bl-content-wide: 73.75rem;
+  --bl-target-min: 2.75rem;
+  --bl-radius-small: 0.65rem;
+  --bl-radius-panel: 1.25rem;
+  --bl-shadow-paper: 0 18px 50px rgb(31 47 42 / 10%);
+
+  /* Compatibility aliases for the first submitted surfaces. */
+  --ink: var(--bl-ink);
+  --ink-soft: var(--bl-ink-muted);
+  --paper: var(--bl-surface);
+  --paper-muted: var(--bl-surface-muted);
+  --line: var(--bl-line);
+  --green: var(--bl-brand);
+  --green-bright: var(--bl-brand-active);
+  --ochre: var(--bl-accent);
+  --ochre-pale: var(--bl-accent-soft);
+  --danger: var(--bl-danger);
+  --radius: var(--bl-radius-panel);
+  --shadow: var(--bl-shadow-paper);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 20rem;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--bl-ink);
+  line-height: var(--bl-leading-body);
+  background: var(--bl-canvas);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+textarea,
+summary {
+  outline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--bl-focus);
+}
+
+::selection {
+  color: var(--bl-surface);
+  background: var(--bl-brand);
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--bl-font-editorial);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
