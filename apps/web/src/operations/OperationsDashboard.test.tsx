@@ -90,10 +90,10 @@ describe('OperationsDashboard', () => {
     render(<OperationsDashboard now={new Date('2026-07-18T08:30:00Z')} />)
 
     expect(screen.getByText('Worker status unavailable')).toBeVisible()
-    expect(screen.getByText('Map shell loaded')).toBeVisible()
+    expect(screen.getByText('Aggregate map committed')).toBeVisible()
     expect(
       screen.getByRole('img', {
-        name: /submitted Australia map scope; occurrence layer withheld/i,
+        name: /submitted Australia evidence summary; public aggregate layer available/i,
       }),
     ).toBeVisible()
     expect(screen.getByText('Review route')).toBeVisible()
@@ -144,7 +144,7 @@ describe('OperationsDashboard', () => {
 
     expect(screen.getByText('Worker status unavailable')).toBeVisible()
     expect(screen.getByText(/failed strict validation/i)).toBeVisible()
-    expect(screen.getByText('Map shell loaded')).toBeVisible()
+    expect(screen.getByText('Aggregate map committed')).toBeVisible()
     expect(screen.getByRole('link', { name: 'Open submitted snapshot' })).toBeVisible()
   })
 

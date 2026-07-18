@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 GIF = ROOT / "assets" / "readme" / "butterflylens-live-map.gif"
 SNAPSHOT = ROOT / "data" / "submission" / "v1" / "submitted_snapshot.json"
+MAP = ROOT / "apps" / "web" / "src" / "map" / "submittedMapSnapshot.json"
 
 
 class CompetitionReadmeTests(unittest.TestCase):
@@ -19,6 +20,7 @@ class CompetitionReadmeTests(unittest.TestCase):
         cls.readme = README.read_text(encoding="utf-8")
         cls.hero = cls.readme.split("\n## ", maxsplit=1)[0]
         cls.snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+        cls.map = json.loads(MAP.read_text(encoding="utf-8"))
 
     def test_first_screen_contains_every_competition_requirement(self) -> None:
         required = (
@@ -47,9 +49,9 @@ class CompetitionReadmeTests(unittest.TestCase):
         self.assertIn(f"[**Run Submitted Replay →**]({public})", self.hero)
 
     def test_measured_result_and_worker_state_match_the_frozen_snapshot(self) -> None:
-        species = self.snapshot["pack"]["accepted_species"]
-        self.assertEqual(species, 463)
-        self.assertIn(f"**{species} accepted species**", self.hero)
+        self.assertEqual(self.map["counts"]["mapEligible"], 213_310)
+        self.assertEqual(self.map["counts"]["mapCells"], 630)
+        self.assertIn("**213,310 ALA rows · 630 coarse H3 cells**", self.hero)
         self.assertEqual(self.snapshot["worker"]["state"], "unavailable")
         self.assertIn("no authenticated heartbeat is attached", self.hero)
         self.assertIn("makes no model call", self.hero)
@@ -73,10 +75,10 @@ class CompetitionReadmeTests(unittest.TestCase):
         self.assertEqual(struct.unpack_from("<HH", content, 6), (960, 540))
         self.assertEqual(content.count(b"\x21\xf9\x04"), 8)
         self.assertLessEqual(len(content), 500_000)
-        self.assertEqual(len(content), 327_789)
+        self.assertEqual(len(content), 285_315)
         self.assertEqual(
             hashlib.sha256(content).hexdigest(),
-            "223e3f21d0a82b41d801ef470edfe31b999ff21457d1949885ab56f5444ebc1d",
+            "2dea64aad4f960b35caf57f26309e6324b49c2a257bdd703eb0b91a65fa6b975",
         )
 
 

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import { EvidenceNotice, StateBadge } from '../design-system/EvidencePrimitives'
+import { submittedMapSnapshot } from '../map/submittedMapModel'
 import {
   buildSafeOperationsProjection,
   submittedOperationsSnapshot,
@@ -146,15 +147,25 @@ export function OperationsDashboard({
     now,
   )
   const workerBadge = WORKER_BADGE[projection.workerStatus]
-  const map = submittedOperationsSnapshot.map
+  const map = submittedMapSnapshot
   const review = submittedOperationsSnapshot.review
+  const lastMapRefresh =
+    monitoring.snapshotMode === 'submitted'
+      ? {
+          state: 'submitted' as const,
+          fingerprint: map.snapshotFingerprint,
+          refreshedAt: map.generatedAt,
+          reason:
+            'The committed rights-screened ALA projection contains 213,310 map-eligible rows across 630 coarse H3 cells.',
+        }
+      : monitoring.lastMapRefresh
 
   return (
-    <section className="operations-dashboard" id="live" aria-labelledby="live-heading">
+    <section className="operations-dashboard" id="operations" aria-labelledby="operations-heading">
       <header className="operations-dashboard__header">
         <div>
           <p className="eyebrow">Pipeline observatory</p>
-          <h2 id="live-heading">Live when available. Committed when not.</h2>
+          <h2 id="operations-heading">Live when available. Committed when not.</h2>
           <p>
             The map, review route, and submitted snapshot load from this static
             build. A worker heartbeat can add status, but never gates the site.
@@ -177,28 +188,32 @@ export function OperationsDashboard({
           <div className="operations-card__heading">
             <div>
               <p className="eyebrow">Committed map</p>
-              <h3 id="operations-map-heading">{map.scopeLabel} scope</h3>
+              <h3 id="operations-map-heading">Australia scope</h3>
             </div>
-            <StateBadge state="submitted">Map shell loaded</StateBadge>
+            <StateBadge state="submitted">Aggregate map committed</StateBadge>
           </div>
           <svg
             className="operations-map__figure"
             viewBox="0 0 420 260"
             role="img"
-            aria-label="Submitted Australia map scope; occurrence layer withheld"
+            aria-label="Submitted Australia evidence summary; public aggregate layer available"
           >
             <rect x="1" y="1" width="418" height="258" rx="18" />
             <path d="M96 63l54-28 71 6 37 22 63 2 39 37-18 47-42 18-17 47-63 17-33-27-58-4-35-31-39-20 14-42z" />
             <circle cx="304" cy="207" r="10" />
-            <path className="operations-map__withheld" d="M61 226h298" />
           </svg>
           <div className="operations-map__boundary">
-            <StateBadge state="caution">Occurrence layer withheld</StateBadge>
-            <p>{map.reason}</p>
+            <StateBadge state="verified">Aggregate layer available</StateBadge>
+            <p>
+              {map.counts.mapEligible.toLocaleString('en-AU')} rights-screened,
+              map-eligible ALA rows across{' '}
+              {map.counts.mapCells.toLocaleString('en-AU')} coarse H3 cells. Flickr
+              remains unavailable.
+            </p>
           </div>
           <p className="operations-card__provenance">
             Snapshot <code>{map.snapshotId}</code> · fingerprint{' '}
-            <code>{map.artifactFingerprint.slice(0, 12)}…</code>
+            <code>{map.snapshotFingerprint.slice(0, 12)}…</code>
           </p>
         </article>
 
@@ -346,14 +361,14 @@ export function OperationsDashboard({
           />
           <MetricCard
             label="Last map refresh"
-            state={monitoring.lastMapRefresh.state}
-            value={monitoring.lastMapRefresh.refreshedAt ?? 'Unavailable'}
+            state={lastMapRefresh.state}
+            value={lastMapRefresh.refreshedAt ?? 'Unavailable'}
             detail={
-              monitoring.lastMapRefresh.fingerprint === null
+              lastMapRefresh.fingerprint === null
                 ? undefined
-                : `${monitoring.lastMapRefresh.fingerprint.slice(0, 12)}…`
+                : `${lastMapRefresh.fingerprint.slice(0, 12)}…`
             }
-            reason={monitoring.lastMapRefresh.reason}
+            reason={lastMapRefresh.reason}
           />
           <MetricCard
             label="Model state"

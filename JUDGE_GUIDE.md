@@ -1,7 +1,7 @@
 # ButterflyLens judge guide
 
 **Judged mode:** Submitted replay · **current worker:** unavailable ·
-**measured result:** 463 accepted Australian butterfly species.
+**measured result:** 213,310 rights-screened ALA rows in 630 coarse H3 cells.
 
 [Open the public replay](https://karikris.github.io/ButterflyLens/) ·
 [Open the Australia map](https://karikris.github.io/ButterflyLens/#live) ·
@@ -20,14 +20,14 @@ worker observation.
 
 | Step | Time | Action | Expected evidence |
 | ---: | :--- | --- | --- |
-| 1 | 0:00–0:10 | **View the Australia map.** Open [Live](https://karikris.github.io/ButterflyLens/#live) and find **Committed map**. | Australia scope and map shell load. **Occurrence layer withheld** remains visible; the committed catalogue shows 463 species. |
-| 2 | 0:10–0:20 | **Compare ALA and Flickr.** Open [Ask ButterflyLens](https://karikris.github.io/ButterflyLens/#ask-butterflylens), choose “Can ALA and Flickr counts be compared yet?”, then replay it. | The stored trace says the national ALA count is withheld, no immutable Flickr count is attached, and the difference is unavailable—not zero. |
-| 3 | 0:20–0:30 | **Attempt to open a potential coverage-gap cell.** Return to the [map](https://karikris.github.io/ButterflyLens/#live) and inspect the scope card. | No selectable cell is exposed in Submitted mode. This is the correct rights-safe result while occurrence and cell counts are withheld; it does not imply biological absence. |
+| 1 | 0:00–0:10 | **View the Australia map.** Open [Live](https://karikris.github.io/ButterflyLens/#live) and find **Rights-screened submitted map**. | The aggregate heatmap loads with 213,310 map-eligible ALA rows and 630 coarse H3 cells. Flickr is unavailable. |
+| 2 | 0:10–0:20 | **Compare ALA and Flickr.** Open [Ask ButterflyLens](https://karikris.github.io/ButterflyLens/#ask-butterflylens), choose “Can ALA and Flickr counts be compared yet?”, then replay it. | The stored trace cites the national ALA count directly, while the immutable Flickr count and two-source difference remain unavailable—not zero. |
+| 3 | 0:20–0:30 | **Inspect one submitted ALA cell.** Return to the [map](https://karikris.github.io/ButterflyLens/#live), select a blue H3 cell, and inspect its evidence card. | The exact aggregate count, fingerprint, and coordinate-free provider-record sample update. The cell is evidence coverage, not a coverage-gap, presence, absence, abundance, or identification claim. |
 | 4 | 0:30–0:45 | **Review a butterfly image.** Open [Verify](https://karikris.github.io/ButterflyLens/#verify), choose **Can’t tell** when the image cannot support a stronger decision, then lock the draft to reveal permitted context. | The decision is blind, the integrity-checked CC BY-SA 4.0 fixture is visible, and the interface labels the decision **Draft only**. Nothing is submitted. |
 | 5 | 0:45–0:55 | **Watch community evidence update.** Observe **Current contribution** change to the selected draft, then open [Contributors](https://karikris.github.io/ButterflyLens/#contributors). | Only local draft state changes. The authenticated contribution snapshot and all stored community totals remain unavailable; no consensus or occurrence is fabricated. |
 | 6 | 0:55–1:05 | **Inspect quality.** Open [Quality](https://karikris.github.io/ButterflyLens/#quality). | Reviewed sample 0 and decisive reviews 0 are workflow counts, not 0% precision. Precision and agreement remain unavailable. Reference diagnostics show 463 accepted species, 2,906 valid decodes, and 0 human-verified species. |
 | 7 | 1:05–1:20 | **Ask the GPT-5.6 evidence route what is missing.** Choose “Which species should receive the next reference review?” and replay it. | The deterministic gap queue names *Hypochrysops sandrae*, *Lacturnea lacturnus*, then *Charaxes andrewsi*. The footer says **Model not invoked**; this is targeted workflow order, not rarity or distribution. |
-| 8 | 1:20–1:30 | **Inspect the live M5 worker.** Return to [Live](https://karikris.github.io/ButterflyLens/#live) and open operational monitoring. | **Worker status unavailable**, heartbeat unavailable, stage/queue/resource values unavailable, and YOLOE/BioCLIP unfinished. The site and Submitted artifacts remain usable. |
+| 8 | 1:20–1:30 | **Inspect the live M5 worker.** Open [operational monitoring](https://karikris.github.io/ButterflyLens/#operations). | **Worker status unavailable**, heartbeat unavailable, stage/queue/resource values unavailable, and YOLOE/BioCLIP unfinished. The site and Submitted artifacts remain usable. |
 
 ## What the judge should conclude
 
@@ -49,7 +49,8 @@ worker observation.
 | --- | --- | --- |
 | Canonical snapshot | `sha256:27a256934a1ac1a9fb0d27b75a0fe805bf12224df42d7e6b7d235991d26fb9de` | Immutable Task 16.1 freeze sourced from commit `0e07f175fa07650e90606ca07b2286807010f1de`. |
 | Australian catalogue | 463 accepted species · fingerprint `083ed290418938e1c32ee75cad5dea6d81153f529ab1c40acbb64f52beccba06` | Accepted taxonomy and source assertions; no occurrence or identity claim. |
-| ALA internal inventory | 236,897 selected rows · 230,027 spatially eligible · 23,744 aggregate rows | Audit inventory only. Public occurrence and cell counts remain null. |
+| ALA internal inventory | 236,897 selected rows · 230,027 spatially eligible · 23,744 aggregate rows | Canonical Task 16 audit inventory; the later public map is a separately fingerprinted, rights-screened projection. |
+| Submitted public map | 220,144 rights-screened selected · 213,310 map-eligible · 630 coarse H3 cells · fingerprint `d39a73ae0b41677a2e557c89a72237d90d0e1e6cd2019cfbf091b41e85bae446` | Conservative aggregate projection; three flagged datasets excluded, raw occurrence coordinates absent, and absence inference prohibited. |
 | Flickr plan | 1,876 query definitions · 1,754 deduplicated physical requests | Deterministic and `planned_not_sent` by the freeze. No active-fetch output is included. |
 | Public Flickr display | 0 photos displayed | A workflow count caused by the blocked public display gate, not proof that Flickr has no butterfly photos. |
 | Review | local draft only · 0 stored reviews · 0 decisive reviews | The demo does not write community evidence or claim consensus. |
@@ -64,7 +65,7 @@ worker observation.
 | --- | --- | --- |
 | Source of truth | Bundled Git- and SHA-256-pinned artifacts | An authenticated observation may select only an explicitly committed live artifact. |
 | Site availability | Worker-independent GitHub Pages build | Live status enhances the site but never gates it. |
-| Map | Australia scope only; occurrence layer and counts withheld | A generalized cell becomes selectable only with rights, sensitivity, artifact, and release receipts. |
+| Map | Rights-screened ALA aggregate with selectable coarse H3 cells and exact state/IBRA/LGA/H3 drilldowns | A live replacement must retain rights, sensitivity, artifact, attribution, and release receipts. |
 | Flickr | Unsent plan and blocked display surface | Only fully received, deduplicated, rights-eligible candidates may be displayed; they still are not occurrences. |
 | Community | Local demo draft; writes blocked | Authenticated append-only reviews, independent overlap, privacy policy acceptance, and release gates are required. |
 | GPT-5.6 | Stored tool trace; no model or network call | A server-side authenticated Responses run must use strict read-only tools and preserve exact citations. |
@@ -104,7 +105,7 @@ This route verifies the evidence chain rather than repeating the visual tour.
    ```
 
 2. Inspect the [analyst artifact registry](packages/openai/submitted-artifacts.v1.json).
-   It cites commit `f9b96814f335684cf311b70b622e2cade0188b9b`;
+   It cites the map-data commit `cfe6b5f38b687e83d2a601d381edde29fcb7a717`;
    the repository reads the exact Git objects at that commit so later
    working-tree metadata cannot mutate the Submitted analyst view.
 3. Run the guide, replay, and immutable-artifact checks:
@@ -129,9 +130,10 @@ This route verifies the evidence chain rather than repeating the visual tour.
 
 ## Rights, privacy, and provenance
 
-- ALA display and downstream release remain blocked pending exact rights review
-  for dataset UIDs `dr1097`, `dr30019`, and `dr635`, covering 16,753 selected
-  rows. Internal inventory counts do not grant publication permission.
+- The public aggregate projection excludes dataset UIDs `dr1097`, `dr30019`,
+  and `dr635`, covering 16,753 selected rows. That conservative exclusion is
+  not a legal conclusion; full occurrence release remains blocked pending exact
+  citation-rights review.
 - The review fixture retains Wikimedia Commons source attribution and CC BY-SA
   4.0 terms. Its use does not verify the pictured taxon.
 - Flickr display requires source, photographer, licence, cache, privacy,
@@ -147,7 +149,8 @@ This route verifies the evidence chain rather than repeating the visual tour.
 
 ## Current limitations
 
-- No public occurrence layer or selectable coverage-gap cell is released.
+- The public ALA layer is aggregate and coordinate-free; it cannot establish
+  presence, absence, abundance, identity, or a cross-source coverage gap.
 - No completed immutable Flickr candidate dataset is attached.
 - No stored community review, consensus, representative audit, or quality
   estimate exists.

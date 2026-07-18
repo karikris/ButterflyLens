@@ -57,19 +57,23 @@ describe('credential-free community judge journey', () => {
     expect(
       reviewView.getByRole('img', { name: 'Australia location unavailable' }),
     ).toBeVisible()
-    const operations = requiredElement('#live')
+    const map = within(requiredElement('#live'))
+    expect(map.getByText('Map-eligible baseline')).toBeVisible()
+    expect(map.getByText('213,310')).toBeVisible()
+    expect(map.getByText('630')).toBeVisible()
+    const operations = requiredElement('#operations')
     const operationsView = within(operations)
     expect(
       operationsView.getByRole('img', {
-        name: 'Submitted Australia map scope; occurrence layer withheld',
+        name: 'Submitted Australia evidence summary; public aggregate layer available',
       }),
     ).toBeVisible()
-    expect(operationsView.getByText('Occurrence layer withheld')).toBeVisible()
+    expect(operationsView.getByText('Aggregate layer available')).toBeVisible()
     const lastMapRefresh = operationsView.getByText('Last map refresh').closest('li')
     expect(lastMapRefresh).not.toBeNull()
     expect(lastMapRefresh).toHaveTextContent('submitted')
-    expect(lastMapRefresh).toHaveTextContent('2026-07-17T19:14:01Z')
-    expect(lastMapRefresh).toHaveTextContent(/occurrence layers remain withheld/i)
+    expect(lastMapRefresh).toHaveTextContent('2026-07-19T00:00:00Z')
+    expect(lastMapRefresh).toHaveTextContent(/213,310 map-eligible rows/i)
 
     // 4. Find and inspect one exact accepted species page.
     const species = requiredElement('#species')
@@ -100,7 +104,7 @@ describe('credential-free community judge journey', () => {
     // 5. Inspect the worker-independent pipeline and submitted fallback.
     expect(operationsView.getByText('Worker status unavailable')).toBeVisible()
     expect(operationsView.getByText('Submitted fallback')).toBeVisible()
-    expect(operationsView.getByText('Map shell loaded')).toBeVisible()
+    expect(operationsView.getByText('Aggregate map committed')).toBeVisible()
     expect(operationsView.getByText(/YOLOE unfinished · BioCLIP unfinished/)).toBeVisible()
     expect(
       operationsView.getByRole('link', { name: 'Open committed species snapshot' }),

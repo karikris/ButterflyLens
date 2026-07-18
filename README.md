@@ -7,7 +7,7 @@
     <img
       src="assets/readme/butterflylens-live-map.gif"
       width="560"
-      alt="ButterflyLens Submitted replay showing the Australia map scope, withheld occurrence layer, and fingerprinted 463-species catalogue"
+      alt="ButterflyLens Submitted map showing the rights-screened Australian ALA heatmap, exact aggregate counts, and unavailable Flickr layer"
     >
   </a>
 </p>
@@ -16,7 +16,7 @@
 
 | Submitted replay | Current worker status | Measured result |
 | --- | --- | --- |
-| Available · credential-free and immutable | **Unavailable** · no authenticated heartbeat is attached | **463 accepted species** in the frozen Australian catalogue |
+| Available · credential-free and immutable | **Unavailable** · no authenticated heartbeat is attached | **213,310 ALA rows · 630 coarse H3 cells** in the rights-screened public map |
 
 **GPT-5.6:** the evidence analyst is constrained to tool-returned records and explicit uncertainty. The Submitted route is a stored replay and makes no model call. **Codex:** designed, implemented, tested, and documented the evidence system; it does not identify butterflies or cast community reviews.
 
@@ -30,14 +30,16 @@ GPU, model download, or M5 availability. A compact route is:
 1. Open **Help Verify** and inspect the rights-cleared image, blind evidence
    controls, uncertainty language, and local draft boundary.
 2. Search the submitted catalogue of 463 accepted Australian butterfly species.
-3. Open **Live Map** to inspect the Australia scope, exact snapshot fingerprint,
-   worker fallback, and the deliberately withheld occurrence layer.
+3. Open **Live Map** to inspect 213,310 rights-screened ALA rows across 630
+   selectable coarse H3 cells, exact-count drilldowns, and the snapshot
+   fingerprint. Flickr remains unavailable—not zero.
 4. Ask ButterflyLens what the submitted artifacts support. The visible answer is
    the fingerprinted, model-free replay—not a hidden live model response.
 5. Inspect quality and export surfaces to see which claims remain unavailable or
    release-blocked instead of being rendered as zero.
 
-The GIF above is an eight-frame local capture of that real Submitted map surface.
+The GIF above is an eight-frame local capture of that real Submitted map surface,
+including its aggregate heatmap and selected-cell evidence.
 It contains no third-party photograph and made no external request. “Live Map” is
 the product route; its current public data mode remains the Submitted replay.
 
@@ -56,15 +58,19 @@ It records:
 - the authoritative rebuilt ButterflyLens ALA baseline: 236,897 selected
   occurrence-evidence rows, 230,027 spatially eligible rows, and 23,744
   aggregate rows;
+- the conservative public map projection: 220,144 rights-screened selected
+  rows, 213,310 map-eligible rows, and 630 coarse H3 cells, with no raw
+  occurrence coordinates;
 - 463 accepted species in `australian-butterflies-v1`;
 - a deterministic, unsent Flickr plan with 1,876 query definitions and 1,754
   deduplicated physical requests; and
 - exact source hashes, review state, map counts, worker contract, and unfinished
   model states.
 
-Those are inventory measurements, not biological completeness or publication
-claims. ALA occurrence display and downstream release remain blocked on rights
-review for three contributing datasets covering 16,753 selected rows.
+Those are evidence measurements, not biological completeness claims. The public
+aggregate map excludes all 16,753 selected rows from three flagged datasets;
+that fail-closed screen is not a legal conclusion. Full occurrence release
+remains blocked while their exact citation rights are resolved.
 
 ## Submitted and live are different states
 

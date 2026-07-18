@@ -14,6 +14,7 @@ OPERATIONS = ROOT / "apps/web/src/operations/submittedOperationsSnapshot.json"
 MONITORING = ROOT / "apps/web/src/operations/submittedMonitoringSnapshot.json"
 QUALITY = ROOT / "apps/web/src/quality/submittedQualityProjection.json"
 REPLAY = ROOT / "packages/openai/submitted-replays.v1.json"
+MAP = ROOT / "apps/web/src/map/submittedMapSnapshot.json"
 
 
 class JudgeGuideTests(unittest.TestCase):
@@ -26,6 +27,7 @@ class JudgeGuideTests(unittest.TestCase):
         cls.monitoring = json.loads(MONITORING.read_text(encoding="utf-8"))
         cls.quality = json.loads(QUALITY.read_text(encoding="utf-8"))
         cls.replay = json.loads(REPLAY.read_text(encoding="utf-8"))
+        cls.map = json.loads(MAP.read_text(encoding="utf-8"))
 
     def test_readme_links_the_guide_from_its_first_screen(self) -> None:
         hero = self.readme.split("\n## ", maxsplit=1)[0]
@@ -41,7 +43,7 @@ class JudgeGuideTests(unittest.TestCase):
         expected_actions = (
             "View the Australia map",
             "Compare ALA and Flickr",
-            "Attempt to open a potential coverage-gap cell",
+            "Inspect one submitted ALA cell",
             "Review a butterfly image",
             "Watch community evidence update",
             "Inspect quality",
@@ -62,6 +64,7 @@ class JudgeGuideTests(unittest.TestCase):
     def test_route_uses_real_public_anchors_and_exact_stored_questions(self) -> None:
         for anchor in (
             "#live",
+            "#operations",
             "#ask-butterflylens",
             "#verify",
             "#contributors",
@@ -93,6 +96,10 @@ class JudgeGuideTests(unittest.TestCase):
         self.assertEqual(ala_counts["dataset_resources"], 53)
         self.assertEqual(self.quality["referenceDiagnostics"]["validDecodes"], 2_906)
         self.assertEqual(self.quality["referenceDiagnostics"]["humanVerifiedSpecies"], 0)
+        self.assertEqual(self.map["snapshotId"], "snapshot:submitted-ala-public-map-20260719")
+        self.assertEqual(self.map["counts"]["rightsScreenedSelected"], 220_144)
+        self.assertEqual(self.map["counts"]["mapEligible"], 213_310)
+        self.assertEqual(self.map["counts"]["mapCells"], 630)
         for value in (
             self.snapshot["snapshot_fingerprint"],
             self.operations["submittedSnapshot"]["artifactFingerprint"],
@@ -100,22 +107,32 @@ class JudgeGuideTests(unittest.TestCase):
             "230,027",
             "23,744",
             "2,906",
+            "220,144",
+            "213,310",
+            "630",
+            self.map["snapshotFingerprint"],
         ):
             with self.subTest(value=value):
                 self.assertIn(str(value), self.guide)
 
-    def test_unavailable_steps_are_documented_as_boundaries_not_successes(self) -> None:
+    def test_map_and_unavailable_services_are_documented_as_boundaries(self) -> None:
         self.assertFalse(
             self.snapshot["map_counts"]["public_projection"]["occurrence_layer_visible"]
         )
         self.assertIsNone(
             self.snapshot["map_counts"]["public_projection"]["displayed_cell_count"]
         )
+        self.assertEqual(
+            self.map["rights"]["state"],
+            "public_projection_available_with_flagged_datasets_excluded",
+        )
+        self.assertFalse(self.map["policies"]["occurrenceCoordinatesPublished"])
+        self.assertFalse(self.map["policies"]["absenceInferencePermitted"])
         self.assertEqual(self.monitoring["heartbeat"]["state"], "unavailable")
         self.assertIsNone(self.monitoring["heartbeat"]["observedAt"])
         normalized_guide = " ".join(self.guide.split())
         for phrase in (
-            "No selectable cell is exposed in Submitted mode",
+            "The cell is evidence coverage, not a coverage-gap",
             "Only local draft state changes",
             "Model not invoked",
             "Current result: stop at step 1",
