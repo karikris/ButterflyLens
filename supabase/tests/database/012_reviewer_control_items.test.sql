@@ -1,0 +1,25 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set search_path = public, private, extensions;
+
+select plan(18);
+select has_table('private', 'reviewer_control_types', 'control type catalog exists');
+select has_table('private', 'reviewer_control_sets', 'control sets exist');
+select has_table('private', 'reviewer_control_items', 'control items exist');
+select has_table('private', 'reviewer_control_assignments', 'hidden control bindings exist');
+select is((select count(*) from private.reviewer_control_types), 6::bigint, 'six governed control kinds exist');
+select ok(not has_table_privilege('anon', 'private.reviewer_control_items', 'select'), 'guests cannot see expected answers');
+select ok(not has_table_privilege('authenticated', 'private.reviewer_control_items', 'select'), 'reviewers cannot see expected answers');
+select ok(not has_table_privilege('authenticated', 'private.reviewer_control_assignments', 'select'), 'reviewers cannot identify controls');
+select ok(not has_table_privilege('service_role', 'private.reviewer_control_items', 'update'), 'control truth cannot be overwritten');
+select ok(not has_table_privilege('service_role', 'private.reviewer_control_items', 'delete'), 'control truth cannot be deleted');
+select has_trigger('private', 'reviewer_control_items', 'reviewer_control_items_enforce_governance', 'control governance trigger exists');
+select has_trigger('private', 'reviewer_control_items', 'reviewer_control_items_reject_mutation', 'control items are immutable');
+select has_trigger('private', 'reviewer_control_assignments', 'reviewer_control_assignments_enforce_binding', 'control binding trigger exists');
+select has_trigger('private', 'reviewer_control_assignments', 'reviewer_control_assignments_reject_mutation', 'control bindings are immutable');
+select has_index('private', 'reviewer_control_items', 'reviewer_control_items_campaign_pk_idx', 'campaign FK is indexed');
+select has_index('private', 'reviewer_control_items', 'reviewer_control_items_media_pk_idx', 'media FK is indexed');
+select col_is_fk('private', 'reviewer_control_items', 'duplicate_of_media_object_pk', 'duplicate target is governed');
+select col_not_null('private', 'reviewer_control_items', 'evidence_fingerprint');
+select * from finish();
+rollback;
