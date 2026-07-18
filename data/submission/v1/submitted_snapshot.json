@@ -1,0 +1,396 @@
+{
+  "ala_baseline": {
+    "authority": "ButterflyLens rebuilt baseline",
+    "counts": {
+      "aggregate_cell_rows": 23744,
+      "aggregate_scope_rows": {
+        "australia": 1,
+        "h3_coarse": 630,
+        "h3_local": 17499,
+        "h3_regional": 4986,
+        "ibra_region": 87,
+        "lga_2023_statistical_approximation": 532,
+        "state_territory": 9
+      },
+      "dataset_resources": 53,
+      "selected_occurrence_rows": 236897,
+      "spatially_eligible_rows": 230027
+    },
+    "generated_at": "2026-07-17T19:14:01Z",
+    "manifest": {
+      "git_blob_sha": "ff21a930c8b46210713f85cfdf0bef2113dc0b63",
+      "last_changed_commit": "0f3e1c81a9957d0e6079dec44170bbc4a230065a",
+      "path": "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json",
+      "physical_sha256": "f16cb0939721b40b941caa5a7e2cd6767b20774750f56208b799422bde758b7e"
+    },
+    "rights": {
+      "release_state": "blocked_pending_dataset_rights_resolution",
+      "review_required_dataset_uids": [
+        "dr1097",
+        "dr30019",
+        "dr635"
+      ],
+      "review_required_records": 16753
+    },
+    "semantics": "ALA baseline occurrence evidence; not complete ground truth",
+    "snapshot_fingerprint": "d33d4d36752579ba780fca4d0ec9f234848ccccdba468711846a265c12108f65",
+    "snapshot_id": "ala-papilionoidea-au-20260717-d33d4d367525",
+    "source_archive": {
+      "path": "sources/ala_occurrence_download.zip",
+      "physical_bytes": 32373889,
+      "physical_sha256": "d13b60aa85af54176832cc2ea374f472a02f0ffdc5f1f5c49f896c899f3afab7",
+      "row_count": 236897,
+      "schema_version": "ALA offline download ZIP"
+    }
+  },
+  "excluded_active_work": [
+    "BioMiner incomplete ButterflyLens GBIF/Flickr/model handoff",
+    "external active Flickr fetch and all partial results",
+    "YOLOE routes weights and detections",
+    "BioCLIP weights embeddings prototypes and scores",
+    "live worker identity heartbeat and resource metrics",
+    "stored community reviews consensus and release candidates"
+  ],
+  "flickr_query_plan": {
+    "active_external_fetch_included": false,
+    "active_external_fetch_reason": "No complete immutable Flickr handoff is part of the source commit.",
+    "counts": {
+      "accepted_species": 463,
+      "associations_by_tier": {
+        "1": 1409,
+        "2": 2069,
+        "3": 593,
+        "4": 926,
+        "5": 0
+      },
+      "definitions_by_tier": {
+        "1": 1409,
+        "2": 458,
+        "3": 7,
+        "4": 2,
+        "5": 0
+      },
+      "logical_associations": 4997,
+      "physical_requests": 1754,
+      "query_definitions": 1876,
+      "request_links": 4997
+    },
+    "execution_state": "planned_not_sent",
+    "fixed_parameters": {
+      "content_types": 0,
+      "media": "photos",
+      "safe_search": 1
+    },
+    "global_out_of_range_state": "blocked_pending_authoritative_global_source",
+    "lane_fingerprint": "044e5c09d13b5e4ab7f966b46c447a0c5e29fb6f12f02e449e0672b0a27ad524",
+    "lane_id": "australia_known",
+    "network_calls_made_by_freeze": 0,
+    "planner_source": {
+      "git_tree_sha": "acfd97b0a0964da4e34709deb6126a9b83a070ed",
+      "last_changed_commit": "2f83ce9b7df6cc1f8bc90946c1e6bb6fe55cb87d",
+      "path": "packages/contracts/python/butterflylens/flickr"
+    },
+    "schema_version": "butterflylens-flickr-australia-known-lane:v1.0.0",
+    "scope": {
+      "absence_inference_permitted": false,
+      "meaning": "taxa_authoritatively_known_from_australia",
+      "photo_location_filter_implied": false,
+      "region_code": "AU"
+    },
+    "source_pack": {
+      "name_assertions_sha256": "78f5048a180c49809bea0d57d44ee4f4cc62c0638e96d87f194a4be42fa1a3a5",
+      "pack_id": "australian-butterflies-v1",
+      "taxa_sha256": "df62592172d3291ebbb86f538a8275643c20a6aefa64857b26d85019ef463bf8"
+    }
+  },
+  "frozen_at": "2026-07-18T13:39:04Z",
+  "immutable": true,
+  "map_counts": {
+    "absence_inference_permitted": false,
+    "authoritative_internal": {
+      "accepted_species": 463,
+      "ala_aggregate_cell_rows": 23744,
+      "ala_scope_rows": {
+        "australia": 1,
+        "h3_coarse": 630,
+        "h3_local": 17499,
+        "h3_regional": 4986,
+        "ibra_region": 87,
+        "lga_2023_statistical_approximation": 532,
+        "state_territory": 9
+      },
+      "ala_selected_occurrence_rows": 236897,
+      "ala_spatially_eligible_rows": 230027
+    },
+    "public_projection": {
+      "admitted_flickr_candidate_count": null,
+      "displayed_cell_count": null,
+      "displayed_occurrence_count": null,
+      "occurrence_layer_visible": false,
+      "reason": "The committed map shell is available, but ALA occurrence layers and counts remain withheld while exact dataset citation rights are resolved.",
+      "unavailable_is_zero": false
+    },
+    "release_state": "blocked_pending_dataset_rights_resolution",
+    "render_state": "scope_only_occurrences_withheld",
+    "snapshot_fingerprint": "d33d4d36752579ba780fca4d0ec9f234848ccccdba468711846a265c12108f65",
+    "snapshot_id": "ala-papilionoidea-au-20260717-d33d4d367525"
+  },
+  "models": {
+    "bioclip": {
+      "manifest": {
+        "git_blob_sha": "16c092630c04756bde166f008168e5733759a6be",
+        "last_changed_commit": "ecbeaa78e87e26127181cc33504a3650e55c4418",
+        "path": "data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json",
+        "physical_sha256": "c4f93d219a08113387ec1728f18683f9556bbff000a93610d3be7b801dd6a5a7"
+      },
+      "model_id": null,
+      "revision": null,
+      "runtime_loaded": false,
+      "status": "skipped_unfinished_by_goal_instruction",
+      "weights_sha256": null
+    },
+    "openai_analyst": {
+      "configured_model_id": "gpt-5.6-sol",
+      "family_alias": "gpt-5.6",
+      "live_model_state": "not_run",
+      "model_invoked": false,
+      "network_calls": 0,
+      "replay": {
+        "git_blob_sha": "1a8d06423df4301664485682c3dfec4e36036a79",
+        "last_changed_commit": "69a102cc31253e7d3eb84c91d92de2a0c266b7c8",
+        "path": "packages/openai/submitted-replays.v1.json",
+        "physical_sha256": "1d029dc54fa1e540aa11cdbaa5163bc2d912250ed4846e0e4db78763feaf4178"
+      },
+      "requirements": {
+        "git_blob_sha": "47b10155f3e82481b0e373ba3b3aa314436302da",
+        "last_changed_commit": "0d4dc889dd6a08f79736f168ef988baf25988aca",
+        "path": "packages/openai/implementation-requirements.v1.json",
+        "physical_sha256": "b9dacaa99122587073946374d86bc19fc1dc903668e003ab239eb912dd4f3b89"
+      },
+      "submitted_mode": "replayed"
+    },
+    "yoloe": {
+      "execution_attempted": false,
+      "manifest": {
+        "git_blob_sha": "605351db021257a2188d29806ecd5e04521ed851",
+        "last_changed_commit": "3a623ca3bd4b210e7703577961d1b9dcb5ba6a6b",
+        "path": "data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json",
+        "physical_sha256": "e05664a1e8141f6be3cc2c2a35197facd7bc080a24a540cc8ff5cd24d162501b"
+      },
+      "model_id": null,
+      "revision": null,
+      "status": "blocked_not_executed",
+      "weights_sha256": null
+    }
+  },
+  "pack": {
+    "accepted_species": 463,
+    "generated_at": "2026-07-17T15:06:19Z",
+    "git_tree": {
+      "git_tree_sha": "c4317b24fa4b0bd5df78c2dd972839a8db833b0c",
+      "last_changed_commit": "b68dfad1cd01429c9e2ed27797ee3237830aec97",
+      "path": "data/packs/australian_butterflies/v1"
+    },
+    "manifest": {
+      "git_blob_sha": "ecfedab0e46e745f649a9df524979e368b053b15",
+      "last_changed_commit": "b68dfad1cd01429c9e2ed27797ee3237830aec97",
+      "path": "data/packs/australian_butterflies/v1/manifest.json",
+      "physical_sha256": "41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a"
+    },
+    "pack_id": "australian-butterflies-v1",
+    "schema_version": "butterflylens-taxonomy-pack-manifest/v1",
+    "version": "v1"
+  },
+  "release": {
+    "blockers": [
+      "ala_dataset_rights:dr1097",
+      "ala_dataset_rights:dr30019",
+      "ala_dataset_rights:dr635",
+      "bioclip:skipped_unfinished_by_goal_instruction",
+      "community_privacy:category_retention_schedule",
+      "community_privacy:legal_operator_identity",
+      "community_privacy:moderation_and_removal_workflows",
+      "community_privacy:overseas_recipient_countries_or_regions",
+      "community_privacy:private_privacy_contact",
+      "community_privacy:versioned_participant_acceptance",
+      "yoloe:blocked_not_executed"
+    ],
+    "community_live_and_data_release": "blocked",
+    "release_ready": false,
+    "static_submitted_replay": "verified"
+  },
+  "review_state": {
+    "community_writes_enabled": false,
+    "completed_consensus_records": 0,
+    "decisive_reviews": 0,
+    "fixture_available": true,
+    "fixture_item_id": "commons-review-fixture-47248e36944c",
+    "fixture_media_sha256": "47248e36944cf91256c906e8454adcad99121da049260745d57f4cbffae65a78",
+    "fixture_rights": {
+      "attribution": "Common Lime Butterfly Papilio demoleus UP by Kadavoor by Jeevan Jose, CC BY-SA 4.0",
+      "creator": "Jeevan Jose",
+      "licenseName": "CC BY-SA 4.0",
+      "licenseUri": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "rightsHolder": "Jeevan Jose",
+      "sourceUri": "https://commons.wikimedia.org/wiki/File:Common_Lime_Butterfly_Papilio_demoleus_UP_by_Kadavoor.jpg"
+    },
+    "human_verified_media": 0,
+    "media_manifest": {
+      "git_blob_sha": "604c74b42b7e4fe6e4d3fde2848539ab8239213f",
+      "last_changed_commit": "d30da7d3ddfc8d992533be4f902c1bc51ee63c07",
+      "path": "apps/web/src/review/reviewMediaManifest.json",
+      "physical_sha256": "7c66b7178c117e3349a6b0767dce5590c10621561d046ebc5ac44de25dd8420f"
+    },
+    "representative_reviewed_sample": 0,
+    "scientific_claim_allowed": false,
+    "state": "local_draft_only_no_stored_review",
+    "stored_review_events": 0
+  },
+  "schema_version": "butterflylens-submitted-snapshot:v1.0.0",
+  "snapshot_fingerprint": "sha256:27a256934a1ac1a9fb0d27b75a0fe805bf12224df42d7e6b7d235991d26fb9de",
+  "snapshot_id": "butterflylens-submitted-20260718-v1",
+  "snapshot_mode": "submitted",
+  "source": {
+    "commit": "0e07f175fa07650e90606ca07b2286807010f1de",
+    "git_tree_sha": "adf748c89ecbcc60100932104e77c1e4fc0cddfe",
+    "repository": "karikris/ButterflyLens"
+  },
+  "source_shas": {
+    "artifacts": [
+      {
+        "git_blob_sha": "ecfedab0e46e745f649a9df524979e368b053b15",
+        "last_changed_commit": "b68dfad1cd01429c9e2ed27797ee3237830aec97",
+        "path": "data/packs/australian_butterflies/v1/manifest.json",
+        "physical_sha256": "41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a"
+      },
+      {
+        "git_blob_sha": "5975a589dd62ec6d28610f4e6d4704223b1aeedc",
+        "last_changed_commit": "e23a9774a3c9f122cd422bb8fb345783fb3dec8b",
+        "path": "data/packs/australian_butterflies/v1/taxa.jsonl",
+        "physical_sha256": "df62592172d3291ebbb86f538a8275643c20a6aefa64857b26d85019ef463bf8"
+      },
+      {
+        "git_blob_sha": "2f78b4853524f67e6f6049bd67464ee150463055",
+        "last_changed_commit": "3e1059d7fc403591067c62207d5f37e985bf4878",
+        "path": "data/packs/australian_butterflies/v1/name_assertions.jsonl",
+        "physical_sha256": "78f5048a180c49809bea0d57d44ee4f4cc62c0638e96d87f194a4be42fa1a3a5"
+      },
+      {
+        "git_blob_sha": "ff21a930c8b46210713f85cfdf0bef2113dc0b63",
+        "last_changed_commit": "0f3e1c81a9957d0e6079dec44170bbc4a230065a",
+        "path": "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json",
+        "physical_sha256": "f16cb0939721b40b941caa5a7e2cd6767b20774750f56208b799422bde758b7e"
+      },
+      {
+        "git_blob_sha": "1cc9387a9bfe0916a00d0354221dffad9f04efdb",
+        "last_changed_commit": "5432772619bceebd9f5a4762993c53e84abd4de7",
+        "path": "apps/web/src/operations/submittedOperationsSnapshot.json",
+        "physical_sha256": "5d0cc36d481b0618a76f320dc3370ea4c3522592671f3e86466062bba0b779ab"
+      },
+      {
+        "git_blob_sha": "d8a3c4fd5856cb4febafa8a9f663058333bb584d",
+        "last_changed_commit": "e605864a786bf6897135ba968b320c86c87b967f",
+        "path": "apps/web/src/operations/submittedMonitoringSnapshot.json",
+        "physical_sha256": "2233cf3f00b6926bcdd96d584629823f39ff84fd765290949f67a4ff9020271a"
+      },
+      {
+        "git_blob_sha": "d99d8aa20d22f2a02960de1c06618a291405745c",
+        "last_changed_commit": "11d8d3e232d2fa96eae6cc44c5a2f5cd615ce83b",
+        "path": "apps/web/src/quality/submittedQualityProjection.json",
+        "physical_sha256": "2022327e885ad344948dcb20a9f7545cc6eff76e37f64671629d782bf0247928"
+      },
+      {
+        "git_blob_sha": "604c74b42b7e4fe6e4d3fde2848539ab8239213f",
+        "last_changed_commit": "d30da7d3ddfc8d992533be4f902c1bc51ee63c07",
+        "path": "apps/web/src/review/reviewMediaManifest.json",
+        "physical_sha256": "7c66b7178c117e3349a6b0767dce5590c10621561d046ebc5ac44de25dd8420f"
+      },
+      {
+        "git_blob_sha": "117e15c1735b9252be3dd63f48360be4a30cad85",
+        "last_changed_commit": "d30da7d3ddfc8d992533be4f902c1bc51ee63c07",
+        "path": "provenance/data_rights_manifest.json",
+        "physical_sha256": "d4af0b623f9eb875bd88073aaa13fddfdb7e0063698ebb258cb334508a415201"
+      },
+      {
+        "git_blob_sha": "605351db021257a2188d29806ecd5e04521ed851",
+        "last_changed_commit": "3a623ca3bd4b210e7703577961d1b9dcb5ba6a6b",
+        "path": "data/packs/australian_butterflies/v1/references/v1/reference_yoloe_readiness_manifest.json",
+        "physical_sha256": "e05664a1e8141f6be3cc2c2a35197facd7bc080a24a540cc8ff5cd24d162501b"
+      },
+      {
+        "git_blob_sha": "16c092630c04756bde166f008168e5733759a6be",
+        "last_changed_commit": "ecbeaa78e87e26127181cc33504a3650e55c4418",
+        "path": "data/packs/australian_butterflies/v1/references/v1/reference_bioclip_status.json",
+        "physical_sha256": "c4f93d219a08113387ec1728f18683f9556bbff000a93610d3be7b801dd6a5a7"
+      },
+      {
+        "git_blob_sha": "7f956ed93eaa4d2de8a010ae623404d93ae14c00",
+        "last_changed_commit": "b68dfad1cd01429c9e2ed27797ee3237830aec97",
+        "path": "data/packs/australian_butterflies/v1/references/v1/reference_bank_manifest.json",
+        "physical_sha256": "628c6fd5851b5157cae601eec65cb764e77e166dfcc8dbb3a34ccfd5d1076ded"
+      },
+      {
+        "git_blob_sha": "80cfde1d8b7c121cbab50c2503f40febc9001a13",
+        "last_changed_commit": "85e4120aba28d60dae9cdc306885c08d0b8fdbf2",
+        "path": "packages/flickr/global_out_of_range_status.json",
+        "physical_sha256": "7215fd7895bd1cf207da28501fd8bbb43768a545df9659b0f026631f271b3cd7"
+      },
+      {
+        "git_blob_sha": "47b10155f3e82481b0e373ba3b3aa314436302da",
+        "last_changed_commit": "0d4dc889dd6a08f79736f168ef988baf25988aca",
+        "path": "packages/openai/implementation-requirements.v1.json",
+        "physical_sha256": "b9dacaa99122587073946374d86bc19fc1dc903668e003ab239eb912dd4f3b89"
+      },
+      {
+        "git_blob_sha": "1a8d06423df4301664485682c3dfec4e36036a79",
+        "last_changed_commit": "69a102cc31253e7d3eb84c91d92de2a0c266b7c8",
+        "path": "packages/openai/submitted-replays.v1.json",
+        "physical_sha256": "1d029dc54fa1e540aa11cdbaa5163bc2d912250ed4846e0e4db78763feaf4178"
+      },
+      {
+        "git_blob_sha": "f2830a0d7530b7d60c1a319e281bda4a8833a984",
+        "last_changed_commit": "80db0debcdb937bb2e22c98a4eca47e27c7e0603",
+        "path": "packages/contracts/schemas/live-worker-contracts.schema.json",
+        "physical_sha256": "e47f4a67c3d3fb896a6df14aeb5ac7d3f72dd05658634e10df36c6737805e447"
+      },
+      {
+        "git_blob_sha": "d8fb68c52193f0d75e1fccdff9a4b7aabb1e879a",
+        "last_changed_commit": "f031c5300c04434eb71157513db7a6955eedb235",
+        "path": "policies/community-privacy-policy.v1.json",
+        "physical_sha256": "d485b1743d248dcf5dec5fc1f49f3303d56a8bf0fe0c9a77967b5d5ce1261487"
+      }
+    ],
+    "hash_algorithms": {
+      "git_objects": "repository_object_format_sha1",
+      "physical": "sha256"
+    },
+    "upstream": {
+      "biominer_reference_origin_commit": "d71bceabf75748a25df39d0025e8da907f295f8c",
+      "taxalens_review_media_origin_commit": "c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc"
+    }
+  },
+  "worker": {
+    "configured_models": [],
+    "heartbeat_observed_at": null,
+    "identity_fingerprint": null,
+    "scientific_claim_allowed": false,
+    "state": "unavailable",
+    "state_reason": "No authenticated worker heartbeat is attached to the submitted build.",
+    "version": {
+      "contract": {
+        "git_blob_sha": "f2830a0d7530b7d60c1a319e281bda4a8833a984",
+        "last_changed_commit": "80db0debcdb937bb2e22c98a4eca47e27c7e0603",
+        "path": "packages/contracts/schemas/live-worker-contracts.schema.json",
+        "physical_sha256": "e47f4a67c3d3fb896a6df14aeb5ac7d3f72dd05658634e10df36c6737805e447"
+      },
+      "identity_contract": "butterflylens-worker-identity:v1.0.0",
+      "implementation": {
+        "git_tree_sha": "7503b6f7076f1b47e42675d4b2d3e23bbdddb49a",
+        "last_changed_commit": "ebba78c8a2b04aedadb57fa6a5c96a8bf19bb483",
+        "path": "services/worker"
+      },
+      "semantic_version": null,
+      "version_state": "git_tree_and_contract_only_no_separate_package_version"
+    }
+  }
+}

@@ -835,6 +835,19 @@
       "removal_state": "active"
     },
     {
+      "path": "data/submission/v1/submitted_snapshot.json",
+      "fingerprint": "sha256:16713ce4b1f4caad19e515ed2cf6d9d30ab1592e925a8a5281a6184f5d28bc2b",
+      "provider": "ButterflyLens derived metadata over separately identified frozen sources",
+      "source_id": "butterflylens-australian-butterflies-pack-v1",
+      "licence": "AGPL-3.0-only-METADATA-CHILD-RIGHTS-RETAINED",
+      "attribution": "Australian Biological Resources Study/Australian Faunal Directory; Atlas of Living Australia and contributing resources; GBIF; iNaturalist creators and rights holders; Wikimedia Commons creator Jeevan Jose; ButterflyLens provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active",
+      "scope_note": "Snapshot metadata only. Child artifacts retain their own licences, attribution, sensitive-data policy, and release blocks; this record does not authorize ALA occurrence-layer release or media reuse."
+    },
+    {
       "path": "apps/web/public/media/review-fixture-47248e36944c.jpg",
       "fingerprint": "sha256:47248e36944cf91256c906e8454adcad99121da049260745d57f4cbffae65a78",
       "provider": "Wikimedia Commons via karikris/taxalens@c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc",
