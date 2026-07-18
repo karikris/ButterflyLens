@@ -362,6 +362,16 @@ PROJECTION_COVERAGE = {
             "apps/web/src/species/speciesCatalogueModel.test.ts#rejects model or human evidence that was not run",
         ),
     },
+    "submitted-freeze": {
+        "json": ("data/submission/v1/submitted_snapshot.json",),
+        "symbols": (),
+        "positive": (
+            "tests/test_submitted_snapshot_freeze.py#test_checked_in_snapshot_is_exactly_reproducible",
+        ),
+        "negative": (
+            "tests/test_submitted_snapshot_freeze.py#test_fingerprint_rejects_tampering_and_release_stays_blocked",
+        ),
+    },
     "worker-offline": {
         "json": (),
         "symbols": (

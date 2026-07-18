@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import subprocess
 from typing import Any, Iterable
 
 
@@ -56,6 +57,7 @@ class SubmittedEvidenceRepository:
         if self.snapshot_mode != "submitted":
             raise ArtifactIntegrityError("only the submitted snapshot is allowed")
         self._artifacts = self._load_artifacts()
+        self._artifact_bytes_cache: dict[str, bytes] = {}
         self._json_cache: dict[str, Any] = {}
         self._verify_all()
         self._species_by_key: dict[str, dict[str, Any]] | None = None
@@ -119,23 +121,27 @@ class SubmittedEvidenceRepository:
 
     def _verify_all(self) -> None:
         for artifact in self._artifacts.values():
-            path = (self.root / artifact.path).resolve()
-            try:
-                path.relative_to(self.root)
-            except ValueError as error:
-                raise ArtifactIntegrityError(
-                    f"artifact escapes repository root: {artifact.path}"
-                ) from error
-            try:
-                digest = hashlib.sha256(path.read_bytes()).hexdigest()
-            except OSError as error:
-                raise ArtifactIntegrityError(
-                    f"cannot read pinned artifact: {artifact.path}"
-                ) from error
+            digest = hashlib.sha256(self._read_pinned_bytes(artifact)).hexdigest()
             if digest != artifact.sha256:
                 raise ArtifactIntegrityError(
                     f"pinned artifact checksum mismatch: {artifact.path}"
                 )
+
+    def _read_pinned_bytes(self, artifact: SourceArtifact) -> bytes:
+        if artifact.key not in self._artifact_bytes_cache:
+            try:
+                completed = subprocess.run(
+                    ["git", "show", f"{self.commit}:{artifact.path}"],
+                    cwd=self.root,
+                    check=True,
+                    capture_output=True,
+                )
+            except (OSError, subprocess.CalledProcessError) as error:
+                raise ArtifactIntegrityError(
+                    f"cannot read pinned artifact: {artifact.path}"
+                ) from error
+            self._artifact_bytes_cache[artifact.key] = completed.stdout
+        return self._artifact_bytes_cache[artifact.key]
 
     @property
     def artifact_keys(self) -> tuple[str, ...]:
@@ -172,10 +178,8 @@ class SubmittedEvidenceRepository:
         if key not in self._json_cache:
             artifact = self.artifact(key)
             try:
-                payload = json.loads(
-                    (self.root / artifact.path).read_text(encoding="utf-8")
-                )
-            except (OSError, json.JSONDecodeError) as error:
+                payload = json.loads(self._read_pinned_bytes(artifact))
+            except (UnicodeDecodeError, json.JSONDecodeError) as error:
                 raise ArtifactIntegrityError(
                     f"pinned artifact is not readable JSON: {artifact.path}"
                 ) from error

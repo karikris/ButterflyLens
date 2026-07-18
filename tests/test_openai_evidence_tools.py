@@ -145,6 +145,28 @@ class OpenAIEvidenceToolTests(unittest.TestCase):
         )
         self.assertEqual(restored["acceptedScientificName"], SPECIES_NAME)
 
+    def test_repository_reads_the_pinned_commit_not_mutable_worktree_bytes(self) -> None:
+        repository = SubmittedEvidenceRepository(ROOT)
+        pinned = repository.read_json("rights_manifest")
+        working = json.loads(
+            (ROOT / "provenance/data_rights_manifest.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertNotEqual(pinned, working)
+        self.assertFalse(
+            any(
+                row.get("path") == "data/submission/v1/submitted_snapshot.json"
+                for row in pinned["artifacts"]
+            )
+        )
+        self.assertTrue(
+            any(
+                row.get("path") == "data/submission/v1/submitted_snapshot.json"
+                for row in working["artifacts"]
+            )
+        )
+
     def test_unknown_extra_and_malformed_arguments_fail(self) -> None:
         with self.assertRaisesRegex(ToolInputError, "unknown"):
             self.toolbox.invoke("invent_species", {})

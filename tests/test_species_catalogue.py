@@ -4,6 +4,8 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,7 +44,34 @@ class SpeciesCatalogueTests(unittest.TestCase):
         "project PyArrow environment is required for deterministic rebuild",
     )
     def test_checked_in_projection_is_deterministic_from_frozen_sources(self) -> None:
-        rebuilt = BUILDER.build_catalogue(generated_at=self.catalogue["generatedAt"])
+        operations = json.loads(
+            (ROOT / "apps/web/src/operations/submittedOperationsSnapshot.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        source_commit = operations["submittedSnapshot"]["sourceCommit"]
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            frozen_rights = Path(temporary_directory) / "data_rights_manifest.json"
+            frozen_rights.write_bytes(
+                subprocess.run(
+                    [
+                        "git",
+                        "show",
+                        f"{source_commit}:provenance/data_rights_manifest.json",
+                    ],
+                    cwd=ROOT,
+                    check=True,
+                    capture_output=True,
+                ).stdout
+            )
+            self.assertEqual(
+                BUILDER.sha256_file(frozen_rights),
+                self.catalogue["sourceFingerprints"]["dataRightsManifest"],
+            )
+            rebuilt = BUILDER.build_catalogue(
+                rights_path=frozen_rights,
+                generated_at=self.catalogue["generatedAt"],
+            )
         self.assertEqual(rebuilt, self.catalogue)
 
     def test_rebuilt_baseline_contains_all_accepted_species_once(self) -> None:
