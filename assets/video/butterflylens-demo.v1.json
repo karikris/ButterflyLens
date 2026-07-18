@@ -54,6 +54,10 @@
       "sha256": "2233cf3f00b6926bcdd96d584629823f39ff84fd765290949f67a4ff9020271a"
     },
     {
+      "path": "apps/web/src/map/submittedMapSnapshot.json",
+      "sha256": "2033dadaa67427768fde54c6f16b509bddae382bb9e38fb9cdbdbd6c9a43281e"
+    },
+    {
       "path": "apps/web/src/review/reviewMediaManifest.json",
       "sha256": "7c66b7178c117e3349a6b0767dce5590c10621561d046ebc5ac44de25dd8420f"
     },
@@ -67,11 +71,11 @@
     },
     {
       "path": "packages/openai/submitted-replays.v1.json",
-      "sha256": "1d029dc54fa1e540aa11cdbaa5163bc2d912250ed4846e0e4db78763feaf4178"
+      "sha256": "83f87e51a96124242d9da33719be4475dc621224deb7cf4f85fca6282e334612"
     },
     {
       "path": "packages/openai/submitted-artifacts.v1.json",
-      "sha256": "fe56e55b2046dbd3d88c8a63f96ac5a7e2f6b0135f1d2c71813962f83d280a3d"
+      "sha256": "808c4b936e1a3fb0aeab56c9b0b4a0279d1d1b97d6c27c6f77a4d941a0f29f93"
     }
   ],
   "shots": [

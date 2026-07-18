@@ -42,7 +42,8 @@ test('renders the complete public fallback without browser or network errors', a
     }),
   ).toBeVisible()
   await expect(page.getByText('Search results are hypotheses—not biodiversity records.')).toBeVisible()
-  await expect(page.getByText('Occurrence layer withheld').first()).toBeVisible()
+  await expect(page.getByText('Aggregate layer available').first()).toBeVisible()
+  await expect(page.getByText('213,310').first()).toBeVisible()
   await expect(page.getByText('Worker status unavailable')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Ask ButterflyLens' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Evidence strength, without guesswork.' })).toBeVisible()
