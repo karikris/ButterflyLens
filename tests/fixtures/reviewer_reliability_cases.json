@@ -1,0 +1,32 @@
+{
+  "schema_version": "butterflylens-reviewer-reliability-fixtures:v1.0.0",
+  "domain": {
+    "family_taxon_key": "family:papilionidae",
+    "source_provider": "flickr",
+    "life_stage": "adult",
+    "visual_domain": "live_field"
+  },
+  "estimated_case": {
+    "positive_actual": ["yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "no"],
+    "negative_actual": ["no", "no", "no", "no", "no", "no", "no", "no", "yes", "yes"],
+    "overlaps": [
+      {"reviewer": "yes", "peer": "yes", "adjudicated": "yes"},
+      {"reviewer": "no", "peer": "no", "adjudicated": "no"},
+      {"reviewer": "yes", "peer": "yes", "adjudicated": "yes"},
+      {"reviewer": "no", "peer": "no", "adjudicated": "no"},
+      {"reviewer": "yes", "peer": "yes", "adjudicated": "no"},
+      {"reviewer": "no", "peer": "no", "adjudicated": null},
+      {"reviewer": "yes", "peer": "yes", "adjudicated": null},
+      {"reviewer": "no", "peer": "no", "adjudicated": null},
+      {"reviewer": "yes", "peer": "no", "adjudicated": null},
+      {"reviewer": "no", "peer": "yes", "adjudicated": null}
+    ]
+  },
+  "insufficient_case": {
+    "positive_actual": ["yes", "no"],
+    "negative_actual": ["no"],
+    "overlaps": [
+      {"reviewer": "yes", "peer": "yes", "adjudicated": null}
+    ]
+  }
+}

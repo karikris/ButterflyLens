@@ -111,10 +111,26 @@ insert into public.consensus (
 from public.review_events where review_event_id = 'review-event:test';
 insert into public.reviewer_reliability (
   reviewer_reliability_id, reviewer_profile_pk, project_pk, family_taxon_key,
-  life_stage, visual_domain, weighting_state, policy_version,
-  reliability_fingerprint, measured_at
-) select 'reliability:test', rp.id, p.id, 'family:all', 'all', 'field-photo',
-  'equal_weight', 'v1', repeat('7', 64), now()
+  source_provider, life_stage, visual_domain, weighting_state,
+  sample_count, decisive_count, positive_control_count,
+  negative_control_count, control_accuracy, overlap_count,
+  adjudicated_count, evidence_fingerprint, evidence_cutoff, blockers,
+  metrics, estimator_version, policy_version, reliability_fingerprint,
+  measured_at
+) select 'reliability:test', rp.id, p.id, 'family:all',
+  'butterflylens_fixture', 'unknown', 'ambiguous', 'insufficient_evidence',
+  0, 0, 0, 0, null, 0, 0, repeat('6', 64), now(),
+  array['control_attempts_below_minimum'], jsonb_build_object(
+    'visibility', 'private', 'public_ranking_allowed', false,
+    'model_agreement_used', false, 'majority_agreement_alone_used', false,
+    'scientific_claim_allowed', false,
+    'method', 'control_calibrated_beta_binomial_v1',
+    'evidence_fingerprint', repeat('6', 64),
+    'control_accuracy', null, 'sensitivity', null, 'specificity', null,
+    'pairwise_agreement', null, 'krippendorff_alpha', null,
+    'adjudicated_overlap', null
+  ), 'butterflylens-reliability-estimator:v1.0.0',
+  'butterflylens-reviewer-reliability-policy:v1.0.0', repeat('7', 64), now()
 from public.reviewer_profiles rp cross join public.projects p
 where rp.reviewer_profile_id = 'reviewer:test' and p.project_id = 'project:review-test';
 insert into public.quality_snapshots (

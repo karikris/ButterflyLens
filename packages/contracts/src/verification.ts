@@ -223,6 +223,21 @@ export interface ReviewerReliability {
   readonly shrinkage_fraction: number | null
   readonly minimum_evidence: number
   readonly blockers: readonly string[]
+  readonly metrics: {
+    readonly control_accuracy: number | null
+    readonly sensitivity: number | null
+    readonly specificity: number | null
+    readonly pairwise_agreement: number | null
+    readonly krippendorff_alpha: number | null
+    readonly adjudicated_overlap: number | null
+    readonly positive_control_count: number
+    readonly negative_control_count: number
+    readonly overlap_count: number
+    readonly adjudicated_count: number
+    readonly pair_count: number
+    readonly agreement_pair_count: number
+    readonly metric_blockers: readonly string[]
+  }
   readonly evidence_fingerprint: string
   readonly visibility: 'private'
   readonly public_ranking_allowed: false

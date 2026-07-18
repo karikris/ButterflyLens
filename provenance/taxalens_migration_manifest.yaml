@@ -1,5 +1,5 @@
 schema_version: butterflylens-taxalens-migration-v1
-updated_at: "2026-07-18T02:00:00Z"
+updated_at: "2026-07-18T02:42:12Z"
 source_snapshot:
   repository: karikris/taxalens
   commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -197,6 +197,23 @@ components:
       - Static tests cover all control kinds, blindness, privacy, evidence binding, immutability, indexed foreign keys, and pgTAP plan integrity.
       - Eighteen pgTAP assertions define private tables, privileges, triggers, indexes, foreign keys, and required evidence.
     status: implemented_original_adapter
+  - component_id: taxalens-reviewer-reliability-estimator-pattern-v1
+    source_repository: karikris/taxalens
+    source_commit: c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc
+    source_path: apps/web/src/review/domain/reviewerReliability.ts
+    destination_path: packages/verification/python/butterflylens_verification/reliability.py
+    migration_kind: interface_pattern
+    reason: Implement ButterflyLens-owned private domain estimates while retaining deterministic agreement and control-performance precedent without copying upstream code, fixtures, labels, or scores.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Measure control accuracy, class-valid sensitivity/specificity, target-versus-peer agreement, nominal Krippendorff alpha, and exact-lineage adjudicated overlap.
+      - Apply the predeclared Beta prior, uncertainty interval, shrinkage toward equal weight, and capped operational mapping only after every policy threshold passes.
+      - Persist private append-only domain revisions through a fixed-search-path admission trigger that rejects model/majority truth shortcuts and browser writes.
+    tests:
+      - Deterministic synthetic fixtures cover every metric, sparse unavailable states, order invariance, malformed independence/lineage, storage mapping, and JSON Schema validity.
+      - Static migration tests and twenty-six pgTAP assertions define fields, thresholds, append-only lineage, privileges, RLS, functions, triggers, and indexes.
+    status: implemented_original_adapter
 butterflylens_owned_changes:
   - ownership_id: australia-wide-community-product
     status: planned
@@ -228,9 +245,15 @@ butterflylens_owned_changes:
     upstream_boundary: Credential-free local IndexedDB review and optional static repository snapshots.
     butterflylens_responsibility: Supabase Auth, least-privilege RLS, roles, assignments, consent, private metadata, moderation, and audit.
   - ownership_id: private-reviewer-reliability
-    status: planned
+    status: partially_implemented
     upstream_boundary: Aggregate anonymous agreement and control-set metrics with unweighted human consensus.
     butterflylens_responsibility: Private domain-specific uncertainty-aware estimates shrunk toward equal weight, with no public ranking or model-vote shortcut.
+    completed_scope:
+      - Normative minimum-evidence, shrinkage, uncertainty, cap, privacy, dissent, and dignity policy.
+      - Deterministic estimator, contract metrics, database storage mapping, append-only admission, and private RLS-preserving schema.
+    remaining_scope:
+      - Task 9.4 weighted consensus integration with preserved unweighted layers and dissent.
+      - Live database integration execution and reviewer-facing private explanation/appeal UI.
   - ownership_id: contributor-experience
     status: partially_implemented
     upstream_boundary: Researcher-oriented fixture mission, evidence, local review, dashboard, and replay.

@@ -171,6 +171,7 @@ class ReviewerReliability(TypedDict):
     shrinkage_fraction: float | None
     minimum_evidence: int
     blockers: list[str]
+    metrics: dict[str, object]
     evidence_fingerprint: str
     visibility: Literal["private"]
     public_ranking_allowed: Literal[False]

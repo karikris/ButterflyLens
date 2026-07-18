@@ -758,6 +758,7 @@
         "shrinkage_fraction",
         "minimum_evidence",
         "blockers",
+        "metrics",
         "evidence_fingerprint",
         "visibility",
         "public_ranking_allowed",
@@ -817,7 +818,7 @@
         "equal_weight_target": { "const": 1 },
         "applied_weight": {
           "anyOf": [
-            { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+            { "type": "number", "minimum": 0.5, "maximum": 2 },
             { "type": "null" }
           ]
         },
@@ -832,6 +833,49 @@
           "type": "array",
           "uniqueItems": true,
           "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "control_accuracy",
+            "sensitivity",
+            "specificity",
+            "pairwise_agreement",
+            "krippendorff_alpha",
+            "adjudicated_overlap",
+            "positive_control_count",
+            "negative_control_count",
+            "overlap_count",
+            "adjudicated_count",
+            "pair_count",
+            "agreement_pair_count",
+            "metric_blockers"
+          ],
+          "properties": {
+            "control_accuracy": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+            "sensitivity": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+            "specificity": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+            "pairwise_agreement": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+            "krippendorff_alpha": {
+              "anyOf": [
+                { "type": "number", "minimum": -1, "maximum": 1 },
+                { "type": "null" }
+              ]
+            },
+            "adjudicated_overlap": { "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/nullable_probability" },
+            "positive_control_count": { "type": "integer", "minimum": 0 },
+            "negative_control_count": { "type": "integer", "minimum": 0 },
+            "overlap_count": { "type": "integer", "minimum": 0 },
+            "adjudicated_count": { "type": "integer", "minimum": 0 },
+            "pair_count": { "type": "integer", "minimum": 0 },
+            "agreement_pair_count": { "type": "integer", "minimum": 0 },
+            "metric_blockers": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+            }
+          }
         },
         "evidence_fingerprint": {
           "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
