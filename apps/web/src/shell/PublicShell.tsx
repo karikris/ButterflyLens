@@ -85,6 +85,10 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
             <a href="https://github.com/karikris/ButterflyLens/blob/main/DARWIN_CORE_EXPORT.md">
               Darwin Core export
             </a>
+            {' · '}
+            <a href="https://github.com/karikris/ButterflyLens/blob/main/ALA_CONTRIBUTION.md">
+              ALA contribution preparation
+            </a>
           </p>
         </div>
       </footer>

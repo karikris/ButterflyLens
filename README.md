@@ -40,3 +40,7 @@ evidence-packet receipts while keeping release-ready distinct from published.
 The [Darwin Core export policy](DARWIN_CORE_EXPORT.md) packages only those exact
 receipts into a deterministic, generalized, rights-preserving evidence archive;
 preparation remains distinct from publication or provider submission.
+The [ALA contribution preparation policy](ALA_CONTRIBUTION.md) adds mandatory
+metadata, licence, attribution, provider-agreement, quality, and manifest
+artifacts to that verified archive while retaining an offline, human-only
+submission boundary.
