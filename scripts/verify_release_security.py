@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 import tomllib
 
 
@@ -308,7 +309,32 @@ def verify_privacy_and_release_blocks() -> tuple[str, bool, bool, tuple[str, ...
     )
 
 
+def verify_completion_boundary() -> None:
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "verify_completion_audit.py")],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        detail = result.stdout.strip() or result.stderr.strip() or "unknown failure"
+        raise SecurityVerificationError(
+            f"completion boundary verification failed: {detail}"
+        )
+    try:
+        completion = json.loads(result.stdout)
+    except json.JSONDecodeError as error:
+        raise SecurityVerificationError(
+            "completion boundary verifier returned invalid JSON"
+        ) from error
+    if completion.get("goal_complete") is not False:
+        raise SecurityVerificationError(
+            "completion boundary no longer blocks the release claim"
+        )
+
+
 def run_audit() -> SecurityAudit:
+    verify_completion_boundary()
     public_tables, security_definers, views = verify_rls(migration_documents())
     scanned_files = verify_no_secrets(tracked_paths())
     network_files = verify_external_network_inventory()
