@@ -173,6 +173,18 @@
       "scope_note": "Exact UID joins preserve 53 resource citations and 31 non-resource citation entries. Three potentially restrictive citation-rights conflicts covering 16,753 selected rows block downstream public-product release pending resolution or exclusion; the screen is not a legal conclusion."
     },
     {
+      "source_id": "butterflylens-ala-public-map-v1",
+      "provider": "ButterflyLens derived from the frozen ALA occurrence, dataset, citation, and spatial-context evidence",
+      "dataset": "Rights-screened submitted ALA public-map projection",
+      "source_url": "data/packs/australian_butterflies/v1/map/map_manifest.json",
+      "retrieved_at": "2026-07-19T00:00:00Z",
+      "licence": "MIXED-CC0-PDM-CC-BY-RIGHTS-SCREENED",
+      "licence_url": "data/packs/australian_butterflies/v1/ala/ala_attribution.json",
+      "terms_url": "https://www.ala.org.au/terms-of-use/",
+      "attribution": "Atlas of Living Australia and every contributing provider/resource retained after the documented conservative rights screen; DCCEEW; Source: Australian Bureau of Statistics; ButterflyLens projection provenance.",
+      "scope_note": "Aggregate public evidence from 213,310 spatially eligible rows after excluding all 16,753 selected rows from dr1097, dr30019, and dr635. The full 236,897-row rebuilt baseline remains authoritative and preserved. Exclusion is a fail-closed publication choice, not a legal conclusion. Only H3 aggregate geometry is published; no occurrence or boundary coordinates are exposed; provider assertions are not human verification and no biological absence may be inferred."
+    },
+    {
       "source_id": "biominer-reference-metadata-import-20260718",
       "provider": "GBIF and iNaturalist normalized by BioMiner at the pinned origin commit",
       "dataset": "Bounded Australian butterfly candidate-observation and media metadata import",
@@ -979,6 +991,54 @@
       "display_allowed": false,
       "redistribution_allowed": false,
       "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/map/geographic_impact_cells.parquet",
+      "fingerprint": "sha256:f6ed6f8bdaf6385ea91ed47d98b77f31817f5880c02c4d604c4d4310b3080ed0",
+      "provider": "ButterflyLens derived from Atlas of Living Australia and retained contributing resources",
+      "source_id": "butterflylens-ala-public-map-v1",
+      "licence": "MIXED-CC0-PDM-CC-BY-RIGHTS-SCREENED",
+      "attribution": "Atlas of Living Australia and every retained contributing provider/resource identified in the frozen snapshot; ButterflyLens H3 projection provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active_rights_screened_projection"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/map/geographic_impact_summary.parquet",
+      "fingerprint": "sha256:c85952e63dda07003b68bd54ce8fb9c1ecc7116d8d3119868b12d28a1d5a3be3",
+      "provider": "ButterflyLens derived from Atlas of Living Australia and retained contributing resources",
+      "source_id": "butterflylens-ala-public-map-v1",
+      "licence": "MIXED-CC0-PDM-CC-BY-RIGHTS-SCREENED",
+      "attribution": "Atlas of Living Australia and every retained contributing provider/resource; DCCEEW; Source: Australian Bureau of Statistics; ButterflyLens aggregation provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active_rights_screened_projection"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/map/map_manifest.json",
+      "fingerprint": "sha256:fe37f6c004dbed987b81293a5a5602afdac8683a59d4e85b651ca5732b3c8015",
+      "provider": "ButterflyLens derived from the frozen ALA evidence and rights records",
+      "source_id": "butterflylens-ala-public-map-v1",
+      "licence": "MIXED-CC0-PDM-CC-BY-RIGHTS-SCREENED",
+      "attribution": "Atlas of Living Australia and every retained contributing provider/resource; ButterflyLens public-map provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active_rights_screened_projection"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/map/schemas/geographic_impact_summary.schema.json",
+      "fingerprint": "sha256:5a89e0216a5ab77203288541dc77614a6552325e954160a4cd2fbe2535b8894e",
+      "provider": "ButterflyLens schema derived from the submitted ALA public-map projection",
+      "source_id": "butterflylens-ala-public-map-v1",
+      "licence": "MIXED-CC0-PDM-CC-BY-RIGHTS-SCREENED",
+      "attribution": "Atlas of Living Australia and retained contributing resources; ButterflyLens schema and provenance.",
+      "processing_allowed": true,
+      "display_allowed": true,
+      "redistribution_allowed": true,
+      "removal_state": "active_rights_screened_projection"
     }
   ]
 }
