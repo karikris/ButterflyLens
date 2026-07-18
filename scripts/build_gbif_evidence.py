@@ -911,10 +911,19 @@ def publish(args: argparse.Namespace) -> None:
     rights = json.loads(args.rights_manifest.read_text(encoding="utf-8"))
     source_id = f"gbif-occurrence-download-{receipt['download']['key']}"
     rights["generated_at"] = args.published_at
+    source_positions = [
+        index
+        for index, source in enumerate(rights["sources"])
+        if source.get("source_id") == source_id
+    ]
+    source_insert_index = (
+        source_positions[0] if source_positions else len(rights["sources"])
+    )
     rights["sources"] = [
         source for source in rights["sources"] if source.get("source_id") != source_id
     ]
-    rights["sources"].append(
+    rights["sources"].insert(
+        min(source_insert_index, len(rights["sources"])),
         {
             "source_id": source_id,
             "provider": "GBIF and the 126 constituent data publishers identified in the frozen DWCA",
@@ -926,7 +935,7 @@ def publish(args: argparse.Namespace) -> None:
             "terms_url": "https://www.gbif.org/terms",
             "attribution": receipt["download"]["citation"] + "; every constituent dataset citation and every row/media attribution retained in the evidence pack.",
             "scope_note": "571,755 processed occurrence assertions, 542,052 media-metadata rows with no media bytes, and 126 dataset citation/rights rows. Exact per-row and per-dataset rights, withheld/generalisation text, uncertainty, and quality issues remain attached. Provider labels are not human verification. Processing is permitted for the governed internal evidence workflow; display and redistribution remain blocked pending rights, sensitivity, quality, provenance, and human review. The rebuilt ALA baseline remains authoritative.",
-        }
+        },
     )
     relative_root = Path("data/packs/australian_butterflies/v1/gbif")
     rights_paths = {
@@ -940,14 +949,23 @@ def publish(args: argparse.Namespace) -> None:
         relative_root / "schemas/gbif_multimedia.schema.json",
         relative_root / "schemas/gbif_dataset.schema.json",
     }
+    artifact_positions = [
+        index
+        for index, record in enumerate(rights["artifacts"])
+        if Path(record.get("path", "")) in rights_paths
+    ]
+    artifact_insert_index = (
+        artifact_positions[0] if artifact_positions else len(rights["artifacts"])
+    )
     rights["artifacts"] = [
         record
         for record in rights["artifacts"]
         if Path(record.get("path", "")) not in rights_paths
     ]
+    gbif_rights_records = []
     for relative in sorted(rights_paths, key=lambda value: value.as_posix()):
         path = ROOT / relative
-        rights["artifacts"].append(
+        gbif_rights_records.append(
             {
                 "path": relative.as_posix(),
                 "fingerprint": f"sha256:{sha256_file(path)}",
@@ -961,6 +979,11 @@ def publish(args: argparse.Namespace) -> None:
                 "removal_state": "active_internal_rights_review_required",
             }
         )
+    rights["artifacts"][
+        min(artifact_insert_index, len(rights["artifacts"])) : min(
+            artifact_insert_index, len(rights["artifacts"])
+        )
+    ] = gbif_rights_records
     pack_relative = "data/packs/australian_butterflies/v1/manifest.json"
     for record in rights["artifacts"]:
         if record.get("path") == pack_relative:

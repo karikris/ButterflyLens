@@ -1,7 +1,9 @@
 # ButterflyLens completion status
 
-ButterflyLens is **not complete or release-ready** at the fixed repository
-boundary `7a2c2eba61cd10034096e006cdb04fd5018a2b10`.
+ButterflyLens is **not complete or release-ready**. The machine audit remains a
+historical, fixed repository boundary at
+`7a2c2eba61cd10034096e006cdb04fd5018a2b10`; later work is recorded separately
+and does not silently rewrite that audit.
 
 The exact audit in
 [`provenance/completion_audit.v1.json`](provenance/completion_audit.v1.json)
@@ -22,6 +24,22 @@ evidence for the criterion. It does not turn a provider assertion into a human
 identification, an image candidate into an occurrence, or a tested service
 contract into observed live operation.
 
+## Follow-on progress after the fixed audit
+
+Task 18.3 adds the three requested map artifacts under
+`data/packs/australian_butterflies/v1/map/` and an offline public Explore view.
+The rights-screened projection contains 630 H3 cells and 23,484 national,
+state/territory, IBRA, LGA-approximation, and H3 summary rows. It maps 213,310
+spatially eligible ALA records after conservatively excluding all 16,753
+selected records from the three datasets already flagged for citation-rights
+review. The full 236,897-row rebuilt ALA baseline remains authoritative and
+preserved. Dataset exclusion is a publication choice, not a legal conclusion.
+
+The map presents unavailable Flickr, YOLOE, BioCLIP, review, human-supported,
+and release-ready layers as unavailable with reasons—not zero. It therefore
+closes the ALA baseline-map gap without claiming the still-missing cross-layer
+geographic impact or overall release readiness.
+
 ## Binding unfinished work
 
 1. BioMiner is still fetching Flickr metadata. ButterflyLens has not copied its
@@ -31,9 +49,10 @@ contract into observed live operation.
 2. YOLOE and BioCLIP execution remains `unfinished_not_run` by user direction.
    Their routes, full-frame inputs, embeddings, prototypes, scores, persistent
    model workers, and unchanged-embedding proof remain incomplete.
-3. The public geographic-impact map remains blocked by missing Flickr/model/
-   review impact cells and unresolved ALA public-product rights. Contracts are
-   present; the real map and drilldowns are not.
+3. A public rights-screened ALA aggregate map and exact drilldowns are present.
+   Flickr/model/review impact comparisons remain incomplete, so coverage-gap,
+   human-supported-additional, and release-ready-additional values remain
+   unavailable and the complete cross-layer impact map is not finished.
 4. GPT-5.6 has a bounded live implementation and deterministic evidence tools,
    but no credentialed live model evaluation is claimed. The public replay is
    deliberately credential-free and labelled `Model not invoked`.

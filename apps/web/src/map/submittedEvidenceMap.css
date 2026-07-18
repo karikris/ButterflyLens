@@ -127,6 +127,17 @@
 .submitted-map__card-heading h3,
 .submitted-map__subheading h4 {
   margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.submitted-map__card-heading > div,
+.submitted-map__subheading > div {
+  min-width: 0;
+}
+
+.submitted-map__card-heading > .bl-state-badge,
+.submitted-map__subheading > .bl-state-badge {
+  flex: 0 0 auto;
 }
 
 .submitted-map__card-heading h3 {

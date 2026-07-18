@@ -68,6 +68,16 @@ SCHEMA_GROUPS = {
             "packages/contracts/tests/check_parity.py#Python accepted invalid case",
         ),
     },
+    "completion-audit": {
+        "prefix": "provenance/",
+        "count": 1,
+        "positive": (
+            "tests/test_completion_audit.py#test_fixed_audit_verifies_and_remains_incomplete",
+        ),
+        "negative": (
+            "tests/test_completion_audit.py#test_false_completion_claim_is_rejected",
+        ),
+    },
     "first-nations-names": {
         "prefix": "data/packs/australian_butterflies/v1/schemas/",
         "count": 2,
@@ -110,6 +120,16 @@ SCHEMA_GROUPS = {
         ),
         "negative": (
             "tests/test_artifact_storage_layout.py#test_public_thumbnail_and_crop_permissions_fail_closed",
+        ),
+    },
+    "submitted-map": {
+        "prefix": "data/packs/australian_butterflies/v1/map/schemas/",
+        "count": 1,
+        "positive": (
+            "tests/test_public_ala_map.py#test_artifact_receipts_and_parquet_schemas_match",
+        ),
+        "negative": (
+            "tests/test_public_ala_map.py#test_unavailable_layers_are_null_with_reasons_never_zero",
         ),
     },
 }
@@ -287,6 +307,18 @@ PROJECTION_COVERAGE = {
         ),
         "negative": (
             "tests/test_flickr_public_display_policy.py#test_page_limit_duplicates_private_removal_and_stale_cache_fail_closed",
+        ),
+    },
+    "map": {
+        "json": ("apps/web/src/map/submittedMapSnapshot.json",),
+        "symbols": (
+            "apps/web/src/map/submittedMapModel.ts#submittedMapSnapshot",
+        ),
+        "positive": (
+            "apps/web/src/map/submittedMapModel.test.ts#accepts the exact rights-screened submitted projection",
+        ),
+        "negative": (
+            "apps/web/src/map/submittedMapModel.test.ts#rejects a fabricated available Flickr layer",
         ),
     },
     "monitoring": {
@@ -519,7 +551,7 @@ class ContractCoverageTests(unittest.TestCase):
 
     def test_every_tracked_json_schema_has_structural_and_named_coverage(self) -> None:
         schema_paths = tracked("*.schema.json")
-        self.assertEqual(len(schema_paths), 40)
+        self.assertEqual(len(schema_paths), 42)
         grouped: set[str] = set()
         for name, group in SCHEMA_GROUPS.items():
             paths = tuple(path for path in schema_paths if path.startswith(group["prefix"]))
