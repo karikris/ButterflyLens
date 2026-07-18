@@ -106,3 +106,14 @@ This append-oriented record captures product or governance decisions made by Kri
   live and stored-replay labels.
 - Do not change the model, effort, prompt, budgets, or architecture without a
   representative evaluation set demonstrating the trade-off.
+
+## 2026-07-18 — Live analyst deployment boundary
+
+- Require a signed-in Supabase user behind both the platform JWT gate and the
+  authenticated-user Edge wrapper before any live analyst call.
+- Keep the OpenAI secret only in Edge Function secrets and separate it from the
+  optional Supabase Studio assistant key; a publishable key alone cannot invoke
+  the analyst.
+- Keep the committed submitted page credential-free and make no model call from
+  that replay. Live deployment is a separate operator action, and Task 11.4 owns
+  the visibly distinct stored judge replay.

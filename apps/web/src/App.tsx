@@ -7,6 +7,7 @@ import { SpeciesDirectory } from './species/SpeciesDirectory'
 import { FlickrDisplayBoundary } from './flickr/FlickrDisplayBoundary'
 import { ContributorExperience } from './community/ContributorExperience'
 import { submittedContributorImpact } from './community/contributorImpactModel'
+import { AskButterflyLens } from './analyst/AskButterflyLens'
 
 export function App() {
   return (
@@ -46,12 +47,7 @@ export function App() {
       <FlickrDisplayBoundary />
       <QualityDashboard snapshot={submittedQualityDashboard} />
       <ContributorExperience snapshot={submittedContributorImpact} />
-      <RoutePreview
-        id="ask-butterflylens"
-        kicker="Bounded evidence assistant"
-        title="Ask ButterflyLens"
-        description="A future read-only assistant will cite committed artifacts, state uncertainty, and refuse unsupported scientific claims."
-      />
+      <AskButterflyLens />
     </PublicShell>
   )
 }

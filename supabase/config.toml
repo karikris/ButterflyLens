@@ -97,8 +97,13 @@ enabled = true
 port = 54323
 # External URL of the API server that frontend connects to.
 api_url = "http://127.0.0.1"
-# OpenAI API Key to use for Supabase AI in the Supabase Studio.
-openai_api_key = "env(OPENAI_API_KEY)"
+# Keep the optional Studio assistant separate from the application function key.
+openai_api_key = "env(SUPABASE_STUDIO_OPENAI_API_KEY)"
+
+# Ask ButterflyLens requires both the platform JWT gate and the authenticated
+# @supabase/server user wrapper. Publishable-key-only calls are rejected.
+[functions.ask-butterflylens]
+verify_jwt = true
 
 # Email testing server. Emails sent with the local dev setup are not actually sent - rather, they
 # are monitored, and you can view the emails that would have been sent from the web interface.

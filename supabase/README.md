@@ -67,3 +67,39 @@ npx --yes supabase test db --local supabase/tests/database
 
 The first migration targets PostgreSQL 17, matching the current generated
 Supabase configuration and avoiding deprecated PostgreSQL 14 support.
+
+## Ask ButterflyLens Edge Function
+
+`ask-butterflylens` is an authenticated, read-only OpenAI Responses API
+boundary. It uses `@supabase/server` user authentication behind the platform
+JWT gate, and it does not use a service-role client or write to Postgres. The
+browser may send only a Supabase publishable key and the signed-in user's
+access token. `OPENAI_API_KEY` is read only inside the Edge Function.
+
+The committed Deno import map pins `@supabase/server` 1.4.0 and `openai`
+6.48.0 exactly. `deno.lock` and `dependency-licenses.json` cover the complete
+12-package npm tree. Use frozen dependency resolution for every check:
+
+```bash
+npx deno test --config=supabase/functions/deno.json --frozen=true supabase/functions/tests
+npx deno check --config=supabase/functions/deno.json --frozen=true supabase/functions/ask-butterflylens/index.ts
+```
+
+For local manual testing only, put the secret in an ignored file such as
+`supabase/functions/.env.local` and serve the function through the local
+Supabase gateway:
+
+```bash
+npx --yes supabase functions serve ask-butterflylens --env-file supabase/functions/.env.local
+```
+
+The file must contain `OPENAI_API_KEY`; never prefix that secret with `VITE_`,
+place it in browser configuration, commit it, print it, or paste it into a test
+fixture. Invocation requires a real user JWT. A publishable key by itself is
+not authorization.
+
+Production setup is an explicit operator action: set `OPENAI_API_KEY` through
+Supabase Edge Function secrets, deploy `ask-butterflylens`, and retain
+`verify_jwt = true`. The submitted static experience intentionally injects no
+live client and performs no model call. Task 11.4 owns the separately labelled
+credential-free stored replay.

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.window", "dom", "dom.iterable"],
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "imports": {
+    "@supabase/server": "npm:@supabase/server@1.4.0",
+    "openai": "npm:openai@6.48.0",
+    "openai/responses": "npm:openai@6.48.0/resources/responses/responses"
+  },
+  "lock": "./deno.lock"
+}

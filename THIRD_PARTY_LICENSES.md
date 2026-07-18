@@ -42,7 +42,8 @@ Model weights and source code are separately fingerprinted licence subjects. A p
 | --- | --- | --- | --- |
 | PostgreSQL | Primary relational database | PostgreSQL Licence | [Supabase architecture documentation](https://supabase.com/docs/guides/getting-started/architecture) identifies the upstream licence. Preserve applicable notices if redistributed. |
 | Supabase platform repository | Hosted database/auth/RLS/edge operational reference | Apache-2.0 | [Supabase repository licence](https://github.com/supabase/supabase/blob/master/LICENSE). Preserve licence/NOTICE conditions for redistributed source; hosted-service terms and privacy are separate contracts. |
-| `@supabase/supabase-js` | Browser/server client | MIT | [Official client repository](https://github.com/supabase/supabase-js). Pin package and lockfile. Never expose secret/service-role keys. |
+| `@supabase/supabase-js` 2.110.7 | Transitive Edge auth client | MIT | [Official client repository](https://github.com/supabase/supabase-js). The exact transitive resolution and integrity are in `supabase/functions/deno.lock` and its generated licence report. Never expose secret/service-role keys. |
+| `@supabase/server` 1.4.0 | Authenticated Edge Function wrapper | MIT | [Official server repository](https://github.com/supabase/server). Exact npm pin, integrity, transitive tree, and licence result are committed. The browser receives no secret or service-role key. |
 | DuckDB | Local analytics and deterministic artifact queries | MIT | [DuckDB repository](https://github.com/duckdb/duckdb). Preserve notice. Audit separately bundled extensions before enabling them. |
 | Polars | Dataframe and Parquet processing | MIT | [Polars repository](https://github.com/pola-rs/polars). Preserve notice and audit optional dependencies selected by extras. |
 | Apache Arrow / PyArrow 25.0.0 | Locked Parquet and Arrow interoperability | Apache-2.0 | [Apache Arrow repository](https://github.com/apache/arrow/). Preserve licence and NOTICE. Exact source/wheel hashes and the Python 3.14 compatibility receipt are in `uv.lock` and `provenance/dependency_licenses.json`. |
@@ -63,7 +64,7 @@ The initial public map should render ButterflyLens-owned evidence layers and sep
 | TypeScript 7.0.2 | Pinned type checking and compiler | Apache-2.0 | [TypeScript repository](https://github.com/microsoft/TypeScript). Preserve applicable notice when redistributed. |
 | Vitest 4.1.10 | Pinned unit/component tests | MIT | [Vitest repository](https://github.com/vitest-dev/vitest). Development-only; it is absent from the production bundle. |
 | Playwright | Chromium/Firefox/WebKit E2E and visual testing | Apache-2.0 | [Playwright repository](https://github.com/microsoft/playwright). Preserve licence and `NOTICE`; browser binaries carry their own terms/notices. |
-| OpenAI JavaScript/TypeScript SDK | Server-side Responses API client | Apache-2.0 | [Official SDK licence](https://github.com/openai/openai-node/blob/main/LICENSE). API/service terms and model availability are separate runtime gates. |
+| OpenAI JavaScript/TypeScript SDK 6.48.0 | Server-side Responses API client | Apache-2.0 | [Official SDK licence](https://github.com/openai/openai-node/blob/main/LICENSE). The exact npm pin and integrity are committed in the Deno lock and licence report. API/service terms and model availability are separate runtime gates. |
 
 No version is approved by a floating range. The later application scaffold must select exact direct versions, commit lockfiles, and reject unknown, unlicensed, source-available-only, SSPL, Commons Clause, Business Source, non-commercial, or incompatible copyleft production dependencies unless this audit is deliberately amended.
 

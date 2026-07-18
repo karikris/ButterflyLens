@@ -1,0 +1,117 @@
+{
+  "schema_version": "butterflylens-deno-dependency-licenses/v1",
+  "generated_at": "2026-07-18T06:38:13Z",
+  "lockfile": "supabase/functions/deno.lock",
+  "registry_source": "official npm registry metadata retrieved 2026-07-18",
+  "allowed_licenses": ["0BSD", "Apache-2.0", "MIT"],
+  "packages": [
+    {
+      "lock_key": "@supabase/auth-js@2.110.7",
+      "name": "@supabase/auth-js",
+      "version": "2.110.7",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/supabase-js",
+      "integrity": "sha512-M5Bpl4hCv6kHcOO/xM06Dyfg1mYLHljMkp1plhzG9IRZPc3czvyMsSN1XpL5+GKisOKM3lSN59zhpcm6sMVXfA=="
+    },
+    {
+      "lock_key": "@supabase/functions-js@2.110.7",
+      "name": "@supabase/functions-js",
+      "version": "2.110.7",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/supabase-js",
+      "integrity": "sha512-megYmexlYEoR/0qlsr4Snh9wtzAodO7MAri3NMevZrXzNvQRKlvmTcSBoKGLQEPDakgDZMqbMdf9DwoZz6qfoA=="
+    },
+    {
+      "lock_key": "@supabase/phoenix@0.4.5",
+      "name": "@supabase/phoenix",
+      "version": "0.4.5",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/phoenix",
+      "integrity": "sha512-aAn9H9ovVyeApKy11OWOrrOGq8DV68yWeH4ud2lN9fzn4aO8Zb5GLL9m1pUg9nLqIcT+ZDfAcsZe0E/nqdv2lw=="
+    },
+    {
+      "lock_key": "@supabase/postgrest-js@2.110.7",
+      "name": "@supabase/postgrest-js",
+      "version": "2.110.7",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/supabase-js",
+      "integrity": "sha512-ban6YV0djhVaqVYezlOARKLIuOBSvLLhyQVZjA2nxPrtswhxHCl1+gI4giFgI9ATQAaMNbUZb4JXiuL5lEA/5g=="
+    },
+    {
+      "lock_key": "@supabase/realtime-js@2.110.7",
+      "name": "@supabase/realtime-js",
+      "version": "2.110.7",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/supabase-js",
+      "integrity": "sha512-AMtZjyFA2gsmjuxopPNS/sRznLQHG0Ht5x+ytTPTOh3vAcOTUlVRLx7gW4/CONNnbb3PKOkE+HmM35HOSbmomQ=="
+    },
+    {
+      "lock_key": "@supabase/server@1.4.0_@supabase+supabase-js@2.110.7",
+      "name": "@supabase/server",
+      "version": "1.4.0",
+      "scope": "direct",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/server",
+      "integrity": "sha512-zPCtVEIXSyrzCAegYU/+5UpMoTJz0CogL/xnETX5Sx6HBs2bZot9bQNgHhN1vyGq3su14x3JdAbuOKa/YmdH+w=="
+    },
+    {
+      "lock_key": "@supabase/storage-js@2.110.7",
+      "name": "@supabase/storage-js",
+      "version": "2.110.7",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/supabase-js",
+      "integrity": "sha512-2tcDE8cjEDy1uKxKavBpKQod1JdMV1jDXQag48TCa+kycmJOltc0yVabC0BUlhOwAl6WykXU2aOsH3ELMtZrmQ=="
+    },
+    {
+      "lock_key": "@supabase/supabase-js@2.110.7",
+      "name": "@supabase/supabase-js",
+      "version": "2.110.7",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/supabase-js",
+      "integrity": "sha512-AnfO3A230Shy6RMO7cya3Wl1OcXnABJrzH8vP+fY7/RFjhzcchB7DjKkkTIAntlwekD+GkSFzEvt2tC+D4Fp8w=="
+    },
+    {
+      "lock_key": "iceberg-js@0.8.1",
+      "name": "iceberg-js",
+      "version": "0.8.1",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/supabase/iceberg-js",
+      "integrity": "sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA=="
+    },
+    {
+      "lock_key": "jose@6.2.3",
+      "name": "jose",
+      "version": "6.2.3",
+      "scope": "transitive",
+      "license": "MIT",
+      "source_url": "https://github.com/panva/jose",
+      "integrity": "sha512-YYVDInQKFJfR/xa3ojUTl8c2KoTwiL1R5Wg9YCydwH0x0B9grbzlg5HC7mMjCtUJjbQ/YnGEZIhI5tCgfTb4Hw=="
+    },
+    {
+      "lock_key": "openai@6.48.0",
+      "name": "openai",
+      "version": "6.48.0",
+      "scope": "direct",
+      "license": "Apache-2.0",
+      "source_url": "https://github.com/openai/openai-node",
+      "integrity": "sha512-KhVp+FyV50QrXNextvL9hIU5l6ox5HYuKQjGVk7lIqprgJol90+dQXWONV6S1lRWsKA1bXjrow8RsUT14M1hNA=="
+    },
+    {
+      "lock_key": "tslib@2.8.1",
+      "name": "tslib",
+      "version": "2.8.1",
+      "scope": "transitive",
+      "license": "0BSD",
+      "source_url": "https://github.com/microsoft/tslib",
+      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
+    }
+  ]
+}

@@ -23,7 +23,7 @@
     "reasoning_context": "current_turn",
     "parallel_tool_calls": false,
     "tool_choice": "auto",
-    "max_tool_calls": 8,
+    "application_max_tool_calls": 8,
     "max_tool_loop_iterations": 6,
     "max_output_tokens": 1800,
     "per_tool_timeout_seconds": 10,

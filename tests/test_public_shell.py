@@ -45,6 +45,7 @@ class PublicShellTests(unittest.TestCase):
                 WEB / "quality/QualityDashboard.tsx",
                 WEB / "species/SpeciesDirectory.tsx",
                 WEB / "community/ContributorExperience.tsx",
+                WEB / "analyst/AskButterflyLens.tsx",
                 SHELL,
             )
         )

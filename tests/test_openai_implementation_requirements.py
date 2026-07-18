@@ -56,7 +56,7 @@ class OpenAIImplementationRequirementsTests(unittest.TestCase):
 
     def test_budgets_and_failure_states_are_bounded(self) -> None:
         request = self.requirements["request_policy"]
-        self.assertEqual(request["max_tool_calls"], 8)
+        self.assertEqual(request["application_max_tool_calls"], 8)
         self.assertEqual(request["max_tool_loop_iterations"], 6)
         self.assertEqual(request["max_output_tokens"], 1800)
         self.assertEqual(request["per_tool_timeout_seconds"], 10)

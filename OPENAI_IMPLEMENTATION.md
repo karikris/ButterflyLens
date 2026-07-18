@@ -32,10 +32,12 @@ and [deployment checklist](https://developers.openai.com/api/docs/guides/deploym
   and prohibits client-side exposure. [API authentication](https://developers.openai.com/api/reference/overview#authentication).
 - Send `model: "gpt-5.6-sol"`, `reasoning: { effort: "xhigh", context:
   "current_turn" }`, `store: false`, `parallel_tool_calls: false`,
-  `max_tool_calls: 8`, `max_output_tokens: 1800`, and `tool_choice: "auto"`.
-  The application independently enforces six continuation loops, ten seconds
-  per tool, and one retry for a transient tool failure. Budget exhaustion is a
-  labelled incomplete answer, never an unbounded retry.
+  `max_output_tokens: 1800`, and `tool_choice: "auto"`. The application
+  independently enforces eight total custom-tool calls, six continuation loops,
+  ten seconds per tool, and one retry for a transient tool failure. The exact
+  pinned SDK does not expose a Responses `max_tool_calls` request field, so no
+  undocumented parameter is sent. Budget exhaustion is a labelled incomplete
+  answer, never an unbounded retry.
 - Send a stable privacy-preserving `safety_identifier`: SHA-256 of the permanent
   Auth identity for signed-in users, or of a stable random session identifier
   for a logged-out replay. Never send email, public name, raw Auth UUID, or IP.

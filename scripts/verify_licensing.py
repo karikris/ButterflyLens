@@ -164,6 +164,97 @@ def verify() -> None:
             ("react 19.2.7", "react-dom 19.2.7", "scheduler 0.27.0", "MIT License"),
         )
 
+    deno_config_path = "supabase/functions/deno.json"
+    if deno_config_path in tracked:
+        required_deno_files = {
+            "supabase/functions/deno.lock",
+            "supabase/functions/dependency-licenses.json",
+        }
+        missing_deno_files = sorted(required_deno_files - tracked)
+        if missing_deno_files:
+            raise VerificationError(
+                f"Edge Function dependency evidence is incomplete: {missing_deno_files}"
+            )
+
+        deno_config = require_json_object(deno_config_path, ("imports", "lock"))
+        expected_imports = {
+            "@supabase/server": "npm:@supabase/server@1.4.0",
+            "openai": "npm:openai@6.48.0",
+            "openai/responses": (
+                "npm:openai@6.48.0/resources/responses/responses"
+            ),
+        }
+        if deno_config["imports"] != expected_imports:
+            raise VerificationError("Edge Function imports are not the audited exact pins")
+        if deno_config["lock"] != "./deno.lock":
+            raise VerificationError("Edge Function must use its committed frozen lock")
+
+        deno_lock = require_json_object(
+            "supabase/functions/deno.lock", ("version", "specifiers", "npm")
+        )
+        expected_specifiers = {
+            "npm:@supabase/server@1.4.0": (
+                "1.4.0_@supabase+supabase-js@2.110.7"
+            ),
+            "npm:openai@6.48.0": "6.48.0",
+        }
+        if deno_lock["version"] != "5" or deno_lock["specifiers"] != expected_specifiers:
+            raise VerificationError("Edge Function lock specifiers changed from audited pins")
+        locked_packages = deno_lock["npm"]
+        if not isinstance(locked_packages, dict) or not locked_packages:
+            raise VerificationError("Edge Function npm lock tree is empty")
+
+        deno_licenses = require_json_object(
+            "supabase/functions/dependency-licenses.json",
+            ("schema_version", "lockfile", "allowed_licenses", "packages"),
+        )
+        if deno_licenses["lockfile"] != "supabase/functions/deno.lock":
+            raise VerificationError("Edge Function licence report names the wrong lock")
+        allowed_deno_licenses = set(deno_licenses["allowed_licenses"])
+        report_rows = deno_licenses["packages"]
+        if not isinstance(report_rows, list) or not report_rows:
+            raise VerificationError("Edge Function dependency licence report is empty")
+        report_by_key = {
+            row.get("lock_key"): row
+            for row in report_rows
+            if isinstance(row, dict) and isinstance(row.get("lock_key"), str)
+        }
+        if len(report_by_key) != len(report_rows) or set(report_by_key) != set(
+            locked_packages
+        ):
+            raise VerificationError(
+                "Edge Function licence report does not exactly cover the npm lock tree"
+            )
+        invalid_deno_rows = [
+            lock_key
+            for lock_key, locked in locked_packages.items()
+            if not isinstance(locked, dict)
+            or report_by_key[lock_key].get("integrity") != locked.get("integrity")
+            or report_by_key[lock_key].get("license") not in allowed_deno_licenses
+            or report_by_key[lock_key].get("scope") not in {"direct", "transitive"}
+            or not report_by_key[lock_key].get("name")
+            or not report_by_key[lock_key].get("version")
+        ]
+        if invalid_deno_rows:
+            raise VerificationError(
+                "Edge Function dependency licence rows are invalid: "
+                f"{invalid_deno_rows}"
+            )
+        direct_deno = {
+            row.get("name")
+            for row in report_rows
+            if isinstance(row, dict) and row.get("scope") == "direct"
+        }
+        if direct_deno != {"@supabase/server", "openai"}:
+            raise VerificationError(
+                f"Edge Function direct dependency set changed: {sorted(direct_deno)}"
+            )
+
+        require_text(
+            "supabase/config.toml",
+            ("[functions.ask-butterflylens]", "verify_jwt = true"),
+        )
+
     model_files = {
         path
         for path in tracked
