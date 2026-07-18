@@ -85,7 +85,8 @@ h2 {
 
 .site-header,
 .site-footer,
-.review-landing {
+.review-landing,
+.quality-dashboard {
   width: min(1180px, calc(100% - 2rem));
   margin-inline: auto;
 }
@@ -577,6 +578,270 @@ dd {
   border-left: 3px solid var(--ochre);
 }
 
+.quality-dashboard {
+  padding-block: clamp(2rem, 5vw, 4.5rem);
+  border-top: 1px solid var(--line);
+}
+
+.quality-dashboard__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 2rem;
+}
+
+.quality-dashboard__intro h2 {
+  max-width: 780px;
+  margin-bottom: 0.8rem;
+  font-size: clamp(2.2rem, 5vw, 4.3rem);
+  line-height: 1;
+}
+
+.quality-dashboard__intro p:not(.eyebrow) {
+  max-width: 760px;
+  margin-bottom: 0;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.quality-state {
+  max-width: 14rem;
+  padding: 0.7rem 0.85rem;
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  background: #dde9e3;
+  border: 1px solid #aac4ba;
+  border-radius: 999px;
+}
+
+.quality-state[data-state="unavailable"] {
+  color: #69401f;
+  background: var(--ochre-pale);
+  border-color: #d3a373;
+}
+
+.quality-boundary {
+  margin: 1.75rem 0 1.25rem;
+  padding: 1rem 1.2rem;
+  color: #69401f;
+  line-height: 1.55;
+  background: var(--ochre-pale);
+  border-left: 4px solid var(--ochre);
+}
+
+.quality-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.25rem;
+}
+
+.quality-metrics article {
+  display: grid;
+  min-height: 9.5rem;
+  align-content: space-between;
+  gap: 0.55rem;
+  padding: 1.1rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--green-bright);
+  border-radius: 0.9rem;
+  box-shadow: 0 10px 30px rgb(31 47 42 / 7%);
+}
+
+.quality-metrics article[data-state="unavailable"] {
+  border-top-color: var(--ochre);
+}
+
+.quality-metrics article > span {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.quality-metrics article strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.quality-metrics article small {
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.quality-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.quality-panel,
+.reference-health,
+.quality-provenance {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.quality-panel {
+  padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+.quality-panel h3,
+.reference-health h3 {
+  margin-bottom: 0.7rem;
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+}
+
+.quality-panel > div > p:not(.eyebrow) {
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.quality-facts,
+.quality-provenance dl {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+}
+
+.quality-facts div,
+.quality-provenance dl div {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.6fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+}
+
+.quality-facts dd {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.quality-blockers {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quality-blockers li {
+  position: relative;
+  padding: 0.75rem 0.85rem 0.75rem 2.15rem;
+  color: #69401f;
+  line-height: 1.4;
+  background: var(--ochre-pale);
+  border-radius: 0.65rem;
+}
+
+.quality-blockers li::before {
+  position: absolute;
+  margin-left: -1.35rem;
+  content: "×";
+  font-weight: 900;
+}
+
+.reference-health {
+  margin-top: 1rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+.reference-health > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.reference-health > header > p {
+  margin-bottom: 0.7rem;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.reference-health ul {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reference-health li {
+  display: grid;
+  min-height: 8.5rem;
+  align-content: space-between;
+  gap: 0.4rem;
+  padding: 0.8rem;
+  background: #f7f3e9;
+  border: 1px solid #d8d0bd;
+  border-top: 3px solid var(--ochre);
+  border-radius: 0.65rem;
+}
+
+.reference-health li[data-severity="blocker"] {
+  border-top-color: var(--danger);
+}
+
+.reference-health li[data-severity="unfinished"] {
+  border-top-color: #746759;
+}
+
+.reference-health li span {
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.reference-health li strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.9rem;
+}
+
+.reference-health li small {
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.quality-provenance {
+  margin-top: 1rem;
+  padding: 1rem 1.2rem;
+}
+
+.quality-provenance summary {
+  min-height: 2rem;
+  color: var(--green);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.quality-provenance > p {
+  margin: 1rem 0 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.quality-provenance code {
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
 .site-footer {
   display: flex;
   justify-content: space-between;
@@ -595,8 +860,18 @@ dd {
   .review-intro,
   .review-grid,
   .review-context-grid,
-  .blind-context {
+  .blind-context,
+  .quality-dashboard__intro,
+  .quality-detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quality-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reference-health ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .review-count {
@@ -626,6 +901,17 @@ dd {
     padding-top: 2rem;
   }
 
+  .quality-state {
+    max-width: none;
+    justify-self: start;
+    text-align: left;
+  }
+
+  .quality-metrics,
+  .reference-health ul {
+    grid-template-columns: 1fr;
+  }
+
   .review-intro h1 {
     font-size: 2.7rem;
   }
@@ -640,6 +926,8 @@ dd {
 
   .map-facts div,
   .contribution-card dl div,
+  .quality-facts div,
+  .quality-provenance dl div,
   .blind-context__revealed dl,
   .blind-context ul {
     grid-template-columns: 1fr;

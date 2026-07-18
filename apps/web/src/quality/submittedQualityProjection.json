@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "butterflylens-community-quality-dashboard:v1.0.0",
+  "snapshotMode": "submitted",
+  "status": "unavailable",
+  "reviewedSample": 0,
+  "decisiveReviews": 0,
+  "precision": {
+    "availability": "unavailable",
+    "estimate": null,
+    "interval": null,
+    "effectiveSampleSize": null,
+    "reason": "No fingerprinted representative probability audit is attached to the submitted replay."
+  },
+  "reviewerAgreement": {
+    "availability": "unavailable",
+    "pairwiseAgreement": null,
+    "nominalAlpha": null,
+    "overlappingItems": 0,
+    "reason": "No completed independent review overlap is stored in this credential-free replay."
+  },
+  "speciesQuality": {
+    "availability": "unavailable",
+    "estimate": null,
+    "auditedSpecies": 0,
+    "acceptedSpecies": 463,
+    "reason": "Species-level quality requires representative reviewed evidence; reference coverage diagnostics are not a quality estimate."
+  },
+  "referenceDiagnostics": {
+    "acceptedSpecies": 463,
+    "speciesWithValidDecodes": 237,
+    "humanVerifiedSpecies": 0,
+    "validDecodes": 2906,
+    "flags": [
+      { "flagId": "human_review_absent", "affectedSpecies": 463, "severity": "blocker" },
+      { "flagId": "provisional_support_below_target_20", "affectedSpecies": 381, "severity": "review" },
+      { "flagId": "no_automated_gate_eligible_media", "affectedSpecies": 226, "severity": "blocker" },
+      { "flagId": "no_selected_media", "affectedSpecies": 226, "severity": "blocker" },
+      { "flagId": "no_candidate_media", "affectedSpecies": 126, "severity": "blocker" },
+      { "flagId": "observer_diversity_low", "affectedSpecies": 33, "severity": "review" },
+      { "flagId": "download_or_decode_failure", "affectedSpecies": 4, "severity": "review" },
+      { "flagId": "exact_content_duplicate_pending_resolution", "affectedSpecies": 1, "severity": "review" },
+      { "flagId": "yoloe_unfinished", "affectedSpecies": 237, "severity": "unfinished" },
+      { "flagId": "bioclip_unfinished", "affectedSpecies": 237, "severity": "unfinished" }
+    ]
+  },
+  "releaseBlockers": [
+    "human_reference_review_absent",
+    "yoloe_unfinished",
+    "bioclip_unfinished",
+    "durable_private_source_media_storage_pending",
+    "reference_coverage_incomplete"
+  ],
+  "provenance": {
+    "qualityManifestSha256": "4cfc41de9908dbe7f0997e5dc59fd964606d3127d5af24e660868eabc7367d91",
+    "referenceBankFingerprint": "6f23e1ec04d0297797439973aea98d9b45bc989ce9ec61db35064824621bdc3d",
+    "qualityManifestGeneratedAt": "2026-07-17T21:05:00Z",
+    "qualitySnapshotFingerprint": null,
+    "authoritativeBaseline": "ButterflyLens rebuilt baseline"
+  },
+  "targetedQueueSeparate": true,
+  "modelVoteIncluded": false,
+  "scientificClaimAllowed": false
+}

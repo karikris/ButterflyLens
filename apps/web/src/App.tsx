@@ -1,5 +1,7 @@
 import { ReviewLanding } from './review/ReviewLanding'
 import { submittedReviewItem } from './review/reviewLandingModel'
+import { QualityDashboard } from './quality/QualityDashboard'
+import { submittedQualityDashboard } from './quality/qualityDashboardModel'
 
 export function App() {
   return (
@@ -21,6 +23,7 @@ export function App() {
       </header>
       <main id="review-workspace">
         <ReviewLanding item={submittedReviewItem} qualifiedReviewer={false} />
+        <QualityDashboard snapshot={submittedQualityDashboard} />
       </main>
       <footer className="site-footer">
         <p>Search results are hypotheses—not biodiversity records.</p>

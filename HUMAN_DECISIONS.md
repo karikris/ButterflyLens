@@ -22,3 +22,11 @@ This append-oriented record captures product or governance decisions made by Kri
   export, and derived/model use as separate decisions, blocked by default.
 - Never use machine translation, invention, geographic inference, a generic
   “Aboriginal name” field, or contributor/model voting as cultural authority.
+
+## 2026-07-18 — Evidence baseline and model boundary
+
+- Treat the rebuilt ButterflyLens ALA baseline as authoritative for this goal;
+  legacy repository data may inform inspection but cannot supersede it.
+- Do not run Flickr API calls during this goal.
+- Skip all YOLOE and BioCLIP work, mark both lanes unfinished, and continue with
+  the next safe task.
