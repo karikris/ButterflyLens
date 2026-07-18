@@ -93,6 +93,21 @@ class OpenAIImplementationRequirementsTests(unittest.TestCase):
             "replay_label_integrity",
         ):
             self.assertIn(required, dimensions)
+        current = evaluation["current_suite"]
+        self.assertEqual(current["case_count"], 48)
+        self.assertEqual(current["category_count"], 12)
+        self.assertEqual(current["deterministic_oracle_state"], "passed")
+        self.assertEqual(current["live_model_state"], "not_run")
+        self.assertIsNone(current["live_unsupported_claim_rate"])
+        self.assertIsNone(current["live_tool_selection_accuracy"])
+        self.assertIsNone(current["live_final_answer_accuracy"])
+        self.assertFalse(current["scripted_output_reported_as_model_run"])
+        for artifact in (
+            current["dataset_artifact"],
+            current["result_artifact"],
+            current["trace_schema"],
+        ):
+            self.assertTrue((ROOT / artifact).is_file(), artifact)
 
     def test_replay_is_non_model_offline_and_fingerprint_grounded(self) -> None:
         replay = self.requirements["replay_policy"]
@@ -117,6 +132,7 @@ class OpenAIImplementationRequirementsTests(unittest.TestCase):
         self.assertIn("exact SDK pins", self.guide)
         self.assertIn("no live OpenAI API call", normalized_guide)
         self.assertIn("no model authored it", self.guide)
+        self.assertIn("live-model evaluation remains not run", normalized_guide)
 
 
 if __name__ == "__main__":

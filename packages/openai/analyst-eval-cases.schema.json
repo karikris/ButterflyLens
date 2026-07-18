@@ -1,0 +1,896 @@
+{
+  "$id": "https://butterflylens.app/schemas/openai/analyst-eval-cases-v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_count": {
+      "const": 48
+    },
+    "cases": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "case_id": {
+            "pattern": "^[a-z][a-z0-9_]{2,79}$",
+            "type": "string"
+          },
+          "category": {
+            "enum": [
+              "map_impact",
+              "ala_flickr_comparison",
+              "species_maturity",
+              "occurrence_overclaim",
+              "reviewer_reliability",
+              "representative_vs_targeted_review",
+              "worker_offline",
+              "absent_reference",
+              "licence_restriction",
+              "first_nations_name_governance",
+              "no_model_memory_taxon_id",
+              "no_fabricated_metric"
+            ],
+            "type": "string"
+          },
+          "expected_live_response_state": {
+            "enum": [
+              "completed",
+              "incomplete"
+            ]
+          },
+          "expected_tool_call": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "scope_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "national",
+                          "state",
+                          "ibra",
+                          "lga",
+                          "h3"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "scope_type",
+                      "scope_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "inspect_map_scope"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "scope_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "national",
+                          "state",
+                          "ibra",
+                          "lga",
+                          "h3"
+                        ],
+                        "type": "string"
+                      },
+                      "species_key": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "scope_type",
+                      "scope_id",
+                      "species_key"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "compare_ala_and_flickr"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "scientific_name": {
+                        "maxLength": 240,
+                        "minLength": 1,
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "species_key": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "species_key",
+                      "scientific_name"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "inspect_species"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "candidate_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "candidate_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "inspect_flickr_candidate"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "record_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": "string"
+                      },
+                      "record_type": {
+                        "enum": [
+                          "species",
+                          "ala_occurrence",
+                          "flickr_candidate",
+                          "classification",
+                          "review_consensus",
+                          "worker",
+                          "contribution"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "record_type",
+                      "record_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "trace_record_evidence"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "classification_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "classification_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "explain_classification"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "item_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "item_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "inspect_review_consensus"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "domain_key": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "subject": {
+                        "enum": [
+                          "self"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "subject",
+                      "domain_key"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "inspect_reviewer_quality"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "pipeline_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "pipeline_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "inspect_pipeline_status"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "worker_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "worker_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "inspect_worker_status"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "limit": {
+                        "maximum": 20,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "scope_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "national",
+                          "state",
+                          "ibra",
+                          "lga",
+                          "h3"
+                        ],
+                        "type": "string"
+                      },
+                      "species_key": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "scope_type",
+                      "scope_id",
+                      "species_key",
+                      "limit"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "recommend_next_review_batch"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "criterion": {
+                        "enum": [
+                          "reference_gap",
+                          "open_conflicts",
+                          "reviewable_reference"
+                        ],
+                        "type": "string"
+                      },
+                      "limit": {
+                        "maximum": 20,
+                        "minimum": 1,
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "criterion",
+                      "limit"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "recommend_next_species"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "scope_id": {
+                        "maxLength": 180,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "scope_type": {
+                        "enum": [
+                          "national",
+                          "state",
+                          "ibra",
+                          "lga",
+                          "h3"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "scope_type",
+                      "scope_id"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "explain_geographic_contribution"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "report_scope": {
+                        "enum": [
+                          "self"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "report_scope"
+                    ],
+                    "type": "object"
+                  },
+                  "name": {
+                    "const": "prepare_impact_report"
+                  }
+                },
+                "required": [
+                  "name",
+                  "arguments"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "live_model_state": {
+            "const": "not_run"
+          },
+          "oracle": {
+            "additionalProperties": false,
+            "properties": {
+              "citation_ids": {
+                "items": {
+                  "maxLength": 180,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 12,
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "result_fingerprint": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "result_status": {
+                "enum": [
+                  "available",
+                  "partial",
+                  "unavailable",
+                  "not_found",
+                  "forbidden"
+                ]
+              }
+            },
+            "required": [
+              "result_status",
+              "result_fingerprint",
+              "citation_ids"
+            ],
+            "type": "object"
+          },
+          "prohibited_claims": {
+            "items": {
+              "enum": [
+                "official_record",
+                "new_occurrence",
+                "verified_occurrence",
+                "confirmed_range",
+                "biological_absence",
+                "human_verified_provider",
+                "model_probability",
+                "model_memory_taxon",
+                "fabricated_metric",
+                "reviewer_ranking",
+                "reviewer_identity",
+                "sensitive_coordinates",
+                "first_nations_name_invention",
+                "representative_from_targeted",
+                "worker_offline_inference",
+                "licence_permission_inference",
+                "scientific_authority"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "question": {
+            "maxLength": 1200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "required_facts": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "type": "string"
+                },
+                "state": {
+                  "enum": [
+                    "observed",
+                    "derived",
+                    "unavailable",
+                    "withheld",
+                    "unfinished",
+                    "conflict",
+                    "not_applicable"
+                  ],
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "integer",
+                    "number",
+                    "boolean",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "state",
+                "value"
+              ],
+              "type": "object"
+            },
+            "maxItems": 12,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "case_id",
+          "category",
+          "question",
+          "expected_tool_call",
+          "required_facts",
+          "prohibited_claims",
+          "expected_live_response_state",
+          "oracle",
+          "live_model_state"
+        ],
+        "type": "object"
+      },
+      "maxItems": 48,
+      "minItems": 48,
+      "type": "array"
+    },
+    "category_count": {
+      "const": 12
+    },
+    "dimension_coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_citation_completeness": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "budget_compliance": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "final_answer_functional_correctness": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "missing_evidence_abstention": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "privacy_boundary": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "replay_label_integrity": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "schema_adherence": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "tool_argument_precision": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "tool_selection": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "unsupported_claim_refusal": {
+          "items": {
+            "maxLength": 180,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "final_answer_functional_correctness",
+        "tool_selection",
+        "tool_argument_precision",
+        "schema_adherence",
+        "artifact_citation_completeness",
+        "unsupported_claim_refusal",
+        "missing_evidence_abstention",
+        "budget_compliance",
+        "privacy_boundary",
+        "replay_label_integrity"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "butterflylens-analyst-eval-suite:v1.0.0"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "implementation_commit": {
+          "const": "69a102cc31253e7d3eb84c91d92de2a0c266b7c8"
+        },
+        "model_invoked": {
+          "const": false
+        },
+        "model_target": {
+          "const": "gpt-5.6-sol"
+        },
+        "network_calls": {
+          "const": 0
+        },
+        "reasoning_effort_target": {
+          "const": "xhigh"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "repository": {
+          "const": "karikris/ButterflyLens"
+        },
+        "requirements_fingerprint": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "response_api": {
+          "const": "/v1/responses"
+        },
+        "response_schema_fingerprint": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "tool_artifact_commit": {
+          "const": "f9b96814f335684cf311b70b622e2cade0188b9b"
+        },
+        "tool_contract_fingerprint": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "repository",
+        "implementation_commit",
+        "tool_artifact_commit",
+        "recorded_at",
+        "model_target",
+        "reasoning_effort_target",
+        "response_api",
+        "model_invoked",
+        "network_calls",
+        "requirements_fingerprint",
+        "tool_contract_fingerprint",
+        "response_schema_fingerprint"
+      ],
+      "type": "object"
+    },
+    "suite_fingerprint": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "source",
+    "case_count",
+    "category_count",
+    "dimension_coverage",
+    "cases",
+    "suite_fingerprint"
+  ],
+  "title": "ButterflyLens representative analyst evaluation suite",
+  "type": "object"
+}

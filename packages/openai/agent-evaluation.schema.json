@@ -1,0 +1,335 @@
+{
+  "$id": "https://butterflylens.app/schemas/openai/agent-evaluation-v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_results": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "case_id": {
+            "pattern": "^[a-z][a-z0-9_]{2,79}$",
+            "type": "string"
+          },
+          "checks": {
+            "items": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 5,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "deterministic_status": {
+            "const": "passed"
+          },
+          "live_model_status": {
+            "const": "not_run"
+          },
+          "observed_result_fingerprint": {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "observed_result_status": {
+            "enum": [
+              "available",
+              "partial",
+              "unavailable",
+              "not_found",
+              "forbidden"
+            ]
+          }
+        },
+        "required": [
+          "case_id",
+          "deterministic_status",
+          "live_model_status",
+          "observed_result_status",
+          "observed_result_fingerprint",
+          "checks"
+        ],
+        "type": "object"
+      },
+      "maxItems": 48,
+      "minItems": 48,
+      "type": "array"
+    },
+    "dimensions": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_citation_completeness": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "budget_compliance": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "final_answer_functional_correctness": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "missing_evidence_abstention": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "privacy_boundary": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "replay_label_integrity": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "schema_adherence": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "tool_argument_precision": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "tool_selection": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        },
+        "unsupported_claim_refusal": {
+          "enum": [
+            "not_run_live_model_required",
+            "passed_deterministic_oracle",
+            "grader_ready_live_model_not_run",
+            "passed_single_tool_case_design",
+            "passed_stored_replay_boundary"
+          ]
+        }
+      },
+      "required": [
+        "final_answer_functional_correctness",
+        "tool_selection",
+        "tool_argument_precision",
+        "schema_adherence",
+        "artifact_citation_completeness",
+        "unsupported_claim_refusal",
+        "missing_evidence_abstention",
+        "budget_compliance",
+        "privacy_boundary",
+        "replay_label_integrity"
+      ],
+      "type": "object"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "execution": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "deterministic_oracle_no_model"
+        },
+        "model_invoked": {
+          "const": false
+        },
+        "model_target": {
+          "const": "gpt-5.6-sol"
+        },
+        "network_calls": {
+          "const": 0
+        },
+        "reasoning_effort_target": {
+          "const": "xhigh"
+        },
+        "response_calls": {
+          "const": 0
+        },
+        "scripted_model_output_used": {
+          "const": false
+        }
+      },
+      "required": [
+        "mode",
+        "model_target",
+        "reasoning_effort_target",
+        "model_invoked",
+        "response_calls",
+        "network_calls",
+        "scripted_model_output_used"
+      ],
+      "type": "object"
+    },
+    "limitations": {
+      "items": {
+        "maxLength": 600,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 6,
+      "minItems": 3,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "metrics": {
+      "additionalProperties": false,
+      "properties": {
+        "deterministic_oracle_pass_rate": {
+          "const": 1.0
+        },
+        "live_final_answer_accuracy": {
+          "type": "null"
+        },
+        "live_tool_selection_accuracy": {
+          "type": "null"
+        },
+        "live_unsupported_claim_rate": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "deterministic_oracle_pass_rate",
+        "live_unsupported_claim_rate",
+        "live_tool_selection_accuracy",
+        "live_final_answer_accuracy"
+      ],
+      "type": "object"
+    },
+    "overall_status": {
+      "const": "deterministic_gate_passed_live_model_not_run"
+    },
+    "replay_check": {
+      "additionalProperties": false,
+      "properties": {
+        "case_count": {
+          "maximum": 12,
+          "minimum": 3,
+          "type": "integer"
+        },
+        "catalog_fingerprint": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "mode": {
+          "const": "replayed"
+        },
+        "model_invoked": {
+          "const": false
+        },
+        "network_calls": {
+          "const": 0
+        }
+      },
+      "required": [
+        "mode",
+        "model_invoked",
+        "network_calls",
+        "case_count",
+        "catalog_fingerprint"
+      ],
+      "type": "object"
+    },
+    "result_fingerprint": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "butterflylens-analyst-eval-result:v1.0.0"
+    },
+    "suite_fingerprint": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "totals": {
+      "additionalProperties": false,
+      "properties": {
+        "cases": {
+          "const": 48
+        },
+        "deterministic_failed": {
+          "const": 0
+        },
+        "deterministic_passed": {
+          "const": 48
+        },
+        "live_model_failed": {
+          "const": 0
+        },
+        "live_model_passed": {
+          "const": 0
+        },
+        "live_model_run": {
+          "const": 0
+        }
+      },
+      "required": [
+        "cases",
+        "deterministic_passed",
+        "deterministic_failed",
+        "live_model_run",
+        "live_model_passed",
+        "live_model_failed"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "suite_fingerprint",
+    "evaluated_at",
+    "execution",
+    "overall_status",
+    "totals",
+    "metrics",
+    "dimensions",
+    "replay_check",
+    "case_results",
+    "limitations",
+    "result_fingerprint"
+  ],
+  "title": "ButterflyLens offline analyst evaluation result",
+  "type": "object"
+}

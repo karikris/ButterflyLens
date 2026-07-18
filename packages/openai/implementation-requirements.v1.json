@@ -107,7 +107,20 @@
       "privacy_boundary",
       "replay_label_integrity"
     ],
-    "change_gate": "representative_eval_before_prompt_or_reasoning_change"
+    "change_gate": "representative_eval_before_prompt_or_reasoning_change",
+    "current_suite": {
+      "dataset_artifact": "packages/openai/analyst-eval-cases.v1.json",
+      "result_artifact": "packages/openai/agent_evaluation.json",
+      "trace_schema": "packages/openai/analyst-live-eval-trace.schema.json",
+      "case_count": 48,
+      "category_count": 12,
+      "deterministic_oracle_state": "passed",
+      "live_model_state": "not_run",
+      "live_unsupported_claim_rate": null,
+      "live_tool_selection_accuracy": null,
+      "live_final_answer_accuracy": null,
+      "scripted_output_reported_as_model_run": false
+    }
   },
   "official_sources": [
     "https://developers.openai.com/api/docs/guides/latest-model",

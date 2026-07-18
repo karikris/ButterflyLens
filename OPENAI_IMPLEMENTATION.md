@@ -116,10 +116,24 @@ moving from trace inspection to repeatable datasets/eval runs.
 [Evaluation best practices](https://developers.openai.com/api/docs/guides/evaluation-best-practices)
 and [agent evaluations](https://developers.openai.com/api/docs/guides/agent-evals).
 
+The current Task 11.5 suite contains 48 cases, with four cases in each required
+scientific/governance category and coverage of all fourteen deterministic
+tools. The offline result re-invokes exact tool arguments and verifies result
+fingerprints, required fact states, citations, replay labels, privacy, and
+claim-prohibition contracts. A strict complete-trace grader is ready for a
+later credentialed run.
+
+This is not a live model benchmark. No GPT-5.6 output, Responses request, or
+scripted substitute was used to produce `agent_evaluation.json`. Consequently,
+live final-answer accuracy, tool-selection accuracy, and unsupported-claim rate
+are null. Only a complete recorded `gpt-5.6-sol`/`xhigh` trace may populate
+those fields.
+
 ## Current repository state
 
-Tasks 11.2 and 11.3 added the fourteen deterministic tools and the authenticated
-server route with exact SDK pins. Task 11.4 adds a credential-free replay of
-three stored tool traces. The live route has not been deployed and no live
-OpenAI API call, model output, or agent evaluation result exists. Task 11.5
-owns the representative evaluation boundary.
+Tasks 11.2 and 11.3 added the fourteen deterministic tools and authenticated
+server route with exact SDK pins. Task 11.4 added a credential-free replay of
+three stored tool traces. Task 11.5 adds the 48-case deterministic evaluation
+suite, offline result, and recorded-trace grader. The live route has not been
+deployed and no live OpenAI API call or model output exists; live-model
+evaluation remains not run.

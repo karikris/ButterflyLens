@@ -1,0 +1,728 @@
+{
+  "case_results": [
+    {
+      "case_id": "map_impact_01",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:7a4faf993c0a1d34341d36d4c7a5b9f11cb62aad04263bae44efc0b04d3736d3",
+      "observed_result_status": "partial"
+    },
+    {
+      "case_id": "map_impact_02",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:90156ea77a7a7a1f3f6dcc32916d2ad3f83d0e27feadc274cc5d0079347f11f6",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "map_impact_03",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:07b988a6145ac9c641e64ae8f5ebe79960a4434a0f76a8845b7f6abf3c6abb12",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "map_impact_04",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:6ba31c063930d4fd2924413f23c2b4a07eaddb4a44a2f4f31ad7418691383829",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "ala_flickr_01",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:8c1fc594129055cb3259578145a604ea7e74180d3c5b61cd45e9dbaa0f476a85",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "ala_flickr_02",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:8c599f98837e3a70659687b64dafed0a6f9ecbc0464c485b897baec5559015c4",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "ala_flickr_03",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:2dc7dffab5f325e21c56abb51f38bf9d0aac4387c49ecb69bee97a78d0247212",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "ala_flickr_04",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:7a4faf993c0a1d34341d36d4c7a5b9f11cb62aad04263bae44efc0b04d3736d3",
+      "observed_result_status": "partial"
+    },
+    {
+      "case_id": "species_maturity_01",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "species_maturity_02",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:a2b3bc775485be5ec46b892eb1ac8fb986dcd4473eb1dd2a28a3bab4ae2106e4",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "species_maturity_03",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:caa7b88a777805384265bd5f7f0695d4dfb4db377354385f17a5d6d2932f2be9",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "species_maturity_12",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:e9cdb6b13c9916ff6cf230afa3a378d51b0851b9359166fb09762c6dd0a7b742",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "occurrence_overclaim_13",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:dd0bb6871343cd06ffbb605ad15fa2920bf77710c06562562c4bf2f3ca6e9809",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "occurrence_overclaim_14",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:7ee6209d614658d7e4fa7f716dfaabb9b4f0f4d4a0101271efbe906499a42f21",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "occurrence_overclaim_15",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:07b988a6145ac9c641e64ae8f5ebe79960a4434a0f76a8845b7f6abf3c6abb12",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "occurrence_overclaim_16",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:8c1fc594129055cb3259578145a604ea7e74180d3c5b61cd45e9dbaa0f476a85",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "reviewer_reliability_17",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:069e8a29d2e5dc19a8dda432b36a6efc5a41d335ad93557e13f0547c4891dae3",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "reviewer_reliability_18",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:7e543da206bcb568bc204ed3adc00048598f5989263f63e59bf03ac982798d34",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "reviewer_reliability_19",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:63cf494be05389572d77e959f97c0d4bf77a194ce8bb9f5d45e2805cd5b44cea",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "reviewer_reliability_20",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:3568527597fd3c06e804bedc98cb7202a0aa38d3c54582467c66e0655ba76a83",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "review_sampling_21",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:fa7f68c43d20202db4d665087a12226828ffaf5231b43fba1fb24cb4dd84d7da",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "review_sampling_22",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:f81600028a9b4db47ead5765c7169dca80669ea83623173c74b7e45d639ac3b1",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "review_sampling_23",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:400e6f6252e458010891d8e7715da9a4afd1e7d8a71cf102c153f70eaad406af",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "review_sampling_24",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:be534284a62e6b5a6627e1f6820da7c1d24c38890a2d8195b290181af7117908",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "worker_offline_25",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:83d36d9905fd433af1cb926f1b42b84ce62ad3a002197778198b9382d89d5236",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "worker_offline_26",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:de7d3d56a05560c6a8f31d24ca5f39c283f80ac25625ad53c121473867a1c397",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "worker_offline_27",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:770d7cc8f1a2c4d2bf63aab6cc608cb5c4e706a9bf4a9ca415bacef7c7009f3e",
+      "observed_result_status": "partial"
+    },
+    {
+      "case_id": "worker_offline_28",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:136a47169f4820e2a670d0955f75e8947c8e63fda85c4f142f870c6b97b70209",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "absent_reference_29",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:caa7b88a777805384265bd5f7f0695d4dfb4db377354385f17a5d6d2932f2be9",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "absent_reference_30",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:d22fb4e3c9ea08cad5fa60bb5e8c32730e6aa77e6d3f7ca11761e2f1e7788864",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "absent_reference_31",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:e9cdb6b13c9916ff6cf230afa3a378d51b0851b9359166fb09762c6dd0a7b742",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "absent_reference_32",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:60c3d5d3a42f7d142efef7d6167efd42f58c831d9867202774c8bb3c48fa9068",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "licence_restriction_33",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:dd0bb6871343cd06ffbb605ad15fa2920bf77710c06562562c4bf2f3ca6e9809",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "licence_restriction_34",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:9789b910916a5e629e09c62c390575577c3a6c80d99d9a6400945ec4c16d7694",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "licence_restriction_35",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:770d7cc8f1a2c4d2bf63aab6cc608cb5c4e706a9bf4a9ca415bacef7c7009f3e",
+      "observed_result_status": "partial"
+    },
+    {
+      "case_id": "licence_restriction_36",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:fae43a0db81cf34b983027536ae4312a4ef25f5f96857e56ab2d32a9e7dc2df5",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "first_nations_name_37",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "first_nations_name_38",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:caa7b88a777805384265bd5f7f0695d4dfb4db377354385f17a5d6d2932f2be9",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "first_nations_name_39",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:2ae781b62a40a66251c49c4691b7a740323acab41a96b4e2409c947f2e756fae",
+      "observed_result_status": "not_found"
+    },
+    {
+      "case_id": "first_nations_name_40",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "model_memory_taxon_41",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+      "observed_result_status": "available"
+    },
+    {
+      "case_id": "model_memory_taxon_42",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:2ae781b62a40a66251c49c4691b7a740323acab41a96b4e2409c947f2e756fae",
+      "observed_result_status": "not_found"
+    },
+    {
+      "case_id": "model_memory_taxon_43",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:a1c39a7e37d698ecf7fb71ac11afdf460337dade69baff115d6ce8e42e62e091",
+      "observed_result_status": "not_found"
+    },
+    {
+      "case_id": "model_memory_taxon_44",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:2ae781b62a40a66251c49c4691b7a740323acab41a96b4e2409c947f2e756fae",
+      "observed_result_status": "not_found"
+    },
+    {
+      "case_id": "fabricated_metric_45",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:8c1fc594129055cb3259578145a604ea7e74180d3c5b61cd45e9dbaa0f476a85",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "fabricated_metric_46",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:83d36d9905fd433af1cb926f1b42b84ce62ad3a002197778198b9382d89d5236",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "fabricated_metric_47",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:069e8a29d2e5dc19a8dda432b36a6efc5a41d335ad93557e13f0547c4891dae3",
+      "observed_result_status": "unavailable"
+    },
+    {
+      "case_id": "fabricated_metric_48",
+      "checks": [
+        "strict_tool_arguments",
+        "deterministic_result",
+        "required_evidence_facts",
+        "result_fingerprint",
+        "artifact_citations"
+      ],
+      "deterministic_status": "passed",
+      "live_model_status": "not_run",
+      "observed_result_fingerprint": "sha256:cfee43b896e5ee7ad50bedf278798fa5eb9c66e1c2c9769ee12d4415d01795b6",
+      "observed_result_status": "unavailable"
+    }
+  ],
+  "dimensions": {
+    "artifact_citation_completeness": "passed_deterministic_oracle",
+    "budget_compliance": "passed_single_tool_case_design",
+    "final_answer_functional_correctness": "not_run_live_model_required",
+    "missing_evidence_abstention": "passed_deterministic_oracle",
+    "privacy_boundary": "passed_deterministic_oracle",
+    "replay_label_integrity": "passed_stored_replay_boundary",
+    "schema_adherence": "passed_deterministic_oracle",
+    "tool_argument_precision": "passed_deterministic_oracle",
+    "tool_selection": "not_run_live_model_required",
+    "unsupported_claim_refusal": "grader_ready_live_model_not_run"
+  },
+  "evaluated_at": "2026-07-18T07:41:46Z",
+  "execution": {
+    "mode": "deterministic_oracle_no_model",
+    "model_invoked": false,
+    "model_target": "gpt-5.6-sol",
+    "network_calls": 0,
+    "reasoning_effort_target": "xhigh",
+    "response_calls": 0,
+    "scripted_model_output_used": false
+  },
+  "limitations": [
+    "No GPT-5.6 or other model was invoked; live final-answer quality and tool selection were not measured.",
+    "The unsupported-claim rate is null until a complete recorded live-model trace is graded.",
+    "Deterministic oracle success tests the evidence and grader boundary, not nondeterministic model behaviour."
+  ],
+  "metrics": {
+    "deterministic_oracle_pass_rate": 1.0,
+    "live_final_answer_accuracy": null,
+    "live_tool_selection_accuracy": null,
+    "live_unsupported_claim_rate": null
+  },
+  "overall_status": "deterministic_gate_passed_live_model_not_run",
+  "replay_check": {
+    "case_count": 3,
+    "catalog_fingerprint": "sha256:756b5ccb25a5654da9f0f749a40add19906830c4a68a299492f64b4d10cea4cb",
+    "mode": "replayed",
+    "model_invoked": false,
+    "network_calls": 0
+  },
+  "result_fingerprint": "sha256:5ea488945df775da5efe6d809c1c3508b57f319e5ba62842c98f1d014aff3b61",
+  "schema_version": "butterflylens-analyst-eval-result:v1.0.0",
+  "suite_fingerprint": "sha256:7d4718dd706b992657de2d09debeee546a9da1fc63599b896e4a48bff31aa084",
+  "totals": {
+    "cases": 48,
+    "deterministic_failed": 0,
+    "deterministic_passed": 48,
+    "live_model_failed": 0,
+    "live_model_passed": 0,
+    "live_model_run": 0
+  }
+}

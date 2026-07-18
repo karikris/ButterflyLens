@@ -130,3 +130,18 @@ This append-oriented record captures product or governance decisions made by Kri
 - The stored prose is a deterministic project-authored evidence rendering. No
   GPT-5.6 or other model authored it, so do not attach a model identity or
   simulate live inference.
+
+## 2026-07-18 — Analyst evaluation truth boundary
+
+- Use one frozen 48-case suite with four cases in each of the twelve required
+  scientific and governance categories and coverage of all fourteen tools.
+- Treat deterministic oracle, schema, citation, replay, privacy, and grader
+  checks as application-boundary evidence only. They do not measure GPT-5.6
+  tool selection or final-answer quality.
+- Keep live unsupported-claim rate, tool-selection accuracy, and final-answer
+  accuracy null until a complete recorded `gpt-5.6-sol`/`xhigh` trace actually
+  runs and passes the strict grader.
+- Never use a scripted fixture as model evidence. A deterministic trace-grader
+  self-test must remain labelled synthetic and `model_invoked: false`.
+- Do not change the frozen prompt, model, effort, or budgets on the strength of
+  offline oracle success alone; live evaluation and human review remain needed.

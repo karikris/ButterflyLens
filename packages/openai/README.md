@@ -76,3 +76,36 @@ and says `model_invoked: false`. Its response shape deliberately has no model
 identity field: GPT-5.6 did not author these stored answers. The public replay
 only matches the three exact questions and never falls through to live
 inference, re-executes a tool, or simulates a conversation.
+
+## Representative analyst evaluations
+
+`analyst-eval-cases.v1.json` contains 48 questions: four cases in each of the
+twelve Task 11.5 categories. Every case pins the smallest expected tool call,
+exact arguments, deterministic result status/fingerprint/citations, required
+evidence facts, expected live response state, and prohibited claim classes.
+All fourteen tools are represented.
+
+Rebuild the suite, its three strict schemas, and the offline result with:
+
+```bash
+uv run --locked python scripts/build_openai_evaluations.py
+```
+
+`agent_evaluation.json` truthfully records the current boundary. All 48
+deterministic oracles pass, the submitted replay boundary passes, and no model,
+Responses request, network request, or scripted model output was used. Live
+final-answer accuracy, tool-selection accuracy, and unsupported-claim rate are
+therefore `null`, not zero.
+
+`analyst-live-eval-trace.schema.json` defines a complete recorded-trace input
+for a later credentialed run. The grader verifies exact `gpt-5.6-sol`/`xhigh`
+provenance, all case IDs, tool selection and arguments, reproduced tool
+outputs, strict response schema, complete unmodified citations, unavailable
+states, budgets, privacy, scientific-language prohibitions, and numeric/taxon-ID
+provenance. It grades a supplied trace only; it never calls OpenAI itself.
+
+Grade a complete trace with:
+
+```bash
+uv run --locked python scripts/grade_openai_evaluation.py path/to/trace.json
+```
