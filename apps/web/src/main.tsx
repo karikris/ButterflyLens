@@ -9,6 +9,7 @@ import './species/speciesDirectory.css'
 import './flickr/flickrDisplayBoundary.css'
 import './community/contributorExperience.css'
 import './analyst/askButterflyLens.css'
+import './operations/operationsDashboard.css'
 import './styles.css'
 
 const root = document.getElementById('root')

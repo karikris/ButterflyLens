@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "butterflylens-public-operations:v1.0.0",
+  "generatedAt": "2026-07-18T04:48:12Z",
+  "site": {
+    "available": true,
+    "committedDataQueryable": true,
+    "workerRequired": false
+  },
+  "workerFallback": {
+    "status": "unavailable",
+    "heartbeatObservedAt": null,
+    "reason": "No authenticated live heartbeat is attached to this public build. Worker state is unavailable; committed site data remains available."
+  },
+  "submittedSnapshot": {
+    "snapshotId": "australian-butterflies-v1/submitted-species-catalogue-v1",
+    "mode": "submitted",
+    "artifactFingerprint": "083ed290418938e1c32ee75cad5dea6d81153f529ab1c40acbb64f52beccba06",
+    "generatedAt": "2026-07-18T04:48:12Z",
+    "sourceCommit": "f053c27d877fba07df841e2825618d9f705b2333",
+    "label": "Submitted Australian butterfly catalogue",
+    "href": "#species",
+    "speciesCount": 463
+  },
+  "map": {
+    "snapshotId": "ala-papilionoidea-au-20260717-d33d4d367525",
+    "artifactFingerprint": "d33d4d36752579ba780fca4d0ec9f234848ccccdba468711846a265c12108f65",
+    "generatedAt": "2026-07-17T19:14:01Z",
+    "sourceCommit": "0f3e1c81a9957d0e6079dec44170bbc4a230065a",
+    "scopeLabel": "Australia",
+    "renderState": "scope_only_occurrences_withheld",
+    "releaseState": "blocked_pending_dataset_rights_resolution",
+    "occurrenceLayerVisible": false,
+    "absenceInferencePermitted": false,
+    "reason": "The committed map shell is available, but ALA occurrence layers and counts remain withheld while exact dataset citation rights are resolved."
+  },
+  "review": {
+    "available": true,
+    "itemId": "commons-review-fixture-47248e36944c",
+    "mediaSha256": "47248e36944cf91256c906e8454adcad99121da049260745d57f4cbffae65a78",
+    "sourceCommit": "d30da7d3ddfc8d992533be4f902c1bc51ee63c07",
+    "href": "#verify",
+    "reason": "The rights-cleared submitted review fixture is bundled with the site and does not require a worker."
+  }
+}

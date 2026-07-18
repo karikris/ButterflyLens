@@ -2,12 +2,13 @@ import { ReviewLanding } from './review/ReviewLanding'
 import { submittedReviewItem } from './review/reviewLandingModel'
 import { QualityDashboard } from './quality/QualityDashboard'
 import { submittedQualityDashboard } from './quality/qualityDashboardModel'
-import { PublicShell, RoutePreview } from './shell/PublicShell'
+import { PublicShell } from './shell/PublicShell'
 import { SpeciesDirectory } from './species/SpeciesDirectory'
 import { FlickrDisplayBoundary } from './flickr/FlickrDisplayBoundary'
 import { ContributorExperience } from './community/ContributorExperience'
 import { submittedContributorImpact } from './community/contributorImpactModel'
 import { AskButterflyLens } from './analyst/AskButterflyLens'
+import { OperationsDashboard } from './operations/OperationsDashboard'
 
 export function App() {
   return (
@@ -38,12 +39,7 @@ export function App() {
       </section>
       <ReviewLanding item={submittedReviewItem} qualifiedReviewer={false} />
       <SpeciesDirectory />
-      <RoutePreview
-        id="live"
-        kicker="Pipeline observatory"
-        title="Live"
-        description="Committed worker state and acquisition budgets will appear here without making a live worker a judging dependency."
-      />
+      <OperationsDashboard />
       <FlickrDisplayBoundary />
       <QualityDashboard snapshot={submittedQualityDashboard} />
       <ContributorExperience snapshot={submittedContributorImpact} />

@@ -49,7 +49,10 @@ describe('public application shell', () => {
       expect(document.querySelector(href!)).not.toBeNull()
     }
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
-    expect(screen.getAllByText('Surface scheduled')).toHaveLength(1)
+    expect(screen.queryByText('Surface scheduled')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Live when available. Committed when not.' }),
+    ).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Ask ButterflyLens' })).toBeInTheDocument()
   })
 })
