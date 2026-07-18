@@ -161,6 +161,12 @@ export interface VerificationEvent {
 }
 
 export interface ConsensusLayer {
+  readonly method:
+    | 'unweighted_human_counts_v1'
+    | 'qualified_equal_weight_v1'
+    | 'qualified_reliability_weighted_v1'
+    | 'qualified_adjudication_v1'
+    | 'release_gate_v1'
   readonly status: 'pending' | 'available' | 'blocked' | 'unavailable'
   readonly outcome:
     | 'supported'
@@ -171,11 +177,23 @@ export interface ConsensusLayer {
     | 'release_ready'
     | 'not_release_ready'
     | null
+  readonly eligible_review_count: number
+  readonly decisive_review_count: number
+  readonly support_count: number
+  readonly oppose_count: number
+  readonly support_total: number
+  readonly oppose_total: number
+  readonly uncertain_count: number
+  readonly media_failure_count: number
+  readonly deferred_count: number
+  readonly dissent_count: number
+  readonly event_fingerprints: readonly string[]
   readonly blockers: readonly string[]
 }
 
 export interface VerificationConsensus {
   readonly schema_version: typeof VERIFICATION_CONSENSUS_SCHEMA_VERSION
+  readonly policy_version: 'butterflylens-layered-consensus-policy:v1.0.0'
   readonly consensus_id: string
   readonly project_id: string
   readonly campaign_id: string
@@ -194,6 +212,14 @@ export interface VerificationConsensus {
   readonly community_evidence: ConsensusLayer
   readonly qualified_consensus: ConsensusLayer
   readonly release_consensus: ConsensusLayer
+  readonly release_gates: {
+    readonly rights_passed: boolean
+    readonly provenance_passed: boolean
+    readonly conflict_resolved: boolean
+    readonly quality_passed: boolean
+    readonly expert_gate_satisfied: boolean
+    readonly authorization_passed: boolean
+  }
   readonly reviewer_weights_applied: boolean
   readonly reliability_snapshot_fingerprint: string | null
   readonly model_vote_included: false

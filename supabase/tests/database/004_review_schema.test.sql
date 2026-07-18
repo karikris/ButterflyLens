@@ -104,10 +104,30 @@ from public.assignments a where a.assignment_id = 'assignment:test';
 insert into public.consensus (
   consensus_id, verification_campaign_pk, media_object_pk, consensus_layer,
   status, decision, method, method_version, eligible_review_count,
-  decisive_review_count, review_event_fingerprints, consensus_fingerprint
+  decisive_review_count, review_event_fingerprints, layer_summary,
+  consensus_fingerprint
 ) select 'consensus:test', verification_campaign_pk, media_object_pk,
-  'community_evidence', 'reached', 'yes', 'synthetic-count', 'v1', 1, 1,
-  array[event_fingerprint], repeat('6', 64)
+  'community_evidence', 'reached', 'yes', 'unweighted_human_counts_v1',
+  'butterflylens-layered-consensus:v1.0.0', 1, 1,
+  array[event_fingerprint], jsonb_build_object(
+    'method', 'unweighted_human_counts_v1',
+    'policy_version', 'butterflylens-layered-consensus-policy:v1.0.0',
+    'status', 'available',
+    'outcome', 'supported', 'eligible_review_count', 1,
+    'decisive_review_count', 1, 'support_count', 1, 'oppose_count', 0,
+    'support_total', 1, 'oppose_total', 0,
+    'uncertain_count', 0, 'media_failure_count', 0, 'deferred_count', 0,
+    'dissent_count', 0, 'event_fingerprints', to_jsonb(array[event_fingerprint]),
+    'blockers', '[]'::jsonb, 'model_vote_included', false,
+    'scientific_claim_allowed', false,
+    'outer_consensus_fingerprint', repeat('6', 64),
+    'adjudication_event_fingerprint', null,
+    'release_gates', jsonb_build_object(
+      'rights_passed', false, 'provenance_passed', false,
+      'conflict_resolved', false, 'quality_passed', false,
+      'expert_gate_satisfied', false, 'authorization_passed', false
+    )
+  ), repeat('6', 64)
 from public.review_events where review_event_id = 'review-event:test';
 insert into public.reviewer_reliability (
   reviewer_reliability_id, reviewer_profile_pk, project_pk, family_taxon_key,
@@ -166,11 +186,11 @@ select throws_ok(
 );
 select throws_ok(
   $$update public.review_events set decision = 'alternative_taxon'$$,
-  '23514', 'alternative-taxon decision requires a taxon'
+  '55000', 'append-only review decisions cannot be mutated'
 );
 select throws_ok(
   $$update public.review_events set reviewer_profile_pk = 999999$$,
-  '23503', 'event identity must match its assignment'
+  '55000', 'append-only review identity cannot be mutated'
 );
 select throws_ok(
   $$insert into public.consensus (
@@ -186,11 +206,11 @@ select throws_ok(
 );
 select throws_ok(
   $$update public.reviewer_reliability set weighting_state = 'shrunk_capped', shrunk_weight = 1.2$$,
-  '23514', 'weighted reliability requires minimum evidence'
+  '55000', 'append-only reliability weights cannot be mutated'
 );
 select throws_ok(
   $$update public.reviewer_reliability set metrics = '{"bioclip_agreement":1}'::jsonb$$,
-  '23514', 'model agreement cannot define reviewer truth'
+  '55000', 'append-only reliability metrics cannot be mutated'
 );
 select throws_ok(
   $$update public.quality_snapshots set snapshot_kind = 'representative_audit'$$,

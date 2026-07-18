@@ -577,8 +577,33 @@
     "consensus_layer": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "outcome", "blockers"],
+      "required": [
+        "method",
+        "status",
+        "outcome",
+        "eligible_review_count",
+        "decisive_review_count",
+        "support_count",
+        "oppose_count",
+        "support_total",
+        "oppose_total",
+        "uncertain_count",
+        "media_failure_count",
+        "deferred_count",
+        "dissent_count",
+        "event_fingerprints",
+        "blockers"
+      ],
       "properties": {
+        "method": {
+          "enum": [
+            "unweighted_human_counts_v1",
+            "qualified_equal_weight_v1",
+            "qualified_reliability_weighted_v1",
+            "qualified_adjudication_v1",
+            "release_gate_v1"
+          ]
+        },
         "status": {
           "enum": ["pending", "available", "blocked", "unavailable"]
         },
@@ -598,6 +623,23 @@
             { "type": "null" }
           ]
         },
+        "eligible_review_count": { "type": "integer", "minimum": 0 },
+        "decisive_review_count": { "type": "integer", "minimum": 0 },
+        "support_count": { "type": "integer", "minimum": 0 },
+        "oppose_count": { "type": "integer", "minimum": 0 },
+        "support_total": { "type": "number", "minimum": 0 },
+        "oppose_total": { "type": "number", "minimum": 0 },
+        "uncertain_count": { "type": "integer", "minimum": 0 },
+        "media_failure_count": { "type": "integer", "minimum": 0 },
+        "deferred_count": { "type": "integer", "minimum": 0 },
+        "dissent_count": { "type": "integer", "minimum": 0 },
+        "event_fingerprints": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/sha256"
+          }
+        },
         "blockers": {
           "type": "array",
           "uniqueItems": true,
@@ -610,6 +652,7 @@
       "additionalProperties": false,
       "required": [
         "schema_version",
+        "policy_version",
         "consensus_id",
         "project_id",
         "campaign_id",
@@ -625,6 +668,7 @@
         "community_evidence",
         "qualified_consensus",
         "release_consensus",
+        "release_gates",
         "reviewer_weights_applied",
         "reliability_snapshot_fingerprint",
         "model_vote_included",
@@ -634,6 +678,9 @@
       "properties": {
         "schema_version": {
           "const": "butterflylens-verification-consensus:v1.0.0"
+        },
+        "policy_version": {
+          "const": "butterflylens-layered-consensus-policy:v1.0.0"
         },
         "consensus_id": {
           "$ref": "urn:butterflylens:schema:common:v1.0.0#/$defs/stable_id"
@@ -707,6 +754,26 @@
         "community_evidence": { "$ref": "#/$defs/consensus_layer" },
         "qualified_consensus": { "$ref": "#/$defs/consensus_layer" },
         "release_consensus": { "$ref": "#/$defs/consensus_layer" },
+        "release_gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rights_passed",
+            "provenance_passed",
+            "conflict_resolved",
+            "quality_passed",
+            "expert_gate_satisfied",
+            "authorization_passed"
+          ],
+          "properties": {
+            "rights_passed": { "type": "boolean" },
+            "provenance_passed": { "type": "boolean" },
+            "conflict_resolved": { "type": "boolean" },
+            "quality_passed": { "type": "boolean" },
+            "expert_gate_satisfied": { "type": "boolean" },
+            "authorization_passed": { "type": "boolean" }
+          }
+        },
         "reviewer_weights_applied": { "type": "boolean" },
         "reliability_snapshot_fingerprint": {
           "anyOf": [

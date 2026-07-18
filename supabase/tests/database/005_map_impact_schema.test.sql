@@ -61,9 +61,30 @@ from public.projects where project_id = 'project:map-test';
 insert into public.consensus (
   consensus_id, verification_campaign_pk, media_object_pk, species_pk,
   consensus_layer, status, method, method_version, eligible_review_count,
-  decisive_review_count, review_event_fingerprints, consensus_fingerprint
+  decisive_review_count, review_event_fingerprints, layer_summary,
+  consensus_fingerprint
 ) select 'consensus:map-test', c.id, m.id, s.id, 'community_evidence',
-  'insufficient', 'synthetic', 'v1', 0, 0, '{}', repeat('3',64)
+  'insufficient', 'unweighted_human_counts_v1',
+  'butterflylens-layered-consensus:v1.0.0', 0, 0, '{}',
+  jsonb_build_object(
+    'method', 'unweighted_human_counts_v1',
+    'policy_version', 'butterflylens-layered-consensus-policy:v1.0.0',
+    'status', 'pending',
+    'outcome', null, 'eligible_review_count', 0,
+    'decisive_review_count', 0, 'support_count', 0, 'oppose_count', 0,
+    'support_total', 0, 'oppose_total', 0,
+    'uncertain_count', 0, 'media_failure_count', 0, 'deferred_count', 0,
+    'dissent_count', 0, 'event_fingerprints', '[]'::jsonb,
+    'blockers', jsonb_build_array('decisive_reviews_below_required'),
+    'model_vote_included', false, 'scientific_claim_allowed', false,
+    'outer_consensus_fingerprint', repeat('3',64),
+    'adjudication_event_fingerprint', null,
+    'release_gates', jsonb_build_object(
+      'rights_passed', false, 'provenance_passed', false,
+      'conflict_resolved', false, 'quality_passed', false,
+      'expert_gate_satisfied', false, 'authorization_passed', false
+    )
+  ), repeat('3',64)
 from public.verification_campaigns c cross join public.media_objects m
 cross join public.species s
 where c.verification_campaign_id = 'campaign:map-test'

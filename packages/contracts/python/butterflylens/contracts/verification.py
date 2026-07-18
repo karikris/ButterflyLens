@@ -125,13 +125,26 @@ class VerificationEvent(TypedDict):
 
 
 class ConsensusLayer(TypedDict):
+    method: str
     status: str
     outcome: str | None
+    eligible_review_count: int
+    decisive_review_count: int
+    support_count: int
+    oppose_count: int
+    support_total: float
+    oppose_total: float
+    uncertain_count: int
+    media_failure_count: int
+    deferred_count: int
+    dissent_count: int
+    event_fingerprints: list[str]
     blockers: list[str]
 
 
 class VerificationConsensus(TypedDict):
     schema_version: Literal["butterflylens-verification-consensus:v1.0.0"]
+    policy_version: Literal["butterflylens-layered-consensus-policy:v1.0.0"]
     consensus_id: str
     project_id: str
     campaign_id: str
@@ -147,6 +160,7 @@ class VerificationConsensus(TypedDict):
     community_evidence: ConsensusLayer
     qualified_consensus: ConsensusLayer
     release_consensus: ConsensusLayer
+    release_gates: dict[str, bool]
     reviewer_weights_applied: bool
     reliability_snapshot_fingerprint: str | None
     model_vote_included: Literal[False]
