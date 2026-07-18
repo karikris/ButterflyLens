@@ -93,3 +93,16 @@ This append-oriented record captures product or governance decisions made by Kri
 - Recognition cannot create scientific identity, consensus, expert-gate,
   quality, authorization, or release authority. Unavailable totals stay null,
   not fabricated zeroes.
+
+## 2026-07-18 — OpenAI analyst boundary
+
+- Use the direct Responses API with the explicit `gpt-5.6-sol` model and the
+  user-required `xhigh` reasoning effort as the initial measured baseline.
+- Keep the API key in the trusted server environment, set `store: false`, and
+  expose only bounded deterministic read-only tools; do not put OpenAI access
+  in the browser or treat model memory as biodiversity evidence.
+- Require strict tool and final-output schemas, governed artifact citations,
+  explicit unavailable/incomplete states, bounded tool budgets, and distinct
+  live and stored-replay labels.
+- Do not change the model, effort, prompt, budgets, or architecture without a
+  representative evaluation set demonstrating the trade-off.

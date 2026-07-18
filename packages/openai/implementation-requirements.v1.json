@@ -1,0 +1,112 @@
+{
+  "schema_version": "butterflylens-openai-implementation-requirements:v1.0.0",
+  "verified_at": "2026-07-18T05:45:21Z",
+  "verification_state": "official_docs_verified_no_live_api_call",
+  "model": {
+    "explicit_id": "gpt-5.6-sol",
+    "family_alias": "gpt-5.6",
+    "reasoning_effort": "xhigh",
+    "reasoning_effort_source": "user_required_baseline",
+    "response_api": "/v1/responses"
+  },
+  "architecture": {
+    "client": "official_openai_javascript_sdk_server_only",
+    "agent_runtime": "direct_responses_api_single_agent",
+    "browser_openai_access": false,
+    "custom_tools": "deterministic_read_only_local",
+    "openai_built_in_tools_enabled": false,
+    "remote_mcp_enabled": false,
+    "model_biodiversity_memory_authority": false
+  },
+  "request_policy": {
+    "store": false,
+    "reasoning_context": "current_turn",
+    "parallel_tool_calls": false,
+    "tool_choice": "auto",
+    "max_tool_calls": 8,
+    "max_tool_loop_iterations": 6,
+    "max_output_tokens": 1800,
+    "per_tool_timeout_seconds": 10,
+    "transient_tool_retries": 1,
+    "safety_identifier": "sha256_authenticated_user_or_stable_session_id"
+  },
+  "schema_policy": {
+    "function_tools_strict": true,
+    "final_text_format_strict": true,
+    "all_object_properties_required": true,
+    "additional_properties": false,
+    "optional_fields_use_nullable_type": true,
+    "server_validates_tool_arguments": true,
+    "server_validates_tool_outputs": true,
+    "server_validates_final_output": true
+  },
+  "evidence_policy": {
+    "artifact_citations_required_for_factual_claims": true,
+    "citation_fields": [
+      "artifact_id",
+      "repository",
+      "commit",
+      "path",
+      "fingerprint"
+    ],
+    "citation_targets_allowlisted": true,
+    "missing_evidence_result": "unavailable_not_zero",
+    "source_conflicts_preserved": true,
+    "inference_label_required": true,
+    "species_guessing_from_model_memory": false,
+    "scientific_claim_authority": false
+  },
+  "response_handling": {
+    "statuses": ["completed", "incomplete", "failed", "cancelled"],
+    "refusal_is_first_class": true,
+    "incomplete_details_are_first_class": true,
+    "function_call_id_preserved": true,
+    "all_output_items_parsed": true,
+    "budget_exhaustion_result": "bounded_incomplete",
+    "tool_error_result": "bounded_incomplete",
+    "live_and_replay_labels_distinct": true
+  },
+  "security_privacy": {
+    "api_key_location": "server_environment_or_key_management_service",
+    "api_key_in_browser": false,
+    "api_key_in_database": false,
+    "raw_secret_logging": false,
+    "raw_sensitive_tool_output_logging": false,
+    "openai_response_storage": false,
+    "reviewer_private_fields_default": "withheld",
+    "sensitive_coordinates_default": "withheld_or_governed_rollup"
+  },
+  "evaluation_policy": {
+    "minimum_cases": 40,
+    "deterministic_tool_tests_required": true,
+    "stored_replay_tests_required": true,
+    "live_model_evaluation_requires_key": true,
+    "live_model_output_evaluated_only_when_run": true,
+    "dimensions": [
+      "final_answer_functional_correctness",
+      "tool_selection",
+      "tool_argument_precision",
+      "schema_adherence",
+      "artifact_citation_completeness",
+      "unsupported_claim_refusal",
+      "missing_evidence_abstention",
+      "budget_compliance",
+      "privacy_boundary",
+      "replay_label_integrity"
+    ],
+    "change_gate": "representative_eval_before_prompt_or_reasoning_change"
+  },
+  "official_sources": [
+    "https://developers.openai.com/api/docs/guides/latest-model",
+    "https://developers.openai.com/api/docs/guides/upgrading-to-gpt-5p6-sol",
+    "https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6",
+    "https://developers.openai.com/api/docs/guides/migrate-to-responses",
+    "https://developers.openai.com/api/docs/guides/function-calling#strict-mode",
+    "https://developers.openai.com/api/docs/guides/structured-outputs",
+    "https://developers.openai.com/api/docs/guides/deployment-checklist",
+    "https://developers.openai.com/api/docs/guides/safety-best-practices#implement-safety-identifiers",
+    "https://developers.openai.com/api/docs/guides/your-data",
+    "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+    "https://developers.openai.com/api/docs/guides/agent-evals"
+  ]
+}
