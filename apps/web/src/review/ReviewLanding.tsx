@@ -1,6 +1,12 @@
 import { useId, useMemo, useState } from 'react'
 
 import {
+  blindReviewFieldLabels,
+  blindReviewFields,
+  submittedReviewDisclosure,
+  type ReviewDisclosure,
+} from './blindReviewModel'
+import {
   reviewOutcomeLabels,
   type ReviewLandingItem,
   type ReviewOutcome,
@@ -21,14 +27,18 @@ const allOutcomes: readonly ReviewOutcome[] = [
 export function ReviewLanding({
   item,
   qualifiedReviewer,
+  disclosure = submittedReviewDisclosure,
 }: {
   readonly item: ReviewLandingItem
   readonly qualifiedReviewer: boolean
+  readonly disclosure?: ReviewDisclosure
 }) {
   const [comment, setComment] = useState('')
   const [alternativeTaxon, setAlternativeTaxon] = useState('')
   const [outcome, setOutcome] = useState<ReviewOutcome | null>(null)
   const [verifiedImageDisplayed, setVerifiedImageDisplayed] = useState(false)
+  const [decisionLocked, setDecisionLocked] = useState(false)
+  const [contextRevealed, setContextRevealed] = useState(false)
   const readinessId = useId()
 
   const scientificDecisionReady =
@@ -40,6 +50,20 @@ export function ReviewLanding({
         : reviewOutcomeLabels[outcome],
     [outcome],
   )
+
+  function revealPermittedContext() {
+    if (outcome === null) return
+    setDecisionLocked(true)
+    setContextRevealed(true)
+  }
+
+  function startNewDraft() {
+    setOutcome(null)
+    setComment('')
+    setAlternativeTaxon('')
+    setDecisionLocked(false)
+    setContextRevealed(false)
+  }
 
   return (
     <article className="review-landing" aria-labelledby="review-heading">
@@ -94,10 +118,10 @@ export function ReviewLanding({
           <div className="media-card__body">
             {item.media.state === 'verified' ? (
               <p className="media-attribution">
-                {item.media.attribution}.{' '}
-                <a href={item.media.sourceUri}>Wikimedia Commons source</a>.{' '}
+                Image by {item.media.creator}.{' '}
                 <a href={item.media.licenseUri}>{item.media.licenseName}</a>.
-                Provider identity is an assertion, not a scientific decision.
+                Full source attribution stays withheld until the draft decision
+                is locked.
               </p>
             ) : null}
             <h2 id="review-image-heading">{item.question}</h2>
@@ -127,7 +151,7 @@ export function ReviewLanding({
                     data-outcome={candidateOutcome}
                     aria-pressed={outcome === candidateOutcome}
                     aria-describedby={scientific ? readinessId : undefined}
-                    disabled={scientific && !scientificDecisionReady}
+                    disabled={decisionLocked || (scientific && !scientificDecisionReady)}
                     onClick={() => setOutcome(candidateOutcome)}
                   >
                     {reviewOutcomeLabels[candidateOutcome]}
@@ -141,6 +165,7 @@ export function ReviewLanding({
             <textarea
               rows={4}
               value={comment}
+              disabled={decisionLocked}
               placeholder="Note a visible feature, ambiguity, or media problem."
               onChange={(event) => setComment(event.target.value)}
             />
@@ -150,7 +175,7 @@ export function ReviewLanding({
             <input
               type="text"
               value={alternativeTaxon}
-              disabled={!qualifiedReviewer}
+              disabled={!qualifiedReviewer || decisionLocked}
               aria-describedby="alternative-taxon-help"
               placeholder={qualifiedReviewer ? 'Accepted taxon name or key' : ''}
               onChange={(event) => setAlternativeTaxon(event.target.value)}
@@ -163,6 +188,66 @@ export function ReviewLanding({
           </p>
         </form>
       </div>
+
+      <section className="blind-context" aria-labelledby="blind-context-heading">
+        <div>
+          <p className="eyebrow">Blind review context</p>
+          <h2 id="blind-context-heading">
+            {contextRevealed ? 'Permitted context revealed' : 'Withheld until decision'}
+          </h2>
+        </div>
+        {contextRevealed ? (
+          <div className="blind-context__revealed" role="status">
+            <p>
+              The draft decision is now locked locally. Revealed context cannot
+              change it; start a new draft to return to a blind state.
+            </p>
+            {item.media.state === 'verified' ? (
+              <p>
+                <strong>Source:</strong> {item.media.attribution}.{' '}
+                <a href={item.media.sourceUri}>Wikimedia Commons source</a>.
+              </p>
+            ) : null}
+            <dl>
+              <DisclosureValue label="Model label" value={disclosure.modelLabel} />
+              <DisclosureValue label="Model score band" value={disclosure.modelScoreBand} />
+              <DisclosureValue label="Flickr query term" value={disclosure.flickrQueryTerm} />
+              <DisclosureValue
+                label="Source comment"
+                value={disclosure.sourceCommentExcerpt}
+              />
+              <DisclosureValue
+                label="Peer summary"
+                value={formatPeerSummary(disclosure)}
+              />
+            </dl>
+            <p className="blind-context__reason">{disclosure.reason}</p>
+            <button type="button" className="secondary-button" onClick={startNewDraft}>
+              Start a new blind draft
+            </button>
+          </div>
+        ) : (
+          <div>
+            <p>
+              The following context is absent from this decision surface and is
+              not merely visually obscured:
+            </p>
+            <ul>
+              {blindReviewFields.map((field) => (
+                <li key={field}>{blindReviewFieldLabels[field]}</li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              className="secondary-button"
+              disabled={outcome === null}
+              onClick={revealPermittedContext}
+            >
+              Lock draft decision and reveal permitted context
+            </button>
+          </div>
+        )}
+      </section>
 
       <div className="review-context-grid">
         <section className="map-card" aria-labelledby="map-preview-heading">
@@ -223,4 +308,19 @@ export function ReviewLanding({
       </div>
     </article>
   )
+}
+
+function DisclosureValue({ label, value }: { readonly label: string; readonly value: string | null }) {
+  return (
+    <div>
+      <dt>{label}</dt>
+      <dd>{value ?? 'Unavailable'}</dd>
+    </div>
+  )
+}
+
+function formatPeerSummary(disclosure: ReviewDisclosure): string | null {
+  const summary = disclosure.peerSummary
+  if (summary === null) return null
+  return `${summary.decisive} decisive · ${summary.yes} yes · ${summary.no} no · ${summary.uncertain} uncertain`
 }

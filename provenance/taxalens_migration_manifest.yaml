@@ -1,5 +1,5 @@
 schema_version: butterflylens-taxalens-migration-v1
-updated_at: "2026-07-18T01:40:00Z"
+updated_at: "2026-07-18T01:51:00Z"
 source_snapshot:
   repository: karikris/taxalens
   commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -126,6 +126,24 @@ components:
     tests:
       - Static migration tests for every required default, campaign gate, assignment invariant, privacy boundary, and pgTAP plan.
       - Twenty-one pgTAP assertions cover policy values, private privileges, and server-only progress introspection.
+    status: implemented_original_adapter
+  - component_id: taxalens-blind-review-disclosure-pattern-v1
+    source_repository: karikris/taxalens
+    source_commit: c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc
+    source_path: apps/web/src/review/domain/flickrReviewDisclosure.ts
+    destination_path: supabase/migrations/20260718014600_blind_review_disclosure.sql
+    migration_kind: interface_pattern
+    reason: Preserve pre-decision evidence separation and controlled reveal while moving the authority boundary into ButterflyLens RLS, column grants, and security-invoker projections.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Expose only assignment identity/status, question, media-integrity, and rights fields before a decision; exclude campaign names, assignment round/reason, storage, model, query, comment, peer, and reviewer-identity fields.
+      - Bind post-decision disclosure to the same reviewer's append-only event and expose banded model context and anonymous peer counts only.
+      - Lock the local draft before fixture context reveal and reset to a fresh blind state before the decision can change.
+    tests:
+      - Static database tests for the blind campaign trigger, allowlisted projection, event-bound disclosure, grants, and identity-free shape.
+      - Eighteen pgTAP assertions define privileges, views, RLS, and hidden base-table access.
+      - Six component tests cover pre-decision absence, locked reveal, unavailable context, reset, attribution, and media readiness.
     status: implemented_original_adapter
 butterflylens_owned_changes:
   - ownership_id: australia-wide-community-product

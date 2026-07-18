@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { ReviewLanding } from './ReviewLanding'
+import type { ReviewDisclosure } from './blindReviewModel'
 import {
   submittedReviewItem,
   type ReviewLandingItem,
@@ -20,11 +21,8 @@ describe('review-first landing experience', () => {
     expect(
       screen.getByRole('img', { name: 'Rights-cleared butterfly review fixture' }),
     ).toBeInTheDocument()
-    expect(screen.getByText(/by Jeevan Jose, CC BY-SA 4.0/)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Wikimedia Commons source' })).toHaveAttribute(
-      'href',
-      expect.stringContaining('commons.wikimedia.org'),
-    )
+    expect(screen.getByText(/Image by Jeevan Jose/)).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Wikimedia Commons source' })).not.toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'CC BY-SA 4.0' })).toHaveAttribute(
       'href',
       'https://creativecommons.org/licenses/by-sa/4.0/',
@@ -44,8 +42,14 @@ describe('review-first landing experience', () => {
       screen.getByText(/model labels, model scores.*are hidden/i),
     ).toBeInTheDocument()
     expect(screen.queryByRole('meter')).not.toBeInTheDocument()
-    expect(screen.queryByText(/majority vote/i)).not.toBeInTheDocument()
+    expect(screen.getByText('Majority vote')).toBeInTheDocument()
+    expect(screen.queryByText(/majority says/i)).not.toBeInTheDocument()
     expect(screen.getByText(/does not submit or claim a stored review/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Lock draft decision and reveal permitted context',
+      }),
+    ).toBeDisabled()
   })
 
   it('updates the visible contribution without claiming persistence', () => {
@@ -105,5 +109,62 @@ describe('review-first landing experience', () => {
     }
     expect(screen.getByRole('button', { name: 'Can’t view' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'Skip' })).toBeEnabled()
+  })
+
+  it('reveals allowlisted context only after locking a decision', () => {
+    const disclosure: ReviewDisclosure = {
+      state: 'available',
+      reason: 'Synthetic post-decision context for the component test.',
+      modelLabel: 'sentinel-model-label',
+      modelScoreBand: 'sentinel-score-band',
+      flickrQueryTerm: 'sentinel-query-term',
+      sourceCommentExcerpt: 'sentinel-source-comment',
+      peerSummary: { decisive: 3, yes: 2, no: 1, uncertain: 0 },
+      scientificClaimAllowed: false,
+    }
+    render(
+      <ReviewLanding
+        item={submittedReviewItem}
+        qualifiedReviewer={false}
+        disclosure={disclosure}
+      />,
+    )
+
+    for (const hiddenValue of [
+      'sentinel-model-label',
+      'sentinel-score-band',
+      'sentinel-query-term',
+      'sentinel-source-comment',
+    ]) {
+      expect(screen.queryByText(hiddenValue)).not.toBeInTheDocument()
+    }
+
+    const image = screen.getByRole('img', {
+      name: 'Rights-cleared butterfly review fixture',
+    })
+    fireEvent.load(image)
+    fireEvent.click(screen.getByRole('button', { name: 'Yes' }))
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Lock draft decision and reveal permitted context',
+      }),
+    )
+
+    for (const revealedValue of [
+      'sentinel-model-label',
+      'sentinel-score-band',
+      'sentinel-query-term',
+      'sentinel-source-comment',
+    ]) {
+      expect(screen.getByText(revealedValue)).toBeInTheDocument()
+    }
+    expect(screen.getByText(/3 decisive · 2 yes · 1 no · 0 uncertain/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Wikimedia Commons source' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'No' })).toBeDisabled()
+    expect(screen.getByRole('textbox', { name: /Comment/ })).toBeDisabled()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Start a new blind draft' }))
+    expect(screen.queryByText('sentinel-model-label')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Yes' })).toBeEnabled()
   })
 })

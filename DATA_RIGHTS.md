@@ -235,7 +235,9 @@ Attribution: “Common Lime Butterfly Papilio demoleus UP by Kadavoor by Jeevan
 Jose, CC BY-SA 4.0.” The [Wikimedia Commons source](https://commons.wikimedia.org/wiki/File:Common_Lime_Butterfly_Papilio_demoleus_UP_by_Kadavoor.jpg)
 identifies Jeevan Jose as author and copyright holder and offers the file under
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The page shows
-the attribution and both links next to the image.
+the creator and licence next to the image. To avoid disclosing the provider's
+taxon label during blind review, the full title and Commons source link appear
+as soon as the reviewer locks a draft decision and opens permitted context.
 
 This is a provider-labelled fixture, not occurrence evidence, a representative
 sample, or verified taxonomic truth. Its target label stays hidden from the
