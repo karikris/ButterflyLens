@@ -61,3 +61,16 @@ It retains state, non-secret configuration, and logs for recovery/audit.
 This is an unsigned development LaunchAgent. A distributable production helper
 must move into a signed app bundle and use Apple's Service Management path; this
 script does not claim production signing or notarization.
+
+## Bounded media admission
+
+`media_pipeline.py` accepts local caller-supplied media only. Each stage queue
+has independent record and byte ceilings; metadata is flushed into bounded
+Zstandard Parquet parts. Exact durable acknowledgements are required for every
+unique source object, Parquet part, and checkpoint manifest before any input
+cache path is removed. Failed or incomplete acknowledgements preserve all
+source paths.
+
+Rolling prefetch is disabled until an M5 measurement demonstrates a useful
+bounded setting. YOLOE, full-frame model inputs, BioCLIP, and scoring are
+recorded only as `unfinished_not_run`; no placeholder model evidence is made.

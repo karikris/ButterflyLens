@@ -18,6 +18,16 @@ from .identity import (
 from .configuration import ConfigurationError, WorkerServiceConfiguration, load_environment_file
 from .keychain import KeychainError, KeychainSecretProvider
 from .local_sink import LocalJsonlHeartbeatSink, LocalSinkError
+from .media_pipeline import (
+    MEDIA_PIPELINE_SCHEMA_VERSION,
+    UNFINISHED_MODEL_STAGES,
+    BoundedStageQueue,
+    DurableArtifactStore,
+    MediaInput,
+    MediaPipelineError,
+    MediaPipelinePolicy,
+    run_bounded_media_pipeline,
+)
 
 __all__ = [
     "HeartbeatError",
@@ -36,6 +46,14 @@ __all__ = [
     "load_environment_file",
     "LocalJsonlHeartbeatSink",
     "LocalSinkError",
+    "MEDIA_PIPELINE_SCHEMA_VERSION",
+    "UNFINISHED_MODEL_STAGES",
+    "BoundedStageQueue",
+    "DurableArtifactStore",
+    "MediaInput",
+    "MediaPipelineError",
+    "MediaPipelinePolicy",
+    "run_bounded_media_pipeline",
     "load_or_create_registration",
     "probe_machine_profile",
 ]
