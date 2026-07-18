@@ -78,6 +78,18 @@ SCHEMA_GROUPS = {
             "tests/test_first_nations_name_policy.py#test_assertion_contract_rejects_missing_community",
         ),
     },
+    "gbif-evidence": {
+        "prefix": "data/packs/australian_butterflies/v1/gbif/schemas/",
+        "count": 4,
+        "positive": (
+            "tests/test_gbif_download_receipt.py#test_receipt_matches_closed_schema",
+            "tests/test_gbif_evidence_pack.py#test_manifest_and_all_artifacts_reconcile",
+        ),
+        "negative": (
+            "tests/test_gbif_evidence_builder.py#test_archive_checksum_mismatch_fails_before_build",
+            "tests/test_gbif_evidence_builder.py#test_receipt_may_not_replace_ala_authority",
+        ),
+    },
     "openai": {
         "prefix": "packages/openai/",
         "count": 5,
@@ -507,7 +519,7 @@ class ContractCoverageTests(unittest.TestCase):
 
     def test_every_tracked_json_schema_has_structural_and_named_coverage(self) -> None:
         schema_paths = tracked("*.schema.json")
-        self.assertEqual(len(schema_paths), 36)
+        self.assertEqual(len(schema_paths), 40)
         grouped: set[str] = set()
         for name, group in SCHEMA_GROUPS.items():
             paths = tuple(path for path in schema_paths if path.startswith(group["prefix"]))

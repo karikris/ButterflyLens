@@ -32,6 +32,7 @@ USER_AGENT = (
     "ButterflyLens/0.1 (+https://github.com/karikris/ButterflyLens; "
     "GBIF receipt-bound evidence acquisition)"
 )
+ROOT = Path(__file__).resolve().parents[1]
 
 FieldSpec = tuple[str, str | None, str, bool, str]
 
@@ -155,6 +156,62 @@ def write_json(path: Path, value: Any) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_bytes(canonical_json(value) + b"\n")
     os.replace(temporary, path)
+
+
+def write_pretty_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(value, ensure_ascii=False, allow_nan=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(temporary, path)
+
+
+def ordered_mapping(value: dict[str, Any], key_order: tuple[str, ...]) -> dict[str, Any]:
+    return {
+        key: value[key]
+        for key in (*key_order, *(key for key in value if key not in key_order))
+        if key in value
+    }
+
+
+def ordered_rights_manifest(value: dict[str, Any]) -> dict[str, Any]:
+    source_order = (
+        "source_id",
+        "provider",
+        "dataset",
+        "source_url",
+        "retrieved_at",
+        "licence",
+        "licence_url",
+        "terms_url",
+        "citation_guidance_url",
+        "attribution",
+        "scope_note",
+    )
+    artifact_order = (
+        "path",
+        "fingerprint",
+        "provider",
+        "source_id",
+        "licence",
+        "attribution",
+        "processing_allowed",
+        "display_allowed",
+        "redistribution_allowed",
+        "removal_state",
+        "scope_note",
+    )
+    result = ordered_mapping(
+        value,
+        ("schema_version", "generated_at", "sources", "artifacts"),
+    )
+    result["sources"] = [ordered_mapping(row, source_order) for row in value["sources"]]
+    result["artifacts"] = [
+        ordered_mapping(row, artifact_order) for row in value["artifacts"]
+    ]
+    return result
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -760,6 +817,174 @@ def build(args: argparse.Namespace) -> None:
     )
 
 
+def publish(args: argparse.Namespace) -> None:
+    gbif_dir = args.gbif_dir
+    evidence_path = gbif_dir / "gbif_evidence_manifest.json"
+    receipt_path = gbif_dir / "gbif_download_receipt.json"
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    validate_receipt(receipt)
+    if evidence.get("schema_version") != MANIFEST_SCHEMA_VERSION:
+        raise GbifEvidenceError("unexpected GBIF evidence manifest schema")
+    semantic = dict(evidence)
+    expected_fingerprint = semantic.pop("evidence_pack_fingerprint", None)
+    if expected_fingerprint != sha256_bytes(canonical_json(semantic)):
+        raise GbifEvidenceError("GBIF evidence manifest fingerprint mismatch")
+    artifact_versions = {
+        "occurrences": OCCURRENCE_SCHEMA_VERSION,
+        "multimedia": MULTIMEDIA_SCHEMA_VERSION,
+        "datasets": DATASET_SCHEMA_VERSION,
+    }
+    for name, artifact_record in evidence["artifacts"].items():
+        path = gbif_dir / artifact_record["path"]
+        if not path.is_file() or sha256_file(path) != artifact_record["physical_sha256"]:
+            raise GbifEvidenceError(f"GBIF evidence artifact mismatch: {name}")
+    for name, schema_record in evidence["schemas"].items():
+        path = gbif_dir / schema_record["path"]
+        if not path.is_file() or sha256_file(path) != schema_record["physical_sha256"]:
+            raise GbifEvidenceError(f"GBIF evidence schema mismatch: {name}")
+
+    pack = json.loads(args.pack_manifest.read_text(encoding="utf-8"))
+    pack["gbif_state"] = {
+        "status": "built_rights_review_required",
+        "generated_at": evidence["generated_at"],
+        "download_key": receipt["download"]["key"],
+        "doi": receipt["download"]["doi"],
+        "receipt_path": "gbif/gbif_download_receipt.json",
+        "receipt_fingerprint": receipt["receipt_fingerprint"],
+        "evidence_manifest_path": "gbif/gbif_evidence_manifest.json",
+        "evidence_manifest_sha256": sha256_file(evidence_path),
+        "evidence_pack_fingerprint": evidence["evidence_pack_fingerprint"],
+        "occurrence_rows": evidence["artifacts"]["occurrences"]["row_count"],
+        "multimedia_metadata_rows": evidence["artifacts"]["multimedia"]["row_count"],
+        "dataset_rows": evidence["artifacts"]["datasets"]["row_count"],
+        "raw_archive_committed_to_git": False,
+        "media_bytes_downloaded": False,
+        "flickr_api_calls_made": False,
+        "authoritative_ala_baseline": "ButterflyLens rebuilt baseline",
+        "gbif_replaces_ala_baseline": False,
+        "public_release_state": "blocked_pending_record_and_dataset_rights_review",
+    }
+    pack_artifacts = pack["artifacts"]
+    pack_artifacts["gbif/gbif_download_receipt.json"] = {
+        "physical_sha256": sha256_file(receipt_path),
+        "row_count": 1,
+        "schema_version": RECEIPT_SCHEMA_VERSION,
+    }
+    pack_artifacts["gbif/gbif_evidence_manifest.json"] = {
+        "physical_sha256": sha256_file(evidence_path),
+        "row_count": 1,
+        "schema_version": MANIFEST_SCHEMA_VERSION,
+    }
+    for name, artifact_record in evidence["artifacts"].items():
+        pack_artifacts[f"gbif/{artifact_record['path']}"] = {
+            "physical_sha256": artifact_record["physical_sha256"],
+            "row_count": artifact_record["row_count"],
+            "schema_version": artifact_versions[name],
+        }
+    for name, schema_record in evidence["schemas"].items():
+        pack_artifacts[f"gbif/{schema_record['path']}"] = {
+            "physical_sha256": schema_record["physical_sha256"],
+            "row_count": 1,
+            "schema_version": PARQUET_SCHEMA_VERSION,
+        }
+    sources = [
+        source
+        for source in pack["occurrence_sources"]
+        if source.get("provider") != "Global Biodiversity Information Facility"
+    ]
+    sources.append(
+        {
+            "path": "gbif/gbif_download_receipt.json",
+            "physical_sha256": sha256_file(receipt_path),
+            "retrieved_at": receipt["verified_at"],
+            "provider": "Global Biodiversity Information Facility",
+            "snapshot_id": receipt["download"]["key"],
+            "snapshot_fingerprint": receipt["receipt_fingerprint"],
+            "doi": receipt["download"]["doi"],
+            "role": "complementary_occurrence_evidence_ala_baseline_remains_authoritative",
+        }
+    )
+    pack["occurrence_sources"] = sources
+    write_json(args.pack_manifest, pack)
+
+    rights = json.loads(args.rights_manifest.read_text(encoding="utf-8"))
+    source_id = f"gbif-occurrence-download-{receipt['download']['key']}"
+    rights["generated_at"] = args.published_at
+    rights["sources"] = [
+        source for source in rights["sources"] if source.get("source_id") != source_id
+    ]
+    rights["sources"].append(
+        {
+            "source_id": source_id,
+            "provider": "GBIF and the 126 constituent data publishers identified in the frozen DWCA",
+            "dataset": "Australian Papilionoidea occurrence and multimedia-metadata download",
+            "source_url": receipt["download"]["doi_url"],
+            "retrieved_at": receipt["verified_at"],
+            "licence": "MIXED-CC0-CC-BY-CC-BY-NC-DOWNLOAD-CC-BY-NC-4.0",
+            "licence_url": "data/packs/australian_butterflies/v1/gbif/gbif_download_receipt.json",
+            "terms_url": "https://www.gbif.org/terms",
+            "attribution": receipt["download"]["citation"] + "; every constituent dataset citation and every row/media attribution retained in the evidence pack.",
+            "scope_note": "571,755 processed occurrence assertions, 542,052 media-metadata rows with no media bytes, and 126 dataset citation/rights rows. Exact per-row and per-dataset rights, withheld/generalisation text, uncertainty, and quality issues remain attached. Provider labels are not human verification. Processing is permitted for the governed internal evidence workflow; display and redistribution remain blocked pending rights, sensitivity, quality, provenance, and human review. The rebuilt ALA baseline remains authoritative.",
+        }
+    )
+    relative_root = Path("data/packs/australian_butterflies/v1/gbif")
+    rights_paths = {
+        relative_root / "gbif_download_receipt.json",
+        relative_root / "gbif_evidence_manifest.json",
+        relative_root / "gbif_occurrences.parquet",
+        relative_root / "gbif_multimedia.parquet",
+        relative_root / "gbif_datasets.parquet",
+        relative_root / "schemas/gbif_download_receipt.schema.json",
+        relative_root / "schemas/gbif_occurrence.schema.json",
+        relative_root / "schemas/gbif_multimedia.schema.json",
+        relative_root / "schemas/gbif_dataset.schema.json",
+    }
+    rights["artifacts"] = [
+        record
+        for record in rights["artifacts"]
+        if Path(record.get("path", "")) not in rights_paths
+    ]
+    for relative in sorted(rights_paths, key=lambda value: value.as_posix()):
+        path = ROOT / relative
+        rights["artifacts"].append(
+            {
+                "path": relative.as_posix(),
+                "fingerprint": f"sha256:{sha256_file(path)}",
+                "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+                "source_id": source_id,
+                "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+                "attribution": receipt["download"]["citation"] + "; constituent and media attribution retained in the frozen evidence.",
+                "processing_allowed": True,
+                "display_allowed": False,
+                "redistribution_allowed": False,
+                "removal_state": "active_internal_rights_review_required",
+            }
+        )
+    pack_relative = "data/packs/australian_butterflies/v1/manifest.json"
+    for record in rights["artifacts"]:
+        if record.get("path") == pack_relative:
+            record["fingerprint"] = f"sha256:{sha256_file(args.pack_manifest)}"
+            record["display_allowed"] = True
+            record["redistribution_allowed"] = True
+            record["scope_note"] = "Umbrella metadata over source-specific artifacts. The new GBIF evidence is internal and rights-blocked; the ALA baseline remains authoritative."
+            break
+    else:
+        raise GbifEvidenceError("data-rights manifest lacks the root pack artifact")
+    write_pretty_json(args.rights_manifest, ordered_rights_manifest(rights))
+    print(
+        json.dumps(
+            {
+                "pack_manifest": str(args.pack_manifest),
+                "pack_manifest_sha256": sha256_file(args.pack_manifest),
+                "rights_manifest": str(args.rights_manifest),
+                "rights_artifacts": len(rights["artifacts"]),
+            },
+            sort_keys=True,
+        )
+    )
+
+
 def parser() -> argparse.ArgumentParser:
     value = argparse.ArgumentParser(description=__doc__)
     commands = value.add_subparsers(dest="command", required=True)
@@ -774,6 +999,12 @@ def parser() -> argparse.ArgumentParser:
     build_command.add_argument("--output-dir", type=Path, required=True)
     build_command.add_argument("--generated-at", required=True)
     build_command.set_defaults(handler=build)
+    publish_command = commands.add_parser("publish", help="integrate built Parquet evidence into pack and rights manifests")
+    publish_command.add_argument("--gbif-dir", type=Path, required=True)
+    publish_command.add_argument("--pack-manifest", type=Path, required=True)
+    publish_command.add_argument("--rights-manifest", type=Path, required=True)
+    publish_command.add_argument("--published-at", required=True)
+    publish_command.set_defaults(handler=publish)
     return value
 
 

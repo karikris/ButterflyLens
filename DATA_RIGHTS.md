@@ -1,6 +1,6 @@
 # Data, API, Media, and Community Rights Audit
 
-Audit date: `2026-07-17`
+Audit updated: `2026-07-19`
 
 ButterflyLens separates permission to query an API, permission to store metadata, permission to download media, permission to transform or run models over media, permission to display media, and permission to redistribute evidence. Passing one of these gates never implies the others.
 
@@ -8,18 +8,18 @@ This document is engineering evidence, not legal advice. Provider terms can chan
 
 ## Gate outcome
 
-No provider credential, boundary geometry, source-image collection in Git,
-human-verified reference bank, community review, or export is stored in
-ButterflyLens at this audit. Permitted reference source objects exist only in
-the ignored local cache. A selected ALA occurrence snapshot now exists under
-the controls below. The remaining statuses define what must be true before
-later artifacts become eligible.
+No provider credential, boundary geometry, GBIF source-media byte, Flickr
+payload, human-verified reference bank, community review, or export is stored
+in ButterflyLens at this audit. Permitted iNaturalist reference source objects
+exist only in the ignored local cache. Selected ALA and GBIF occurrence-
+evidence snapshots exist under the controls below. The remaining statuses
+define what must be true before later artifacts become eligible.
 
 | Source | Current status | Release gate |
 | --- | --- | --- |
 | Flickr API | No key configured or call made. | Register the application/use, accept current API terms, identify commercial status, activate the single global budget, and pass per-photo rights/display/removal checks. |
 | Atlas of Living Australia (ALA) | Selected evidence snapshot frozen on 17 July 2026; downstream public-product release remains blocked for three dataset-rights conflicts. | Preserve the exact query/archive fingerprint, contributing-resource citations, per-row licence, quality/sensitivity state, dataset review state, and downstream eligibility. Resolve or exclude the flagged resources and recheck terms before release. |
-| GBIF | Bounded candidate-reference metadata imported; compatible media licences classified, but every GBIF media host remains download-blocked and no DOI was minted. | Approve each required provider host and retain dataset, publisher, occurrence, media, creator, licence, attribution, and source fingerprints before any later byte acquisition. |
+| GBIF | DOI-bearing Australian Papilionoidea download `10.15468/dl.7uut3k` is stored as 571,755 occurrence, 542,052 media-metadata, and 126 dataset-rights Parquet rows. No media bytes were fetched; public release is rights-blocked. The earlier bounded candidate-reference import remains separate. | Resolve or exclude record/dataset/media rights and sensitivity conflicts, approve each required provider host, and retain every source fingerprint and attribution before display, redistribution, model use, or later byte acquisition. |
 | iNaturalist | Automated `cc0`/`cc-by`, exact-taxon, host, download, and decode gate complete: 2,906 provisional objects valid and four HTTP 404 rows quarantined. | Keep every candidate unreviewed, enforce the commercial-AI-training prohibition, preserve creator/licence/source evidence, and complete later duplicate, routing, embedding, and human-review gates. |
 | ABS ASGS boundaries | ALA-indexed LGA 2023 contextual values selected; no geometry copied. | Retain the ALA layer metadata receipt, CC BY 4.0 attribution, and statistical-boundary qualification; a future geometry file requires its own checksum and gate. |
 | DCCEEW IBRA 7 | ALA-indexed IBRA v7 region values selected; no geometry copied. | Retain the ALA layer metadata receipt and CC BY 4.0 attribution; a future geometry file requires its own checksum and gate. |
@@ -149,6 +149,27 @@ Authoritative sources inspected:
 ButterflyLens must retain publisher ownership identifiers with every forwarded record, comply with the licence selected by each publisher, and publicly acknowledge/cite publishers. Prefer DOI-bearing downloads; when APIs or combined sources are used, preserve dataset keys and register/cite a derived dataset where appropriate.
 
 GBIF occurrence datasets may be CC0, CC BY, or CC BY-NC. The most restrictive applicable use gate survives aggregation. A record licence never automatically covers associated media: inspect and retain each image licence, creator, attribution, and parent occurrence citation separately. GBIF does not warrant data quality/completeness; reference-provider labels remain provisional evidence until reviewed.
+
+The frozen DOI-bearing download `0004170-260715120105164` is cited as:
+“GBIF.org (18 July 2026) GBIF Occurrence Download
+https://doi.org/10.15468/dl.7uut3k”. Its exact 261,743,165-byte source DWCA has
+SHA-256
+`7807622f6c2539ac536cb5f06d17087da3ecdd83b13a0dec54764e3800ff8f2b`
+and remains outside Git. The checked-in evidence projection retains 571,755
+processed occurrence rows, 542,052 multimedia metadata rows with no media
+bytes, and 126 constituent dataset citations/rights records. The download-
+level licence is CC BY-NC 4.0; constituent dataset rights comprise 76 CC BY
+4.0, 28 CC BY-NC 4.0, and 22 CC0 statements. Exact record and media licences
+remain attached rather than inheriting a blanket permission.
+
+The evidence manifest preserves source-row and archive-bound fingerprints,
+dataset keys, publisher/citation fields, information-withheld and
+generalisation text, coordinate uncertainty, issue codes, taxonomy status,
+and media attribution metadata. These are provider assertions, not human
+verification, current-presence evidence, absence evidence, or permission to
+display or redistribute. The independently rebuilt ButterflyLens ALA baseline
+remains authoritative; the GBIF pack is complementary comparison, provenance,
+taxonomy-reconciliation, and future keyword/reference evidence only.
 
 ## iNaturalist
 

@@ -151,8 +151,13 @@ class ButterflyLensIntegrationTests(unittest.TestCase):
                 relative_path,
             )
         self.assertEqual(catalogue["speciesCount"], 463)
+        repository = SubmittedEvidenceRepository(ROOT)
+        submitted_pack_fingerprint = repository.citation("taxonomy_pack")[
+            "fingerprint"
+        ].removeprefix("sha256:")
         self.assertEqual(
-            catalogue["sourceFingerprints"]["packManifest"], file_sha256(pack_path)
+            catalogue["sourceFingerprints"]["packManifest"],
+            submitted_pack_fingerprint,
         )
         self.assertEqual(
             catalogue["sourceFingerprints"]["alaSnapshotManifest"],
@@ -169,10 +174,9 @@ class ButterflyLensIntegrationTests(unittest.TestCase):
         )
         self.assertFalse(catalogue["states"]["scientificClaimAllowed"])
 
-        repository = SubmittedEvidenceRepository(ROOT)
         self.assertEqual(
             repository.citation("taxonomy_pack")["fingerprint"],
-            f"sha256:{file_sha256(pack_path)}",
+            f"sha256:{catalogue['sourceFingerprints']['packManifest']}",
         )
         self.assertEqual(
             repository.citation("ala_snapshot")["fingerprint"],

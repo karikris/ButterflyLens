@@ -33,3 +33,36 @@ The raw 261,743,165-byte DWCA is intentionally not stored in Git. Its exact
 SHA-256 and member inventory are frozen in `gbif_download_receipt.json` so an
 operator can acquire and verify it separately before running the offline
 Parquet builder. No media bytes are downloaded, and no Flickr API call is made.
+
+## Rebuild
+
+Acquisition is the only network-enabled command and is never run by default
+tests:
+
+```sh
+uv run python scripts/build_gbif_evidence.py acquire \
+  --receipt data/packs/australian_butterflies/v1/gbif/gbif_download_receipt.json \
+  --output /operator/controlled/0004170-260715120105164.zip
+```
+
+The build is offline and receipt-bound:
+
+```sh
+uv run python scripts/build_gbif_evidence.py build \
+  --archive /operator/controlled/0004170-260715120105164.zip \
+  --receipt data/packs/australian_butterflies/v1/gbif/gbif_download_receipt.json \
+  --output-dir data/packs/australian_butterflies/v1/gbif \
+  --generated-at 2026-07-18T16:09:03Z
+```
+
+The checked-in build contains:
+
+- 571,755 processed occurrence-evidence rows in
+  `gbif_occurrences.parquet`;
+- 542,052 media-metadata rows in `gbif_multimedia.parquet`, with no media
+  bytes; and
+- 126 constituent dataset/citation/rights rows in `gbif_datasets.parquet`.
+
+`gbif_evidence_manifest.json` binds every Parquet file and closed schema to
+the source receipt with physical and logical SHA-256 fingerprints. The root
+pack and rights manifests keep all GBIF data display/redistribution blocked.

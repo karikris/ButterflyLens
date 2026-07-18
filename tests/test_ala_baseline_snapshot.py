@@ -562,20 +562,23 @@ class AlaPublishedSnapshotTests(unittest.TestCase):
             self.builder.sha256_file(ALA / "ala_snapshot_manifest.json"),
         )
         self.assertEqual(ala_state["status"], "built_rights_review_required")
+        ala_source = next(
+            source
+            for source in self.pack_manifest["occurrence_sources"]
+            if source["provider"] == self.builder.ALA_PROVIDER
+        )
         self.assertEqual(
-            self.pack_manifest["occurrence_sources"],
-            [
-                {
-                    "path": "ala/ala_snapshot_receipt.json",
-                    "physical_sha256": self.builder.sha256_file(
-                        ALA / "ala_snapshot_receipt.json"
-                    ),
-                    "retrieved_at": self.receipt["retrieved_at"],
-                    "provider": self.builder.ALA_PROVIDER,
-                    "snapshot_id": self.receipt["snapshot_id"],
-                    "snapshot_fingerprint": self.receipt["snapshot_fingerprint"],
-                }
-            ],
+            ala_source,
+            {
+                "path": "ala/ala_snapshot_receipt.json",
+                "physical_sha256": self.builder.sha256_file(
+                    ALA / "ala_snapshot_receipt.json"
+                ),
+                "retrieved_at": self.receipt["retrieved_at"],
+                "provider": self.builder.ALA_PROVIDER,
+                "snapshot_id": self.receipt["snapshot_id"],
+                "snapshot_fingerprint": self.receipt["snapshot_fingerprint"],
+            },
         )
 
     def test_dataset_uid_citation_counts_and_licences_reconcile(self) -> None:

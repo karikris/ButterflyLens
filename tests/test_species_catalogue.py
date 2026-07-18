@@ -52,6 +52,7 @@ class SpeciesCatalogueTests(unittest.TestCase):
         source_commit = operations["submittedSnapshot"]["sourceCommit"]
         with tempfile.TemporaryDirectory() as temporary_directory:
             frozen_rights = Path(temporary_directory) / "data_rights_manifest.json"
+            frozen_manifest = Path(temporary_directory) / "manifest.json"
             frozen_rights.write_bytes(
                 subprocess.run(
                     [
@@ -64,11 +65,24 @@ class SpeciesCatalogueTests(unittest.TestCase):
                     capture_output=True,
                 ).stdout
             )
+            frozen_manifest.write_bytes(
+                subprocess.run(
+                    [
+                        "git",
+                        "show",
+                        f"{source_commit}:data/packs/australian_butterflies/v1/manifest.json",
+                    ],
+                    cwd=ROOT,
+                    check=True,
+                    capture_output=True,
+                ).stdout
+            )
             self.assertEqual(
                 BUILDER.sha256_file(frozen_rights),
                 self.catalogue["sourceFingerprints"]["dataRightsManifest"],
             )
             rebuilt = BUILDER.build_catalogue(
+                manifest_path=frozen_manifest,
                 rights_path=frozen_rights,
                 generated_at=self.catalogue["generatedAt"],
             )

@@ -121,12 +121,16 @@ def species_slug(scientific_name: str, key: str) -> str:
 
 
 def build_catalogue(
-    *, pack: Path = DEFAULT_PACK, rights_path: Path = DEFAULT_RIGHTS, generated_at: str
+    *,
+    pack: Path = DEFAULT_PACK,
+    manifest_path: Path | None = None,
+    rights_path: Path = DEFAULT_RIGHTS,
+    generated_at: str,
 ) -> dict[str, Any]:
     if not UTC_PATTERN.fullmatch(generated_at):
         raise SpeciesCatalogueError("generated_at must be an RFC 3339 UTC second timestamp")
 
-    manifest_path = pack / "manifest.json"
+    manifest_path = manifest_path or pack / "manifest.json"
     manifest = load_json(manifest_path)
     rights = load_json(rights_path)
     if manifest.get("pack_id") != "australian-butterflies-v1":
@@ -436,12 +440,16 @@ def write_catalogue(catalogue: dict[str, Any], output: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pack", type=Path, default=DEFAULT_PACK)
+    parser.add_argument("--manifest", type=Path)
     parser.add_argument("--rights", type=Path, default=DEFAULT_RIGHTS)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--generated-at", required=True)
     args = parser.parse_args()
     catalogue = build_catalogue(
-        pack=args.pack, rights_path=args.rights, generated_at=args.generated_at
+        pack=args.pack,
+        manifest_path=args.manifest,
+        rights_path=args.rights,
+        generated_at=args.generated_at,
     )
     write_catalogue(catalogue, args.output)
     print(

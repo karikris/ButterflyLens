@@ -13,12 +13,30 @@ ROOT = Path(__file__).resolve().parents[1]
 SESSION_ID = "019f7038-92ae-7021-8318-53ca97648404"
 FIRST_COMMIT = "db0657fd432b698c167d559328a57b0befef6664"
 AUDITED_COMMIT = "8ebbd37a7169d1b0a38e1f6fb6a3e0aac39bbb97"
+FINALIZATION_COMMIT = "51e3dc3d84978432b3b1991a5a375a581684b64d"
 
 
 def _jsonl(path: str) -> list[dict[str, object]]:
     return [
         json.loads(line)
         for line in (ROOT / path).read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
+def _git_bytes(commit: str, path: str) -> bytes:
+    return subprocess.run(
+        ["git", "show", f"{commit}:{path}"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
+
+
+def _frozen_jsonl(path: str) -> list[dict[str, object]]:
+    return [
+        json.loads(line)
+        for line in _git_bytes(FINALIZATION_COMMIT, path).decode("utf-8").splitlines()
         if line.strip()
     ]
 
@@ -48,8 +66,8 @@ class BuildWeekProvenanceTests(unittest.TestCase):
         cls.decisions = (ROOT / "HUMAN_DECISIONS.md").read_text(encoding="utf-8")
         cls.session_path = ROOT / "provenance" / "sessions" / f"{SESSION_ID}.json"
         cls.session = json.loads(cls.session_path.read_text(encoding="utf-8"))
-        cls.commits = _jsonl("provenance/commits.jsonl")
-        cls.models = _jsonl("provenance/model_usage.jsonl")
+        cls.commits = _frozen_jsonl("provenance/commits.jsonl")
+        cls.models = _frozen_jsonl("provenance/model_usage.jsonl")
 
     def test_immutable_baseline_and_audit_range_match_git(self) -> None:
         baseline = (ROOT / "BUILD_WEEK_BASELINE.md").read_text(encoding="utf-8")
@@ -112,8 +130,8 @@ class BuildWeekProvenanceTests(unittest.TestCase):
         self.assertIn("zero network calls", self.delta)
 
     def test_tool_ledgers_and_headroom_receipts_are_exact(self) -> None:
-        self.assertEqual(len(_jsonl("provenance/githits.jsonl")), 130)
-        self.assertEqual(len(_jsonl("provenance/valyu.jsonl")), 104)
+        self.assertEqual(len(_frozen_jsonl("provenance/githits.jsonl")), 130)
+        self.assertEqual(len(_frozen_jsonl("provenance/valyu.jsonl")), 104)
         hashes = {
             "504a09159e203964093d4131",
             "7621abd7c83707de1ab1f539",
@@ -136,7 +154,7 @@ class BuildWeekProvenanceTests(unittest.TestCase):
             self.session["audit_boundary"]["containing_finalization_commit"]
         )
         for artifact in self.session["provenance_artifacts"]:
-            payload = (ROOT / artifact["path"]).read_bytes()
+            payload = _git_bytes(FINALIZATION_COMMIT, artifact["path"])
             self.assertEqual(hashlib.sha256(payload).hexdigest(), artifact["sha256"])
         self.assertIn("cannot embed its own full SHA", self.delta)
         self.assertIn("no feedback opening or\n  submission is claimed", self.delta)
@@ -194,8 +212,11 @@ class BuildWeekProvenanceTests(unittest.TestCase):
         self.assertIn("Human direction is not post-change review", self.delta)
 
     def test_task_corpus_and_test_evidence_counts_are_fixed(self) -> None:
-        reports = list((ROOT / "provenance" / "task_reports").glob("*.md"))
-        plans = list((ROOT / "provenance" / "task_plans").glob("*.md"))
+        files = _git(
+            "ls-tree", "-r", "--name-only", FINALIZATION_COMMIT, "provenance"
+        ).splitlines()
+        reports = [path for path in files if path.startswith("provenance/task_reports/")]
+        plans = [path for path in files if path.startswith("provenance/task_plans/")]
         self.assertEqual(len(reports), 65)
         self.assertEqual(len(plans), 39)
         counts = self.session["provenance_counts"]

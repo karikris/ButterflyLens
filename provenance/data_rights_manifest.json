@@ -1,6 +1,6 @@
 {
   "schema_version": "butterflylens-data-rights/v1",
-  "generated_at": "2026-07-18T01:34:00Z",
+  "generated_at": "2026-07-18T16:09:03Z",
   "sources": [
     {
       "source_id": "butterflylens-australian-butterflies-pack-v1",
@@ -207,6 +207,18 @@
       "terms_url": "https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia",
       "attribution": "Common Lime Butterfly Papilio demoleus UP by Kadavoor by Jeevan Jose, CC BY-SA 4.0",
       "scope_note": "One exact JPEG was copied from karikris/taxalens commit c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc for a credential-free review replay. The provider identity is an assertion; the fixture is not representative and permits no scientific claim. The asset was renamed without altering its bytes."
+    },
+    {
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "provider": "GBIF and the 126 constituent data publishers identified in the frozen DWCA",
+      "dataset": "Australian Papilionoidea occurrence and multimedia-metadata download",
+      "source_url": "https://doi.org/10.15468/dl.7uut3k",
+      "retrieved_at": "2026-07-18T15:53:05Z",
+      "licence": "MIXED-CC0-CC-BY-CC-BY-NC-DOWNLOAD-CC-BY-NC-4.0",
+      "licence_url": "data/packs/australian_butterflies/v1/gbif/gbif_download_receipt.json",
+      "terms_url": "https://www.gbif.org/terms",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; every constituent dataset citation and every row/media attribution retained in the evidence pack.",
+      "scope_note": "571,755 processed occurrence assertions, 542,052 media-metadata rows with no media bytes, and 126 dataset citation/rights rows. Exact per-row and per-dataset rights, withheld/generalisation text, uncertainty, and quality issues remain attached. Provider labels are not human verification. Processing is permitted for the governed internal evidence workflow; display and redistribution remain blocked pending rights, sensitivity, quality, provenance, and human review. The rebuilt ALA baseline remains authoritative."
     }
   ],
   "artifacts": [
@@ -236,7 +248,7 @@
     },
     {
       "path": "data/packs/australian_butterflies/v1/manifest.json",
-      "fingerprint": "sha256:41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a",
+      "fingerprint": "sha256:dc50723d9eda38f4a72a53784b87374cc5855184f5b8eb7d716bf2814246c4ba",
       "provider": "ButterflyLens derived from AFD, ALA, GBIF, and iNaturalist",
       "source_id": "butterflylens-australian-butterflies-pack-v1",
       "licence": "MIXED-SEE-SOURCES",
@@ -244,7 +256,8 @@
       "processing_allowed": true,
       "display_allowed": true,
       "redistribution_allowed": true,
-      "removal_state": "active"
+      "removal_state": "active",
+      "scope_note": "Umbrella metadata over source-specific artifacts. The new GBIF evidence is internal and rights-blocked; the ALA baseline remains authoritative."
     },
     {
       "path": "data/packs/australian_butterflies/v1/conflicts.jsonl",
@@ -858,6 +871,114 @@
       "display_allowed": true,
       "redistribution_allowed": true,
       "removal_state": "active"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/gbif_datasets.parquet",
+      "fingerprint": "sha256:632e2335044cf3c7b02369258ad1edf61d448a764c25e24222bfa306c95828a8",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/gbif_download_receipt.json",
+      "fingerprint": "sha256:f00d045fe8fd200724430ea19eea47327b65b8296c2a27e70efdbccc5dced5d7",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/gbif_evidence_manifest.json",
+      "fingerprint": "sha256:29d45411e7860266d02282386fb1bddec0fccfa708cf0802fb59c37dc7b5abf4",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/gbif_multimedia.parquet",
+      "fingerprint": "sha256:32e4e1464301ac6fc37226e36f70995c4d36860caa87057962c0da146f76fb08",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/gbif_occurrences.parquet",
+      "fingerprint": "sha256:971125b2c0cbba1a2f4d2e9f11ddc0b4149efbb3cabb8661364d36610e963cdc",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/schemas/gbif_dataset.schema.json",
+      "fingerprint": "sha256:f105b1c3d1181ddadd89305d275c0fdd1fa51e0f18f95eae6b48b47e59cc645e",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/schemas/gbif_download_receipt.schema.json",
+      "fingerprint": "sha256:be355fec8f50bada3aaa11c8c29766c9065cf4ed4757ed3e1136f3d251243543",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/schemas/gbif_multimedia.schema.json",
+      "fingerprint": "sha256:a6678f40e135445c9eeae205ae9f63ff0d19de44616ef660291c3b23a88fd4d2",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
+    },
+    {
+      "path": "data/packs/australian_butterflies/v1/gbif/schemas/gbif_occurrence.schema.json",
+      "fingerprint": "sha256:9328c17a01ada216c90b1f7d3102ffb4aa2e31311872b1ae016aed12f2f6e055",
+      "provider": "GBIF and constituent publishers; ButterflyLens deterministic projection where applicable",
+      "source_id": "gbif-occurrence-download-0004170-260715120105164",
+      "licence": "MIXED-SEE-GBIF-RECEIPT-ROW-AND-DATASET-RIGHTS",
+      "attribution": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k; constituent and media attribution retained in the frozen evidence.",
+      "processing_allowed": true,
+      "display_allowed": false,
+      "redistribution_allowed": false,
+      "removal_state": "active_internal_rights_review_required"
     }
   ]
 }
