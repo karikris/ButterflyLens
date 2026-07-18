@@ -1,0 +1,109 @@
+1
+00:00:00,000 --> 00:00:09,000
+ButterflyLens starts with the authoritative rebuilt ALA baseline:
+236,897 selected occurrence-evidence rows.
+
+2
+00:00:09,000 --> 00:00:18,000
+The Submitted public map exposes 213,310 map-eligible rows across 630 blue H3 cells.
+It is a selected baseline, not complete biological truth.
+
+3
+00:00:18,000 --> 00:00:26,000
+Flickr is the live discovery stream,
+not a biodiversity record.
+
+4
+00:00:26,000 --> 00:00:34,000
+This replay has the deterministic request plan, but no completed immutable result.
+Active partial outputs are never substituted into the demo.
+
+5
+00:00:34,000 --> 00:00:41,000
+Governed candidates are designed to flow
+through the M5 pipeline.
+
+6
+00:00:41,000 --> 00:00:48,000
+No authenticated heartbeat, committed batch, or model fingerprint is attached.
+YOLOE and BioCLIP remain unfinished, so progress is not invented.
+
+7
+00:00:48,000 --> 00:01:00,000
+Community expertise enters through blind review. Without enough visible evidence,
+I choose “Can’t tell” rather than force an identity.
+
+8
+00:01:00,000 --> 00:01:12,000
+Only after the draft is locked do source details appear.
+This changes local demo state; it submits nothing and verifies no species.
+
+9
+00:01:12,000 --> 00:01:19,500
+One local draft cannot update this map. H3 cell 838c23fffffffff
+links 224 ALA baseline rows to fingerprinted evidence.
+
+10
+00:01:19,500 --> 00:01:27,000
+The source sample is coordinate-free. A future Flickr or review layer
+needs its own committed, rights-cleared evidence.
+
+11
+00:01:27,000 --> 00:01:35,000
+Stronger evidence requires repeated, independent reviewers
+and an explicit consensus policy.
+
+12
+00:01:35,000 --> 00:01:43,000
+This replay stores no community review or identity.
+Unavailable totals stay unavailable; model or majority agreement is not truth.
+
+13
+00:01:43,000 --> 00:01:51,000
+Quality needs a representative audit,
+not a convenient sample.
+
+14
+00:01:51,000 --> 00:01:59,000
+Precision and its interval are unavailable—not zero.
+The 2,906 valid decodes are diagnostics; zero species are human-verified here.
+
+15
+00:01:59,000 --> 00:02:09,500
+GPT-5.6 is the bounded live analyst target. It explains deterministic evidence
+through read-only tools and never identifies from memory.
+
+16
+00:02:09,500 --> 00:02:20,000
+The model-free replay cites the ALA aggregate, refuses an unsupported Flickr difference,
+and preserves its tool trace. The footer proves no model ran here.
+
+17
+00:02:20,000 --> 00:02:25,500
+The Submitted map drills into state, IBRA,
+LGA, and H3 counts.
+
+18
+00:02:25,500 --> 00:02:31,000
+Cross-source impact awaits an immutable Flickr layer.
+Missing coverage is not biological absence.
+
+19
+00:02:31,000 --> 00:02:35,500
+Export is governed too. ButterflyLens exposes
+the release contract, not a pretend download.
+
+20
+00:02:35,500 --> 00:02:40,000
+Unreviewed Flickr candidates can never enter
+the final occurrence archive.
+
+21
+00:02:40,000 --> 00:02:44,000
+Codex built and tested the product
+and its provenance.
+
+22
+00:02:44,000 --> 00:02:48,000
+It supplied no butterfly identity,
+community vote, or scientific ground truth.

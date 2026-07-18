@@ -9,10 +9,19 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST_PATH = ROOT / "assets/video/butterflylens-demo.v1.json"
-CAPTIONS_PATH = ROOT / "assets/video/butterflylens-demo.en-AU.srt"
+MANIFEST_PATH = ROOT / "assets/video/butterflylens-demo.v2.json"
+CAPTIONS_PATH = ROOT / "assets/video/butterflylens-demo.v2.en-AU.srt"
+LEGACY_MANIFEST_PATH = ROOT / "assets/video/butterflylens-demo.v1.json"
+LEGACY_CAPTIONS_PATH = ROOT / "assets/video/butterflylens-demo.en-AU.srt"
 SCRIPT_PATH = ROOT / "DEMO_VIDEO.md"
 README_PATH = ROOT / "README.md"
+MAP_SNAPSHOT_PATH = ROOT / "apps/web/src/map/submittedMapSnapshot.json"
+SUBMITTED_SNAPSHOT_PATH = ROOT / "data/submission/v1/submitted_snapshot.json"
+QUALITY_SNAPSHOT_PATH = ROOT / "apps/web/src/quality/submittedQualityProjection.json"
+REPLAY_PATH = ROOT / "packages/openai/submitted-replays.v1.json"
+
+LEGACY_MANIFEST_SHA256 = "851cec43a9ed5da0e25a0046becb5daf91cbdb6a171a1ee9ad6e0fe170ca9b52"
+LEGACY_CAPTIONS_SHA256 = "dccdcc81bfaf1df7374160dd085b8129ed0bc4abb053fc04014291cb67998e48"
 
 REQUIRED_SEQUENCE = [
     "ala_baseline",
@@ -61,18 +70,40 @@ def _caption_cues() -> list[tuple[int, int, str]]:
     return cues
 
 
+def _git_bytes(commit: str, path: str) -> bytes:
+    return subprocess.run(
+        ["git", "show", f"{commit}:{path}"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
+
+
 class DemoVideoTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         cls.script = SCRIPT_PATH.read_text(encoding="utf-8")
+        cls.map_snapshot = json.loads(MAP_SNAPSHOT_PATH.read_text(encoding="utf-8"))
+        cls.submitted_snapshot = json.loads(
+            SUBMITTED_SNAPSHOT_PATH.read_text(encoding="utf-8")
+        )
+        cls.quality_snapshot = json.loads(
+            QUALITY_SNAPSHOT_PATH.read_text(encoding="utf-8")
+        )
+        cls.replays = json.loads(REPLAY_PATH.read_text(encoding="utf-8"))
 
     def test_manifest_pins_the_submitted_product_and_publication_boundary(self) -> None:
         manifest = self.manifest
-        self.assertEqual(manifest["schema_version"], "butterflylens-demo-video/v1")
+        self.assertEqual(manifest["schema_version"], "butterflylens-demo-video/v2")
         self.assertRegex(manifest["source_commit"], r"^[0-9a-f]{40}$")
         subprocess.run(
             ["git", "cat-file", "-e", f'{manifest["source_commit"]}^{{commit}}'],
+            cwd=ROOT,
+            check=True,
+        )
+        subprocess.run(
+            ["git", "merge-base", "--is-ancestor", manifest["source_commit"], "HEAD"],
             cwd=ROOT,
             check=True,
         )
@@ -80,10 +111,26 @@ class DemoVideoTests(unittest.TestCase):
         self.assertFalse(manifest["capture"]["credentials_permitted"])
         self.assertFalse(manifest["capture"]["private_worker_telemetry_permitted"])
         self.assertFalse(manifest["capture"]["active_flickr_output_permitted"])
+        self.assertFalse(manifest["capture"]["unfinished_model_output_permitted"])
         self.assertEqual(manifest["audio"]["status"], "scripted_not_recorded")
         self.assertEqual(manifest["publication"]["status"], "not_uploaded")
         self.assertIsNone(manifest["publication"]["youtube_url"])
         self.assertTrue(manifest["publication"]["human_approval_required"])
+
+    def test_v1_packet_is_preserved_as_historical_evidence(self) -> None:
+        self.assertEqual(
+            hashlib.sha256(LEGACY_MANIFEST_PATH.read_bytes()).hexdigest(),
+            LEGACY_MANIFEST_SHA256,
+        )
+        self.assertEqual(
+            hashlib.sha256(LEGACY_CAPTIONS_PATH.read_bytes()).hexdigest(),
+            LEGACY_CAPTIONS_SHA256,
+        )
+        self.assertEqual(
+            self.manifest["supersedes"]["manifest"],
+            "assets/video/butterflylens-demo.v1.json",
+        )
+        self.assertIn("predates", self.manifest["supersedes"]["reason"])
 
     def test_timeline_is_exact_contiguous_and_in_required_sequence(self) -> None:
         manifest = self.manifest
@@ -103,6 +150,7 @@ class DemoVideoTests(unittest.TestCase):
             self.assertEqual(shot["start_ms"], cursor, shot["id"])
             self.assertGreater(shot["end_ms"], shot["start_ms"], shot["id"])
             self.assertTrue(shot["visual_proof"], shot["id"])
+            self.assertTrue(shot["capture_source_paths"], shot["id"])
             self.assertTrue(shot["truth_boundary"], shot["id"])
             cursor = shot["end_ms"]
         self.assertEqual(cursor, manifest["duration_ms"])
@@ -126,12 +174,87 @@ class DemoVideoTests(unittest.TestCase):
             manifest["required_working_product_fraction"],
         )
 
-    def test_every_evidence_source_is_present_and_fingerprinted(self) -> None:
+    def test_every_evidence_source_matches_the_pinned_commit(self) -> None:
+        commit = self.manifest["source_commit"]
         for source in self.manifest["evidence_sources"]:
             path = ROOT / source["path"]
             self.assertTrue(path.is_file(), source["path"])
-            digest = hashlib.sha256(path.read_bytes()).hexdigest()
-            self.assertEqual(digest, source["sha256"], source["path"])
+            current_bytes = path.read_bytes()
+            pinned_bytes = _git_bytes(commit, source["path"])
+            self.assertEqual(current_bytes, pinned_bytes, source["path"])
+            self.assertEqual(
+                hashlib.sha256(pinned_bytes).hexdigest(),
+                source["sha256"],
+                source["path"],
+            )
+
+    def test_every_capture_source_exists_at_the_pinned_commit(self) -> None:
+        commit = self.manifest["source_commit"]
+        paths = {
+            path
+            for shot in self.manifest["shots"]
+            for path in shot["capture_source_paths"]
+        }
+        for path in paths:
+            self.assertTrue(_git_bytes(commit, path), path)
+
+    def test_measured_claims_are_derived_from_pinned_artifacts(self) -> None:
+        claims = self.manifest["measured_claims"]
+        map_counts = self.map_snapshot["counts"]
+        self.assertEqual(
+            claims["authoritative_ala_selected_rows"],
+            self.submitted_snapshot["ala_baseline"]["counts"]["selected_occurrence_rows"],
+        )
+        self.assertEqual(claims["rights_screened_selected_rows"], map_counts["rightsScreenedSelected"])
+        self.assertEqual(claims["map_eligible_ala_rows"], map_counts["mapEligible"])
+        self.assertEqual(claims["coarse_h3_cells"], map_counts["mapCells"])
+        self.assertEqual(claims["rights_excluded_selected_rows"], map_counts["rightsExcludedSelected"])
+
+        selected_scope = next(
+            scope
+            for scope in self.map_snapshot["scopes"]["h3"]
+            if scope["scopeId"] == claims["selected_h3_scope_id"]
+        )
+        selected_cell = next(
+            cell
+            for cell in self.map_snapshot["cells"]
+            if f'h3:3:{cell["cellId"]}' == claims["selected_h3_scope_id"]
+        )
+        self.assertEqual(claims["selected_h3_ala_rows"], selected_scope["count"])
+        self.assertEqual(claims["selected_h3_ala_rows"], selected_cell["count"])
+        self.assertEqual(
+            claims["selected_h3_evidence_fingerprint"],
+            f'sha256:{selected_cell["evidenceFingerprint"]}',
+        )
+
+        diagnostics = self.quality_snapshot["referenceDiagnostics"]
+        self.assertEqual(claims["accepted_species"], diagnostics["acceptedSpecies"])
+        self.assertEqual(claims["valid_reference_decodes"], diagnostics["validDecodes"])
+        self.assertEqual(claims["human_verified_species"], diagnostics["humanVerifiedSpecies"])
+        self.assertIsNone(claims["flickr_candidate_count"])
+        self.assertIsNone(claims["ala_flickr_difference"])
+
+        self.assertEqual(
+            self.manifest["submitted_snapshot_fingerprint"],
+            self.submitted_snapshot["snapshot_fingerprint"],
+        )
+        self.assertEqual(
+            self.manifest["submitted_map_snapshot_fingerprint"],
+            f'sha256:{self.map_snapshot["snapshotFingerprint"]}',
+        )
+
+    def test_analyst_shot_uses_the_map_grounded_model_free_replay(self) -> None:
+        replay = next(
+            case
+            for case in self.replays["cases"]
+            if "Can ALA and Flickr counts be compared yet?" in case["accepted_questions"]
+        )
+        statements = " ".join(claim["statement"] for claim in replay["response"]["claims"])
+        self.assertIn("213,310", statements)
+        self.assertIn("No completed immutable national Flickr candidate count", statements)
+        self.assertIn("count difference is unavailable", statements)
+        self.assertFalse(replay["response"]["replay"]["model_invoked"])
+        self.assertEqual(replay["response"]["replay"]["response_calls"], 0)
 
     def test_captions_cover_the_full_cut_without_gaps_or_overlap(self) -> None:
         cues = _caption_cues()
@@ -151,10 +274,10 @@ class DemoVideoTests(unittest.TestCase):
         normalized_script = re.sub(r"\s+", " ", self.script.replace("\n> ", " "))
         required = [
             "ALA baseline",
-            "Flickr live stream",
+            "Flickr candidate stream",
             "M5 pipeline",
             "Butterfly verification",
-            "Map update",
+            "Map update boundary",
             "Repeated reviewers",
             "Quality interval",
             "GPT-5.6 analysis",
@@ -165,20 +288,25 @@ class DemoVideoTests(unittest.TestCase):
             "Draft review ≠ stored evidence ≠ map release",
             "unavailable—not zero",
             "Model not invoked",
-            "does not mean biological absence",
+            "not biological absence",
             "no public YouTube URL",
         ]
         for phrase in required:
             self.assertIn(phrase, normalized_script)
         self.assertNotIn("50,000", self.script)
         self.assertNotIn("50000", self.script)
+        self.assertNotIn("Occurrence layer withheld", self.script)
+        self.assertNotIn("No selectable impact cell is released yet", self.script)
 
     def test_script_does_not_claim_the_video_is_complete(self) -> None:
         self.assertIn(
             "not recorded,\n> narrated, reviewed as a final cut, or uploaded",
             self.script,
         )
-        self.assertIn("The final human-approved recording and public upload remain required.", self.script)
+        self.assertIn(
+            "The final human-approved recording and public upload remain required.",
+            self.script,
+        )
         self.assertIn("Do not label the script", self.script)
 
     def test_readme_links_the_video_packet_without_claiming_a_finished_video(self) -> None:

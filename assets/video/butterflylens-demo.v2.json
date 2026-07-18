@@ -1,0 +1,335 @@
+{
+  "schema_version": "butterflylens-demo-video/v2",
+  "title": "ButterflyLens — Discover, review, and strengthen Australia’s butterfly data",
+  "language": "en-AU",
+  "source_commit": "45fb5ac07dcd51852c9e92217667f3f5052868fe",
+  "submitted_snapshot_id": "butterflylens-submitted-20260718-v1",
+  "submitted_snapshot_fingerprint": "sha256:27a256934a1ac1a9fb0d27b75a0fe805bf12224df42d7e6b7d235991d26fb9de",
+  "submitted_map_snapshot_id": "snapshot:submitted-ala-public-map-20260719",
+  "submitted_map_snapshot_fingerprint": "sha256:d39a73ae0b41677a2e557c89a72237d90d0e1e6cd2019cfbf091b41e85bae446",
+  "duration_ms": 168000,
+  "target_duration_ms": {
+    "minimum": 165000,
+    "maximum": 170000
+  },
+  "required_working_product_fraction": 0.6666666667,
+  "working_product_ms": 160000,
+  "working_product_fraction": 0.9523809524,
+  "supersedes": {
+    "manifest": "assets/video/butterflylens-demo.v1.json",
+    "captions": "assets/video/butterflylens-demo.en-AU.srt",
+    "reason": "The historical v1 packet predates the rights-screened Submitted ALA aggregate map and must not be used for current recording."
+  },
+  "capture": {
+    "status": "not_recorded",
+    "viewport": "1920x1080",
+    "frame_rate": 30,
+    "local_product_url": "http://127.0.0.1:4173/ButterflyLens/",
+    "public_reference_url": "https://karikris.github.io/ButterflyLens/",
+    "network_policy": "block all requests except the pinned local ButterflyLens production build",
+    "credentials_permitted": false,
+    "private_worker_telemetry_permitted": false,
+    "active_flickr_output_permitted": false,
+    "unfinished_model_output_permitted": false
+  },
+  "audio": {
+    "status": "scripted_not_recorded",
+    "voice": "human narrator, clear Australian English",
+    "captions": "assets/video/butterflylens-demo.v2.en-AU.srt",
+    "music_required": false
+  },
+  "publication": {
+    "status": "not_uploaded",
+    "youtube_url": null,
+    "human_approval_required": true,
+    "requirements": [
+      "record the actual pinned product rather than a mockup",
+      "record and mix clear narration",
+      "review the final cut for scientific, rights, privacy, and provenance accuracy",
+      "upload the approved sub-three-minute cut to public YouTube"
+    ]
+  },
+  "measured_claims": {
+    "authoritative_ala_selected_rows": 236897,
+    "rights_screened_selected_rows": 220144,
+    "map_eligible_ala_rows": 213310,
+    "coarse_h3_cells": 630,
+    "rights_excluded_selected_rows": 16753,
+    "selected_h3_scope_id": "h3:3:838c23fffffffff",
+    "selected_h3_ala_rows": 224,
+    "selected_h3_evidence_fingerprint": "sha256:ddac9c308e2bf80d3ee45d777359cfbdcdca8bfb10b22c9cdd88e2fff77dd233",
+    "accepted_species": 463,
+    "valid_reference_decodes": 2906,
+    "human_verified_species": 0,
+    "flickr_candidate_count": null,
+    "ala_flickr_difference": null
+  },
+  "evidence_sources": [
+    {
+      "path": "data/submission/v1/submitted_snapshot.json",
+      "sha256": "16713ce4b1f4caad19e515ed2cf6d9d30ab1592e925a8a5281a6184f5d28bc2b"
+    },
+    {
+      "path": "apps/web/src/operations/submittedOperationsSnapshot.json",
+      "sha256": "5d0cc36d481b0618a76f320dc3370ea4c3522592671f3e86466062bba0b779ab"
+    },
+    {
+      "path": "apps/web/src/operations/submittedMonitoringSnapshot.json",
+      "sha256": "2233cf3f00b6926bcdd96d584629823f39ff84fd765290949f67a4ff9020271a"
+    },
+    {
+      "path": "apps/web/src/map/submittedMapSnapshot.json",
+      "sha256": "2033dadaa67427768fde54c6f16b509bddae382bb9e38fb9cdbdbd6c9a43281e"
+    },
+    {
+      "path": "apps/web/src/review/reviewMediaManifest.json",
+      "sha256": "7c66b7178c117e3349a6b0767dce5590c10621561d046ebc5ac44de25dd8420f"
+    },
+    {
+      "path": "apps/web/src/community/submittedContributorImpact.json",
+      "sha256": "bd91f704296577c8067ee1474f4c1d4316488c69dd95b4ad11f02e7dfc0b0e1a"
+    },
+    {
+      "path": "apps/web/src/quality/submittedQualityProjection.json",
+      "sha256": "2022327e885ad344948dcb20a9f7545cc6eff76e37f64671629d782bf0247928"
+    },
+    {
+      "path": "packages/openai/submitted-replays.v1.json",
+      "sha256": "83f87e51a96124242d9da33719be4475dc621224deb7cf4f85fca6282e334612"
+    },
+    {
+      "path": "packages/openai/submitted-artifacts.v1.json",
+      "sha256": "808c4b936e1a3fb0aeab56c9b0b4a0279d1d1b97d6c27c6f77a4d941a0f29f93"
+    },
+    {
+      "path": "assets/readme/butterflylens-live-map.gif",
+      "sha256": "2dea64aad4f960b35caf57f26309e6324b49c2a257bdd703eb0b91a65fa6b975"
+    }
+  ],
+  "shots": [
+    {
+      "sequence": 1,
+      "id": "ala_baseline",
+      "label": "ALA baseline",
+      "start_ms": 0,
+      "end_ms": 18000,
+      "working_product": true,
+      "route": "#live",
+      "capture_source_paths": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "visual_proof": [
+        "Rights-screened submitted map",
+        "Map-eligible baseline · 213,310",
+        "H3 cells · 630",
+        "ALA baseline · blue filled cells",
+        "Public projection, not complete truth"
+      ],
+      "truth_boundary": "The complete 236,897-row rebuilt ALA baseline is authoritative for this build; the 213,310-row public projection is narrower, selected evidence rather than complete ground truth."
+    },
+    {
+      "sequence": 2,
+      "id": "flickr_live_stream",
+      "label": "Flickr candidate stream",
+      "start_ms": 18000,
+      "end_ms": 34000,
+      "working_product": true,
+      "route": "#flickr-display-policy",
+      "capture_source_paths": [
+        "apps/web/src/flickr/FlickrDisplayBoundary.tsx"
+      ],
+      "visual_proof": [
+        "Flickr public display gate",
+        "0 Flickr photos displayed",
+        "Display remains blocked",
+        "active parallel fetch and its partial outputs are not public evidence"
+      ],
+      "truth_boundary": "The external stream is not attached to the Submitted snapshot; discovery candidates are not occurrences and partial fetch output is not shown."
+    },
+    {
+      "sequence": 3,
+      "id": "m5_pipeline",
+      "label": "M5 pipeline",
+      "start_ms": 34000,
+      "end_ms": 48000,
+      "working_product": true,
+      "route": "#operations",
+      "capture_source_paths": [
+        "apps/web/src/operations/OperationsDashboard.tsx",
+        "apps/web/src/operations/submittedMonitoringSnapshot.json"
+      ],
+      "visual_proof": [
+        "Pipeline observatory",
+        "Worker status unavailable",
+        "YOLOE unfinished · BioCLIP unfinished"
+      ],
+      "truth_boundary": "No authenticated M5 heartbeat, model fingerprint, committed batch, or model result is attached; YOLOE and BioCLIP remain unfinished."
+    },
+    {
+      "sequence": 4,
+      "id": "butterfly_verification",
+      "label": "Butterfly verification",
+      "start_ms": 48000,
+      "end_ms": 72000,
+      "working_product": true,
+      "route": "#verify",
+      "capture_source_paths": [
+        "apps/web/src/review/ReviewLanding.tsx",
+        "apps/web/src/review/reviewMediaManifest.json"
+      ],
+      "visual_proof": [
+        "Review without hints",
+        "Can’t tell",
+        "Draft only",
+        "Show source context"
+      ],
+      "truth_boundary": "The review is blind and local; revealing permitted context does not submit a decision or verify a species."
+    },
+    {
+      "sequence": 5,
+      "id": "map_update",
+      "label": "Map update boundary",
+      "start_ms": 72000,
+      "end_ms": 87000,
+      "working_product": true,
+      "route": "#live",
+      "capture_source_paths": [
+        "apps/web/src/review/ReviewLanding.tsx",
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "visual_proof": [
+        "Current contribution",
+        "H3 coarse cells",
+        "Selected H3 cell · 838c23fffffffff",
+        "ALA baseline records · 224",
+        "Evidence · ddac9c308e2bf80d3ee45d777359cfbdcdca8bfb10b22c9cdd88e2fff77dd233",
+        "Provider-record sample"
+      ],
+      "truth_boundary": "A local draft cannot update the public map; the selected ALA cell is immutable Submitted evidence, while any future Flickr or review layer requires its own governed artifact."
+    },
+    {
+      "sequence": 6,
+      "id": "repeated_reviewers",
+      "label": "Repeated reviewers",
+      "start_ms": 87000,
+      "end_ms": 103000,
+      "working_product": true,
+      "route": "#contributors",
+      "capture_source_paths": [
+        "apps/web/src/community/ContributorExperience.tsx",
+        "apps/web/src/community/submittedContributorImpact.json"
+      ],
+      "visual_proof": [
+        "Contribution snapshot unavailable",
+        "No contribution totals are claimed",
+        "Evidence, not speed"
+      ],
+      "truth_boundary": "Independent repeated review is required for stronger evidence; the replay contains no stored community reviews or contributor identities."
+    },
+    {
+      "sequence": 7,
+      "id": "quality_interval",
+      "label": "Quality interval",
+      "start_ms": 103000,
+      "end_ms": 119000,
+      "working_product": true,
+      "route": "#quality",
+      "capture_source_paths": [
+        "apps/web/src/quality/QualityDashboard.tsx",
+        "apps/web/src/quality/submittedQualityProjection.json"
+      ],
+      "visual_proof": [
+        "Precision estimate · Unavailable",
+        "Reviewer agreement · Unavailable",
+        "Valid decoded images · 2,906",
+        "Human-verified species · 0"
+      ],
+      "truth_boundary": "An unavailable representative interval is not zero; reference diagnostics are not population quality estimates."
+    },
+    {
+      "sequence": 8,
+      "id": "gpt_5_6_analysis",
+      "label": "GPT-5.6 analysis",
+      "start_ms": 119000,
+      "end_ms": 140000,
+      "working_product": true,
+      "route": "#ask-butterflylens",
+      "capture_source_paths": [
+        "apps/web/src/analyst/AskButterflyLens.tsx",
+        "packages/openai/submitted-replays.v1.json",
+        "packages/openai/submitted-artifacts.v1.json"
+      ],
+      "visual_proof": [
+        "Can ALA and Flickr counts be compared yet?",
+        "213,310 spatially eligible ALA baseline occurrence-evidence rows",
+        "No completed immutable national Flickr candidate count",
+        "count difference is unavailable",
+        "Model not invoked"
+      ],
+      "truth_boundary": "The Submitted answer is a deterministic stored replay; GPT-5.6 is the bounded live analyst target and did not run for this replay."
+    },
+    {
+      "sequence": 9,
+      "id": "geographic_impact",
+      "label": "Geographic impact",
+      "start_ms": 140000,
+      "end_ms": 151000,
+      "working_product": true,
+      "route": "#live",
+      "capture_source_paths": [
+        "apps/web/src/map/SubmittedEvidenceMap.tsx",
+        "apps/web/src/map/submittedMapSnapshot.json"
+      ],
+      "visual_proof": [
+        "State / territory",
+        "IBRA v7",
+        "LGA approximation",
+        "H3 coarse cells",
+        "Flickr candidates · Unavailable—not zero"
+      ],
+      "truth_boundary": "ALA-only geographic drilldowns are available; no cross-source impact is calculated without an immutable Flickr layer, and missing coverage is not biological absence."
+    },
+    {
+      "sequence": 10,
+      "id": "evidence_export",
+      "label": "Evidence export",
+      "start_ms": 151000,
+      "end_ms": 160000,
+      "working_product": true,
+      "route": "#about",
+      "capture_source_paths": [
+        "apps/web/src/shell/PublicShell.tsx",
+        "OCCURRENCE_RELEASE.md",
+        "DARWIN_CORE_EXPORT.md"
+      ],
+      "visual_proof": [
+        "Darwin Core export",
+        "Occurrence release",
+        "Search results are hypotheses—not biodiversity records"
+      ],
+      "truth_boundary": "The product exposes governed export documentation, not a downloadable public occurrence archive; unreviewed Flickr candidates remain excluded."
+    },
+    {
+      "sequence": 11,
+      "id": "codex_provenance",
+      "label": "Codex provenance",
+      "start_ms": 160000,
+      "end_ms": 168000,
+      "working_product": false,
+      "route": "repository provenance",
+      "capture_source_paths": [
+        "CODEX_COLLABORATION.md",
+        "provenance/commits.jsonl",
+        "provenance/model_usage.jsonl"
+      ],
+      "visual_proof": [
+        "45fb5ac07dcd51852c9e92217667f3f5052868fe",
+        "sha256:27a256934a1ac1a9fb0d27b75a0fe805bf12224df42d7e6b7d235991d26fb9de",
+        "sha256:d39a73ae0b41677a2e557c89a72237d90d0e1e6cd2019cfbf091b41e85bae446"
+      ],
+      "truth_boundary": "Codex built and tested product code and evidence contracts; it did not create butterfly identities, community votes, or scientific ground truth."
+    }
+  ]
+}
