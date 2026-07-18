@@ -122,7 +122,7 @@ describe('credential-free community judge journey', () => {
     expect(analystView.getByText('1 stored tool call')).toBeVisible()
     fireEvent.click(analystView.getByText('Stored tool trace (1)'))
     expect(analystView.getByText('inspect_species')).toBeVisible()
-    expect(analystView.getByText(/sha256:9d12bf73/)).toBeVisible()
+    expect(analystView.getByText(/sha256:4402e9fd/)).toBeVisible()
     fireEvent.click(analystView.getByText('Artifact citations (3)'))
     expect(
       analystView.getByText(

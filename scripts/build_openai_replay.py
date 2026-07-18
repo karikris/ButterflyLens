@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ROOT = ROOT / "packages" / "openai" / "python"
 OUTPUT = ROOT / "packages" / "openai" / "submitted-replays.v1.json"
 SCHEMA_OUTPUT = ROOT / "packages" / "openai" / "replay-catalog.schema.json"
-IMPLEMENTATION_COMMIT = "efcf45890d6da5e958f4d46240d3e8c00be8e68b"
-RECORDED_AT = "2026-07-18T06:55:59Z"
+IMPLEMENTATION_COMMIT = "609433e0e765cc3ba7d1b894db44e3cd2c4381f0"
+RECORDED_AT = "2026-07-18T17:55:33Z"
 sys.path.insert(0, str(PACKAGE_ROOT))
 
 from butterflylens_openai import EvidenceToolbox, TOOL_ORDER  # noqa: E402
@@ -295,8 +295,8 @@ def build_catalog() -> dict[str, Any]:
         fact["name"]: (fact["state"], fact["value"])
         for fact in comparison_output["facts"]
     }
-    if comparison_facts["ala_occurrence_count"] != ("withheld", None):
-        raise ValueError("stored comparison no longer preserves the ALA rights gate")
+    if comparison_facts["ala_occurrence_count"] != ("observed", 213_310):
+        raise ValueError("stored comparison lost the rights-screened ALA count")
     if comparison_facts["flickr_candidate_count"] != ("unavailable", None):
         raise ValueError("stored comparison unexpectedly has Flickr counts")
     comparison_citations = [
@@ -376,18 +376,19 @@ def build_catalog() -> dict[str, Any]:
                 comparison_id,
                 comparison_trace,
                 summary=(
-                    "The stored submitted evidence cannot yet support an ALA/Flickr "
-                    "count comparison."
+                    "The stored submitted evidence has a rights-screened national "
+                    "ALA count, but no immutable Flickr count or two-source difference."
                 ),
                 claims=[
                     {
                         "claim_id": "claim_1",
                         "statement": (
-                            "The national ALA occurrence count is withheld by the "
-                            "submitted dataset-rights boundary."
+                            "The submitted public map contains 213,310 spatially "
+                            "eligible ALA baseline occurrence-evidence rows after "
+                            "its conservative dataset-rights screen."
                         ),
-                        "evidence_state": "unavailable",
-                        "citation_ids": [comparison_citations[0], comparison_citations[1], comparison_citations[3]],
+                        "evidence_state": "direct",
+                        "citation_ids": [comparison_citations[1], comparison_citations[3]],
                     },
                     {
                         "claim_id": "claim_2",
@@ -396,7 +397,7 @@ def build_catalog() -> dict[str, Any]:
                             "present in the stored submitted evidence."
                         ),
                         "evidence_state": "unavailable",
-                        "citation_ids": [comparison_citations[0], comparison_citations[2]],
+                        "citation_ids": [comparison_citations[2]],
                     },
                     {
                         "claim_id": "claim_3",

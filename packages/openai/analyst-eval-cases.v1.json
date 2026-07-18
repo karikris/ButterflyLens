@@ -16,12 +16,11 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
-          "butterflylens:ala-submitted-aggregation",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:7a4faf993c0a1d34341d36d4c7a5b9f11cb62aad04263bae44efc0b04d3736d3",
+        "result_fingerprint": "sha256:6a8b6e6a1aa54a6f6610cf71c72de221867c6aa948d5c03dc77d51209e19b936",
         "result_status": "partial"
       },
       "prohibited_claims": [
@@ -42,8 +41,13 @@
         },
         {
           "name": "ala_occurrence_count",
-          "state": "withheld",
-          "value": null
+          "state": "observed",
+          "value": 213310
+        },
+        {
+          "name": "map_cell_count",
+          "state": "observed",
+          "value": 630
         },
         {
           "name": "absence_inference_permitted",
@@ -55,10 +59,10 @@
     {
       "case_id": "map_impact_02",
       "category": "map_impact",
-      "expected_live_response_state": "incomplete",
+      "expected_live_response_state": "completed",
       "expected_tool_call": {
         "arguments": {
-          "scope_id": "NSW",
+          "scope_id": "ala:state-territory:new%20south%20wales",
           "scope_type": "state"
         },
         "name": "inspect_map_scope"
@@ -67,13 +71,12 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
-          "butterflylens:ala-submitted-aggregation",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:90156ea77a7a7a1f3f6dcc32916d2ad3f83d0e27feadc274cc5d0079347f11f6",
-        "result_status": "unavailable"
+        "result_fingerprint": "sha256:ac790065a7621a7528bc20f1346434a5e957b015f3988e6ad164d73ccdf5e3bf",
+        "result_status": "partial"
       },
       "prohibited_claims": [
         "official_record",
@@ -90,6 +93,11 @@
           "name": "accepted_species",
           "state": "unavailable",
           "value": null
+        },
+        {
+          "name": "ala_occurrence_count",
+          "state": "observed",
+          "value": 47861
         },
         {
           "name": "map_cell_count",
@@ -122,7 +130,7 @@
           "butterflylens:geographic-impact-policy",
           "butterflylens:submitted-species-catalogue"
         ],
-        "result_fingerprint": "sha256:07b988a6145ac9c641e64ae8f5ebe79960a4434a0f76a8845b7f6abf3c6abb12",
+        "result_fingerprint": "sha256:4a7c82e63e971fc580c3bf1c8a45c2728e85e16c569a7f5b33241ff19ba993f5",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -157,10 +165,10 @@
     {
       "case_id": "map_impact_04",
       "category": "map_impact",
-      "expected_live_response_state": "incomplete",
+      "expected_live_response_state": "completed",
       "expected_tool_call": {
         "arguments": {
-          "scope_id": "sydney-lga",
+          "scope_id": "ala:lga-2023-approx:sydney",
           "scope_type": "lga"
         },
         "name": "inspect_map_scope"
@@ -169,13 +177,12 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
-          "butterflylens:ala-submitted-aggregation",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:6ba31c063930d4fd2924413f23c2b4a07eaddb4a44a2f4f31ad7418691383829",
-        "result_status": "unavailable"
+        "result_fingerprint": "sha256:a17f07c2aefee297903ef274300a1d418ae59eec7886f2ac4b8f68f2c6c50335",
+        "result_status": "partial"
       },
       "prohibited_claims": [
         "official_record",
@@ -190,7 +197,12 @@
         {
           "name": "scope_id",
           "state": "observed",
-          "value": "sydney-lga"
+          "value": "ala:lga-2023-approx:sydney"
+        },
+        {
+          "name": "ala_occurrence_count",
+          "state": "observed",
+          "value": 2051
         },
         {
           "name": "map_cell_count",
@@ -207,7 +219,7 @@
     {
       "case_id": "ala_flickr_01",
       "category": "ala_flickr_comparison",
-      "expected_live_response_state": "incomplete",
+      "expected_live_response_state": "completed",
       "expected_tool_call": {
         "arguments": {
           "scope_id": null,
@@ -220,12 +232,12 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:8c1fc594129055cb3259578145a604ea7e74180d3c5b61cd45e9dbaa0f476a85",
-        "result_status": "unavailable"
+        "result_fingerprint": "sha256:309664a3e11da40d3495932a9a31959648c7af571b02e31d36e6f7ad99f87faf",
+        "result_status": "partial"
       },
       "prohibited_claims": [
         "official_record",
@@ -240,8 +252,8 @@
       "required_facts": [
         {
           "name": "ala_occurrence_count",
-          "state": "withheld",
-          "value": null
+          "state": "observed",
+          "value": 213310
         },
         {
           "name": "flickr_candidate_count",
@@ -258,10 +270,10 @@
     {
       "case_id": "ala_flickr_02",
       "category": "ala_flickr_comparison",
-      "expected_live_response_state": "incomplete",
+      "expected_live_response_state": "completed",
       "expected_tool_call": {
         "arguments": {
-          "scope_id": "NSW",
+          "scope_id": "ala:state-territory:new%20south%20wales",
           "scope_type": "state",
           "species_key": null
         },
@@ -271,12 +283,12 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:8c599f98837e3a70659687b64dafed0a6f9ecbc0464c485b897baec5559015c4",
-        "result_status": "unavailable"
+        "result_fingerprint": "sha256:f289b1a2168f2fc136437e61749ab077756184218d3480a6f0194508e0739cda",
+        "result_status": "partial"
       },
       "prohibited_claims": [
         "official_record",
@@ -292,7 +304,12 @@
         {
           "name": "scope_id",
           "state": "observed",
-          "value": "NSW"
+          "value": "ala:state-territory:new%20south%20wales"
+        },
+        {
+          "name": "ala_occurrence_count",
+          "state": "observed",
+          "value": 47861
         },
         {
           "name": "count_difference",
@@ -322,11 +339,11 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:2dc7dffab5f325e21c56abb51f38bf9d0aac4387c49ecb69bee97a78d0247212",
+        "result_fingerprint": "sha256:9df8fdb2871ca6a84e083c113888d89f1b754868af3019565bf85c60b13a402e",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -372,12 +389,11 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
-          "butterflylens:ala-submitted-aggregation",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:7a4faf993c0a1d34341d36d4c7a5b9f11cb62aad04263bae44efc0b04d3736d3",
+        "result_fingerprint": "sha256:6a8b6e6a1aa54a6f6610cf71c72de221867c6aa948d5c03dc77d51209e19b936",
         "result_status": "partial"
       },
       "prohibited_claims": [
@@ -420,7 +436,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+        "result_fingerprint": "sha256:4402e9fd4f7222f6f057151fd0adc5a9addb28a42d3c6d890151ba0a6097b877",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -465,7 +481,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:a2b3bc775485be5ec46b892eb1ac8fb986dcd4473eb1dd2a28a3bab4ae2106e4",
+        "result_fingerprint": "sha256:2b178a3bc82961f660f1e631dc311af2d3cc50a7f5b8f424fd8bc36d72936763",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -510,7 +526,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:caa7b88a777805384265bd5f7f0695d4dfb4db377354385f17a5d6d2932f2be9",
+        "result_fingerprint": "sha256:ad3d2c265f225213bea1da1cecf448c6e75bb58683038b48df7da42641363c6a",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -554,7 +570,7 @@
           "butterflylens:reference-quality-v1",
           "butterflylens:submitted-species-catalogue"
         ],
-        "result_fingerprint": "sha256:e9cdb6b13c9916ff6cf230afa3a378d51b0851b9359166fb09762c6dd0a7b742",
+        "result_fingerprint": "sha256:0693f333b2415fc23c48b992e74787b9b66158768f08534dd5ca4ac6f3891dfe",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -598,7 +614,7 @@
           "butterflylens:data-rights-manifest",
           "butterflylens:submitted-species-catalogue"
         ],
-        "result_fingerprint": "sha256:dd0bb6871343cd06ffbb605ad15fa2920bf77710c06562562c4bf2f3ca6e9809",
+        "result_fingerprint": "sha256:556dfd84c16844c543c000997c8a70a41fad2c1110bae987c5c634806d09c425",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -645,7 +661,7 @@
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:7ee6209d614658d7e4fa7f716dfaabb9b4f0f4d4a0101271efbe906499a42f21",
+        "result_fingerprint": "sha256:a85ab37085789cc8e9e2cc01df62304587ba8b9a361b6349ea06a824bf5d65e1",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -684,7 +700,7 @@
           "butterflylens:geographic-impact-policy",
           "butterflylens:submitted-species-catalogue"
         ],
-        "result_fingerprint": "sha256:07b988a6145ac9c641e64ae8f5ebe79960a4434a0f76a8845b7f6abf3c6abb12",
+        "result_fingerprint": "sha256:4a7c82e63e971fc580c3bf1c8a45c2728e85e16c569a7f5b33241ff19ba993f5",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -712,7 +728,7 @@
     {
       "case_id": "occurrence_overclaim_16",
       "category": "occurrence_overclaim",
-      "expected_live_response_state": "incomplete",
+      "expected_live_response_state": "completed",
       "expected_tool_call": {
         "arguments": {
           "scope_id": null,
@@ -725,12 +741,12 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:8c1fc594129055cb3259578145a604ea7e74180d3c5b61cd45e9dbaa0f476a85",
-        "result_status": "unavailable"
+        "result_fingerprint": "sha256:309664a3e11da40d3495932a9a31959648c7af571b02e31d36e6f7ad99f87faf",
+        "result_status": "partial"
       },
       "prohibited_claims": [
         "official_record",
@@ -772,7 +788,7 @@
           "butterflylens:reviewer-quality-contract",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:069e8a29d2e5dc19a8dda432b36a6efc5a41d335ad93557e13f0547c4891dae3",
+        "result_fingerprint": "sha256:f276086172f33f07346f711517327e7a7db1c8cef810487ae89f7a0c505bb228",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -816,7 +832,7 @@
           "butterflylens:reviewer-quality-contract",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:7e543da206bcb568bc204ed3adc00048598f5989263f63e59bf03ac982798d34",
+        "result_fingerprint": "sha256:7848ed1784a1e6049263ae31cbea7e19a686008bcb22c9a7be8e67df3b51d80c",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -859,7 +875,7 @@
           "butterflylens:review-consensus-contract",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:63cf494be05389572d77e959f97c0d4bf77a194ce8bb9f5d45e2805cd5b44cea",
+        "result_fingerprint": "sha256:1bc5184b5a51f12d511f23682da202c1d413b76a8f3551568b5c9c6108602fa1",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -903,7 +919,7 @@
           "butterflylens:review-consensus-contract",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:3568527597fd3c06e804bedc98cb7202a0aa38d3c54582467c66e0655ba76a83",
+        "result_fingerprint": "sha256:ec11fe20c3736cad8c248e37c82cae4bf1d703bb74f4231a9c73f1ce5aa2c8bd",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -940,7 +956,7 @@
           "butterflylens:reference-quality-v1",
           "butterflylens:australian-butterflies-v1"
         ],
-        "result_fingerprint": "sha256:fa7f68c43d20202db4d665087a12226828ffaf5231b43fba1fb24cb4dd84d7da",
+        "result_fingerprint": "sha256:4ce7357f126011ec88e23d549ca2eb989bb208a598b09f77a982822e7a095ea8",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -985,7 +1001,7 @@
           "butterflylens:reference-quality-v1",
           "butterflylens:australian-butterflies-v1"
         ],
-        "result_fingerprint": "sha256:f81600028a9b4db47ead5765c7169dca80669ea83623173c74b7e45d639ac3b1",
+        "result_fingerprint": "sha256:3e19f4b87c293a8a5cfa9b7b193ecb76a6c1fefefaff25aa683f6e1627c91c97",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1029,7 +1045,7 @@
           "butterflylens:reference-quality-v1",
           "butterflylens:australian-butterflies-v1"
         ],
-        "result_fingerprint": "sha256:400e6f6252e458010891d8e7715da9a4afd1e7d8a71cf102c153f70eaad406af",
+        "result_fingerprint": "sha256:2356f1d4ea62836afe673fcee5be5282fea1dba4d96e6f12bb2a831d89aaf1dd",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1073,7 +1089,7 @@
           "butterflylens:reference-quality-v1",
           "butterflylens:australian-butterflies-v1"
         ],
-        "result_fingerprint": "sha256:be534284a62e6b5a6627e1f6820da7c1d24c38890a2d8195b290181af7117908",
+        "result_fingerprint": "sha256:020937b0782eb6891da9d3c35400c668231c69df89a3b62b07bbc1c65c78d10e",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1116,7 +1132,7 @@
           "butterflylens:live-worker-policy",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:83d36d9905fd433af1cb926f1b42b84ce62ad3a002197778198b9382d89d5236",
+        "result_fingerprint": "sha256:9399f672a8ed23d9d7a1d5ed768b9dfbaf20d9aee0e47c0d110d810e554225e4",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1159,7 +1175,7 @@
           "butterflylens:live-worker-policy",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:de7d3d56a05560c6a8f31d24ca5f39c283f80ac25625ad53c121473867a1c397",
+        "result_fingerprint": "sha256:d930e151f7d0a2c1ca0ad286417d9052bff26fe1814fd99a6a5a6fc8388c607d",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1200,7 +1216,7 @@
           "butterflylens:submitted-quality-projection",
           "butterflylens:flickr-global-out-of-range-status"
         ],
-        "result_fingerprint": "sha256:770d7cc8f1a2c4d2bf63aab6cc608cb5c4e706a9bf4a9ca415bacef7c7009f3e",
+        "result_fingerprint": "sha256:ab7988d7c7f4d4a8e7b12aa5fe22744c7c7b53b5fafc96e2a149c0dafb57ee03",
         "result_status": "partial"
       },
       "prohibited_claims": [
@@ -1243,7 +1259,7 @@
           "butterflylens:live-worker-contract",
           "butterflylens:live-worker-policy"
         ],
-        "result_fingerprint": "sha256:136a47169f4820e2a670d0955f75e8947c8e63fda85c4f142f870c6b97b70209",
+        "result_fingerprint": "sha256:c21d57c0bb6adac805bff446778b2b8cd10df82c9efb1744747504bf386bb9e3",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1277,7 +1293,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:caa7b88a777805384265bd5f7f0695d4dfb4db377354385f17a5d6d2932f2be9",
+        "result_fingerprint": "sha256:ad3d2c265f225213bea1da1cecf448c6e75bb58683038b48df7da42641363c6a",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1322,7 +1338,7 @@
           "butterflylens:reference-quality-v1",
           "butterflylens:australian-butterflies-v1"
         ],
-        "result_fingerprint": "sha256:d22fb4e3c9ea08cad5fa60bb5e8c32730e6aa77e6d3f7ca11761e2f1e7788864",
+        "result_fingerprint": "sha256:26ade037eb8d20339195d6c280e28cd488650e82e03b0df4657a0f76c7a3a323",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1366,7 +1382,7 @@
           "butterflylens:reference-quality-v1",
           "butterflylens:submitted-species-catalogue"
         ],
-        "result_fingerprint": "sha256:e9cdb6b13c9916ff6cf230afa3a378d51b0851b9359166fb09762c6dd0a7b742",
+        "result_fingerprint": "sha256:0693f333b2415fc23c48b992e74787b9b66158768f08534dd5ca4ac6f3891dfe",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1411,7 +1427,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:60c3d5d3a42f7d142efef7d6167efd42f58c831d9867202774c8bb3c48fa9068",
+        "result_fingerprint": "sha256:f4d361dbdbd6ac4e65c2ba7958d43bfdfa0e3c8a2e6fa69f59b5170b5ab959e5",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1455,7 +1471,7 @@
           "butterflylens:data-rights-manifest",
           "butterflylens:submitted-species-catalogue"
         ],
-        "result_fingerprint": "sha256:dd0bb6871343cd06ffbb605ad15fa2920bf77710c06562562c4bf2f3ca6e9809",
+        "result_fingerprint": "sha256:556dfd84c16844c543c000997c8a70a41fad2c1110bae987c5c634806d09c425",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1494,7 +1510,7 @@
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:9789b910916a5e629e09c62c390575577c3a6c80d99d9a6400945ec4c16d7694",
+        "result_fingerprint": "sha256:c416c36ff3270dd5b057895580953451c3a54c3a6ead19da17a73f0efffbbb08",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1530,7 +1546,7 @@
           "butterflylens:submitted-quality-projection",
           "butterflylens:flickr-global-out-of-range-status"
         ],
-        "result_fingerprint": "sha256:770d7cc8f1a2c4d2bf63aab6cc608cb5c4e706a9bf4a9ca415bacef7c7009f3e",
+        "result_fingerprint": "sha256:ab7988d7c7f4d4a8e7b12aa5fe22744c7c7b53b5fafc96e2a149c0dafb57ee03",
         "result_status": "partial"
       },
       "prohibited_claims": [
@@ -1574,7 +1590,7 @@
           "butterflylens:data-rights-manifest",
           "butterflylens:submitted-species-catalogue"
         ],
-        "result_fingerprint": "sha256:fae43a0db81cf34b983027536ae4312a4ef25f5f96857e56ab2d32a9e7dc2df5",
+        "result_fingerprint": "sha256:f0112214145696b88e031d8b14c3ec59986ceb14ac816227f0723e2ae940fbbf",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1614,7 +1630,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+        "result_fingerprint": "sha256:4402e9fd4f7222f6f057151fd0adc5a9addb28a42d3c6d890151ba0a6097b877",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1653,7 +1669,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:caa7b88a777805384265bd5f7f0695d4dfb4db377354385f17a5d6d2932f2be9",
+        "result_fingerprint": "sha256:ad3d2c265f225213bea1da1cecf448c6e75bb58683038b48df7da42641363c6a",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1692,7 +1708,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:2ae781b62a40a66251c49c4691b7a740323acab41a96b4e2409c947f2e756fae",
+        "result_fingerprint": "sha256:c497a1f41ccc73009e73f4b133ec9bc76e6b5ee4f0d9865bc4dd4911bf4a0c1e",
         "result_status": "not_found"
       },
       "prohibited_claims": [
@@ -1727,7 +1743,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+        "result_fingerprint": "sha256:4402e9fd4f7222f6f057151fd0adc5a9addb28a42d3c6d890151ba0a6097b877",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1766,7 +1782,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+        "result_fingerprint": "sha256:4402e9fd4f7222f6f057151fd0adc5a9addb28a42d3c6d890151ba0a6097b877",
         "result_status": "available"
       },
       "prohibited_claims": [
@@ -1805,7 +1821,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:2ae781b62a40a66251c49c4691b7a740323acab41a96b4e2409c947f2e756fae",
+        "result_fingerprint": "sha256:c497a1f41ccc73009e73f4b133ec9bc76e6b5ee4f0d9865bc4dd4911bf4a0c1e",
         "result_status": "not_found"
       },
       "prohibited_claims": [
@@ -1839,7 +1855,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:a1c39a7e37d698ecf7fb71ac11afdf460337dade69baff115d6ce8e42e62e091",
+        "result_fingerprint": "sha256:1aa0d1f0991d6a14ee10fc33cf1da9de3ced13882c5c47e24d48b6f7d1349f22",
         "result_status": "not_found"
       },
       "prohibited_claims": [
@@ -1873,7 +1889,7 @@
           "butterflylens:australian-butterflies-v1",
           "butterflylens:reference-quality-v1"
         ],
-        "result_fingerprint": "sha256:2ae781b62a40a66251c49c4691b7a740323acab41a96b4e2409c947f2e756fae",
+        "result_fingerprint": "sha256:c497a1f41ccc73009e73f4b133ec9bc76e6b5ee4f0d9865bc4dd4911bf4a0c1e",
         "result_status": "not_found"
       },
       "prohibited_claims": [
@@ -1892,7 +1908,7 @@
     {
       "case_id": "fabricated_metric_45",
       "category": "no_fabricated_metric",
-      "expected_live_response_state": "incomplete",
+      "expected_live_response_state": "completed",
       "expected_tool_call": {
         "arguments": {
           "scope_id": null,
@@ -1905,12 +1921,12 @@
       "oracle": {
         "citation_ids": [
           "butterflylens:submitted-species-catalogue",
-          "butterflylens:ala-submitted-snapshot",
+          "butterflylens:submitted-ala-public-map",
           "butterflylens:flickr-global-out-of-range-status",
           "butterflylens:data-rights-manifest"
         ],
-        "result_fingerprint": "sha256:8c1fc594129055cb3259578145a604ea7e74180d3c5b61cd45e9dbaa0f476a85",
-        "result_status": "unavailable"
+        "result_fingerprint": "sha256:309664a3e11da40d3495932a9a31959648c7af571b02e31d36e6f7ad99f87faf",
+        "result_status": "partial"
       },
       "prohibited_claims": [
         "fabricated_metric",
@@ -1921,8 +1937,8 @@
       "required_facts": [
         {
           "name": "ala_occurrence_count",
-          "state": "withheld",
-          "value": null
+          "state": "observed",
+          "value": 213310
         },
         {
           "name": "flickr_candidate_count",
@@ -1953,7 +1969,7 @@
           "butterflylens:live-worker-policy",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:83d36d9905fd433af1cb926f1b42b84ce62ad3a002197778198b9382d89d5236",
+        "result_fingerprint": "sha256:9399f672a8ed23d9d7a1d5ed768b9dfbaf20d9aee0e47c0d110d810e554225e4",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -1991,7 +2007,7 @@
           "butterflylens:reviewer-quality-contract",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:069e8a29d2e5dc19a8dda432b36a6efc5a41d335ad93557e13f0547c4891dae3",
+        "result_fingerprint": "sha256:f276086172f33f07346f711517327e7a7db1c8cef810487ae89f7a0c505bb228",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -2031,7 +2047,7 @@
           "butterflylens:geographic-impact-policy",
           "butterflylens:submitted-quality-projection"
         ],
-        "result_fingerprint": "sha256:cfee43b896e5ee7ad50bedf278798fa5eb9c66e1c2c9769ee12d4415d01795b6",
+        "result_fingerprint": "sha256:80aaaaf82197bc8e9f6498cccffe4d578963402caf42df002c37deeb98e594ed",
         "result_status": "unavailable"
       },
       "prohibited_claims": [
@@ -2453,18 +2469,18 @@
   },
   "schema_version": "butterflylens-analyst-eval-suite:v1.0.0",
   "source": {
-    "implementation_commit": "69a102cc31253e7d3eb84c91d92de2a0c266b7c8",
+    "implementation_commit": "609433e0e765cc3ba7d1b894db44e3cd2c4381f0",
     "model_invoked": false,
     "model_target": "gpt-5.6-sol",
     "network_calls": 0,
     "reasoning_effort_target": "xhigh",
-    "recorded_at": "2026-07-18T07:41:46Z",
+    "recorded_at": "2026-07-18T17:55:33Z",
     "repository": "karikris/ButterflyLens",
     "requirements_fingerprint": "sha256:b9dacaa99122587073946374d86bc19fc1dc903668e003ab239eb912dd4f3b89",
     "response_api": "/v1/responses",
     "response_schema_fingerprint": "sha256:0dd95a9534b77285bc5586d3153901e4cc27e406181a6d57e2882c2d595ecb91",
-    "tool_artifact_commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
-    "tool_contract_fingerprint": "sha256:b7fc18ed973c3f270a86c68f0eacac24be92fd58dc2b6cd9f989ca094daab274"
+    "tool_artifact_commit": "cfe6b5f38b687e83d2a601d381edde29fcb7a717",
+    "tool_contract_fingerprint": "sha256:2924ebafa35c8e8fbe202ee251d3127fe2898ed5a4ed8a0e524d11159f695145"
   },
-  "suite_fingerprint": "sha256:7d4718dd706b992657de2d09debeee546a9da1fc63599b896e4a48bff31aa084"
+  "suite_fingerprint": "sha256:c1b591bcd3101cf632fcccb1459a076af79d73286b984f39b499cd821d1a415f"
 }

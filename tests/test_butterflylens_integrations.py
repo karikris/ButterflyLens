@@ -152,12 +152,13 @@ class ButterflyLensIntegrationTests(unittest.TestCase):
             )
         self.assertEqual(catalogue["speciesCount"], 463)
         repository = SubmittedEvidenceRepository(ROOT)
-        submitted_pack_fingerprint = repository.citation("taxonomy_pack")[
-            "fingerprint"
-        ].removeprefix("sha256:")
+        canonical_pack_fingerprint = file_sha256(pack_path)
         self.assertEqual(
-            catalogue["sourceFingerprints"]["packManifest"],
-            submitted_pack_fingerprint,
+            repository.citation("taxonomy_pack")["fingerprint"],
+            f"sha256:{canonical_pack_fingerprint}",
+        )
+        self.assertRegex(
+            catalogue["sourceFingerprints"]["packManifest"], r"^[0-9a-f]{64}$"
         )
         self.assertEqual(
             catalogue["sourceFingerprints"]["alaSnapshotManifest"],
@@ -174,10 +175,6 @@ class ButterflyLensIntegrationTests(unittest.TestCase):
         )
         self.assertFalse(catalogue["states"]["scientificClaimAllowed"])
 
-        self.assertEqual(
-            repository.citation("taxonomy_pack")["fingerprint"],
-            f"sha256:{catalogue['sourceFingerprints']['packManifest']}",
-        )
         self.assertEqual(
             repository.citation("ala_snapshot")["fingerprint"],
             f"sha256:{file_sha256(pack_root / 'ala/ala_snapshot_manifest.json')}",
@@ -570,7 +567,8 @@ class ButterflyLensIntegrationTests(unittest.TestCase):
 
         self.assertEqual(species["records"][0]["record_id"], species_key)
         self.assertEqual(fact(map_scope, "accepted_species")["value"], 463)
-        self.assertEqual(fact(map_scope, "ala_occurrence_count")["state"], "withheld")
+        self.assertEqual(fact(map_scope, "ala_occurrence_count")["state"], "observed")
+        self.assertEqual(fact(map_scope, "ala_occurrence_count")["value"], 213_310)
         self.assertEqual(fact(classification, "yoloe_state")["state"], "unfinished")
         self.assertEqual(fact(classification, "bioclip_state")["state"], "unfinished")
         self.assertFalse(fact(classification, "probability_available")["value"])

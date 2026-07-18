@@ -20,23 +20,26 @@ arguments are required nullable values with separate semantic checks.
 ## Submitted evidence boundary
 
 `submitted-artifacts.v1.json` pins every readable evidence artifact to the
-published Task 11.1 commit and exact SHA-256. `SubmittedEvidenceRepository`
+published Task 18.3 map-data commit and exact SHA-256. `SubmittedEvidenceRepository`
 verifies every byte before making any artifact available. Tool citations always
 include artifact ID, `karikris/ButterflyLens`, the exact commit, repository path,
 and SHA-256 fingerprint.
 
-The submitted tools can inspect the 463 accepted-species catalogue, source and
-crosswalk state, provisional reference diagnostics, committed pipeline stages,
-and deterministic species-level workflow priorities. They preserve the ALA
-rights boundary and distinguish targeted review priorities from representative
-quality sampling.
+The submitted tools can inspect the 463 accepted-species catalogue, the
+rights-screened national/state/IBRA/LGA/H3 ALA map, source and crosswalk state,
+provisional reference diagnostics, committed pipeline stages, and deterministic
+species-level workflow priorities. They retain exact aggregate fingerprints,
+preserve the complete rebuilt ALA baseline as authoritative, and distinguish
+the conservative public projection from a legal conclusion or biological
+completeness claim.
 
-No completed immutable Flickr candidate/map snapshot, classification, review
+No completed immutable Flickr candidate snapshot, classification, review
 consensus, private reviewer-quality snapshot, worker heartbeat, geographic
-contribution snapshot, or authenticated impact snapshot is bundled. Those
-tools return cited `unavailable` or `withheld` results with null values; they do
-not return fabricated zeroes, infer absence, inspect BioMiner's active work,
-call Flickr, or guess from model memory.
+contribution snapshot, or authenticated impact snapshot is bundled. The public
+ALA aggregate count is available, but Flickr and ALA/Flickr-difference values
+remain cited `unavailable` nulls. The tools do not return fabricated zeroes,
+infer absence, inspect BioMiner's active work, call Flickr, expose raw
+coordinates, or guess from model memory.
 
 ## Result contract
 

@@ -246,7 +246,7 @@ class OpenAIEvaluationTests(unittest.TestCase):
         self._assert_grade_fails(changed_citation)
 
         direct_incomplete = self._synthetic_trace()
-        index = self._case_index("ala_flickr_01")
+        index = self._case_index("map_impact_03")
         direct_incomplete["cases"][index]["response"]["claims"][0][
             "evidence_state"
         ] = "direct"

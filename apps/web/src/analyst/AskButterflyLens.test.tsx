@@ -53,7 +53,7 @@ describe('Ask ButterflyLens', () => {
     expect(screen.getByText('1 stored tool call')).toBeInTheDocument()
     expect(screen.getByText('Stored tool trace (1)')).toBeInTheDocument()
     expect(screen.getByText('inspect_species')).toBeInTheDocument()
-    expect(screen.getByText(/sha256:9d12bf73/)).toBeInTheDocument()
+    expect(screen.getByText(/sha256:4402e9fd/)).toBeInTheDocument()
     expect(screen.getByText('apps/web/src/species/submittedSpeciesCatalogue.json')).toBeInTheDocument()
     expect(screen.queryByText(/Live ·/)).not.toBeInTheDocument()
   })

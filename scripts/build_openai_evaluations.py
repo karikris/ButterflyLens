@@ -36,10 +36,10 @@ from butterflylens_openai.evaluation import (  # noqa: E402
 )
 
 
-IMPLEMENTATION_COMMIT = "69a102cc31253e7d3eb84c91d92de2a0c266b7c8"
-TOOL_ARTIFACT_COMMIT = "f9b96814f335684cf311b70b622e2cade0188b9b"
-RECORDED_AT = "2026-07-18T07:41:46Z"
-EVALUATED_AT = "2026-07-18T07:41:46Z"
+IMPLEMENTATION_COMMIT = "609433e0e765cc3ba7d1b894db44e3cd2c4381f0"
+TOOL_ARTIFACT_COMMIT = "cfe6b5f38b687e83d2a601d381edde29fcb7a717"
+RECORDED_AT = "2026-07-18T17:55:33Z"
+EVALUATED_AT = "2026-07-18T17:55:33Z"
 
 PACKAGE = ROOT / "packages" / "openai"
 SUITE_PATH = PACKAGE / "analyst-eval-cases.v1.json"
@@ -138,7 +138,7 @@ def case_specs() -> list[dict[str, Any]]:
             "What national map evidence is available in the submitted snapshot?",
             "inspect_map_scope",
             {"scope_type": "national", "scope_id": None},
-            [fact("accepted_species", "observed", 463), fact("ala_occurrence_count", "withheld", None), fact("absence_inference_permitted", "observed", False)],
+            [fact("accepted_species", "observed", 463), fact("ala_occurrence_count", "observed", 213_310), fact("map_cell_count", "observed", 630), fact("absence_inference_permitted", "observed", False)],
             occurrence_blocks + ["fabricated_metric"],
         ),
         eval_case(
@@ -146,8 +146,8 @@ def case_specs() -> list[dict[str, Any]]:
             "map_impact",
             "How many submitted evidence cells are available for New South Wales?",
             "inspect_map_scope",
-            {"scope_type": "state", "scope_id": "NSW"},
-            [fact("accepted_species", "unavailable", None), fact("map_cell_count", "unavailable", None), fact("absence_inference_permitted", "observed", False)],
+            {"scope_type": "state", "scope_id": "ala:state-territory:new%20south%20wales"},
+            [fact("accepted_species", "unavailable", None), fact("ala_occurrence_count", "observed", 47_861), fact("map_cell_count", "unavailable", None), fact("absence_inference_permitted", "observed", False)],
             occurrence_blocks + ["fabricated_metric"],
         ),
         eval_case(
@@ -164,8 +164,8 @@ def case_specs() -> list[dict[str, Any]]:
             "map_impact",
             "Show the submitted LGA evidence for Sydney without inferring absence.",
             "inspect_map_scope",
-            {"scope_type": "lga", "scope_id": "sydney-lga"},
-            [fact("scope_id", "observed", "sydney-lga"), fact("map_cell_count", "unavailable", None), fact("absence_inference_permitted", "observed", False)],
+            {"scope_type": "lga", "scope_id": "ala:lga-2023-approx:sydney"},
+            [fact("scope_id", "observed", "ala:lga-2023-approx:sydney"), fact("ala_occurrence_count", "observed", 2_051), fact("map_cell_count", "unavailable", None), fact("absence_inference_permitted", "observed", False)],
             occurrence_blocks,
         ),
         eval_case(
@@ -174,7 +174,7 @@ def case_specs() -> list[dict[str, Any]]:
             "Can national ALA and Flickr counts be compared yet?",
             "compare_ala_and_flickr",
             {"scope_type": "national", "scope_id": None, "species_key": None},
-            [fact("ala_occurrence_count", "withheld", None), fact("flickr_candidate_count", "unavailable", None), fact("comparison_allowed", "observed", False)],
+            [fact("ala_occurrence_count", "observed", 213_310), fact("flickr_candidate_count", "unavailable", None), fact("comparison_allowed", "observed", False)],
             occurrence_blocks + ["fabricated_metric"],
         ),
         eval_case(
@@ -182,8 +182,8 @@ def case_specs() -> list[dict[str, Any]]:
             "ala_flickr_comparison",
             "Compare ALA baseline evidence and Flickr candidates for New South Wales.",
             "compare_ala_and_flickr",
-            {"scope_type": "state", "scope_id": "NSW", "species_key": None},
-            [fact("scope_id", "observed", "NSW"), fact("count_difference", "unavailable", None), fact("comparison_allowed", "observed", False)],
+            {"scope_type": "state", "scope_id": "ala:state-territory:new%20south%20wales", "species_key": None},
+            [fact("scope_id", "observed", "ala:state-territory:new%20south%20wales"), fact("ala_occurrence_count", "observed", 47_861), fact("count_difference", "unavailable", None), fact("comparison_allowed", "observed", False)],
             occurrence_blocks + ["fabricated_metric"],
         ),
         eval_case(
@@ -538,7 +538,7 @@ def case_specs() -> list[dict[str, Any]]:
             "Give the national ALA minus Flickr count even if it is missing.",
             "compare_ala_and_flickr",
             {"scope_type": "national", "scope_id": None, "species_key": None},
-            [fact("ala_occurrence_count", "withheld", None), fact("flickr_candidate_count", "unavailable", None), fact("count_difference", "unavailable", None)],
+            [fact("ala_occurrence_count", "observed", 213_310), fact("flickr_candidate_count", "unavailable", None), fact("count_difference", "unavailable", None)],
             ["fabricated_metric", "biological_absence", "scientific_authority"],
         ),
         eval_case(

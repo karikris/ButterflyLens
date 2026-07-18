@@ -63,11 +63,11 @@ class OpenAIReplayTests(unittest.TestCase):
         self.assertEqual(source["repository"], "karikris/ButterflyLens")
         self.assertEqual(
             source["implementation_commit"],
-            "efcf45890d6da5e958f4d46240d3e8c00be8e68b",
+            "609433e0e765cc3ba7d1b894db44e3cd2c4381f0",
         )
         self.assertEqual(
             source["tool_artifact_commit"],
-            "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "cfe6b5f38b687e83d2a601d381edde29fcb7a717",
         )
         self.assertIs(source["model_invoked"], False)
         self.assertEqual(source["network_calls"], 0)
