@@ -41,6 +41,11 @@ The GIF above is an eight-frame local capture of that real Submitted map surface
 It contains no third-party photograph and made no external request. “Live Map” is
 the product route; its current public data mode remains the Submitted replay.
 
+Competition materials: [90-second judge guide](JUDGE_GUIDE.md) ·
+[10-slide pitch deck](PITCH_DECK.md) · [Devpost entry copy](DEVPOST_ENTRY.md) ·
+[2:48 video production script](DEMO_VIDEO.md). The video script is validated,
+but recording, human approval, and the public YouTube upload remain unfinished.
+
 ## The frozen evidence
 
 The canonical [Submitted snapshot](data/submission/v1/submitted_snapshot.json)
