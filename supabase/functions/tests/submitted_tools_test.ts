@@ -99,18 +99,18 @@ Deno.test("species evidence is accepted but not scientific authority", async () 
   );
 });
 
-Deno.test("map and comparison preserve withheld and unavailable values", async () => {
+Deno.test("map exposes rights-screened ALA and preserves unavailable Flickr", async () => {
   const map = await executeSubmittedTool("inspect_map_scope", {
     scope_type: "national",
     scope_id: null,
   });
   assert(
-    fact(map, "ala_occurrence_count").value === null,
-    "ALA count must be null",
+    fact(map, "ala_occurrence_count").value === 213_310,
+    "wrong rights-screened ALA count",
   );
   assert(
-    fact(map, "ala_occurrence_count").state === "withheld",
-    "ALA state must be withheld",
+    fact(map, "ala_occurrence_count").state === "observed",
+    "ALA state must be observed",
   );
   assert(
     fact(map, "flickr_candidate_count").value === null,
@@ -119,6 +119,10 @@ Deno.test("map and comparison preserve withheld and unavailable values", async (
   assert(
     fact(map, "absence_inference_permitted").value === false,
     "absence was inferred",
+  );
+  assert(
+    fact(map, "map_cell_count").value === 630,
+    "wrong H3 cell count",
   );
   const comparison = await executeSubmittedTool("compare_ala_and_flickr", {
     scope_type: "national",
@@ -129,6 +133,40 @@ Deno.test("map and comparison preserve withheld and unavailable values", async (
     fact(comparison, "count_difference").value === null,
     "difference was fabricated",
   );
+  assert(
+    fact(comparison, "ala_occurrence_count").value === 213_310,
+    "comparison lost the available ALA count",
+  );
+});
+
+Deno.test("map supports exact lower-scope IDs without raw coordinates", async () => {
+  const cases = [
+    ["state", "ala:state-territory:new%20south%20wales", 47_861],
+    ["ibra", "ala:ibra-v7:arnhem%20coast", 812],
+    ["lga", "ala:lga-2023-approx:adelaide", 560],
+    ["h3", "h3:3:838c23fffffffff", 224],
+  ] as const;
+  for (const [scopeType, scopeId, expected] of cases) {
+    const result = await executeSubmittedTool("inspect_map_scope", {
+      scope_type: scopeType,
+      scope_id: scopeId,
+    });
+    assert(result.status === "partial", `${scopeType} should be partial`);
+    assert(
+      fact(result, "ala_occurrence_count").value === expected,
+      `${scopeType} count changed`,
+    );
+    assert(result.records.length === 1, `${scopeType} record missing`);
+    const encoded = JSON.stringify(result);
+    for (const forbidden of ["center", "polygon", "longitude", "latitude"]) {
+      assert(!encoded.includes(forbidden), `${forbidden} leaked`);
+    }
+  }
+  const missing = await executeSubmittedTool("inspect_map_scope", {
+    scope_type: "state",
+    scope_id: "ala:state-territory:not-real",
+  });
+  assert(missing.status === "not_found", "unknown scope did not fail closed");
 });
 
 Deno.test("private and live tools fail closed without governed snapshots", async () => {

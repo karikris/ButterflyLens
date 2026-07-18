@@ -238,18 +238,145 @@ class EvidenceToolbox:
             ),
         ]
 
+    @staticmethod
+    def _required_map_integer(payload: dict[str, Any], field: str) -> int:
+        value = payload.get(field)
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            raise ToolContractError(f"submitted map {field} is not a count")
+        return value
+
+    def _map_scope_count(
+        self,
+        snapshot: dict[str, Any],
+        scope_type: str,
+        scope: dict[str, Any],
+    ) -> int:
+        if scope_type == "national":
+            return self._required_map_integer(snapshot["counts"], "mapEligible")
+        return self._required_map_integer(scope, "count")
+
+    def _map_scope_record(
+        self,
+        scope: dict[str, Any],
+        citation_ids: Iterable[str],
+    ) -> dict[str, Any]:
+        fingerprint = scope.get("summaryFingerprint")
+        if not isinstance(fingerprint, str) or len(fingerprint) != 64:
+            raise ToolContractError("submitted map scope has no summary fingerprint")
+        evidence_fingerprint = scope.get("evidenceFingerprint")
+        if not isinstance(evidence_fingerprint, str) or len(evidence_fingerprint) != 64:
+            raise ToolContractError("submitted map scope has no evidence fingerprint")
+        latest_year = scope.get("latestEventYear")
+        if latest_year is not None and not isinstance(latest_year, int):
+            raise ToolContractError("submitted map scope latest year is invalid")
+        return _record(
+            f"map-scope:{fingerprint}",
+            "submitted_ala_map_scope",
+            (
+                _fact(
+                    "scope_id",
+                    scope.get("scopeId"),
+                    state="observed",
+                    interpretation="Exact public aggregate scope identifier.",
+                    citation_ids=citation_ids,
+                ),
+                _fact(
+                    "scope_label",
+                    scope.get("label"),
+                    state="observed",
+                    interpretation="Public aggregate scope label.",
+                    citation_ids=citation_ids,
+                ),
+                _fact(
+                    "ala_occurrence_count",
+                    self._required_map_integer(scope, "count"),
+                    state="observed",
+                    unit="occurrences",
+                    interpretation="Rights-screened ALA baseline occurrence-evidence rows in this exact aggregate scope.",
+                    citation_ids=citation_ids,
+                ),
+                _fact(
+                    "unique_taxon_count",
+                    self._required_map_integer(scope, "uniqueTaxonCount"),
+                    state="observed",
+                    unit="taxa",
+                    interpretation="Distinct normalized taxon assertions represented in the aggregate; this is not a completeness claim.",
+                    citation_ids=citation_ids,
+                ),
+                _fact(
+                    "latest_event_year",
+                    latest_year,
+                    state="observed" if latest_year is not None else "unavailable",
+                    unit="year",
+                    interpretation=(
+                        "Latest retained provider event year in the aggregate."
+                        if latest_year is not None
+                        else "No retained provider event year is available for this aggregate."
+                    ),
+                    citation_ids=citation_ids,
+                ),
+                _fact(
+                    "publicly_generalised_count",
+                    self._required_map_integer(scope, "publiclyGeneralisedCount"),
+                    state="observed",
+                    unit="occurrences",
+                    interpretation="Rows marked publicly generalized by the source projection.",
+                    citation_ids=citation_ids,
+                ),
+                _fact(
+                    "evidence_fingerprint",
+                    f"sha256:{evidence_fingerprint}",
+                    state="observed",
+                    interpretation="Fingerprint of the aggregate's evidence membership.",
+                    citation_ids=citation_ids,
+                ),
+                _fact(
+                    "summary_fingerprint",
+                    f"sha256:{fingerprint}",
+                    state="observed",
+                    interpretation="Fingerprint of the exact aggregate summary row.",
+                    citation_ids=citation_ids,
+                ),
+            ),
+            citation_ids,
+        )
+
     def _inspect_map_scope(self, arguments: dict[str, Any]) -> dict[str, Any]:
         keys = (
             "species_catalogue",
-            "ala_snapshot",
-            "ala_aggregation",
+            "submitted_map",
             "flickr_global_status",
             "rights_manifest",
         )
         ids = self._citation_ids(*keys)
         catalogue = self.repository.species_catalogue()
-        boundary = catalogue["alaOccurrenceBoundary"]
+        snapshot = self.repository.submitted_map()
+        scope = self.repository.find_map_scope(
+            scope_type=arguments["scope_type"],
+            scope_id=arguments["scope_id"],
+        )
+        if scope is None:
+            return self._finish(
+                tool_name="inspect_map_scope",
+                status="not_found",
+                summary="The requested exact scope is not in the submitted public ALA map.",
+                query=self._scope_query(arguments, ids),
+                facts=(
+                    _fact(
+                        "scope_found",
+                        False,
+                        state="unavailable",
+                        interpretation="No exact scope identifier matched; the tool does not guess or broaden geography.",
+                        citation_ids=ids,
+                    ),
+                ),
+                records=(),
+                artifact_keys=keys,
+                limitations=("No approximate geographic match was attempted.",),
+            )
         is_national = arguments["scope_type"] == "national"
+        count = self._map_scope_count(snapshot, arguments["scope_type"], scope)
+        map_cells = self._required_map_integer(snapshot["counts"], "mapCells")
         facts = [
             _fact(
                 "accepted_species",
@@ -265,10 +392,14 @@ class EvidenceToolbox:
             ),
             _fact(
                 "ala_occurrence_count",
-                None,
-                state="withheld",
+                count,
+                state="observed",
                 unit="occurrences",
-                interpretation=boundary["reason"],
+                interpretation=(
+                    "Rights-screened ALA baseline occurrence-evidence rows in the national public map projection."
+                    if is_national
+                    else "Rights-screened ALA baseline occurrence-evidence rows in the exact requested aggregate scope."
+                ),
                 citation_ids=ids,
             ),
             _fact(
@@ -281,10 +412,36 @@ class EvidenceToolbox:
             ),
             _fact(
                 "map_cell_count",
-                None,
-                state="unavailable",
+                map_cells if is_national else (1 if arguments["scope_type"] == "h3" else None),
+                state=(
+                    "observed"
+                    if is_national or arguments["scope_type"] == "h3"
+                    else "unavailable"
+                ),
                 unit="cells",
-                interpretation="No governed submitted map snapshot is committed for analyst use.",
+                interpretation=(
+                    "H3 resolution-3 aggregate cells in the submitted national heatmap."
+                    if is_national
+                    else (
+                        "The requested H3 aggregate is one map cell."
+                        if arguments["scope_type"] == "h3"
+                        else "A count of intersecting national heatmap cells is not materialized for this administrative scope."
+                    )
+                ),
+                citation_ids=ids,
+            ),
+            _fact(
+                "rights_excluded_selected",
+                self._required_map_integer(snapshot["counts"], "rightsExcludedSelected")
+                if is_national
+                else None,
+                state="observed" if is_national else "unavailable",
+                unit="occurrences",
+                interpretation=(
+                    "Selected rows conservatively excluded from the national public projection; exclusion is not a legal conclusion."
+                    if is_national
+                    else "The submitted map does not publish excluded-source counts by lower scope."
+                ),
                 citation_ids=ids,
             ),
             _fact(
@@ -297,27 +454,52 @@ class EvidenceToolbox:
         ]
         return self._finish(
             tool_name="inspect_map_scope",
-            status="partial" if is_national else "unavailable",
-            summary=(
-                "The national checklist scope is available, but occurrence, Flickr, and map-cell counts are not publishable in this submitted snapshot."
-                if is_national
-                else "No committed governed map snapshot exists for the requested lower scope."
-            ),
+            status="partial",
+            summary="Rights-screened ALA aggregate evidence is available for this submitted map scope; Flickr evidence remains unavailable.",
             query=self._scope_query(arguments, ids),
             facts=facts,
-            records=(),
+            records=() if is_national else (self._map_scope_record(scope, ids),),
             artifact_keys=keys,
             limitations=(
-                "ALA counts are withheld while exact dataset citation rights remain unresolved.",
+                "The complete ALA baseline remains authoritative; this is a conservative public aggregate projection with three flagged datasets excluded.",
                 "The active Flickr run is not a committed artifact and was not inspected.",
-                "Missing map evidence is not biological absence.",
+                "Provider labels are assertions, and missing evidence is not biological absence.",
             ),
         )
 
     def _compare_ala_and_flickr(self, arguments: dict[str, Any]) -> dict[str, Any]:
-        keys = ("species_catalogue", "ala_snapshot", "flickr_global_status", "rights_manifest")
+        keys = (
+            "species_catalogue",
+            "submitted_map",
+            "flickr_global_status",
+            "rights_manifest",
+        )
         ids = self._citation_ids(*keys)
         query = self._scope_query(arguments, ids)
+        snapshot = self.repository.submitted_map()
+        scope = self.repository.find_map_scope(
+            scope_type=arguments["scope_type"],
+            scope_id=arguments["scope_id"],
+        )
+        if scope is None:
+            return self._finish(
+                tool_name="compare_ala_and_flickr",
+                status="not_found",
+                summary="The requested exact scope is not in the submitted public ALA map.",
+                query=query,
+                facts=(
+                    _fact(
+                        "comparison_allowed",
+                        False,
+                        state="unavailable",
+                        interpretation="No exact public scope matched; geography is not guessed or broadened.",
+                        citation_ids=ids,
+                    ),
+                ),
+                records=(),
+                artifact_keys=keys,
+                limitations=("No approximate geographic match was attempted.",),
+            )
         species_key = arguments["species_key"]
         if species_key is not None:
             species = self.repository.find_species(
@@ -351,13 +533,23 @@ class EvidenceToolbox:
                     artifact_keys=keys,
                     limitations=("No provider or model lookup was attempted.",),
                 )
+        species_scoped = species_key is not None
+        ala_count = (
+            None
+            if species_scoped
+            else self._map_scope_count(snapshot, arguments["scope_type"], scope)
+        )
         facts = [
             _fact(
                 "ala_occurrence_count",
-                None,
-                state="withheld",
+                ala_count,
+                state="unavailable" if species_scoped else "observed",
                 unit="occurrences",
-                interpretation="ALA counts are withheld by the submitted dataset-rights boundary.",
+                interpretation=(
+                    "The submitted public map is not species-granular, so it cannot supply an ALA count for this species selector."
+                    if species_scoped
+                    else "Rights-screened ALA baseline occurrence-evidence rows in the exact requested aggregate scope."
+                ),
                 citation_ids=ids,
             ),
             _fact(
@@ -386,14 +578,19 @@ class EvidenceToolbox:
         ]
         return self._finish(
             tool_name="compare_ala_and_flickr",
-            status="unavailable",
-            summary="ALA and Flickr cannot yet be compared from committed governed evidence for this scope.",
+            status="unavailable" if species_scoped else "partial",
+            summary=(
+                "The submitted map has no species-granular ALA count and no immutable Flickr count for this selector."
+                if species_scoped
+                else "The rights-screened ALA aggregate count is available, but Flickr and the two-source difference remain unavailable."
+            ),
             query=query,
             facts=facts,
             records=(),
             artifact_keys=keys,
             limitations=(
                 "Unavailable is not zero and does not imply absence.",
+                "The complete ALA baseline remains authoritative; the displayed count is the conservative public projection.",
                 "No active Flickr or BioMiner output was inspected.",
             ),
         )

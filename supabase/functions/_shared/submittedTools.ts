@@ -7,6 +7,9 @@ import artifactRegistryJson from "../../../packages/openai/submitted-artifacts.v
 import speciesCatalogueJson from "../../../apps/web/src/species/submittedSpeciesCatalogue.json" with {
   type: "json",
 };
+import submittedMapSnapshotJson from "../../../apps/web/src/map/submittedMapSnapshot.json" with {
+  type: "json",
+};
 import contributorProjectionJson from "../../../apps/web/src/community/submittedContributorImpact.json" with {
   type: "json",
 };
@@ -112,6 +115,7 @@ const artifactRegistry = artifactRegistryJson as unknown as {
   artifacts: ArtifactRow[];
 };
 const speciesCatalogue = speciesCatalogueJson as unknown as JsonObject;
+const submittedMapSnapshot = submittedMapSnapshotJson as unknown as JsonObject;
 const contributorProjection =
   contributorProjectionJson as unknown as JsonObject;
 const artifacts = new Map(
@@ -393,23 +397,170 @@ function arrayField(value: JsonValue | undefined): JsonValue[] {
   return Array.isArray(value) ? value : [];
 }
 
+function requiredMapInteger(payload: JsonObject, field: string): number {
+  const value = payload[field];
+  if (!Number.isInteger(value) || (value as number) < 0) {
+    throw new SubmittedToolError(`submitted map ${field} is not a count`);
+  }
+  return value as number;
+}
+
+function findMapScope(args: JsonObject): JsonObject | null {
+  if (args.scope_type === "national") {
+    return args.scope_id === null
+      ? { scopeId: "AU", label: "Australia" }
+      : null;
+  }
+  const scopes = objectField(submittedMapSnapshot.scopes);
+  const rows = arrayField(scopes[args.scope_type as string]);
+  return (rows.find((row) =>
+    isJsonObject(row) && row.scopeId === args.scope_id
+  ) as JsonObject | undefined) ?? null;
+}
+
+function mapScopeCount(
+  scopeType: JsonValue,
+  scope: JsonObject,
+): number {
+  return scopeType === "national"
+    ? requiredMapInteger(
+      objectField(submittedMapSnapshot.counts),
+      "mapEligible",
+    )
+    : requiredMapInteger(scope, "count");
+}
+
+function mapScopeRecord(
+  scope: JsonObject,
+  ids: readonly string[],
+): EvidenceRecord {
+  const fingerprint = stringField(scope.summaryFingerprint);
+  const evidenceFingerprint = stringField(scope.evidenceFingerprint);
+  if (!fingerprint || fingerprint.length !== 64) {
+    throw new SubmittedToolError(
+      "submitted map scope has no summary fingerprint",
+    );
+  }
+  if (!evidenceFingerprint || evidenceFingerprint.length !== 64) {
+    throw new SubmittedToolError(
+      "submitted map scope has no evidence fingerprint",
+    );
+  }
+  const latestYear = scope.latestEventYear;
+  if (latestYear !== null && !Number.isInteger(latestYear)) {
+    throw new SubmittedToolError(
+      "submitted map scope latest year is invalid",
+    );
+  }
+  return evidenceRecord(
+    `map-scope:${fingerprint}`,
+    "submitted_ala_map_scope",
+    [
+      fact(
+        "scope_id",
+        scope.scopeId as JsonPrimitive,
+        "observed",
+        "Exact public aggregate scope identifier.",
+        ids,
+      ),
+      fact(
+        "scope_label",
+        scope.label as JsonPrimitive,
+        "observed",
+        "Public aggregate scope label.",
+        ids,
+      ),
+      fact(
+        "ala_occurrence_count",
+        requiredMapInteger(scope, "count"),
+        "observed",
+        "Rights-screened ALA baseline occurrence-evidence rows in this exact aggregate scope.",
+        ids,
+        "occurrences",
+      ),
+      fact(
+        "unique_taxon_count",
+        requiredMapInteger(scope, "uniqueTaxonCount"),
+        "observed",
+        "Distinct normalized taxon assertions represented in the aggregate; this is not a completeness claim.",
+        ids,
+        "taxa",
+      ),
+      fact(
+        "latest_event_year",
+        latestYear as JsonPrimitive,
+        latestYear === null ? "unavailable" : "observed",
+        latestYear === null
+          ? "No retained provider event year is available for this aggregate."
+          : "Latest retained provider event year in the aggregate.",
+        ids,
+        "year",
+      ),
+      fact(
+        "publicly_generalised_count",
+        requiredMapInteger(scope, "publiclyGeneralisedCount"),
+        "observed",
+        "Rows marked publicly generalized by the source projection.",
+        ids,
+        "occurrences",
+      ),
+      fact(
+        "evidence_fingerprint",
+        `sha256:${evidenceFingerprint}`,
+        "observed",
+        "Fingerprint of the aggregate's evidence membership.",
+        ids,
+      ),
+      fact(
+        "summary_fingerprint",
+        `sha256:${fingerprint}`,
+        "observed",
+        "Fingerprint of the exact aggregate summary row.",
+        ids,
+      ),
+    ],
+    ids,
+  );
+}
+
 async function inspectMapScope(args: JsonObject): Promise<ToolResult> {
   const keys = [
     "species_catalogue",
-    "ala_snapshot",
-    "ala_aggregation",
+    "submitted_map",
     "flickr_global_status",
     "rights_manifest",
   ];
   const ids = citationIds(keys);
   const national = args.scope_type === "national";
-  const boundary = objectField(speciesCatalogue.alaOccurrenceBoundary);
+  const scope = findMapScope(args);
+  if (!scope) {
+    return finish({
+      tool_name: "inspect_map_scope",
+      status: "not_found",
+      summary:
+        "The requested exact scope is not in the submitted public ALA map.",
+      query: scopeQuery(args, ids),
+      facts: [
+        fact(
+          "scope_found",
+          false,
+          "unavailable",
+          "No exact scope identifier matched; the tool does not guess or broaden geography.",
+          ids,
+        ),
+      ],
+      artifact_keys: keys,
+      limitations: ["No approximate geographic match was attempted."],
+    });
+  }
+  const counts = objectField(submittedMapSnapshot.counts);
+  const count = mapScopeCount(args.scope_type, scope);
+  const mapCells = requiredMapInteger(counts, "mapCells");
   return finish({
     tool_name: "inspect_map_scope",
-    status: national ? "partial" : "unavailable",
-    summary: national
-      ? "The national checklist is available, but occurrence, Flickr, and map-cell counts are not publishable in this submitted snapshot."
-      : "No committed governed map snapshot exists for the requested lower scope.",
+    status: "partial",
+    summary:
+      "Rights-screened ALA aggregate evidence is available for this submitted map scope; Flickr evidence remains unavailable.",
     query: scopeQuery(args, ids),
     facts: [
       fact(
@@ -418,15 +569,17 @@ async function inspectMapScope(args: JsonObject): Promise<ToolResult> {
         national ? "observed" : "unavailable",
         national
           ? "Accepted species in the authoritative national checklist."
-          : "No committed lower-scope species aggregate exists.",
+          : "No committed lower-scope accepted-species aggregate exists in the submitted snapshot.",
         ids,
         "species",
       ),
       fact(
         "ala_occurrence_count",
-        null,
-        "withheld",
-        stringField(boundary.reason) ?? "ALA counts are rights-withheld.",
+        count,
+        "observed",
+        national
+          ? "Rights-screened ALA baseline occurrence-evidence rows in the national public map projection."
+          : "Rights-screened ALA baseline occurrence-evidence rows in the exact requested aggregate scope.",
         ids,
         "occurrences",
       ),
@@ -440,25 +593,40 @@ async function inspectMapScope(args: JsonObject): Promise<ToolResult> {
       ),
       fact(
         "map_cell_count",
-        null,
-        "unavailable",
-        "No governed submitted map snapshot is committed for analyst use.",
+        national ? mapCells : args.scope_type === "h3" ? 1 : null,
+        national || args.scope_type === "h3" ? "observed" : "unavailable",
+        national
+          ? "H3 resolution-3 aggregate cells in the submitted national heatmap."
+          : args.scope_type === "h3"
+          ? "The requested H3 aggregate is one map cell."
+          : "A count of intersecting national heatmap cells is not materialized for this administrative scope.",
         ids,
         "cells",
+      ),
+      fact(
+        "rights_excluded_selected",
+        national ? requiredMapInteger(counts, "rightsExcludedSelected") : null,
+        national ? "observed" : "unavailable",
+        national
+          ? "Selected rows conservatively excluded from the national public projection; exclusion is not a legal conclusion."
+          : "The submitted map does not publish excluded-source counts by lower scope.",
+        ids,
+        "occurrences",
       ),
       fact(
         "absence_inference_permitted",
         false,
         "observed",
-        "Unavailable map evidence cannot establish biological absence.",
+        "Withheld or unavailable evidence cannot establish biological absence.",
         ids,
       ),
     ],
+    records: national ? [] : [mapScopeRecord(scope, ids)],
     artifact_keys: keys,
     limitations: [
-      "ALA occurrence counts are rights-withheld.",
-      "Active Flickr and BioMiner outputs were not inspected.",
-      "Missing evidence is not biological absence.",
+      "The complete ALA baseline remains authoritative; this is a conservative public aggregate projection with three flagged datasets excluded.",
+      "The active Flickr run is not a committed artifact and was not inspected.",
+      "Provider labels are assertions, and missing evidence is not biological absence.",
     ],
   });
 }
@@ -466,12 +634,33 @@ async function inspectMapScope(args: JsonObject): Promise<ToolResult> {
 async function compareAlaAndFlickr(args: JsonObject): Promise<ToolResult> {
   const keys = [
     "species_catalogue",
-    "ala_snapshot",
+    "submitted_map",
     "flickr_global_status",
     "rights_manifest",
   ];
   const ids = citationIds(keys);
   const query = scopeQuery(args, ids);
+  const scope = findMapScope(args);
+  if (!scope) {
+    return finish({
+      tool_name: "compare_ala_and_flickr",
+      status: "not_found",
+      summary:
+        "The requested exact scope is not in the submitted public ALA map.",
+      query,
+      facts: [
+        fact(
+          "comparison_allowed",
+          false,
+          "unavailable",
+          "No exact public scope matched; geography is not guessed or broadened.",
+          ids,
+        ),
+      ],
+      artifact_keys: keys,
+      limitations: ["No approximate geographic match was attempted."],
+    });
+  }
   if (args.species_key !== null) {
     query.push(
       fact(
@@ -503,18 +692,23 @@ async function compareAlaAndFlickr(args: JsonObject): Promise<ToolResult> {
       });
     }
   }
+  const speciesScoped = args.species_key !== null;
+  const alaCount = speciesScoped ? null : mapScopeCount(args.scope_type, scope);
   return finish({
     tool_name: "compare_ala_and_flickr",
-    status: "unavailable",
-    summary:
-      "ALA and Flickr cannot yet be compared from committed governed evidence for this scope.",
+    status: speciesScoped ? "unavailable" : "partial",
+    summary: speciesScoped
+      ? "The submitted map has no species-granular ALA count and no immutable Flickr count for this selector."
+      : "The rights-screened ALA aggregate count is available, but Flickr and the two-source difference remain unavailable.",
     query,
     facts: [
       fact(
         "ala_occurrence_count",
-        null,
-        "withheld",
-        "ALA counts are withheld by the submitted rights boundary.",
+        alaCount,
+        speciesScoped ? "unavailable" : "observed",
+        speciesScoped
+          ? "The submitted public map is not species-granular, so it cannot supply an ALA count for this species selector."
+          : "Rights-screened ALA baseline occurrence-evidence rows in the exact requested aggregate scope.",
         ids,
         "occurrences",
       ),
@@ -544,8 +738,9 @@ async function compareAlaAndFlickr(args: JsonObject): Promise<ToolResult> {
     ],
     artifact_keys: keys,
     limitations: [
-      "Unavailable is not zero or biological absence.",
-      "No active provider output was inspected.",
+      "Unavailable is not zero and does not imply absence.",
+      "The complete ALA baseline remains authoritative; the displayed count is the conservative public projection.",
+      "No active Flickr or BioMiner output was inspected.",
     ],
   });
 }

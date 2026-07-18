@@ -13,7 +13,7 @@ from typing import Any, Iterable
 
 
 REGISTRY_PATH = Path("packages/openai/submitted-artifacts.v1.json")
-REGISTRY_SCHEMA_VERSION = "butterflylens-openai-artifact-registry:v1.0.0"
+REGISTRY_SCHEMA_VERSION = "butterflylens-openai-artifact-registry:v1.1.0"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _COMMIT = re.compile(r"^[0-9a-f]{40}$")
 
@@ -191,6 +191,55 @@ class SubmittedEvidenceRepository:
         if not isinstance(payload, dict) or not isinstance(payload.get("species"), list):
             raise ArtifactIntegrityError("species catalogue shape is invalid")
         return payload
+
+    def submitted_map(self) -> dict[str, Any]:
+        payload = self.read_json("submitted_map")
+        if not isinstance(payload, dict):
+            raise ArtifactIntegrityError("submitted map shape is invalid")
+        if (
+            payload.get("schemaVersion")
+            != "butterflylens-submitted-map-browser-snapshot/v1"
+        ):
+            raise ArtifactIntegrityError("submitted map schema version is unsupported")
+        counts = payload.get("counts")
+        layers = payload.get("layers")
+        scopes = payload.get("scopes")
+        cells = payload.get("cells")
+        rights = payload.get("rights")
+        if not all(isinstance(value, dict) for value in (counts, layers, scopes, rights)):
+            raise ArtifactIntegrityError("submitted map metadata is malformed")
+        if not isinstance(cells, list) or not all(isinstance(row, dict) for row in cells):
+            raise ArtifactIntegrityError("submitted map cells are malformed")
+        if layers.get("alaBaseline", {}).get("status") != "available":
+            raise ArtifactIntegrityError("submitted map ALA layer is not available")
+        if layers.get("flickrCandidate", {}).get("status") != "unavailable":
+            raise ArtifactIntegrityError("submitted map Flickr boundary is invalid")
+        if rights.get("legalConclusion") is not False:
+            raise ArtifactIntegrityError("submitted map rights boundary is invalid")
+        for scope_type in ("state", "ibra", "lga", "h3"):
+            rows = scopes.get(scope_type)
+            if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+                raise ArtifactIntegrityError(
+                    f"submitted map {scope_type} scopes are malformed"
+                )
+        return payload
+
+    def find_map_scope(
+        self,
+        *,
+        scope_type: str,
+        scope_id: str | None,
+    ) -> dict[str, Any] | None:
+        if scope_type == "national":
+            return {"scopeId": "AU", "label": "Australia"} if scope_id is None else None
+        payload = self.submitted_map()
+        rows = payload["scopes"].get(scope_type)
+        if not isinstance(rows, list):
+            return None
+        for row in rows:
+            if row.get("scopeId") == scope_id:
+                return deepcopy(row)
+        return None
 
     def species(self) -> tuple[dict[str, Any], ...]:
         rows = self.species_catalogue()["species"]

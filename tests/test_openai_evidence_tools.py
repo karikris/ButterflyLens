@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,9 +98,10 @@ class OpenAIEvidenceToolTests(unittest.TestCase):
         repository = SubmittedEvidenceRepository(ROOT)
         self.assertEqual(repository.repository, "karikris/ButterflyLens")
         self.assertEqual(
-            repository.commit, "f9b96814f335684cf311b70b622e2cade0188b9b"
+            repository.commit, "cfe6b5f38b687e83d2a601d381edde29fcb7a717"
         )
-        self.assertEqual(len(repository.artifact_keys), 18)
+        self.assertEqual(len(repository.artifact_keys), 19)
+        self.assertIn("submitted_map", repository.artifact_keys)
         for key in repository.artifact_keys:
             citation = repository.citation(key)
             self.assertEqual(citation["commit"], repository.commit)
@@ -145,26 +147,22 @@ class OpenAIEvidenceToolTests(unittest.TestCase):
         )
         self.assertEqual(restored["acceptedScientificName"], SPECIES_NAME)
 
-    def test_repository_reads_the_pinned_commit_not_mutable_worktree_bytes(self) -> None:
-        repository = SubmittedEvidenceRepository(ROOT)
-        pinned = repository.read_json("rights_manifest")
-        working = json.loads(
-            (ROOT / "provenance/data_rights_manifest.json").read_text(
-                encoding="utf-8"
-            )
-        )
-        self.assertNotEqual(pinned, working)
-        self.assertFalse(
-            any(
-                row.get("path") == "data/submission/v1/submitted_snapshot.json"
-                for row in pinned["artifacts"]
-            )
-        )
-        self.assertTrue(
-            any(
-                row.get("path") == "data/submission/v1/submitted_snapshot.json"
-                for row in working["artifacts"]
-            )
+    def test_repository_reads_every_artifact_from_the_exact_pinned_commit(self) -> None:
+        with mock.patch(
+            "butterflylens_openai.repository.subprocess.run",
+            wraps=subprocess.run,
+        ) as run:
+            repository = SubmittedEvidenceRepository(ROOT)
+            submitted_map = repository.submitted_map()
+        self.assertEqual(submitted_map["counts"]["mapEligible"], 213_310)
+        commands = [call.args[0] for call in run.call_args_list]
+        self.assertIn(
+            [
+                "git",
+                "show",
+                "cfe6b5f38b687e83d2a601d381edde29fcb7a717:apps/web/src/map/submittedMapSnapshot.json",
+            ],
+            commands,
         )
 
     def test_unknown_extra_and_malformed_arguments_fail(self) -> None:
@@ -225,32 +223,71 @@ class OpenAIEvidenceToolTests(unittest.TestCase):
         self.assertEqual(missing["status"], "not_found")
         self.assertFalse(fact(missing, "model_memory_lookup_permitted")["value"])
 
-    def test_map_scope_preserves_withheld_and_unavailable_counts(self) -> None:
+    def test_map_scope_returns_rights_screened_ala_and_unavailable_flickr(self) -> None:
         national = self.toolbox.invoke(
             "inspect_map_scope", {"scope_type": "national", "scope_id": None}
         )
         self.assertEqual(national["status"], "partial")
         self.assertEqual(fact(national, "accepted_species")["value"], 463)
-        self.assertIsNone(fact(national, "ala_occurrence_count")["value"])
-        self.assertEqual(fact(national, "ala_occurrence_count")["state"], "withheld")
+        self.assertEqual(fact(national, "ala_occurrence_count")["value"], 213_310)
+        self.assertEqual(fact(national, "ala_occurrence_count")["state"], "observed")
         self.assertIsNone(fact(national, "flickr_candidate_count")["value"])
+        self.assertEqual(fact(national, "map_cell_count")["value"], 630)
+        self.assertEqual(fact(national, "rights_excluded_selected")["value"], 16_753)
         self.assertFalse(fact(national, "absence_inference_permitted")["value"])
-        state = self.toolbox.invoke(
-            "inspect_map_scope", {"scope_type": "state", "scope_id": "NSW"}
-        )
-        self.assertEqual(state["status"], "unavailable")
-        self.assertIsNone(fact(state, "accepted_species")["value"])
 
-    def test_ala_flickr_comparison_does_not_fabricate_difference(self) -> None:
-        result = self.toolbox.invoke(
+    def test_map_scope_supports_exact_state_ibra_lga_and_h3_drilldowns(self) -> None:
+        cases = (
+            ("state", "ala:state-territory:new%20south%20wales", 47_861),
+            ("ibra", "ala:ibra-v7:arnhem%20coast", 812),
+            ("lga", "ala:lga-2023-approx:adelaide", 560),
+            ("h3", "h3:3:838c23fffffffff", 224),
+        )
+        for scope_type, scope_id, expected_count in cases:
+            with self.subTest(scope_type=scope_type):
+                result = self.toolbox.invoke(
+                    "inspect_map_scope",
+                    {"scope_type": scope_type, "scope_id": scope_id},
+                )
+                self.assertEqual(result["status"], "partial")
+                self.assertEqual(
+                    fact(result, "ala_occurrence_count")["value"], expected_count
+                )
+                self.assertEqual(len(result["records"]), 1)
+                record_facts = {
+                    row["name"]: row for row in result["records"][0]["facts"]
+                }
+                self.assertEqual(
+                    record_facts["ala_occurrence_count"]["value"], expected_count
+                )
+                encoded = json.dumps(result)
+                for forbidden in ("center", "polygon", "longitude", "latitude"):
+                    self.assertNotIn(forbidden, encoded)
+
+    def test_unknown_map_scope_fails_closed_without_approximate_match(self) -> None:
+        missing = self.toolbox.invoke(
+            "inspect_map_scope",
+            {"scope_type": "state", "scope_id": "ala:state-territory:not-real"},
+        )
+        self.assertEqual(missing["status"], "not_found")
+        self.assertFalse(fact(missing, "scope_found")["value"])
+
+    def test_ala_flickr_comparison_exposes_only_available_same_scope_count(self) -> None:
+        national = self.toolbox.invoke(
+            "compare_ala_and_flickr",
+            {"scope_type": "national", "scope_id": None, "species_key": None},
+        )
+        self.assertEqual(national["status"], "partial")
+        self.assertEqual(fact(national, "ala_occurrence_count")["value"], 213_310)
+        self.assertIsNone(fact(national, "flickr_candidate_count")["value"])
+        self.assertIsNone(fact(national, "count_difference")["value"])
+        self.assertFalse(fact(national, "comparison_allowed")["value"])
+        species = self.toolbox.invoke(
             "compare_ala_and_flickr",
             {"scope_type": "national", "scope_id": None, "species_key": SPECIES_KEY},
         )
-        self.assertEqual(result["status"], "unavailable")
-        self.assertIsNone(fact(result, "ala_occurrence_count")["value"])
-        self.assertIsNone(fact(result, "flickr_candidate_count")["value"])
-        self.assertIsNone(fact(result, "count_difference")["value"])
-        self.assertFalse(fact(result, "comparison_allowed")["value"])
+        self.assertEqual(species["status"], "unavailable")
+        self.assertIsNone(fact(species, "ala_occurrence_count")["value"])
 
     def test_flickr_candidate_tool_is_local_and_honestly_unavailable(self) -> None:
         result = self.toolbox.invoke(

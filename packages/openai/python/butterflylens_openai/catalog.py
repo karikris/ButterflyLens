@@ -6,7 +6,7 @@ from copy import deepcopy
 from typing import Any
 
 
-CONTRACT_SCHEMA_VERSION = "butterflylens-openai-tool-contracts:v1.0.0"
+CONTRACT_SCHEMA_VERSION = "butterflylens-openai-tool-contracts:v1.1.0"
 RESULT_SCHEMA_VERSION = "butterflylens-openai-tool-result:v1.0.0"
 
 TOOL_ORDER = (
@@ -107,13 +107,19 @@ _NULLABLE_IDENTIFIER = {
     "maxLength": 180,
     "pattern": r"^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
 }
+_NULLABLE_SCOPE_IDENTIFIER = {
+    "type": ["string", "null"],
+    "minLength": 1,
+    "maxLength": 180,
+    "pattern": r"^[A-Za-z0-9][A-Za-z0-9._:/%+-]*$",
+}
 _NULLABLE_TEXT = {"type": ["string", "null"], "minLength": 1, "maxLength": 240}
 _SCOPE_TYPE = {"type": "string", "enum": ["national", "state", "ibra", "lga", "h3"]}
 _LIMIT = {"type": "integer", "minimum": 1, "maximum": 20}
 
 _SCOPE_PROPERTIES = {
     "scope_type": deepcopy(_SCOPE_TYPE),
-    "scope_id": deepcopy(_NULLABLE_IDENTIFIER),
+    "scope_id": deepcopy(_NULLABLE_SCOPE_IDENTIFIER),
 }
 
 _INPUT_SCHEMAS = {
