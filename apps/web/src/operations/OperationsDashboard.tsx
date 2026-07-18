@@ -1,9 +1,17 @@
+import { useEffect, useMemo, useState } from 'react'
+
 import { EvidenceNotice, StateBadge } from '../design-system/EvidencePrimitives'
 import {
   buildSafeOperationsProjection,
   submittedOperationsSnapshot,
   type LiveOperationsObservation,
 } from './operationsModel'
+import {
+  submittedMonitoringSnapshot,
+  type MonitoringState,
+  type PublicMonitoringSnapshot,
+} from './monitoringModel'
+import { loadMonitoringSnapshot } from './monitoringTransport'
 
 const WORKER_BADGE = {
   online: { state: 'verified', label: 'Worker online' },
@@ -11,16 +19,130 @@ const WORKER_BADGE = {
   unavailable: { state: 'unavailable', label: 'Worker status unavailable' },
 } as const
 
+const MONITORING_BADGE = {
+  available: 'verified',
+  submitted: 'submitted',
+  unavailable: 'unavailable',
+  unfinished: 'unfinished',
+  degraded: 'caution',
+} as const
+
+function liveObservationFromMonitoring(
+  snapshot: PublicMonitoringSnapshot,
+): LiveOperationsObservation | null {
+  if (snapshot.snapshotMode !== 'live') return null
+  return {
+    schemaVersion: 'butterflylens-public-worker-observation:v1.0.0',
+    observedAt: snapshot.observedAt,
+    heartbeatObservedAt: snapshot.heartbeat.observedAt,
+    workerState: snapshot.heartbeat.workerState as LiveOperationsObservation['workerState'],
+    committedLiveSnapshot: null,
+  }
+}
+
+function useMonitoringSnapshot(
+  initial: PublicMonitoringSnapshot,
+  endpoint: string | null,
+  refreshMs: number,
+) {
+  const [snapshot, setSnapshot] = useState(initial)
+  useEffect(() => setSnapshot(initial), [initial])
+  useEffect(() => {
+    if (endpoint === null) return
+    let active = true
+    let refreshTimer: ReturnType<typeof setTimeout> | undefined
+    const refresh = async () => {
+      try {
+        const next = await loadMonitoringSnapshot(endpoint)
+        if (active) setSnapshot(next)
+      } catch {
+        // Keep the last valid snapshot. Live monitoring never gates static content.
+      } finally {
+        if (active) refreshTimer = setTimeout(refresh, refreshMs)
+      }
+    }
+    void refresh()
+    return () => {
+      active = false
+      if (refreshTimer !== undefined) clearTimeout(refreshTimer)
+    }
+  }, [endpoint, refreshMs])
+  return snapshot
+}
+
+export function validateMonitoringRefreshMs(value: number) {
+  if (!Number.isInteger(value) || value < 5_000 || value > 300_000) {
+    throw new Error('monitoring refresh interval is invalid')
+  }
+  return value
+}
+
+function MetricCard({
+  detail,
+  label,
+  reason,
+  state,
+  value,
+}: {
+  readonly detail?: string
+  readonly label: string
+  readonly reason: string
+  readonly state: MonitoringState
+  readonly value: string
+}) {
+  return (
+    <li className="monitoring-card">
+      <div className="monitoring-card__heading">
+        <span>{label}</span>
+        <StateBadge state={MONITORING_BADGE[state]}>{state}</StateBadge>
+      </div>
+      <strong>{value}</strong>
+      {detail ? <span>{detail}</span> : null}
+      <p>{reason}</p>
+    </li>
+  )
+}
+
+function formatBytes(value: number | null) {
+  if (value === null) return 'Unavailable'
+  const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB']
+  let scaled = value
+  let unit = 0
+  while (scaled >= 1024 && unit < units.length - 1) {
+    scaled /= 1024
+    unit += 1
+  }
+  return `${scaled.toLocaleString('en-AU', { maximumFractionDigits: 1 })} ${units[unit]}`
+}
+
 export function OperationsDashboard({
-  liveObservation = null,
+  liveObservation,
+  monitoringSnapshot = submittedMonitoringSnapshot,
+  monitoringUrl = null,
   now = new Date(),
+  refreshMs = 30_000,
 }: {
   readonly liveObservation?: LiveOperationsObservation | unknown | null
+  readonly monitoringSnapshot?: PublicMonitoringSnapshot
+  readonly monitoringUrl?: string | null
   readonly now?: Date
+  readonly refreshMs?: number
 }) {
+  const monitoring = useMonitoringSnapshot(
+    monitoringSnapshot,
+    monitoringUrl,
+    validateMonitoringRefreshMs(refreshMs),
+  )
+  const effectiveLiveObservation = useMemo(
+    () =>
+      liveObservation === undefined
+        ? liveObservationFromMonitoring(monitoring)
+        : liveObservation,
+    [liveObservation, monitoring],
+  )
   const projection = buildSafeOperationsProjection(
     submittedOperationsSnapshot,
-    liveObservation,
+    effectiveLiveObservation,
     now,
   )
   const workerBadge = WORKER_BADGE[projection.workerStatus]
@@ -141,6 +263,113 @@ export function OperationsDashboard({
           </div>
         </li>
       </ul>
+
+      <section className="monitoring-panel" aria-labelledby="monitoring-heading">
+        <header>
+          <div>
+            <p className="eyebrow">Operational monitoring</p>
+            <h3 id="monitoring-heading">What the live system can prove now</h3>
+          </div>
+          <StateBadge state={monitoring.snapshotMode === 'live' ? 'verified' : 'submitted'}>
+            {monitoring.snapshotMode === 'live' ? 'Live snapshot' : 'Submitted fallback'}
+          </StateBadge>
+        </header>
+        <p className="monitoring-panel__boundary">
+          Unavailable values stay unavailable—not zero. These operational signals
+          never establish butterfly identity, occurrence, or dataset quality.
+        </p>
+        <ul className="monitoring-grid">
+          <MetricCard
+            label="Worker heartbeat"
+            state={monitoring.heartbeat.state}
+            value={monitoring.heartbeat.observedAt ?? 'Unavailable'}
+            detail={monitoring.heartbeat.workerState ?? undefined}
+            reason={monitoring.heartbeat.reason}
+          />
+          <MetricCard
+            label="API budget"
+            state={monitoring.apiBudget.state}
+            value={
+              monitoring.apiBudget.remaining === null || monitoring.apiBudget.limit === null
+                ? 'Unavailable'
+                : `${monitoring.apiBudget.remaining.toLocaleString('en-AU')} of ${monitoring.apiBudget.limit.toLocaleString('en-AU')} remaining`
+            }
+            detail={
+              monitoring.apiBudget.resetsAt === null
+                ? undefined
+                : `Resets ${monitoring.apiBudget.resetsAt}`
+            }
+            reason={monitoring.apiBudget.reason}
+          />
+          <MetricCard
+            label="Stage health"
+            state={monitoring.stageHealth.state}
+            value={monitoring.stageHealth.currentStage ?? 'Unavailable'}
+            detail={
+              monitoring.stageHealth.healthyCount === null ||
+                monitoring.stageHealth.failedCount === null
+                ? undefined
+                : `${monitoring.stageHealth.healthyCount} healthy · ${monitoring.stageHealth.failedCount} failed`
+            }
+            reason={monitoring.stageHealth.reason}
+          />
+          <MetricCard
+            label="Queue depth"
+            state={monitoring.queue.state}
+            value={
+              monitoring.queue.depth === null || monitoring.queue.capacity === null
+                ? 'Unavailable'
+                : `${monitoring.queue.depth.toLocaleString('en-AU')} of ${monitoring.queue.capacity.toLocaleString('en-AU')}`
+            }
+            reason={monitoring.queue.reason}
+          />
+          <MetricCard
+            label="Failures"
+            state={monitoring.failures.state}
+            value={
+              monitoring.failures.count === null
+                ? 'Unavailable'
+                : monitoring.failures.count.toLocaleString('en-AU')
+            }
+            reason={monitoring.failures.reason}
+          />
+          <MetricCard
+            label="Last artifact"
+            state={monitoring.lastArtifact.state}
+            value={
+              monitoring.lastArtifact.fingerprint === null
+                ? 'Unavailable'
+                : `${monitoring.lastArtifact.fingerprint.slice(0, 12)}…`
+            }
+            detail={monitoring.lastArtifact.committedAt ?? undefined}
+            reason={monitoring.lastArtifact.reason}
+          />
+          <MetricCard
+            label="Last map refresh"
+            state={monitoring.lastMapRefresh.state}
+            value={monitoring.lastMapRefresh.refreshedAt ?? 'Unavailable'}
+            detail={
+              monitoring.lastMapRefresh.fingerprint === null
+                ? undefined
+                : `${monitoring.lastMapRefresh.fingerprint.slice(0, 12)}…`
+            }
+            reason={monitoring.lastMapRefresh.reason}
+          />
+          <MetricCard
+            label="Model state"
+            state={monitoring.models.state}
+            value={`YOLOE ${monitoring.models.yoloe} · BioCLIP ${monitoring.models.bioclip}`}
+            reason={monitoring.models.reason}
+          />
+          <MetricCard
+            label="Disk / memory"
+            state={monitoring.resources.state}
+            value={`Disk ${formatBytes(monitoring.resources.freeDiskBytes)}`}
+            detail={`RSS ${formatBytes(monitoring.resources.processRssBytes)} · capacity ${formatBytes(monitoring.resources.memoryCapacityBytes)}`}
+            reason={monitoring.resources.reason}
+          />
+        </ul>
+      </section>
     </section>
   )
 }

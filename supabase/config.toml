@@ -111,6 +111,11 @@ verify_jwt = true
 [functions.control-butterflylens]
 verify_jwt = true
 
+# Credential-free, public-safe aggregate status. The handler owns exact-origin
+# CORS and reads only the typed append-only projection through the server client.
+[functions.operations-status]
+verify_jwt = false
+
 # Email testing server. Emails sent with the local dev setup are not actually sent - rather, they
 # are monitored, and you can view the emails that would have been sent from the web interface.
 [local_smtp]

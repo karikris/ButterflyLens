@@ -34,6 +34,8 @@ jobs:
       B2_PRIVATE_BUCKET: ${{ vars.B2_PRIVATE_BUCKET }}
       B2_KEY_ID: ${{ secrets.B2_KEY_ID }}
       B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
+      BUTTERFLYLENS_PUBLIC_PROJECT_ID: ${{ vars.BUTTERFLYLENS_PUBLIC_PROJECT_ID }}
+      BUTTERFLYLENS_PUBLIC_ORIGIN: https://karikris.github.io
     steps:
       - name: Checkout immutable source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
@@ -52,6 +54,8 @@ jobs:
           test -n "$B2_PRIVATE_BUCKET"
           test -n "$B2_KEY_ID"
           test -n "$B2_APPLICATION_KEY"
+          test -n "$BUTTERFLYLENS_PUBLIC_PROJECT_ID"
+          test "$BUTTERFLYLENS_PUBLIC_ORIGIN" = "https://karikris.github.io"
       - name: Link exact Supabase project
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD" --yes
       - name: Apply tracked migrations without production seed
@@ -63,11 +67,13 @@ jobs:
             "B2_S3_ENDPOINT=$B2_S3_ENDPOINT" \
             "B2_PRIVATE_BUCKET=$B2_PRIVATE_BUCKET" \
             "B2_KEY_ID=$B2_KEY_ID" \
-            "B2_APPLICATION_KEY=$B2_APPLICATION_KEY"
-      - name: Deploy exact authenticated Edge Functions
+            "B2_APPLICATION_KEY=$B2_APPLICATION_KEY" \
+            "BUTTERFLYLENS_PUBLIC_PROJECT_ID=$BUTTERFLYLENS_PUBLIC_PROJECT_ID" \
+            "BUTTERFLYLENS_PUBLIC_ORIGIN=$BUTTERFLYLENS_PUBLIC_ORIGIN"
+      - name: Deploy exact governed Edge Functions
         run: |
           supabase functions deploy \
-            ask-butterflylens sign-b2-object control-butterflylens \
+            ask-butterflylens sign-b2-object control-butterflylens operations-status \
             --project-ref "$SUPABASE_PROJECT_ID" --use-api
       - name: Verify remote migration history
         run: supabase migration list --linked --password "$SUPABASE_DB_PASSWORD"

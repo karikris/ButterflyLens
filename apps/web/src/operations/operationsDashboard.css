@@ -187,16 +187,103 @@
   color: var(--bl-ink-muted);
 }
 
+.monitoring-panel {
+  margin-top: var(--bl-space-7);
+  padding-top: var(--bl-space-6);
+  border-top: 1px solid var(--bl-line);
+}
+
+.monitoring-panel > header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--bl-space-5);
+}
+
+.monitoring-panel h3 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.monitoring-panel__boundary {
+  max-width: var(--bl-reading-width);
+  margin: var(--bl-space-4) 0 var(--bl-space-5);
+  color: var(--bl-ink-muted);
+}
+
+.monitoring-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--bl-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.monitoring-card {
+  display: grid;
+  align-content: start;
+  gap: var(--bl-space-3);
+  min-width: 0;
+  padding: var(--bl-space-5);
+  background: var(--bl-surface);
+  border: 1px solid var(--bl-line);
+  border-radius: var(--bl-radius-small);
+}
+
+.monitoring-card__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--bl-space-3);
+  color: var(--bl-ink-muted);
+  font-size: var(--bl-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.monitoring-card__heading > span:first-child {
+  padding-top: 0.35rem;
+}
+
+.monitoring-card > strong {
+  font-family: var(--bl-font-editorial);
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.monitoring-card > span,
+.monitoring-card > p {
+  color: var(--bl-ink-muted);
+  overflow-wrap: anywhere;
+}
+
+.monitoring-card > span {
+  font-family: var(--bl-font-mono);
+  font-size: var(--bl-text-xs);
+}
+
+.monitoring-card > p {
+  margin: 0;
+  font-size: var(--bl-text-sm);
+}
+
 @media (max-width: 820px) {
   .operations-dashboard__header,
   .operations-dashboard__grid,
-  .operations-surfaces {
+  .operations-surfaces,
+  .monitoring-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 520px) {
   .operations-card__heading {
+    display: grid;
+  }
+
+  .monitoring-panel > header {
     display: grid;
   }
 

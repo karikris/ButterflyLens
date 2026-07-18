@@ -31,11 +31,22 @@
       "authentication": "user",
       "verify_jwt": true,
       "secret_names": []
+    },
+    "operations-status": {
+      "authentication": "none",
+      "verify_jwt": false,
+      "configuration_names": [
+        "BUTTERFLYLENS_PUBLIC_PROJECT_ID",
+        "BUTTERFLYLENS_PUBLIC_ORIGIN"
+      ],
+      "public_projection": "operational_monitoring_snapshots",
+      "browser_origin": "https://karikris.github.io"
     }
   },
   "browser_allowed_values": [
     "SUPABASE_URL",
-    "SUPABASE_PUBLISHABLE_KEY"
+    "SUPABASE_PUBLISHABLE_KEY",
+    "VITE_BUTTERFLYLENS_MONITORING_URL"
   ],
   "browser_forbidden_values": [
     "SUPABASE_SECRET_KEY",

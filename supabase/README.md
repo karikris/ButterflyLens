@@ -117,8 +117,24 @@ Task 12.1 adds two more authenticated functions:
   curator/administrator membership and the expected run revision, changes the
   run, and freezes the receipt in one transaction.
 
+Task 12.3 adds `operations-status`, a credential-free read boundary over the
+typed, append-only `operational_monitoring_snapshots` projection. Browser roles
+have no table privileges or RLS policy. The function uses its server client to
+select only the configured logical project, permits only `GET` and exact-origin
+preflight from `https://karikris.github.io`, rejects query inputs, disables
+caching and referrers, and returns no project/run/worker identity, raw queue,
+error detail, coordinate, storage key, or URL. Absence is `404`, never a row of
+fabricated zeroes. Operational output cannot authorize scientific claims.
+
+Set the non-secret production variable `BUTTERFLYLENS_PUBLIC_PROJECT_ID` to the
+logical `projects.project_id`. The deployment installs it and the exact public
+origin as Edge configuration. After the function is deployed, set the GitHub
+repository variable `BUTTERFLYLENS_MONITORING_URL` to its credential-free HTTPS
+URL. If either value is absent, the Pages build retains the submitted monitoring
+fallback and performs no request.
+
 The manually gated production workflow applies migrations without seed data,
-sets Edge secrets, and deploys the exact three functions. It requires the
+sets Edge secrets and configuration, and deploys the exact four functions. It requires the
 `production` GitHub environment plus the secret and variable names declared
 in `infra/supabase/production.v1.json`. Supabase Auth production site and
 redirect URLs must match that file; local `config.toml` Auth settings are not

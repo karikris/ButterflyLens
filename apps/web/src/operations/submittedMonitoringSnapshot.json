@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "butterflylens-public-monitoring:v1.0.0",
+  "snapshotMode": "submitted",
+  "observedAt": "2026-07-18T04:48:12Z",
+  "heartbeat": {
+    "state": "unavailable",
+    "observedAt": null,
+    "workerState": null,
+    "reason": "No authenticated worker heartbeat is attached to the submitted build."
+  },
+  "apiBudget": {
+    "state": "unavailable",
+    "limit": null,
+    "used": null,
+    "remaining": null,
+    "resetsAt": null,
+    "reason": "No governed live API budget snapshot is attached."
+  },
+  "stageHealth": {
+    "state": "unavailable",
+    "currentStage": null,
+    "stageState": null,
+    "healthyCount": null,
+    "failedCount": null,
+    "reason": "No live pipeline-stage snapshot is attached."
+  },
+  "queue": {
+    "state": "unavailable",
+    "depth": null,
+    "capacity": null,
+    "reason": "No live queue inventory is attached."
+  },
+  "failures": {
+    "state": "unavailable",
+    "count": null,
+    "reason": "No live failure aggregate is attached; unavailable is not zero."
+  },
+  "lastArtifact": {
+    "state": "submitted",
+    "fingerprint": "083ed290418938e1c32ee75cad5dea6d81153f529ab1c40acbb64f52beccba06",
+    "committedAt": "2026-07-18T04:48:12Z",
+    "reason": "The bundled 463-species catalogue is the last committed public artifact in this build."
+  },
+  "lastMapRefresh": {
+    "state": "submitted",
+    "fingerprint": "d33d4d36752579ba780fca4d0ec9f234848ccccdba468711846a265c12108f65",
+    "refreshedAt": "2026-07-17T19:14:01Z",
+    "reason": "The bundled map scope is pinned to the rebuilt ALA snapshot; occurrence layers remain withheld."
+  },
+  "models": {
+    "state": "unfinished",
+    "yoloe": "unfinished",
+    "bioclip": "unfinished",
+    "reason": "YOLOE and BioCLIP were skipped by goal instruction and remain unfinished."
+  },
+  "resources": {
+    "state": "unavailable",
+    "freeDiskBytes": null,
+    "processRssBytes": null,
+    "memoryCapacityBytes": null,
+    "mpsAllocatedBytes": null,
+    "mpsReservedBytes": null,
+    "reason": "No live disk or memory observation is attached."
+  },
+  "scientificClaimAllowed": false
+}

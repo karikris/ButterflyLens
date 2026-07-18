@@ -11,6 +11,7 @@ import { AskButterflyLens } from './analyst/AskButterflyLens'
 import { OperationsDashboard } from './operations/OperationsDashboard'
 
 export function App() {
+  const monitoringUrl = import.meta.env.VITE_BUTTERFLYLENS_MONITORING_URL || null
   return (
     <PublicShell>
       <section id="explore" className="shell-intro" aria-labelledby="explore-heading">
@@ -39,7 +40,7 @@ export function App() {
       </section>
       <ReviewLanding item={submittedReviewItem} qualifiedReviewer={false} />
       <SpeciesDirectory />
-      <OperationsDashboard />
+      <OperationsDashboard monitoringUrl={monitoringUrl} />
       <FlickrDisplayBoundary />
       <QualityDashboard snapshot={submittedQualityDashboard} />
       <ContributorExperience snapshot={submittedContributorImpact} />

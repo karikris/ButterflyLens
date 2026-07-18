@@ -33,6 +33,7 @@ jobs:
         working-directory: apps/web
         env:
           BUTTERFLYLENS_BASE_PATH: /ButterflyLens/
+          VITE_BUTTERFLYLENS_MONITORING_URL: ${{ vars.BUTTERFLYLENS_MONITORING_URL }}
         run: npm run build
       - name: Verify repository base path
         working-directory: apps/web

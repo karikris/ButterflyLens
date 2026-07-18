@@ -3,6 +3,68 @@ type EmptyWrite = { [_ in never]: never };
 export type EdgeDatabase = {
   public: {
     Tables: {
+      projects: {
+        Row: {
+          id: number;
+          project_id: string;
+        };
+        Insert: EmptyWrite;
+        Update: EmptyWrite;
+        Relationships: [];
+      };
+      operational_monitoring_snapshots: {
+        Row: {
+          id: number;
+          project_pk: number;
+          observed_at: string;
+          heartbeat_state: string;
+          heartbeat_observed_at: string | null;
+          worker_state: string | null;
+          heartbeat_reason: string;
+          api_budget_state: string;
+          api_budget_limit: number | null;
+          api_budget_used: number | null;
+          api_budget_remaining: number | null;
+          api_budget_resets_at: string | null;
+          api_budget_reason: string;
+          stage_health_state: string;
+          current_stage: string | null;
+          stage_state: string | null;
+          healthy_stage_count: number | null;
+          failed_stage_count: number | null;
+          stage_health_reason: string;
+          queue_state: string;
+          queue_depth: number | null;
+          queue_capacity: number | null;
+          queue_reason: string;
+          failure_state: string;
+          failure_count: number | null;
+          failure_reason: string;
+          artifact_state: string;
+          artifact_fingerprint: string | null;
+          artifact_committed_at: string | null;
+          artifact_reason: string;
+          map_state: string;
+          map_fingerprint: string | null;
+          map_refreshed_at: string | null;
+          map_reason: string;
+          model_state: string;
+          yoloe_state: string;
+          bioclip_state: string;
+          model_reason: string;
+          resource_state: string;
+          free_disk_bytes: number | null;
+          process_rss_bytes: number | null;
+          memory_capacity_bytes: number | null;
+          mps_allocated_bytes: number | null;
+          mps_reserved_bytes: number | null;
+          resource_reason: string;
+          scientific_claim_allowed: false;
+        };
+        Insert: EmptyWrite;
+        Update: EmptyWrite;
+        Relationships: [];
+      };
       media_objects: {
         Row: {
           id: number;

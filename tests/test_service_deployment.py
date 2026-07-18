@@ -139,7 +139,10 @@ class ServiceDeploymentTests(unittest.TestCase):
         self.assertIn("environment: production", services)
         self.assertIn("supabase db push", services)
         self.assertNotIn("--include-seed", services)
-        self.assertIn("ask-butterflylens sign-b2-object control-butterflylens", services)
+        self.assertIn(
+            "ask-butterflylens sign-b2-object control-butterflylens operations-status",
+            services,
+        )
         for workflow in (pages, services):
             self.assertNotRegex(workflow, r"uses: [^\s]+@v\d")
             for action in re.findall(r"uses: [^@\s]+@([^\s]+)", workflow):
