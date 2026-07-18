@@ -1,0 +1,19 @@
+{
+  "CORSRules": [
+    {
+      "ID": "butterflylens-pages-read",
+      "AllowedHeaders": ["range"],
+      "AllowedMethods": ["GET", "HEAD"],
+      "AllowedOrigins": ["https://karikris.github.io"],
+      "ExposeHeaders": [
+        "accept-ranges",
+        "content-length",
+        "content-range",
+        "content-type",
+        "etag",
+        "x-bz-file-id"
+      ],
+      "MaxAgeSeconds": 300
+    }
+  ]
+}

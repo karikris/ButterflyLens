@@ -103,3 +103,29 @@ Supabase Edge Function secrets, deploy `ask-butterflylens`, and retain
 `verify_jwt = true`. The submitted static experience intentionally injects no
 live client and performs no model call. Task 11.4 owns the separately labelled
 credential-free stored replay.
+
+## Production service boundaries
+
+Task 12.1 adds two more authenticated functions:
+
+- `sign-b2-object` first proves that the caller can read the media row through
+  RLS, rechecks committed/decode/rights/display/removal state through the
+  server client, signs only `GET` or `HEAD` for at most 900 seconds, and
+  records a URL-free receipt before returning access.
+- `control-butterflylens` accepts only `pause_run`, `resume_run`, and
+  `cancel_run`. A database trigger independently checks active
+  curator/administrator membership and the expected run revision, changes the
+  run, and freezes the receipt in one transaction.
+
+The manually gated production workflow applies migrations without seed data,
+sets Edge secrets, and deploys the exact three functions. It requires the
+`production` GitHub environment plus the secret and variable names declared
+in `infra/supabase/production.v1.json`. Supabase Auth production site and
+redirect URLs must match that file; local `config.toml` Auth settings are not
+deployed by the CLI.
+
+B2 deployment is defined in `infra/b2/buckets.v1.json`. Provisioning requires
+an account-level key only for bucket administration. The Edge signer must use
+a separate read-only, private-bucket, `butterflylens/v1/`-prefix key. No
+credential, signed URL, query string, or private storage key belongs in GitHub
+variables, browser configuration, logs, fingerprints, or database receipts.

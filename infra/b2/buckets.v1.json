@@ -1,0 +1,53 @@
+{
+  "schema_version": "butterflylens-b2-deployment:v1.0.0",
+  "root_prefix": "butterflylens/v1/",
+  "buckets": {
+    "private": {
+      "name_environment": "B2_PRIVATE_BUCKET",
+      "visibility": "allPrivate",
+      "server_side_encryption": "SSE-B2",
+      "object_lock": false,
+      "cors_file": "infra/b2/cors.github-pages.json",
+      "signing_methods": ["GET", "HEAD"],
+      "signing_ttl_default_seconds": 300,
+      "signing_ttl_maximum_seconds": 900
+    },
+    "public": {
+      "name_environment": "B2_PUBLIC_BUCKET",
+      "visibility": "allPublic",
+      "server_side_encryption": "SSE-B2",
+      "object_lock": false,
+      "cors_file": "infra/b2/cors.github-pages.json",
+      "allowed_artifact_class": "public_thumbnails"
+    }
+  },
+  "application_keys": {
+    "edge_signer": {
+      "bucket": "private",
+      "prefix": "butterflylens/v1/",
+      "capabilities": ["listFiles", "readFiles"]
+    },
+    "private_writer": {
+      "bucket": "private",
+      "prefix": "butterflylens/v1/",
+      "capabilities": ["listFiles", "readFiles", "writeFiles"]
+    },
+    "public_thumbnail_writer": {
+      "bucket": "public",
+      "prefix": "butterflylens/v1/",
+      "capabilities": ["listFiles", "readFiles", "writeFiles"]
+    },
+    "removal_worker": {
+      "bucket": "private",
+      "prefix": "butterflylens/v1/",
+      "capabilities": ["listFiles", "readFiles", "deleteFiles"]
+    }
+  },
+  "lifecycle_rules": [],
+  "notes": [
+    "Bucket names and credentials are deployment environment values, never object-key or fingerprint inputs.",
+    "No lifecycle rule proves a rights-removal completion.",
+    "Removable media must not use Object Lock.",
+    "Only a separately approved public thumbnail enters the public bucket."
+  ]
+}

@@ -1,0 +1,94 @@
+name: Deploy ButterflyLens production services
+
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: Production component to deploy
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - supabase
+          - b2
+
+permissions:
+  contents: read
+
+concurrency:
+  group: butterflylens-production-services
+  cancel-in-progress: false
+
+jobs:
+  supabase:
+    if: ${{ inputs.component == 'all' || inputs.component == 'supabase' }}
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      SUPABASE_PROJECT_ID: ujfsrohgsrmssmfqgdsp
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      B2_S3_ENDPOINT: ${{ vars.B2_S3_ENDPOINT }}
+      B2_PRIVATE_BUCKET: ${{ vars.B2_PRIVATE_BUCKET }}
+      B2_KEY_ID: ${{ secrets.B2_KEY_ID }}
+      B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
+    steps:
+      - name: Checkout immutable source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Supabase CLI
+        uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf # v2.1.1
+        with:
+          version: 2.109.1
+      - name: Require production credentials
+        run: |
+          test -n "$SUPABASE_ACCESS_TOKEN"
+          test -n "$SUPABASE_DB_PASSWORD"
+          test -n "$OPENAI_API_KEY"
+          test -n "$B2_S3_ENDPOINT"
+          test -n "$B2_PRIVATE_BUCKET"
+          test -n "$B2_KEY_ID"
+          test -n "$B2_APPLICATION_KEY"
+      - name: Link exact Supabase project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD" --yes
+      - name: Apply tracked migrations without production seed
+        run: supabase db push --linked --password "$SUPABASE_DB_PASSWORD" --yes
+      - name: Install scoped Edge secrets
+        run: |
+          supabase secrets set --project-ref "$SUPABASE_PROJECT_ID" \
+            "OPENAI_API_KEY=$OPENAI_API_KEY" \
+            "B2_S3_ENDPOINT=$B2_S3_ENDPOINT" \
+            "B2_PRIVATE_BUCKET=$B2_PRIVATE_BUCKET" \
+            "B2_KEY_ID=$B2_KEY_ID" \
+            "B2_APPLICATION_KEY=$B2_APPLICATION_KEY"
+      - name: Deploy exact authenticated Edge Functions
+        run: |
+          supabase functions deploy \
+            ask-butterflylens sign-b2-object control-butterflylens \
+            --project-ref "$SUPABASE_PROJECT_ID" --use-api
+      - name: Verify remote migration history
+        run: supabase migration list --linked --password "$SUPABASE_DB_PASSWORD"
+
+  b2:
+    if: ${{ inputs.component == 'all' || inputs.component == 'b2' }}
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      B2_ENDPOINT: ${{ vars.B2_S3_ENDPOINT }}
+      B2_REGION: ${{ vars.B2_REGION }}
+      B2_PRIVATE_BUCKET: ${{ vars.B2_PRIVATE_BUCKET }}
+      B2_PUBLIC_BUCKET: ${{ vars.B2_PUBLIC_BUCKET }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.B2_PROVISION_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.B2_PROVISION_APPLICATION_KEY }}
+    steps:
+      - name: Checkout immutable source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+      - name: Record AWS CLI version
+        run: aws --version
+      - name: Provision and verify B2 buckets
+        run: ./infra/b2/provision.sh

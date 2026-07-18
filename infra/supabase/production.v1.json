@@ -1,0 +1,47 @@
+{
+  "schema_version": "butterflylens-supabase-deployment:v1.0.0",
+  "project_ref": "ujfsrohgsrmssmfqgdsp",
+  "site_url": "https://karikris.github.io/ButterflyLens/",
+  "additional_redirect_urls": [
+    "https://karikris.github.io/ButterflyLens/"
+  ],
+  "anonymous_sign_ins": false,
+  "database": {
+    "migration_directory": "supabase/migrations",
+    "rls_required_for_public_tables": true,
+    "seed_production": false
+  },
+  "edge_functions": {
+    "ask-butterflylens": {
+      "authentication": "user",
+      "verify_jwt": true,
+      "secret_names": ["OPENAI_API_KEY"]
+    },
+    "sign-b2-object": {
+      "authentication": "user",
+      "verify_jwt": true,
+      "secret_names": [
+        "B2_S3_ENDPOINT",
+        "B2_PRIVATE_BUCKET",
+        "B2_KEY_ID",
+        "B2_APPLICATION_KEY"
+      ]
+    },
+    "control-butterflylens": {
+      "authentication": "user",
+      "verify_jwt": true,
+      "secret_names": []
+    }
+  },
+  "browser_allowed_values": [
+    "SUPABASE_URL",
+    "SUPABASE_PUBLISHABLE_KEY"
+  ],
+  "browser_forbidden_values": [
+    "SUPABASE_SECRET_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "OPENAI_API_KEY",
+    "B2_KEY_ID",
+    "B2_APPLICATION_KEY"
+  ]
+}
