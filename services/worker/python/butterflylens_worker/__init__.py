@@ -46,6 +46,14 @@ from .restart import (
     build_public_offline_projection,
     build_resume_plan,
 )
+from .resilience import (
+    CHECKPOINT_VERIFICATION_SCHEMA_VERSION,
+    INCIDENT_KINDS,
+    INCIDENT_PLAN_SCHEMA_VERSION,
+    IncidentPlanningError,
+    build_incident_fallback_plan,
+    verify_checkpoint_file,
+)
 
 __all__ = [
     "ClassificationMaturityError",
@@ -85,6 +93,12 @@ __all__ = [
     "WorkItem",
     "build_public_offline_projection",
     "build_resume_plan",
+    "CHECKPOINT_VERIFICATION_SCHEMA_VERSION",
+    "INCIDENT_KINDS",
+    "INCIDENT_PLAN_SCHEMA_VERSION",
+    "IncidentPlanningError",
+    "build_incident_fallback_plan",
+    "verify_checkpoint_file",
     "load_or_create_registration",
     "probe_machine_profile",
 ]
