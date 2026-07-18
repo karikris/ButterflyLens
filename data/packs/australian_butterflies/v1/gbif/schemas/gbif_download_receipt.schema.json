@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://butterflylens.example/schemas/gbif-download-receipt-v1.json",
+  "title": "ButterflyLens GBIF download receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "verified_at",
+    "provider",
+    "download",
+    "filter",
+    "rights",
+    "archive_inventory",
+    "authority_policy",
+    "evidence_policy",
+    "receipt_fingerprint"
+  ],
+  "properties": {
+    "schema_version": {"const": "butterflylens-gbif-download-receipt/v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "provider": {"const": "Global Biodiversity Information Facility"},
+    "download": {
+      "type": "object",
+      "required": ["key", "doi", "citation", "status", "format", "record_count", "dataset_count", "archive_bytes", "archive_sha256", "archive_committed_to_git"],
+      "properties": {
+        "key": {"const": "0004170-260715120105164"},
+        "doi": {"const": "10.15468/dl.7uut3k"},
+        "citation": {"type": "string", "minLength": 1},
+        "status": {"const": "SUCCEEDED"},
+        "format": {"const": "DWCA"},
+        "record_count": {"const": 571755},
+        "dataset_count": {"const": 126},
+        "archive_bytes": {"const": 261743165},
+        "archive_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "archive_committed_to_git": {"const": false}
+      }
+    },
+    "filter": {
+      "type": "object",
+      "required": ["country_code", "taxon_key", "taxon_name", "checklist", "predicate"],
+      "properties": {
+        "country_code": {"const": "AU"},
+        "taxon_key": {"const": "5G9"},
+        "taxon_name": {"const": "Papilionoidea"},
+        "checklist": {"const": "Catalogue of Life"},
+        "predicate": {"type": "object"}
+      }
+    },
+    "rights": {"type": "object"},
+    "archive_inventory": {"type": "object"},
+    "authority_policy": {"type": "object"},
+    "evidence_policy": {"type": "object"},
+    "receipt_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

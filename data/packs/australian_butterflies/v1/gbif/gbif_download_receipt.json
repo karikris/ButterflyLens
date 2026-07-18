@@ -1,0 +1,127 @@
+{
+  "schema_version": "butterflylens-gbif-download-receipt/v1",
+  "receipt_id": "gbif-0004170-260715120105164-7807622f6c25",
+  "verified_at": "2026-07-18T15:53:05Z",
+  "provider": "Global Biodiversity Information Facility",
+  "download": {
+    "key": "0004170-260715120105164",
+    "doi": "10.15468/dl.7uut3k",
+    "doi_url": "https://doi.org/10.15468/dl.7uut3k",
+    "citation": "GBIF.org (18 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.7uut3k",
+    "api_url": "https://api.gbif.org/v1/occurrence/download/0004170-260715120105164",
+    "download_url": "https://api.gbif.org/v1/occurrence/download/request/0004170-260715120105164.zip",
+    "created": "2026-07-18T01:42:19.549+00:00",
+    "modified": "2026-07-18T02:23:31.436+00:00",
+    "erase_after": "2027-01-18T01:42:19.457+00:00",
+    "status": "SUCCEEDED",
+    "format": "DWCA",
+    "record_count": 571755,
+    "dataset_count": 126,
+    "archive_bytes": 261743165,
+    "archive_sha256": "7807622f6c2539ac536cb5f06d17087da3ecdd83b13a0dec54764e3800ff8f2b",
+    "archive_committed_to_git": false,
+    "archive_headers": {
+      "content_type": "application/zip",
+      "content_length": 261743165,
+      "etag": "\"f99e23d-656d954e1efa8\"",
+      "last_modified": "Sat, 18 Jul 2026 02:21:32 GMT"
+    }
+  },
+  "filter": {
+    "country_code": "AU",
+    "taxon_key": "5G9",
+    "taxon_name": "Papilionoidea",
+    "checklist": "Catalogue of Life",
+    "checklist_key": "7ddf754f-d193-4cc9-b351-99906754a03b",
+    "predicate": {
+      "type": "and",
+      "predicates": [
+        {
+          "type": "equals",
+          "key": "COUNTRY",
+          "value": "AU",
+          "matchCase": false
+        },
+        {
+          "type": "equals",
+          "key": "TAXON_KEY",
+          "value": "5G9",
+          "matchCase": false,
+          "checklistKey": "7ddf754f-d193-4cc9-b351-99906754a03b"
+        }
+      ]
+    }
+  },
+  "rights": {
+    "download_licence": "http://creativecommons.org/licenses/by-nc/4.0/legalcode",
+    "constituent_dataset_rights_entry_count": 126,
+    "constituent_dataset_rights_distribution": {
+      "http://creativecommons.org/licenses/by/4.0/legalcode": 76,
+      "http://creativecommons.org/licenses/by-nc/4.0/legalcode": 28,
+      "http://creativecommons.org/publicdomain/zero/1.0/legalcode": 22
+    },
+    "public_release_state": "blocked_pending_record_and_dataset_rights_review",
+    "legal_determination": false
+  },
+  "archive_inventory": {
+    "file_count": 133,
+    "compressed_member_bytes": 261718645,
+    "uncompressed_bytes": 1361243498,
+    "zip_integrity_verified": true,
+    "members": {
+      "meta.xml": {
+        "uncompressed_bytes": 34411,
+        "sha256": "c6a9a2d4a93b631aeb1d5fe51f9ae9d7cc2159947fe98120443d5c6eb0760159"
+      },
+      "metadata.xml": {
+        "uncompressed_bytes": 11245,
+        "sha256": "2a1d95c0d8334939542eeaace8283329db2dd52d1a799187f3c79a4d9ee61f22"
+      },
+      "rights.txt": {
+        "uncompressed_bytes": 17134,
+        "sha256": "40771ed3797e5551ca9fbddb5a50632694abebaa870bf23d199e817d00b5c7d3"
+      },
+      "citations.txt": {
+        "uncompressed_bytes": 25855,
+        "citation_entry_count": 126,
+        "sha256": "b9ab828a7f7179df0d5bfe485e2c9d6aa077290ec881fa767bb1694dd7218b63"
+      },
+      "occurrence.txt": {
+        "uncompressed_bytes": 767362059,
+        "row_count": 571755,
+        "sha256": "10e5f7960de3ebb130455892f6ea081e6f42d3b2e8833f49ccb978004b0639aa"
+      },
+      "verbatim.txt": {
+        "uncompressed_bytes": 454749366,
+        "row_count": 571755,
+        "sha256": "8b200cc3b5c840304396084b4e61f319203251bda470dbe3b919ad00f7d82f06"
+      },
+      "multimedia.txt": {
+        "uncompressed_bytes": 138172910,
+        "row_count": 542052,
+        "sha256": "3632bf661b73094a85ed2db5f396a08e1a9dc53ee6e84c1133b7b7f48c5c8361"
+      },
+      "dataset_xml": {
+        "file_count": 126,
+        "uncompressed_bytes": 870518,
+        "inventory_sha256": "0b3a20abb0ac22180a78c58549f57f6532616cd591c53cca1267db1d065c055e",
+        "inventory_hash_algorithm": "sha256(sorted(member_path + NUL + member_sha256 + LF))"
+      }
+    }
+  },
+  "authority_policy": {
+    "authoritative_ala_baseline": "ButterflyLens rebuilt baseline",
+    "gbif_role": "complementary occurrence evidence, provenance, taxonomy reconciliation, and future keyword/reference analysis",
+    "gbif_replaces_ala_baseline": false
+  },
+  "evidence_policy": {
+    "provider_taxon_labels": "processed provider assertions; not human verification",
+    "absence_inference_permitted": false,
+    "current_presence_inference_permitted": false,
+    "media_downloaded": false,
+    "flickr_api_called": false,
+    "sensitive_locations": "preserve only GBIF-processed public values, withheld/generalisation text, coordinate uncertainty, and geospatial warnings; never reconstruct or increase precision",
+    "quality": "preserve GBIF issues and source fields; inclusion is not a quality endorsement"
+  },
+  "receipt_fingerprint": "168bd9b71eb20d250cefa89bcbf638ee68222304d95331446d937aecc4f19eec"
+}
