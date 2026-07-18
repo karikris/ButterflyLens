@@ -79,3 +79,17 @@ This append-oriented record captures product or governance decisions made by Kri
 - Keep public Flickr photo display blocked until application approval evidence,
   commercial-use determination, a privacy disclosure, current per-photo rights,
   and an admitted public thumbnail all exist.
+
+## 2026-07-18 — Contributor recognition
+
+- Celebrate evidence work through reviewed images, independently resolved
+  conflicts, accepted species helped, generalised public regions helped,
+  aggregate control coverage, and work completed under a verified expert role.
+- Keep contributor totals private to the authenticated contributor by default.
+  Do not expose control identities, expected answers, exact sensitive places,
+  Auth IDs, reviewer weights, or person-to-person comparisons.
+- Do not use speed rankings, throughput, streak pressure, leaderboards, or pace
+  as contribution quality. Careful abstention remains valuable work.
+- Recognition cannot create scientific identity, consensus, expert-gate,
+  quality, authorization, or release authority. Unavailable totals stay null,
+  not fabricated zeroes.

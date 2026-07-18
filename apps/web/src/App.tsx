@@ -5,6 +5,8 @@ import { submittedQualityDashboard } from './quality/qualityDashboardModel'
 import { PublicShell, RoutePreview } from './shell/PublicShell'
 import { SpeciesDirectory } from './species/SpeciesDirectory'
 import { FlickrDisplayBoundary } from './flickr/FlickrDisplayBoundary'
+import { ContributorExperience } from './community/ContributorExperience'
+import { submittedContributorImpact } from './community/contributorImpactModel'
 
 export function App() {
   return (
@@ -43,12 +45,7 @@ export function App() {
       />
       <FlickrDisplayBoundary />
       <QualityDashboard snapshot={submittedQualityDashboard} />
-      <RoutePreview
-        id="contributors"
-        kicker="Community credit"
-        title="Contributors"
-        description="Contribution history, attribution, reviewer dignity, and consent-aware community recognition will be published here."
-      />
+      <ContributorExperience snapshot={submittedContributorImpact} />
       <RoutePreview
         id="ask-butterflylens"
         kicker="Bounded evidence assistant"

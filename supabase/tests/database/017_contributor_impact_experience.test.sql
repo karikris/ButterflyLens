@@ -1,0 +1,30 @@
+begin;
+select plan(24);
+
+select has_table('public', 'contributor_impact_snapshots');
+select has_column('public', 'contributor_impact_snapshots', 'reviewed_image_count');
+select has_column('public', 'contributor_impact_snapshots', 'resolved_conflict_count');
+select has_column('public', 'contributor_impact_snapshots', 'species_helped_count');
+select has_column('public', 'contributor_impact_snapshots', 'region_helped_count');
+select has_column('public', 'contributor_impact_snapshots', 'control_coverage_count');
+select has_column('public', 'contributor_impact_snapshots', 'expert_contribution_count');
+select has_column('public', 'contributor_impact_snapshots', 'ranking_permitted');
+select has_column('public', 'contributor_impact_snapshots', 'speed_metric_permitted');
+select col_is_fk('public', 'contributor_impact_snapshots', 'project_pk');
+select col_is_fk('public', 'contributor_impact_snapshots', 'reviewer_profile_pk');
+select has_index('public', 'contributor_impact_snapshots', 'contributor_impact_snapshots_reviewer_pk_idx');
+select has_index('public', 'contributor_impact_snapshots', 'contributor_impact_snapshots_project_pk_idx');
+select has_function('private', 'validate_contributor_impact_snapshot', array[]::text[]);
+select has_function('private', 'reject_contributor_impact_snapshot_mutation', array[]::text[]);
+select has_trigger('public', 'contributor_impact_snapshots', 'contributor_impact_snapshots_validate');
+select has_trigger('public', 'contributor_impact_snapshots', 'contributor_impact_snapshots_reject_mutation');
+select has_view('public', 'my_contributor_impact');
+select ok((select relrowsecurity from pg_class where oid = 'public.contributor_impact_snapshots'::regclass), 'RLS is enabled');
+select ok(has_table_privilege('authenticated', 'public.contributor_impact_snapshots', 'SELECT'), 'authenticated can read through self RLS');
+select ok(not has_table_privilege('authenticated', 'public.contributor_impact_snapshots', 'INSERT'), 'authenticated cannot insert snapshots');
+select ok(not has_table_privilege('authenticated', 'public.contributor_impact_snapshots', 'UPDATE'), 'authenticated cannot update snapshots');
+select ok(not has_table_privilege('anon', 'public.contributor_impact_snapshots', 'SELECT'), 'anonymous users cannot read snapshots');
+select ok(has_table_privilege('authenticated', 'public.my_contributor_impact', 'SELECT'), 'authenticated can read the self-only view');
+
+select * from finish();
+rollback;

@@ -13,6 +13,7 @@ DESIGN = WEB / "design-system"
 SHELL = WEB / "shell"
 SPECIES = WEB / "species"
 FLICKR = WEB / "flickr"
+COMMUNITY = WEB / "community"
 CONTRACT = DESIGN / "visualSystem.json"
 
 
@@ -25,6 +26,7 @@ class WebVisualSystemTests(unittest.TestCase):
         cls.shell = (SHELL / "publicShell.css").read_text(encoding="utf-8")
         cls.species = (SPECIES / "speciesDirectory.css").read_text(encoding="utf-8")
         cls.flickr = (FLICKR / "flickrDisplayBoundary.css").read_text(encoding="utf-8")
+        cls.community = (COMMUNITY / "contributorExperience.css").read_text(encoding="utf-8")
         cls.page = (WEB / "styles.css").read_text(encoding="utf-8")
         cls.all_css = "\n".join(
             (
@@ -33,6 +35,7 @@ class WebVisualSystemTests(unittest.TestCase):
                 cls.shell,
                 cls.species,
                 cls.flickr,
+                cls.community,
                 cls.page,
             )
         )

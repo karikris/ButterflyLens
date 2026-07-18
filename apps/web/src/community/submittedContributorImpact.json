@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "butterflylens-contributor-impact-web:v1.0.0",
+  "snapshotMode": "submitted",
+  "snapshotState": "unavailable",
+  "snapshotStateReason": "No authenticated, fingerprinted contributor snapshot is included in this submitted replay.",
+  "recognitionPolicy": "evidence_not_speed",
+  "visibility": "self_only",
+  "metrics": {
+    "reviewedImages": {
+      "state": "unavailable",
+      "value": null,
+      "reason": "Stored effective review evidence is unavailable."
+    },
+    "resolvedConflicts": {
+      "state": "unavailable",
+      "value": null,
+      "reason": "Stored independent adjudication evidence is unavailable."
+    },
+    "speciesHelped": {
+      "state": "unavailable",
+      "value": null,
+      "reason": "Accepted-species contribution lineage is unavailable."
+    },
+    "regionsHelped": {
+      "state": "unavailable",
+      "value": null,
+      "reason": "Generalised public-region contribution lineage is unavailable."
+    },
+    "controlCoverage": {
+      "state": "unavailable",
+      "value": null,
+      "reason": "Governed aggregate control coverage is unavailable."
+    },
+    "expertContribution": {
+      "state": "unavailable",
+      "value": null,
+      "reason": "A current verified expert-role snapshot is unavailable."
+    }
+  },
+  "sourceEvidenceFingerprint": null,
+  "projectionFingerprint": null,
+  "calculatedAt": null,
+  "rankingPermitted": false,
+  "speedMetricPermitted": false,
+  "scientificClaimAllowed": false
+}
