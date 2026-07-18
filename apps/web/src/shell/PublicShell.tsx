@@ -73,6 +73,10 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
             <a href="https://github.com/karikris/ButterflyLens/blob/main/SENSITIVE_LOCATIONS.md">
               Sensitive locations
             </a>
+            {' · '}
+            <a href="https://github.com/karikris/ButterflyLens/blob/main/MEDIA_RIGHTS.md">
+              Media rights
+            </a>
           </p>
         </div>
       </footer>

@@ -47,6 +47,11 @@ The executable public-display contract is
 `packages/flickr/public-display-policy.v1.json`. A parallel BioMiner Flickr
 fetch is active, but no partial output from that run is admitted to this public
 application and ButterflyLens makes no Flickr API call in this goal.
+The executable removal graph is defined by
+`supabase/migrations/20260718103000_media_takedown_workflow.sql` and the
+human-readable [media rights policy](MEDIA_RIGHTS.md). Requester detail stays
+private; public media and release access fail closed from intake through a
+sealed, fingerprinted dependency inventory and terminal completion evidence.
 
 Authoritative sources inspected:
 

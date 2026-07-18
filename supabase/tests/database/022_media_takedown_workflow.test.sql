@@ -1,0 +1,57 @@
+begin;
+
+create extension if not exists pgtap with schema extensions;
+set search_path = public, extensions;
+
+select plan(47);
+
+select has_table('public', 'media_rights_requests', 'media rights requests exist');
+select has_table('private', 'media_rights_requesters', 'private requester records exist');
+select has_table('public', 'media_takedown_dependencies', 'removal graph exists');
+select has_table('public', 'media_takedown_inventory_receipts', 'sealed inventories exist');
+select has_table('public', 'media_rights_request_events', 'request events exist');
+select has_view('public', 'media_rights_request_status', 'identity-free request status exists');
+select ok((select relrowsecurity from pg_class where oid = 'public.media_rights_requests'::regclass), 'requests have RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.media_takedown_dependencies'::regclass), 'dependencies have RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.media_takedown_inventory_receipts'::regclass), 'inventory receipts have RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.media_rights_request_events'::regclass), 'events have RLS');
+select has_column('public', 'media_rights_requests', 'target_fingerprint', 'request binds target fingerprint');
+select has_column('public', 'media_rights_requests', 'deadline_at', 'request has deadline');
+select has_column('public', 'media_rights_requests', 'scientific_claim_allowed', 'request cannot imply science');
+select has_column('private', 'media_rights_requesters', 'private_request_detail', 'claim detail is private');
+select has_column('private', 'media_rights_requesters', 'contact_reference_fingerprint', 'contact reference is fingerprinted');
+select has_column('public', 'media_takedown_dependencies', 'dependency_fingerprint', 'dependency is fingerprinted');
+select has_column('public', 'media_takedown_inventory_receipts', 'dependency_entries', 'inventory lists exact entries');
+select has_column('public', 'media_rights_request_events', 'downstream_effect', 'event records downstream effect');
+select has_column('public', 'media_rights_request_events', 'evidence_fingerprints', 'event records evidence');
+select col_type_is('public', 'media_takedown_inventory_receipts', 'dependency_entries', 'text[]', 'inventory entries are an array');
+select col_type_is('public', 'media_rights_request_events', 'evidence_fingerprints', 'text[]', 'event evidence is an array');
+select has_index('public', 'media_rights_requests', 'media_rights_requests_deadline_idx', 'deadlines are indexed');
+select has_index('public', 'media_takedown_dependencies', 'media_takedown_dependencies_request_idx', 'dependency traversal is indexed');
+select has_trigger('public', 'media_rights_requests', 'media_rights_requests_validate', 'intake validates and quarantines');
+select has_trigger('public', 'media_rights_requests', 'media_rights_requests_reject_mutation', 'requests are immutable');
+select has_trigger('private', 'media_rights_requesters', 'media_rights_requesters_reject_mutation', 'requester detail is immutable');
+select has_trigger('public', 'media_takedown_dependencies', 'media_takedown_dependencies_validate', 'sealed inventory blocks late dependencies');
+select has_trigger('public', 'media_takedown_dependencies', 'media_takedown_dependencies_reject_mutation', 'dependencies are immutable');
+select has_trigger('public', 'media_takedown_inventory_receipts', 'media_takedown_inventory_receipts_validate', 'inventory receipt is exact');
+select has_trigger('public', 'media_rights_request_events', 'media_rights_request_events_validate', 'event sequence and completion are validated');
+select has_function('public', 'request_media_takedown', array['text','text','text','text','text','text','text','text','text','text'], 'authenticated intake RPC exists');
+select has_function('public', 'intake_external_media_takedown', array['text','text','text','text','text','text','text','text','text','text','text'], 'service intake RPC exists');
+select has_function('public', 'decide_media_rights_authority', array['text','boolean','text','text[]','text'], 'curator authority RPC exists');
+select has_function('public', 'seal_media_takedown_inventory', array['text','text[]','text','text'], 'service inventory RPC exists');
+select has_function('public', 'record_media_takedown_dependency_action', array['text','text','text','text','text[]','text'], 'service dependency RPC exists');
+select has_function('public', 'complete_media_takedown', array['text','text','text','text'], 'curator completion RPC exists');
+select has_function('private', 'has_media_takedown_for_release', array['bigint'], 'release suppression helper exists');
+select has_function('private', 'has_media_takedown_for_impact', array['bigint'], 'map suppression helper exists');
+select ok(not has_table_privilege('anon', 'public.media_rights_requests', 'select'), 'anon cannot inspect requests');
+select ok(not has_table_privilege('authenticated', 'public.media_rights_request_events', 'insert'), 'browser cannot insert events directly');
+select ok(not has_table_privilege('authenticated', 'private.media_rights_requesters', 'select'), 'browser cannot read requester detail');
+select ok(has_table_privilege('authenticated', 'public.media_rights_request_status', 'select'), 'authenticated requester has RLS-scoped status');
+select ok(has_table_privilege('service_role', 'public.media_takedown_dependencies', 'insert'), 'service may append dependencies');
+select ok(not has_table_privilege('service_role', 'public.media_takedown_dependencies', 'update'), 'service cannot rewrite dependencies');
+select ok(exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'release_candidates' and policyname = 'release_candidates_public_read' and qual like '%has_media_takedown_for_release%'), 'public release is takedown-gated');
+select ok(exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'geographic_impact' and policyname = 'geographic_impact_public_read' and qual like '%has_media_takedown_for_impact%'), 'public map is takedown-gated');
+select ok(position('set search_path = ''''' in pg_get_functiondef('private.has_media_takedown_for_release(bigint)'::regprocedure)) > 0, 'release helper has fixed empty search path');
+
+select * from finish();
+rollback;

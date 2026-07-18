@@ -31,3 +31,6 @@ review audit, appeal, and curator notes.
 The [sensitive butterfly location policy](SENSITIVE_LOCATIONS.md) now makes
 provider-permission and resolution receipts mandatory before any map or release
 location is publicly readable; missing or unknown evidence is withheld.
+The [media rights and removal policy](MEDIA_RIGHTS.md) defines immediate
+quarantine, private requester handling, dependency traversal, and auditable
+takedown completion without claiming a live prelaunch request channel.
