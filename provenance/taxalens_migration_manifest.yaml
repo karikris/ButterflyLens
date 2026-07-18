@@ -1,5 +1,5 @@
 schema_version: butterflylens-taxalens-migration-v1
-updated_at: "2026-07-18T01:34:00Z"
+updated_at: "2026-07-18T01:40:00Z"
 source_snapshot:
   repository: karikris/taxalens
   commit: 95f9081567d6c96abdc5b5614d7e401d15ad4f03
@@ -110,6 +110,23 @@ components:
       - Component tests for attribution, blinded readiness, successful load, and unavailable-media fallback.
       - Repository rights-manifest fingerprint and permission verification.
     status: verified
+  - component_id: taxalens-independent-assignment-pattern-v1
+    source_repository: karikris/taxalens
+    source_commit: c5e87ead4fdb26d5c5624bbb8d8d67e46d8eddbc
+    source_path: apps/web/src/review/domain/{verificationContracts.ts,verificationConsensus.ts}
+    destination_path: supabase/migrations/20260718013600_repeated_independent_assignments.sql
+    migration_kind: interface_pattern
+    reason: Preserve independent-review counts and conflict escalation while making assignment authority, qualification, concurrency, privacy, and replacement behavior ButterflyLens-owned.
+    build_week_scope: new
+    source_license: MIT
+    changes:
+      - Define versioned server-only defaults for ordinary, disagreement, potential-gap, reference, and high-impact campaigns.
+      - Enforce distinct reviewers, monotonic replacement-safe rounds, active project membership, verified qualifications, and an expert gate in Postgres.
+      - Expose aggregate assignment progress only to the service role and never return reviewer identities or decisions.
+    tests:
+      - Static migration tests for every required default, campaign gate, assignment invariant, privacy boundary, and pgTAP plan.
+      - Twenty-one pgTAP assertions cover policy values, private privileges, and server-only progress introspection.
+    status: implemented_original_adapter
 butterflylens_owned_changes:
   - ownership_id: australia-wide-community-product
     status: planned

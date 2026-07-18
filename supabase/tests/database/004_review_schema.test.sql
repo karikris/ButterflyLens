@@ -64,6 +64,14 @@ where p.project_id = 'project:review-test';
 insert into public.reviewer_profiles (
   reviewer_profile_id, auth_user_id, public_name
 ) values ('reviewer:test', '00000000-0000-4000-8000-000000000001', 'Butterfly Friend');
+insert into public.project_memberships (
+  project_membership_id, project_pk, reviewer_profile_pk, auth_user_id,
+  role, status, enrollment_kind
+) select 'membership:review-test', project.id, profile.id, profile.auth_user_id,
+  'reviewer', 'active', 'self_service'
+from public.projects project cross join public.reviewer_profiles profile
+where project.project_id = 'project:review-test'
+  and profile.reviewer_profile_id = 'reviewer:test';
 insert into public.verification_campaigns (
   verification_campaign_id, project_pk, campaign_kind, name, question,
   status, target_review_count, campaign_fingerprint, opens_at
