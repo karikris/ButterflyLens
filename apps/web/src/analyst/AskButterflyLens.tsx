@@ -5,7 +5,9 @@ import { EvidenceNotice, StateBadge } from '../design-system/EvidencePrimitives'
 import {
   submittedAnalystClient,
   type AnalystClient,
-  type AnalystResponse,
+  type AnalystClientResult,
+  type AnalystPresentation,
+  type StoredToolTrace,
 } from './analystModel'
 
 const SUGGESTED_QUESTIONS = [
@@ -16,12 +18,14 @@ const SUGGESTED_QUESTIONS = [
 
 export function AskButterflyLens({
   client = submittedAnalystClient,
+  clientMode = 'replayed',
 }: {
   readonly client?: AnalystClient
+  readonly clientMode?: 'live' | 'replayed'
 }) {
   const [question, setQuestion] = useState('')
   const [pending, setPending] = useState(false)
-  const [response, setResponse] = useState<AnalystResponse | null>(null)
+  const [answer, setAnswer] = useState<Extract<AnalystClientResult, { state: 'response' }> | null>(null)
   const [unavailableReason, setUnavailableReason] = useState<string | null>(null)
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -29,11 +33,11 @@ export function AskButterflyLens({
     const trimmed = question.trim()
     if (!trimmed || pending) return
     setPending(true)
-    setResponse(null)
+    setAnswer(null)
     setUnavailableReason(null)
     try {
       const result = await client({ question: trimmed, history: [] })
-      if (result.state === 'response') setResponse(result.response)
+      if (result.state === 'response') setAnswer(result)
       else setUnavailableReason(result.reason)
     } catch {
       setUnavailableReason('The analyst failed closed. No unsupported answer was returned.')
@@ -57,13 +61,18 @@ export function AskButterflyLens({
             pipeline state, review priorities, or community impact.
           </p>
         </div>
-        <StateBadge state="unfinished">Live session required</StateBadge>
+        <StateBadge state={clientMode === 'live' ? 'unfinished' : 'submitted'}>
+          {clientMode === 'live' ? 'Live session required' : 'Credential-free replay'}
+        </StateBadge>
       </div>
 
       <EvidenceNotice title="Evidence boundary" tone="caution">
         Answers must use deterministic read-only tools and exact artifact citations.
         The analyst does not identify butterflies from memory, turn missing evidence
         into zero, or create scientific authority.
+        {clientMode === 'replayed' ? (
+          <> The submitted replay loads exact stored calls and outputs; it invokes no model, tool, or network.</>
+        ) : null}
       </EvidenceNotice>
 
       <div className="analyst-layout">
@@ -98,24 +107,38 @@ export function AskButterflyLens({
             type="submit"
             disabled={pending || question.trim().length === 0}
           >
-            {pending ? 'Checking evidence…' : 'Ask with evidence'}
+            {pending
+              ? clientMode === 'live' ? 'Checking evidence…' : 'Loading stored evidence…'
+              : clientMode === 'live' ? 'Ask with evidence' : 'Replay stored evidence'}
           </button>
         </form>
 
         <div className="analyst-result" aria-live="polite" aria-busy={pending}>
-          {pending ? <p>Running bounded evidence tools…</p> : null}
+          {pending ? (
+            <p>{clientMode === 'live' ? 'Running bounded evidence tools…' : 'Validating stored fingerprints…'}</p>
+          ) : null}
           {unavailableReason ? (
-            <EvidenceNotice announce title="Live analyst unavailable" tone="information">
+            <EvidenceNotice
+              announce
+              title={clientMode === 'live' ? 'Live analyst unavailable' : 'Stored replay unavailable'}
+              tone="information"
+            >
               {unavailableReason}
             </EvidenceNotice>
           ) : null}
-          {response ? <AnalystAnswer response={response} /> : null}
-          {!pending && !unavailableReason && !response ? (
+          {answer ? (
+            <AnalystAnswer
+              response={answer.response}
+              replayTrace={answer.replay_trace ?? []}
+            />
+          ) : null}
+          {!pending && !unavailableReason && !answer ? (
             <div className="analyst-result__empty">
               <strong>No answer has been requested.</strong>
               <p>
-                Live answers require an authenticated server session. Task 11.4 adds
-                a visibly labelled credential-free stored replay.
+                {clientMode === 'live'
+                  ? 'Live answers require an authenticated server session.'
+                  : 'Choose one of the three exact questions to inspect its stored, fingerprinted tool trace.'}
               </p>
             </div>
           ) : null}
@@ -125,7 +148,13 @@ export function AskButterflyLens({
   )
 }
 
-function AnalystAnswer({ response }: { readonly response: AnalystResponse }) {
+function AnalystAnswer({
+  response,
+  replayTrace,
+}: {
+  readonly response: AnalystPresentation
+  readonly replayTrace: readonly StoredToolTrace[]
+}) {
   return (
     <article className="analyst-answer">
       <header>
@@ -138,7 +167,7 @@ function AnalystAnswer({ response }: { readonly response: AnalystResponse }) {
                 : 'caution'
           }
         >
-          Live · {response.response_state}
+          {response.mode === 'live' ? 'Live' : 'Replayed'} · {response.response_state}
         </StateBadge>
         <p>{response.summary}</p>
       </header>
@@ -174,9 +203,34 @@ function AnalystAnswer({ response }: { readonly response: AnalystResponse }) {
           </dl>
         </details>
       ) : null}
+      {response.mode === 'replayed' ? (
+        <details className="analyst-trace">
+          <summary>Stored tool trace ({replayTrace.length})</summary>
+          <ol>
+            {replayTrace.map((item) => (
+              <li key={item.call_id}>
+                <strong>{item.name}</strong>
+                <span>Call {item.call_id}</span>
+                <span>Arguments {JSON.stringify(item.arguments)}</span>
+                <span>Output {item.output.status}: {item.output.summary}</span>
+                <span>{item.output.result_fingerprint}</span>
+              </li>
+            ))}
+          </ol>
+        </details>
+      ) : null}
       <footer>
-        <span>{response.model.id} · {response.model.reasoning_effort}</span>
-        <span>{response.usage.tool_calls}/8 tool calls</span>
+        {response.mode === 'live' ? (
+          <>
+            <span>{response.model.id} · {response.model.reasoning_effort}</span>
+            <span>{response.usage.tool_calls}/8 tool calls</span>
+          </>
+        ) : (
+          <>
+            <span>Model not invoked · replayed {response.replay.recorded_at}</span>
+            <span>{response.replay.tool_calls} stored tool call</span>
+          </>
+        )}
       </footer>
     </article>
   )

@@ -39,8 +39,9 @@ and [deployment checklist](https://developers.openai.com/api/docs/guides/deploym
   undocumented parameter is sent. Budget exhaustion is a labelled incomplete
   answer, never an unbounded retry.
 - Send a stable privacy-preserving `safety_identifier`: SHA-256 of the permanent
-  Auth identity for signed-in users, or of a stable random session identifier
-  for a logged-out replay. Never send email, public name, raw Auth UUID, or IP.
+  Auth identity for signed-in live users. The credential-free replay sends no
+  OpenAI request and therefore sends no safety identifier. Never send email,
+  public name, raw Auth UUID, or IP.
   [Safety identifiers](https://developers.openai.com/api/docs/guides/safety-best-practices#implement-safety-identifiers).
 - `store: false` is mandatory. The current Responses default retains application
   state, while OpenAI documents up to 30-day default response application-state
@@ -97,10 +98,13 @@ instructions only after the same eval set passes. [GPT-5.6 prompting guidance](h
 
 ## Live, replay, and evaluation
 
-Live inference and stored judge replay are distinct states. A replay contains
-the exact stored request policy, tool calls, tool outputs, citations, final
-structured result, model slug, and checksums. It is labelled `replayed`; it
-never claims a live model call. If no key exists, only replay is available.
+Live inference and stored judge replay are distinct states. The current replay
+contains exact stored tool calls, complete validated tool outputs, citations,
+a project-authored structured evidence rendering, and result/trace/catalogue
+checksums. It is labelled `replayed`, records zero network and Responses calls,
+and contains no model slug because no model authored it. If a future replay
+stores a real model run, it must preserve and label that run's exact model,
+request policy, output, and checksums. If no key exists, only replay is available.
 
 Task 11.5 must include at least 40 representative cases and evaluate more than
 final prose: tool selection, argument precision, schema adherence, citations,
@@ -112,16 +116,10 @@ moving from trace inspection to repeatable datasets/eval runs.
 [Evaluation best practices](https://developers.openai.com/api/docs/guides/evaluation-best-practices)
 and [agent evaluations](https://developers.openai.com/api/docs/guides/agent-evals).
 
-## Current repository gap
+## Current repository state
 
-At this task boundary ButterflyLens has no OpenAI SDK dependency, API route,
-runtime key, analyst prompt, function tool implementation, live trace, live
-model output, or agent evaluation result. `supabase/config.toml` contains only
-the upstream local-development environment placeholder. The third-party audit
-approves the official SDK's Apache-2.0 licence conditionally but requires the
-later implementation to pin and audit its exact dependency tree.
-
-No live OpenAI API call occurred during this requirements-verification task.
-
-Task 11.2 may now implement deterministic tools without any OpenAI transport.
-Task 11.3 may add the server route only after those tool contracts are stable.
+Tasks 11.2 and 11.3 added the fourteen deterministic tools and the authenticated
+server route with exact SDK pins. Task 11.4 adds a credential-free replay of
+three stored tool traces. The live route has not been deployed and no live
+OpenAI API call, model output, or agent evaluation result exists. Task 11.5
+owns the representative evaluation boundary.

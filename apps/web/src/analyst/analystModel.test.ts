@@ -1,8 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 
+import submittedReplayCatalog from '../../../../packages/openai/submitted-replays.v1.json'
+
 import {
+  createStoredReplayAnalystClient,
   createSupabaseAnalystClient,
   parseAnalystResponse,
+  parseStoredReplayCatalog,
   submittedAnalystClient,
   type AnalystResponse,
 } from './analystModel'
@@ -51,11 +55,53 @@ describe('analyst browser contract', () => {
     expect(() => parseAnalystResponse(value)).toThrow()
   })
 
-  it('keeps the submitted experience credential-free and offline', async () => {
-    const result = await submittedAnalystClient({ question: 'Question?', history: [] })
-    expect(result).toEqual({
+  it('validates and replays all three exact submitted questions without fetch', async () => {
+    const fetchImpl = vi.fn()
+    vi.stubGlobal('fetch', fetchImpl)
+    try {
+      const catalogue = parseStoredReplayCatalog(submittedReplayCatalog)
+      expect(catalogue.source).toMatchObject({ model_invoked: false, network_calls: 0 })
+      expect(catalogue.cases).toHaveLength(3)
+      for (const replayCase of catalogue.cases) {
+        const result = await submittedAnalystClient({
+          question: `  ${replayCase.accepted_questions[0].toUpperCase()}  `,
+          history: [],
+        })
+        expect(result).toMatchObject({
+          state: 'response',
+          response: {
+            mode: 'replayed',
+            replay: { model_invoked: false, response_calls: 0 },
+          },
+          replay_trace: [{ name: replayCase.tool_trace[0].name }],
+        })
+      }
+      expect(fetchImpl).not.toHaveBeenCalled()
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('fails closed for unmatched, conversational, structurally altered, and fingerprint-altered replay', async () => {
+    await expect(submittedAnalystClient({ question: 'Question?', history: [] })).resolves.toMatchObject({
       state: 'unavailable',
-      reason: 'The submitted replay has no authenticated live analyst session. No OpenAI call was made.',
+      reason: expect.stringContaining('No exact stored replay'),
+    })
+    await expect(submittedAnalystClient({
+      question: 'Can ALA and Flickr counts be compared yet?',
+      history: [{ role: 'user', content: 'Earlier question' }],
+    })).resolves.toMatchObject({ state: 'unavailable', reason: expect.stringContaining('single-turn') })
+
+    expect(() => parseStoredReplayCatalog({ ...submittedReplayCatalog, extra: true })).toThrow('exact public shape')
+    const changed = JSON.parse(JSON.stringify(submittedReplayCatalog))
+    changed.cases[0].response.summary = 'Altered after fingerprinting.'
+    const changedClient = createStoredReplayAnalystClient(changed)
+    await expect(changedClient({
+      question: changed.cases[0].accepted_questions[0],
+      history: [],
+    })).resolves.toMatchObject({
+      state: 'unavailable',
+      reason: expect.stringContaining('fingerprint contract'),
     })
   })
 

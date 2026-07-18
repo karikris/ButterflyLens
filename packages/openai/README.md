@@ -55,3 +55,24 @@ server transport must supply and enforce authorization independently; model
 arguments can never grant access or select another person. Results do not
 expose private controls, expected answers, exact sensitive locations, reviewer
 weights, rankings, speed metrics, probabilities, or scientific authority.
+
+## Credential-free stored replay
+
+`submitted-replays.v1.json` contains three exact single-turn judge questions
+with their complete deterministic tool calls and output envelopes. It is
+generated with:
+
+```bash
+uv run --locked python scripts/build_openai_replay.py
+```
+
+`replay-catalog.schema.json` is the strict generated Draft 2020-12 contract.
+Tests rebuild both files, invoke every stored call again, and require
+byte-identical outputs, exact response citations, and RFC 8785 SHA-256 result,
+trace, and catalogue fingerprints.
+
+The catalogue is labelled `replayed`, records zero network and Responses calls,
+and says `model_invoked: false`. Its response shape deliberately has no model
+identity field: GPT-5.6 did not author these stored answers. The public replay
+only matches the three exact questions and never falls through to live
+inference, re-executes a tool, or simulates a conversation.

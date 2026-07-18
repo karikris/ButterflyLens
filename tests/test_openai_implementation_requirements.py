@@ -94,13 +94,29 @@ class OpenAIImplementationRequirementsTests(unittest.TestCase):
         ):
             self.assertIn(required, dimensions)
 
-    def test_every_current_source_is_official_and_guide_states_repository_gap(self) -> None:
+    def test_replay_is_non_model_offline_and_fingerprint_grounded(self) -> None:
+        replay = self.requirements["replay_policy"]
+        self.assertEqual(replay["mode"], "replayed")
+        self.assertFalse(replay["model_invoked"])
+        self.assertEqual(replay["network_calls"], 0)
+        self.assertEqual(replay["response_calls"], 0)
+        self.assertEqual(replay["runtime_tool_calls"], 0)
+        self.assertTrue(replay["exact_stored_tool_calls_and_outputs"])
+        self.assertTrue(replay["artifact_citations_preserved"])
+        self.assertEqual(
+            replay["result_trace_and_catalogue_fingerprints"], "rfc8785_sha256"
+        )
+        self.assertFalse(replay["multi_turn_simulation"])
+        self.assertTrue(replay["model_identity_omitted_when_not_invoked"])
+
+    def test_every_current_source_is_official_and_guide_states_repository_state(self) -> None:
+        normalized_guide = " ".join(self.guide.split())
         for url in self.requirements["official_sources"]:
             self.assertTrue(url.startswith("https://developers.openai.com/"), url)
             self.assertIn(url.split("#", 1)[0], self.guide)
-        self.assertIn("no OpenAI SDK dependency", self.guide)
-        self.assertIn("no OpenAI SDK", self.guide)
-        self.assertIn("No live OpenAI API call occurred", self.guide)
+        self.assertIn("exact SDK pins", self.guide)
+        self.assertIn("no live OpenAI API call", normalized_guide)
+        self.assertIn("no model authored it", self.guide)
 
 
 if __name__ == "__main__":

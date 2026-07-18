@@ -66,6 +66,19 @@
     "tool_error_result": "bounded_incomplete",
     "live_and_replay_labels_distinct": true
   },
+  "replay_policy": {
+    "mode": "replayed",
+    "model_invoked": false,
+    "network_calls": 0,
+    "response_calls": 0,
+    "runtime_tool_calls": 0,
+    "exact_stored_tool_calls_and_outputs": true,
+    "artifact_citations_preserved": true,
+    "result_trace_and_catalogue_fingerprints": "rfc8785_sha256",
+    "unmatched_question_result": "unavailable_no_live_fallthrough",
+    "multi_turn_simulation": false,
+    "model_identity_omitted_when_not_invoked": true
+  },
   "security_privacy": {
     "api_key_location": "server_environment_or_key_management_service",
     "api_key_in_browser": false,

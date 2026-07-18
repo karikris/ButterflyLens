@@ -35,24 +35,32 @@ describe('Ask ButterflyLens', () => {
     expect(screen.getByRole('heading', { name: 'Ask ButterflyLens' })).toBeInTheDocument()
     expect(screen.getByText(/deterministic read-only tools/)).toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: 'Your evidence question' })).toHaveAttribute('maxlength', '1200')
-    expect(screen.getByRole('button', { name: 'Ask with evidence' })).toBeDisabled()
-    expect(screen.getByText(/authenticated server session/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Replay stored evidence' })).toBeDisabled()
+    expect(screen.getByText('Credential-free replay')).toBeInTheDocument()
+    expect(screen.getByText(/invokes no model, tool, or network/)).toBeInTheDocument()
   })
 
-  it('fills a suggested question and fails closed in submitted mode', async () => {
+  it('fills a suggested question and renders the exact stored replay trace', async () => {
     render(<AskButterflyLens />)
 
     fireEvent.click(screen.getByRole('button', { name: 'What evidence is available for Acraea andromacha?' }))
     expect(screen.getByRole('textbox', { name: 'Your evidence question' })).toHaveValue(
       'What evidence is available for Acraea andromacha?',
     )
-    fireEvent.click(screen.getByRole('button', { name: 'Ask with evidence' }))
-    expect(await screen.findByText(/No OpenAI call was made/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Replay stored evidence' }))
+    expect(await screen.findByText('Replayed · completed')).toBeInTheDocument()
+    expect(screen.getByText(/Model not invoked · replayed/)).toBeInTheDocument()
+    expect(screen.getByText('1 stored tool call')).toBeInTheDocument()
+    expect(screen.getByText('Stored tool trace (1)')).toBeInTheDocument()
+    expect(screen.getByText('inspect_species')).toBeInTheDocument()
+    expect(screen.getByText(/sha256:9d12bf73/)).toBeInTheDocument()
+    expect(screen.getByText('apps/web/src/species/submittedSpeciesCatalogue.json')).toBeInTheDocument()
+    expect(screen.queryByText(/Live ·/)).not.toBeInTheDocument()
   })
 
   it('renders a validated live answer with artifact and model provenance', async () => {
     const client: AnalystClient = async () => ({ state: 'response', response: RESPONSE })
-    render(<AskButterflyLens client={client} />)
+    render(<AskButterflyLens client={client} clientMode="live" />)
 
     fireEvent.change(screen.getByRole('textbox', { name: 'Your evidence question' }), {
       target: { value: 'Inspect this species.' },
@@ -71,7 +79,7 @@ describe('Ask ButterflyLens', () => {
     const client: AnalystClient = async () => {
       throw new Error('secret upstream detail')
     }
-    render(<AskButterflyLens client={client} />)
+    render(<AskButterflyLens client={client} clientMode="live" />)
     fireEvent.change(screen.getByRole('textbox', { name: 'Your evidence question' }), {
       target: { value: 'Question?' },
     })

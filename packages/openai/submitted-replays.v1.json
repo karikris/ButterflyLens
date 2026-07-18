@@ -1,0 +1,1119 @@
+{
+  "cases": [
+    {
+      "accepted_questions": [
+        "What evidence is available for Acraea andromacha?"
+      ],
+      "replay_id": "replay:species-acraea-andromacha",
+      "response": {
+        "citations": [
+          {
+            "artifact_id": "butterflylens:submitted-species-catalogue",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:6d774e68abd6f29affb5dcfc220d0c5e4759e74c434f0f720f655e19f9a5d6f9",
+            "path": "apps/web/src/species/submittedSpeciesCatalogue.json",
+            "repository": "karikris/ButterflyLens"
+          },
+          {
+            "artifact_id": "butterflylens:australian-butterflies-v1",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a",
+            "path": "data/packs/australian_butterflies/v1/manifest.json",
+            "repository": "karikris/ButterflyLens"
+          },
+          {
+            "artifact_id": "butterflylens:reference-quality-v1",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:4cfc41de9908dbe7f0997e5dc59fd964606d3127d5af24e660868eabc7367d91",
+            "path": "data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json",
+            "repository": "karikris/ButterflyLens"
+          }
+        ],
+        "claims": [
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:australian-butterflies-v1"
+            ],
+            "claim_id": "claim_1",
+            "evidence_state": "direct",
+            "statement": "Acraea andromacha is an accepted species in the authoritative rebuilt ButterflyLens catalogue."
+          },
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:australian-butterflies-v1",
+              "butterflylens:reference-quality-v1"
+            ],
+            "claim_id": "claim_2",
+            "evidence_state": "direct",
+            "statement": "The submitted reference diagnostics report 20 selected valid decodes and zero human-verified media; release remains blocked by unfinished models and human review."
+          }
+        ],
+        "limitations": [
+          "No GPT-5.6 or other model was invoked to generate or display this replay.",
+          "Accepted taxonomy and provisional references do not identify a photograph or establish an occurrence."
+        ],
+        "mode": "replayed",
+        "replay": {
+          "model_invoked": false,
+          "recorded_at": "2026-07-18T06:55:59Z",
+          "replay_id": "replay:species-acraea-andromacha",
+          "response_calls": 0,
+          "source_commit": "efcf45890d6da5e958f4d46240d3e8c00be8e68b",
+          "tool_calls": 1,
+          "trace_fingerprint": "sha256:5ff8c9730a6f4fea7439cff97ebfb6f943cb983db59937bb9ebeb76d94aa77eb"
+        },
+        "response_state": "completed",
+        "schema_version": "butterflylens-analyst-replay-response:v1.0.0",
+        "summary": "This stored replay shows submitted evidence for Acraea andromacha; it does not identify a photo or release an occurrence.",
+        "tools_used": [
+          "inspect_species"
+        ]
+      },
+      "tool_trace": [
+        {
+          "arguments": {
+            "scientific_name": "Acraea andromacha",
+            "species_key": null
+          },
+          "call_id": "replay:species-acraea-andromacha:call:1",
+          "name": "inspect_species",
+          "output": {
+            "citations": [
+              {
+                "artifact_id": "butterflylens:submitted-species-catalogue",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:6d774e68abd6f29affb5dcfc220d0c5e4759e74c434f0f720f655e19f9a5d6f9",
+                "path": "apps/web/src/species/submittedSpeciesCatalogue.json",
+                "repository": "karikris/ButterflyLens"
+              },
+              {
+                "artifact_id": "butterflylens:australian-butterflies-v1",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a",
+                "path": "data/packs/australian_butterflies/v1/manifest.json",
+                "repository": "karikris/ButterflyLens"
+              },
+              {
+                "artifact_id": "butterflylens:reference-quality-v1",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:4cfc41de9908dbe7f0997e5dc59fd964606d3127d5af24e660868eabc7367d91",
+                "path": "data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json",
+                "repository": "karikris/ButterflyLens"
+              }
+            ],
+            "facts": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:australian-butterflies-v1",
+                  "butterflylens:reference-quality-v1"
+                ],
+                "interpretation": "The rebuilt ButterflyLens baseline is authoritative for this goal.",
+                "name": "authoritative_baseline",
+                "state": "observed",
+                "unit": null,
+                "value": "ButterflyLens rebuilt baseline"
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:australian-butterflies-v1",
+                  "butterflylens:reference-quality-v1"
+                ],
+                "interpretation": "This evidence view does not itself verify a photo identity or occurrence.",
+                "name": "scientific_claim_allowed",
+                "state": "observed",
+                "unit": null,
+                "value": false
+              }
+            ],
+            "limitations": [
+              "English names remain sourced unreviewed assertions.",
+              "Reference counts are provisional workflow diagnostics, not verified identities or quality estimates.",
+              "YOLOE, BioCLIP, and human reference review are unfinished or absent."
+            ],
+            "query": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:australian-butterflies-v1",
+                  "butterflylens:reference-quality-v1"
+                ],
+                "interpretation": "Stable species key selector when supplied.",
+                "name": "species_key",
+                "state": "not_applicable",
+                "unit": null,
+                "value": null
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:australian-butterflies-v1",
+                  "butterflylens:reference-quality-v1"
+                ],
+                "interpretation": "Exact accepted scientific-name selector when supplied.",
+                "name": "scientific_name",
+                "state": "observed",
+                "unit": null,
+                "value": "Acraea andromacha"
+              }
+            ],
+            "records": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:australian-butterflies-v1",
+                  "butterflylens:reference-quality-v1"
+                ],
+                "facts": [
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Stable ButterflyLens accepted-species key.",
+                    "name": "species_key",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "bltx:v1:997e8426f871a0602527d4ce"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Accepted scientific name in the frozen authority snapshot.",
+                    "name": "accepted_scientific_name",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "Acraea andromacha"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Deterministic public route slug.",
+                    "name": "slug",
+                    "state": "derived",
+                    "unit": null,
+                    "value": "acraea-andromacha-997e8426"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Accepted family in the submitted hierarchy.",
+                    "name": "family",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "NYMPHALIDAE"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Accepted genus in the submitted hierarchy.",
+                    "name": "genus",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "Acraea"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Sourced English-name assertions; they remain unreviewed.",
+                    "name": "english_names",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "Glasswing; Glasswing Butterfly"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Conservative provider crosswalk state.",
+                    "name": "crosswalk_status",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "complete"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Unresolved provider-concept conflicts retained without automatic resolution.",
+                    "name": "open_conflict_count",
+                    "state": "observed",
+                    "unit": "conflicts",
+                    "value": 0
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Provider-asserted provisional reference workflow state.",
+                    "name": "reference_status",
+                    "state": "unfinished",
+                    "unit": null,
+                    "value": "provisional_decode_only"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Candidate metadata count, not verified identity evidence.",
+                    "name": "reference_candidate_media",
+                    "state": "observed",
+                    "unit": "media",
+                    "value": 434
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Selected decode workflow count, not a release count.",
+                    "name": "reference_selected_media",
+                    "state": "observed",
+                    "unit": "media",
+                    "value": 20
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Valid decode count, not a quality estimate.",
+                    "name": "reference_valid_decodes",
+                    "state": "observed",
+                    "unit": "media",
+                    "value": 20
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Human reference verification is absent in the submitted pack.",
+                    "name": "human_verified_media",
+                    "state": "unfinished",
+                    "unit": "media",
+                    "value": 0
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Reference evidence remains blocked from scientific release.",
+                    "name": "release_status",
+                    "state": "unfinished",
+                    "unit": null,
+                    "value": "blocked_unfinished_models_and_human_review"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:australian-butterflies-v1",
+                      "butterflylens:reference-quality-v1"
+                    ],
+                    "interpretation": "Source authority concept URL recorded by the catalogue.",
+                    "name": "source_url",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "https://biodiversity.org.au/afd/taxa/Acraea_andromacha"
+                  }
+                ],
+                "record_id": "bltx:v1:997e8426f871a0602527d4ce",
+                "record_type": "species"
+              }
+            ],
+            "result_fingerprint": "sha256:9d12bf73ea4923dfe636bcd005f146c995bb6c324d47ce8becba4b7288145e35",
+            "schema_version": "butterflylens-openai-tool-result:v1.0.0",
+            "status": "available",
+            "summary": "Accepted species evidence is available for Acraea andromacha.",
+            "tool_name": "inspect_species"
+          },
+          "sequence": 1
+        }
+      ]
+    },
+    {
+      "accepted_questions": [
+        "Can ALA and Flickr counts be compared yet?"
+      ],
+      "replay_id": "replay:ala-flickr-comparison",
+      "response": {
+        "citations": [
+          {
+            "artifact_id": "butterflylens:submitted-species-catalogue",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:6d774e68abd6f29affb5dcfc220d0c5e4759e74c434f0f720f655e19f9a5d6f9",
+            "path": "apps/web/src/species/submittedSpeciesCatalogue.json",
+            "repository": "karikris/ButterflyLens"
+          },
+          {
+            "artifact_id": "butterflylens:ala-submitted-snapshot",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:f16cb0939721b40b941caa5a7e2cd6767b20774750f56208b799422bde758b7e",
+            "path": "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json",
+            "repository": "karikris/ButterflyLens"
+          },
+          {
+            "artifact_id": "butterflylens:flickr-global-out-of-range-status",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:7215fd7895bd1cf207da28501fd8bbb43768a545df9659b0f026631f271b3cd7",
+            "path": "packages/flickr/global_out_of_range_status.json",
+            "repository": "karikris/ButterflyLens"
+          },
+          {
+            "artifact_id": "butterflylens:data-rights-manifest",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:d4af0b623f9eb875bd88073aaa13fddfdb7e0063698ebb258cb334508a415201",
+            "path": "provenance/data_rights_manifest.json",
+            "repository": "karikris/ButterflyLens"
+          }
+        ],
+        "claims": [
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:ala-submitted-snapshot",
+              "butterflylens:data-rights-manifest"
+            ],
+            "claim_id": "claim_1",
+            "evidence_state": "unavailable",
+            "statement": "The national ALA occurrence count is withheld by the submitted dataset-rights boundary."
+          },
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:flickr-global-out-of-range-status"
+            ],
+            "claim_id": "claim_2",
+            "evidence_state": "unavailable",
+            "statement": "No completed immutable national Flickr candidate count is present in the stored submitted evidence."
+          },
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:ala-submitted-snapshot",
+              "butterflylens:flickr-global-out-of-range-status",
+              "butterflylens:data-rights-manifest"
+            ],
+            "claim_id": "claim_3",
+            "evidence_state": "unavailable",
+            "statement": "The count difference is unavailable; missing evidence is not a zero or evidence of biological absence."
+          }
+        ],
+        "limitations": [
+          "No GPT-5.6 or other model was invoked to generate or display this replay.",
+          "The replay does not inspect the active Flickr fetch or any partial BioMiner output."
+        ],
+        "mode": "replayed",
+        "replay": {
+          "model_invoked": false,
+          "recorded_at": "2026-07-18T06:55:59Z",
+          "replay_id": "replay:ala-flickr-comparison",
+          "response_calls": 0,
+          "source_commit": "efcf45890d6da5e958f4d46240d3e8c00be8e68b",
+          "tool_calls": 1,
+          "trace_fingerprint": "sha256:aa2fe459426660093acdc29f8f2dac0cf119a6bb173a125fd0650d27ba899a4f"
+        },
+        "response_state": "completed",
+        "schema_version": "butterflylens-analyst-replay-response:v1.0.0",
+        "summary": "The stored submitted evidence cannot yet support an ALA/Flickr count comparison.",
+        "tools_used": [
+          "compare_ala_and_flickr"
+        ]
+      },
+      "tool_trace": [
+        {
+          "arguments": {
+            "scope_id": null,
+            "scope_type": "national",
+            "species_key": null
+          },
+          "call_id": "replay:ala-flickr-comparison:call:1",
+          "name": "compare_ala_and_flickr",
+          "output": {
+            "citations": [
+              {
+                "artifact_id": "butterflylens:submitted-species-catalogue",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:6d774e68abd6f29affb5dcfc220d0c5e4759e74c434f0f720f655e19f9a5d6f9",
+                "path": "apps/web/src/species/submittedSpeciesCatalogue.json",
+                "repository": "karikris/ButterflyLens"
+              },
+              {
+                "artifact_id": "butterflylens:ala-submitted-snapshot",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:f16cb0939721b40b941caa5a7e2cd6767b20774750f56208b799422bde758b7e",
+                "path": "data/packs/australian_butterflies/v1/ala/ala_snapshot_manifest.json",
+                "repository": "karikris/ButterflyLens"
+              },
+              {
+                "artifact_id": "butterflylens:flickr-global-out-of-range-status",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:7215fd7895bd1cf207da28501fd8bbb43768a545df9659b0f026631f271b3cd7",
+                "path": "packages/flickr/global_out_of_range_status.json",
+                "repository": "karikris/ButterflyLens"
+              },
+              {
+                "artifact_id": "butterflylens:data-rights-manifest",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:d4af0b623f9eb875bd88073aaa13fddfdb7e0063698ebb258cb334508a415201",
+                "path": "provenance/data_rights_manifest.json",
+                "repository": "karikris/ButterflyLens"
+              }
+            ],
+            "facts": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:ala-submitted-snapshot",
+                  "butterflylens:flickr-global-out-of-range-status",
+                  "butterflylens:data-rights-manifest"
+                ],
+                "interpretation": "ALA counts are withheld by the submitted dataset-rights boundary.",
+                "name": "ala_occurrence_count",
+                "state": "withheld",
+                "unit": "occurrences",
+                "value": null
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:ala-submitted-snapshot",
+                  "butterflylens:flickr-global-out-of-range-status",
+                  "butterflylens:data-rights-manifest"
+                ],
+                "interpretation": "No completed immutable Flickr candidate snapshot exists for the requested scope.",
+                "name": "flickr_candidate_count",
+                "state": "unavailable",
+                "unit": "candidates",
+                "value": null
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:ala-submitted-snapshot",
+                  "butterflylens:flickr-global-out-of-range-status",
+                  "butterflylens:data-rights-manifest"
+                ],
+                "interpretation": "A difference is not calculated unless both comparable counts are admitted.",
+                "name": "count_difference",
+                "state": "unavailable",
+                "unit": "records",
+                "value": null
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:ala-submitted-snapshot",
+                  "butterflylens:flickr-global-out-of-range-status",
+                  "butterflylens:data-rights-manifest"
+                ],
+                "interpretation": "The submitted evidence does not satisfy the same-scope two-source comparison gate.",
+                "name": "comparison_allowed",
+                "state": "observed",
+                "unit": null,
+                "value": false
+              }
+            ],
+            "limitations": [
+              "Unavailable is not zero and does not imply absence.",
+              "No active Flickr or BioMiner output was inspected."
+            ],
+            "query": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:ala-submitted-snapshot",
+                  "butterflylens:flickr-global-out-of-range-status",
+                  "butterflylens:data-rights-manifest"
+                ],
+                "interpretation": "Validated requested geographic scope type.",
+                "name": "scope_type",
+                "state": "observed",
+                "unit": null,
+                "value": "national"
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:ala-submitted-snapshot",
+                  "butterflylens:flickr-global-out-of-range-status",
+                  "butterflylens:data-rights-manifest"
+                ],
+                "interpretation": "National scope has no subordinate scope ID.",
+                "name": "scope_id",
+                "state": "not_applicable",
+                "unit": null,
+                "value": null
+              }
+            ],
+            "records": [],
+            "result_fingerprint": "sha256:8c1fc594129055cb3259578145a604ea7e74180d3c5b61cd45e9dbaa0f476a85",
+            "schema_version": "butterflylens-openai-tool-result:v1.0.0",
+            "status": "unavailable",
+            "summary": "ALA and Flickr cannot yet be compared from committed governed evidence for this scope.",
+            "tool_name": "compare_ala_and_flickr"
+          },
+          "sequence": 1
+        }
+      ]
+    },
+    {
+      "accepted_questions": [
+        "Which species should receive the next reference review?"
+      ],
+      "replay_id": "replay:next-reference-review",
+      "response": {
+        "citations": [
+          {
+            "artifact_id": "butterflylens:submitted-species-catalogue",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:6d774e68abd6f29affb5dcfc220d0c5e4759e74c434f0f720f655e19f9a5d6f9",
+            "path": "apps/web/src/species/submittedSpeciesCatalogue.json",
+            "repository": "karikris/ButterflyLens"
+          },
+          {
+            "artifact_id": "butterflylens:reference-quality-v1",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:4cfc41de9908dbe7f0997e5dc59fd964606d3127d5af24e660868eabc7367d91",
+            "path": "data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json",
+            "repository": "karikris/ButterflyLens"
+          },
+          {
+            "artifact_id": "butterflylens:australian-butterflies-v1",
+            "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+            "fingerprint": "sha256:41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a",
+            "path": "data/packs/australian_butterflies/v1/manifest.json",
+            "repository": "karikris/ButterflyLens"
+          }
+        ],
+        "claims": [
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:reference-quality-v1",
+              "butterflylens:australian-butterflies-v1"
+            ],
+            "claim_id": "claim_1",
+            "evidence_state": "direct",
+            "statement": "The stored queue orders Hypochrysops sandrae, Lacturnea lacturnus, then Charaxes andrewsi for targeted reference-gap review."
+          },
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:reference-quality-v1",
+              "butterflylens:australian-butterflies-v1"
+            ],
+            "claim_id": "claim_2",
+            "evidence_state": "direct",
+            "statement": "All three have zero selected reference media and zero human-verified media in this stored trace."
+          },
+          {
+            "citation_ids": [
+              "butterflylens:submitted-species-catalogue",
+              "butterflylens:reference-quality-v1",
+              "butterflylens:australian-butterflies-v1"
+            ],
+            "claim_id": "claim_3",
+            "evidence_state": "direct",
+            "statement": "This is targeted workflow order, not a ranking of rarity, presence, conservation importance, or dataset quality."
+          }
+        ],
+        "limitations": [
+          "No GPT-5.6 or other model was invoked to generate or display this replay.",
+          "Reference-gap priorities are provisional diagnostics and cannot establish photo identity or occurrence."
+        ],
+        "mode": "replayed",
+        "replay": {
+          "model_invoked": false,
+          "recorded_at": "2026-07-18T06:55:59Z",
+          "replay_id": "replay:next-reference-review",
+          "response_calls": 0,
+          "source_commit": "efcf45890d6da5e958f4d46240d3e8c00be8e68b",
+          "tool_calls": 1,
+          "trace_fingerprint": "sha256:95639b775f6a30c309f4968992b94bfea386e4d63a8cb724846bdcab26c1f79d"
+        },
+        "response_state": "completed",
+        "schema_version": "butterflylens-analyst-replay-response:v1.0.0",
+        "summary": "The stored deterministic reference-gap queue returns three species-level workflow priorities.",
+        "tools_used": [
+          "recommend_next_species"
+        ]
+      },
+      "tool_trace": [
+        {
+          "arguments": {
+            "criterion": "reference_gap",
+            "limit": 3
+          },
+          "call_id": "replay:next-reference-review:call:1",
+          "name": "recommend_next_species",
+          "output": {
+            "citations": [
+              {
+                "artifact_id": "butterflylens:submitted-species-catalogue",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:6d774e68abd6f29affb5dcfc220d0c5e4759e74c434f0f720f655e19f9a5d6f9",
+                "path": "apps/web/src/species/submittedSpeciesCatalogue.json",
+                "repository": "karikris/ButterflyLens"
+              },
+              {
+                "artifact_id": "butterflylens:reference-quality-v1",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:4cfc41de9908dbe7f0997e5dc59fd964606d3127d5af24e660868eabc7367d91",
+                "path": "data/packs/australian_butterflies/v1/references/v1/reference_quality_manifest.json",
+                "repository": "karikris/ButterflyLens"
+              },
+              {
+                "artifact_id": "butterflylens:australian-butterflies-v1",
+                "commit": "f9b96814f335684cf311b70b622e2cade0188b9b",
+                "fingerprint": "sha256:41f74251dedc53f319d22e266dc7c4d01757a5dd457a4e729a79a80b09006b5a",
+                "path": "data/packs/australian_butterflies/v1/manifest.json",
+                "repository": "karikris/ButterflyLens"
+              }
+            ],
+            "facts": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "interpretation": "Priority derives only from committed catalogue/reference diagnostics.",
+                "name": "priority_basis",
+                "state": "derived",
+                "unit": null,
+                "value": "reference_gap"
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "interpretation": "Workflow order is not rarity, presence, conservation, or scientific importance.",
+                "name": "scientific_importance_rank",
+                "state": "observed",
+                "unit": null,
+                "value": false
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "interpretation": "Bounded number of accepted species returned.",
+                "name": "recommended_species",
+                "state": "derived",
+                "unit": "species",
+                "value": 3
+              }
+            ],
+            "limitations": [
+              "Reference counts are provisional workflow diagnostics.",
+              "No geographic absence, occurrence, probability, or model score is inferred."
+            ],
+            "query": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "interpretation": "Explicit workflow criterion selected by the caller.",
+                "name": "criterion",
+                "state": "observed",
+                "unit": null,
+                "value": "reference_gap"
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "interpretation": "Maximum bounded recommendation count.",
+                "name": "limit",
+                "state": "observed",
+                "unit": "species",
+                "value": 3
+              }
+            ],
+            "records": [
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "facts": [
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Deterministic order within this bounded tool result only.",
+                    "name": "priority_order",
+                    "state": "derived",
+                    "unit": null,
+                    "value": 1
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Stable accepted-species key.",
+                    "name": "species_key",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "bltx:v1:2ce6555e4c5c741112d789fb"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Accepted name in the authoritative submitted baseline.",
+                    "name": "accepted_scientific_name",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "Hypochrysops sandrae"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Explicit non-scientific workflow prioritization reason.",
+                    "name": "workflow_reason",
+                    "state": "derived",
+                    "unit": null,
+                    "value": "reference_support_gap"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Provisional selected decode count, not verified identity.",
+                    "name": "selected_reference_media",
+                    "state": "observed",
+                    "unit": "media",
+                    "value": 0
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Arithmetic gap to the configured workflow target of 20; not biological absence.",
+                    "name": "target_support_gap",
+                    "state": "derived",
+                    "unit": "media",
+                    "value": 20
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Retained provider-concept conflict count.",
+                    "name": "open_conflict_count",
+                    "state": "conflict",
+                    "unit": "conflicts",
+                    "value": 3
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "No submitted reference media has human verification.",
+                    "name": "human_verified_media",
+                    "state": "unfinished",
+                    "unit": "media",
+                    "value": 0
+                  }
+                ],
+                "record_id": "bltx:v1:2ce6555e4c5c741112d789fb",
+                "record_type": "species_workflow_priority"
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "facts": [
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Deterministic order within this bounded tool result only.",
+                    "name": "priority_order",
+                    "state": "derived",
+                    "unit": null,
+                    "value": 2
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Stable accepted-species key.",
+                    "name": "species_key",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "bltx:v1:f5fa30e938f4d0ff5b7040ff"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Accepted name in the authoritative submitted baseline.",
+                    "name": "accepted_scientific_name",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "Lacturnea lacturnus"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Explicit non-scientific workflow prioritization reason.",
+                    "name": "workflow_reason",
+                    "state": "derived",
+                    "unit": null,
+                    "value": "reference_support_gap"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Provisional selected decode count, not verified identity.",
+                    "name": "selected_reference_media",
+                    "state": "observed",
+                    "unit": "media",
+                    "value": 0
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Arithmetic gap to the configured workflow target of 20; not biological absence.",
+                    "name": "target_support_gap",
+                    "state": "derived",
+                    "unit": "media",
+                    "value": 20
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Retained provider-concept conflict count.",
+                    "name": "open_conflict_count",
+                    "state": "conflict",
+                    "unit": "conflicts",
+                    "value": 3
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "No submitted reference media has human verification.",
+                    "name": "human_verified_media",
+                    "state": "unfinished",
+                    "unit": "media",
+                    "value": 0
+                  }
+                ],
+                "record_id": "bltx:v1:f5fa30e938f4d0ff5b7040ff",
+                "record_type": "species_workflow_priority"
+              },
+              {
+                "citation_ids": [
+                  "butterflylens:submitted-species-catalogue",
+                  "butterflylens:reference-quality-v1",
+                  "butterflylens:australian-butterflies-v1"
+                ],
+                "facts": [
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Deterministic order within this bounded tool result only.",
+                    "name": "priority_order",
+                    "state": "derived",
+                    "unit": null,
+                    "value": 3
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Stable accepted-species key.",
+                    "name": "species_key",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "bltx:v1:08cbe887619120a4e1c6663f"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Accepted name in the authoritative submitted baseline.",
+                    "name": "accepted_scientific_name",
+                    "state": "observed",
+                    "unit": null,
+                    "value": "Charaxes andrewsi"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Explicit non-scientific workflow prioritization reason.",
+                    "name": "workflow_reason",
+                    "state": "derived",
+                    "unit": null,
+                    "value": "reference_support_gap"
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Provisional selected decode count, not verified identity.",
+                    "name": "selected_reference_media",
+                    "state": "observed",
+                    "unit": "media",
+                    "value": 0
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Arithmetic gap to the configured workflow target of 20; not biological absence.",
+                    "name": "target_support_gap",
+                    "state": "derived",
+                    "unit": "media",
+                    "value": 20
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "Retained provider-concept conflict count.",
+                    "name": "open_conflict_count",
+                    "state": "conflict",
+                    "unit": "conflicts",
+                    "value": 2
+                  },
+                  {
+                    "citation_ids": [
+                      "butterflylens:submitted-species-catalogue",
+                      "butterflylens:reference-quality-v1",
+                      "butterflylens:australian-butterflies-v1"
+                    ],
+                    "interpretation": "No submitted reference media has human verification.",
+                    "name": "human_verified_media",
+                    "state": "unfinished",
+                    "unit": "media",
+                    "value": 0
+                  }
+                ],
+                "record_id": "bltx:v1:08cbe887619120a4e1c6663f",
+                "record_type": "species_workflow_priority"
+              }
+            ],
+            "result_fingerprint": "sha256:f81600028a9b4db47ead5765c7169dca80669ea83623173c74b7e45d639ac3b1",
+            "schema_version": "butterflylens-openai-tool-result:v1.0.0",
+            "status": "available",
+            "summary": "Prepared 3 deterministic workflow priorities using criterion reference_gap.",
+            "tool_name": "recommend_next_species"
+          },
+          "sequence": 1
+        }
+      ]
+    }
+  ],
+  "catalog_fingerprint": "sha256:756b5ccb25a5654da9f0f749a40add19906830c4a68a299492f64b4d10cea4cb",
+  "mode": "replayed",
+  "schema_version": "butterflylens-analyst-replay-catalog:v1.0.0",
+  "source": {
+    "implementation_commit": "efcf45890d6da5e958f4d46240d3e8c00be8e68b",
+    "model_invoked": false,
+    "network_calls": 0,
+    "recorded_at": "2026-07-18T06:55:59Z",
+    "repository": "karikris/ButterflyLens",
+    "tool_artifact_commit": "f9b96814f335684cf311b70b622e2cade0188b9b"
+  }
+}

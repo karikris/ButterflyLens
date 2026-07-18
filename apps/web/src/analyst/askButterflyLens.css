@@ -118,7 +118,8 @@
 
 .analyst-submit:focus-visible,
 .analyst-suggestions button:focus-visible,
-.analyst-citations summary:focus-visible {
+.analyst-citations summary:focus-visible,
+.analyst-trace summary:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
@@ -254,6 +255,41 @@
   margin: 0.3rem 0 0;
 }
 
+.analyst-trace {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  background: #f2efe6;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+}
+
+.analyst-trace summary {
+  min-height: var(--bl-target-min);
+  color: var(--green);
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.analyst-trace ol {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+  padding-left: 1.3rem;
+}
+
+.analyst-trace li {
+  min-width: 0;
+}
+
+.analyst-trace li span {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--ink-soft);
+  font-family: var(--bl-font-mono);
+  font-size: 0.7rem;
+  overflow-wrap: anywhere;
+}
+
 .analyst-answer footer {
   display: flex;
   justify-content: space-between;
@@ -292,6 +328,7 @@
   .analyst-result,
   .analyst-claims li,
   .analyst-citations,
+  .analyst-trace,
   .analyst-submit {
     border: 2px solid CanvasText;
   }

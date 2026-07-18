@@ -117,3 +117,16 @@ This append-oriented record captures product or governance decisions made by Kri
 - Keep the committed submitted page credential-free and make no model call from
   that replay. Live deployment is a separate operator action, and Task 11.4 owns
   the visibly distinct stored judge replay.
+
+## 2026-07-18 — Credential-free analyst replay
+
+- Make the submitted Ask ButterflyLens surface a three-question, single-turn
+  replay of exact stored deterministic tool calls and complete tool outputs.
+- Recompute RFC 8785 SHA-256 fingerprints for every stored result, trace, and
+  catalogue in the browser before displaying an answer; altered evidence fails
+  closed and never falls through to the live analyst.
+- Preserve the tool-output citations exactly and label the answer, trace, call
+  count, recording time, and zero-model boundary as replayed.
+- The stored prose is a deterministic project-authored evidence rendering. No
+  GPT-5.6 or other model authored it, so do not attach a model identity or
+  simulate live inference.
