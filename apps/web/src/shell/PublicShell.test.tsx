@@ -57,6 +57,10 @@ describe('public application shell', () => {
       'href',
       'https://github.com/karikris/ButterflyLens/blob/main/OCCURRENCE_RELEASE.md',
     )
+    expect(screen.getByRole('link', { name: 'Darwin Core export' })).toHaveAttribute(
+      'href',
+      'https://github.com/karikris/ButterflyLens/blob/main/DARWIN_CORE_EXPORT.md',
+    )
   })
 
   it('resolves every application navigation fragment to a real landmark', () => {

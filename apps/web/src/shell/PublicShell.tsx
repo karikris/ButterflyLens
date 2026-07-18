@@ -81,6 +81,10 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
             <a href="https://github.com/karikris/ButterflyLens/blob/main/OCCURRENCE_RELEASE.md">
               Occurrence release
             </a>
+            {' · '}
+            <a href="https://github.com/karikris/ButterflyLens/blob/main/DARWIN_CORE_EXPORT.md">
+              Darwin Core export
+            </a>
           </p>
         </div>
       </footer>

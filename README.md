@@ -37,3 +37,6 @@ takedown completion without claiming a live prelaunch request channel.
 The [occurrence release policy](OCCURRENCE_RELEASE.md) requires exact human,
 qualified, expert, validity, independence, rights, quality, conflict, and
 evidence-packet receipts while keeping release-ready distinct from published.
+The [Darwin Core export policy](DARWIN_CORE_EXPORT.md) packages only those exact
+receipts into a deterministic, generalized, rights-preserving evidence archive;
+preparation remains distinct from publication or provider submission.
