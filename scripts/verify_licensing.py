@@ -179,10 +179,6 @@ def verify() -> None:
         deno_config = require_json_object(deno_config_path, ("imports", "lock"))
         expected_imports = {
             "@supabase/server": "npm:@supabase/server@1.4.0",
-            "openai": "npm:openai@6.48.0",
-            "openai/responses": (
-                "npm:openai@6.48.0/resources/responses/responses"
-            ),
         }
         if deno_config["imports"] != expected_imports:
             raise VerificationError("Edge Function imports are not the audited exact pins")
@@ -196,7 +192,6 @@ def verify() -> None:
             "npm:@supabase/server@1.4.0": (
                 "1.4.0_@supabase+supabase-js@2.110.7"
             ),
-            "npm:openai@6.48.0": "6.48.0",
         }
         if deno_lock["version"] != "5" or deno_lock["specifiers"] != expected_specifiers:
             raise VerificationError("Edge Function lock specifiers changed from audited pins")
@@ -245,7 +240,7 @@ def verify() -> None:
             for row in report_rows
             if isinstance(row, dict) and row.get("scope") == "direct"
         }
-        if direct_deno != {"@supabase/server", "openai"}:
+        if direct_deno != {"@supabase/server"}:
             raise VerificationError(
                 f"Edge Function direct dependency set changed: {sorted(direct_deno)}"
             )

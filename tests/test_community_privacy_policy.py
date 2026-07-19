@@ -64,11 +64,6 @@ class CommunityPrivacyPolicyTests(unittest.TestCase):
         )
         for forbidden in ("localStorage", "sessionStorage", "document.cookie"):
             self.assertNotIn(forbidden, web_sources)
-        analyst = (ROOT / "supabase/functions/_shared/analyst.ts").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn("store: false", analyst)
-        self.assertIn("safety_identifier: safetyIdentifier", analyst)
         self.assertFalse(MANIFEST["anonymous_site"]["product_analytics"])
 
     def test_policy_matches_private_identity_reliability_and_append_only_review(self) -> None:

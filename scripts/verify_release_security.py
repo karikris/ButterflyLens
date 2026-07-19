@@ -41,9 +41,7 @@ EXPECTED_EDGE_SUPABASE_FILES = {
     "supabase/functions/operations-status/index.ts",
     "supabase/functions/sign-b2-object/index.ts",
 }
-EXPECTED_OPENAI_FILES = {
-    "scripts/run_openai_live_evaluation.ts",
-}
+EXPECTED_OPENAI_FILES = set()
 
 
 class SecurityVerificationError(RuntimeError):

@@ -3,7 +3,11 @@
   "generated_at": "2026-07-18T06:38:13Z",
   "lockfile": "supabase/functions/deno.lock",
   "registry_source": "official npm registry metadata retrieved 2026-07-18",
-  "allowed_licenses": ["0BSD", "Apache-2.0", "MIT"],
+  "allowed_licenses": [
+    "0BSD",
+    "Apache-2.0",
+    "MIT"
+  ],
   "packages": [
     {
       "lock_key": "@supabase/auth-js@2.110.7",
@@ -94,15 +98,6 @@
       "license": "MIT",
       "source_url": "https://github.com/panva/jose",
       "integrity": "sha512-YYVDInQKFJfR/xa3ojUTl8c2KoTwiL1R5Wg9YCydwH0x0B9grbzlg5HC7mMjCtUJjbQ/YnGEZIhI5tCgfTb4Hw=="
-    },
-    {
-      "lock_key": "openai@6.48.0",
-      "name": "openai",
-      "version": "6.48.0",
-      "scope": "direct",
-      "license": "Apache-2.0",
-      "source_url": "https://github.com/openai/openai-node",
-      "integrity": "sha512-KhVp+FyV50QrXNextvL9hIU5l6ox5HYuKQjGVk7lIqprgJol90+dQXWONV6S1lRWsKA1bXjrow8RsUT14M1hNA=="
     },
     {
       "lock_key": "tslib@2.8.1",
