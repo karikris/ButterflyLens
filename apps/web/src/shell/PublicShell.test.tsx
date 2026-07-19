@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { App } from '../App'
@@ -21,6 +21,21 @@ describe('public application shell', () => {
       primaryNavigation.map((item) => item.href),
     )
     expect(links[0]).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('updates aria-current from the current hash', () => {
+    window.location.hash = '#verify'
+    render(
+      <PublicShell>
+        <p>Test content</p>
+      </PublicShell>,
+    )
+    fireEvent(window, new HashChangeEvent('hashchange'))
+
+    const navigation = screen.getByRole('navigation', { name: 'Primary' })
+    const links = within(navigation).getAllByRole('link')
+    expect(links[1]).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: 'Explore' })).not.toHaveAttribute('aria-current')
   })
 
   it('provides one skip target and the expected page landmarks', () => {

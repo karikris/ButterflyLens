@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { StateBadge } from '../design-system/EvidencePrimitives'
 
 export const primaryNavigation = [
-  { label: 'Explore', href: '#explore', current: true },
+  { label: 'Explore', href: '#explore' },
   { label: 'Verify', href: '#verify' },
   { label: 'How it works', href: '#how-it-works' },
   { label: 'Community', href: '#community' },
@@ -12,6 +13,18 @@ export const primaryNavigation = [
 ] as const
 
 export function PublicShell({ children }: { readonly children: ReactNode }) {
+  const [activeHash, setActiveHash] = useState<string>(window.location.hash || '#explore')
+
+  useEffect(() => {
+    const updateActiveHash = () => {
+      setActiveHash(window.location.hash || '#explore')
+    }
+    window.addEventListener('hashchange', updateActiveHash)
+    return () => {
+      window.removeEventListener('hashchange', updateActiveHash)
+    }
+  }, [])
+
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main-content">
@@ -36,7 +49,7 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
               <li key={item.href}>
                 <a
                   href={item.href}
-                  aria-current={'current' in item && item.current ? 'page' : undefined}
+                  aria-current={item.href === activeHash ? 'page' : undefined}
                 >
                   {item.label}
                 </a>
