@@ -250,7 +250,7 @@
     },
     {
       "sequence": 8,
-      "id": "gpt_5_6_analysis",
+      "id": "bounded_model_analysis",
       "label": "Bounded model analysis",
       "start_ms": 119000,
       "end_ms": 140000,

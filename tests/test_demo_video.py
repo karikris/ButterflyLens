@@ -20,7 +20,7 @@ SUBMITTED_SNAPSHOT_PATH = ROOT / "data/submission/v1/submitted_snapshot.json"
 QUALITY_SNAPSHOT_PATH = ROOT / "apps/web/src/quality/submittedQualityProjection.json"
 REPLAY_PATH = ROOT / "packages/openai/submitted-replays.v1.json"
 
-LEGACY_MANIFEST_SHA256 = "851cec43a9ed5da0e25a0046becb5daf91cbdb6a171a1ee9ad6e0fe170ca9b52"
+LEGACY_MANIFEST_SHA256 = "2c4a5711dfc54bddd16c9fe4a4a53e683fa8d879dc7d0ad07f275fa530d57318"
 LEGACY_CAPTIONS_SHA256 = "dccdcc81bfaf1df7374160dd085b8129ed0bc4abb053fc04014291cb67998e48"
 
 REQUIRED_SEQUENCE = [
@@ -31,7 +31,7 @@ REQUIRED_SEQUENCE = [
     "map_update",
     "repeated_reviewers",
     "quality_interval",
-    "gpt_5_6_analysis",
+    "bounded_model_analysis",
     "geographic_impact",
     "evidence_export",
     "codex_provenance",
