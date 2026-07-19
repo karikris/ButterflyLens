@@ -91,12 +91,15 @@ contract or interface precedent informed ButterflyLens. Every origin is pinned;
 uncommitted upstream files are excluded.
 
 BioMiner's concurrent GBIF/Flickr work did not present a completed immutable
-ButterflyLens handoff at this boundary. The operator-supplied GBIF occurrence
-download `0004170-260715120105164.zip` (571,755 Australian Papilionoidea
-records; DOI `10.15468/dl.7uut3k`) is recorded as a decision, but was not copied,
-fingerprinted, converted to Parquet, or admitted here. The separate external
-Flickr fetch was reported active at 50,000 unique images; no partial result was
-inspected or copied and no Flickr API call was made by this goal.
+ButterflyLens handoff for Flickr/model evidence at this boundary. The operator-supplied
+GBIF occurrence download `0004170-260715120105164.zip` (571,755 Australian
+Papilionoidea records; DOI `10.15468/dl.7uut3k`) is now copied, fingerprinted,
+and converted to stable Parquet in `data/packs/australian_butterflies/v1/gbif`
+before publication; it is treated as a complementary boundary lane and remains
+blocked pending record-level rights and downstream review.
+The separate external Flickr fetch was reported active at 50,000 unique images;
+no partial result was inspected or copied and no Flickr API call was made by
+this goal.
 
 ## Codex activity and task evidence
 

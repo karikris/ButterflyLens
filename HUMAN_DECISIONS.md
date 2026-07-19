@@ -190,3 +190,14 @@ This append-oriented record captures product or governance decisions made by Kri
 - Keep the GBIF boundary as `blocked_pending_record_and_dataset_rights_review` and
   keep provider assertions labeled as such until downstream rights, quality, and
   human-review gates pass.
+
+## 2026-07-19 — GBIF handoff ingressed
+
+- The operator-supplied GBIF source download
+  `0004170-260715120105164.zip` (DOI `10.15468/dl.7uut3k`, 571,755 records,
+  citation `GBIF.org (18 July 2026) GBIF Occurrence Download
+  https://doi.org/10.15468/dl.7uut3k`) has now been copied as a checked-in
+  fingerprinted Parquet boundary under `data/packs/australian_butterflies/v1/gbif`.
+- This boundary remains complementary to the rebuilt ALA baseline and does not
+  change the `BioMiner is still fetching only Flickr metadata` overlap status for
+  model/Flickr handoff completion.
