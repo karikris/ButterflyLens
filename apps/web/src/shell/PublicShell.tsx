@@ -21,7 +21,6 @@ const routeAlias: Readonly<Record<string, PrimaryRouteHash>> = {
   '#quality': '#more',
   '#flickr-display-policy': '#more',
   '#contributors': '#community',
-  '#ask-butterflylens': '#community',
 } as const
 
 export function normalizeRouteHash(hash: string): PrimaryRouteHash {
