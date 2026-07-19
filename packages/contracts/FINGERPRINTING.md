@@ -68,10 +68,10 @@ model-artifact, preprocessing, artifact-manifest, and map-snapshot envelopes
 needed to connect those records.
 
 A new evidence kind or different preimage meaning requires a contract version
-change. It must not be squeezed into a misleading existing kind. Version 1.0
-remains readable for existing records; v1.1 adds `logical_query_association`
-and replaces the ambiguous v1.0 `api_response` vocabulary item with
-`source_response`. Writers emit v1.1.
+change. It must not be squeezed into a misleading existing kind. Version 1.1
+is the only admitted contract: it distinguishes `logical_query_association`
+and `source_response`, while retired v1.0 records and the ambiguous
+`api_response` kind fail closed.
 
 ## Lineage traversal
 

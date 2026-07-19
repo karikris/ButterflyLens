@@ -19,12 +19,10 @@ sys.path.insert(0, str(ROOT / "packages/contracts/python"))
 sys.path.insert(0, str(ROOT / "services/worker/python"))
 
 from butterflylens.contracts import (  # noqa: E402
-    EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION,
     EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
     FINGERPRINT_CANONICALIZATION,
     FINGERPRINT_HASH_ALGORITHM,
     FINGERPRINT_KINDS,
-    FINGERPRINT_KINDS_V1_0,
     FINGERPRINT_PARENT_RELATIONSHIPS,
     FingerprintValidationError,
     semantic_fingerprint_digest,
@@ -58,7 +56,7 @@ SCHEMA_GROUPS = {
     },
     "butterflylens-contracts": {
         "prefix": "packages/contracts/schemas/",
-        "count": 25,
+        "count": 24,
         "positive": (
             "packages/contracts/tests/fixtures/parity-cases.json#valid_documents",
             "packages/contracts/tests/check_parity.py#validate_python_cases",
@@ -497,24 +495,21 @@ def integrity_values(
 
 
 class ContractCoverageTests(unittest.TestCase):
-    def test_every_fingerprint_kind_and_version_accepts_and_rejects(self) -> None:
-        versions = (
-            (EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION, FINGERPRINT_KINDS_V1_0),
-            (EVIDENCE_FINGERPRINT_SCHEMA_VERSION, FINGERPRINT_KINDS),
-        )
-        for schema_version, kinds in versions:
-            self.assertEqual(len(kinds), len(set(kinds)))
-            for kind in kinds:
-                with self.subTest(schema_version=schema_version, kind=kind):
-                    record = fingerprint_record(schema_version, kind)
-                    validate_evidence_fingerprint(record)
-                    tampered = deepcopy(record)
-                    digest = str(tampered["digest"])
-                    tampered["digest"] = ("0" if digest[0] != "0" else "1") + digest[1:]
-                    with self.assertRaisesRegex(
-                        FingerprintValidationError, "digest mismatch"
-                    ):
-                        validate_evidence_fingerprint(tampered)
+    def test_every_current_fingerprint_kind_accepts_and_rejects(self) -> None:
+        self.assertEqual(len(FINGERPRINT_KINDS), len(set(FINGERPRINT_KINDS)))
+        for kind in FINGERPRINT_KINDS:
+            with self.subTest(kind=kind):
+                record = fingerprint_record(
+                    EVIDENCE_FINGERPRINT_SCHEMA_VERSION, kind
+                )
+                validate_evidence_fingerprint(record)
+                tampered = deepcopy(record)
+                digest = str(tampered["digest"])
+                tampered["digest"] = ("0" if digest[0] != "0" else "1") + digest[1:]
+                with self.assertRaisesRegex(
+                    FingerprintValidationError, "digest mismatch"
+                ):
+                    validate_evidence_fingerprint(tampered)
 
     def test_every_parent_relationship_is_accepted_and_unknown_is_rejected(self) -> None:
         for relationship in FINGERPRINT_PARENT_RELATIONSHIPS:
@@ -551,7 +546,7 @@ class ContractCoverageTests(unittest.TestCase):
 
     def test_every_tracked_json_schema_has_structural_and_named_coverage(self) -> None:
         schema_paths = tracked("*.schema.json")
-        self.assertEqual(len(schema_paths), 42)
+        self.assertEqual(len(schema_paths), 41)
         grouped: set[str] = set()
         for name, group in SCHEMA_GROUPS.items():
             paths = tuple(path for path in schema_paths if path.startswith(group["prefix"]))

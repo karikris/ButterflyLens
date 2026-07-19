@@ -10,7 +10,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "packages/contracts/python"))
 
 from butterflylens.contracts import (  # noqa: E402
-    EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION,
     EVIDENCE_FINGERPRINT_SCHEMA_VERSION,
     FINGERPRINT_KINDS,
     FingerprintValidationError,
@@ -69,7 +68,7 @@ class FingerprintValidationTests(unittest.TestCase):
                     ):
                         validate_evidence_fingerprint(vector["record"])
 
-    def test_legacy_v1_record_remains_valid(self) -> None:
+    def test_legacy_v1_record_is_rejected(self) -> None:
         preimage = {
             "fingerprint_kind": "api_response",
             "subject_id": "response:legacy",
@@ -78,14 +77,17 @@ class FingerprintValidationTests(unittest.TestCase):
             "parents": [],
         }
         record = {
-            "schema_version": EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION,
+            "schema_version": "butterflylens-evidence-fingerprint:v1.0.0",
             "hash_algorithm": "sha256",
             "canonicalization": "RFC8785-JCS",
             "preimage": preimage,
             "digest": semantic_fingerprint_digest(preimage),
             "recorded_at": "2026-07-17T22:10:47Z",
         }
-        validate_evidence_fingerprint(record)
+        with self.assertRaisesRegex(
+            FingerprintValidationError, "unsupported fingerprint version"
+        ):
+            validate_evidence_fingerprint(record)
 
     def test_payload_mutation_is_detected(self) -> None:
         record = deepcopy(self.fixtures["fingerprint_validation_vectors"][0]["record"])

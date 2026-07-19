@@ -21,10 +21,9 @@ production behavior.
 | Surface | Governed inventory | Coverage rule |
 |---|---:|---|
 | current semantic fingerprint kinds | 29 | each validates, then rejects a digest mutation |
-| legacy semantic fingerprint kinds | 28 | each validates under its frozen version, then rejects mutation |
 | fingerprint parent relationships | 8 | each validates; an unknown relationship fails |
-| tracked JSON Schemas | 36 | every schema is structurally valid and belongs to one named positive/negative group |
-| cross-language contract schemas | 25 | all are reachable from 21 positive and 21 negative parity roots |
+| tracked JSON Schemas | 41 | every schema is structurally valid and belongs to one named positive/negative group |
+| cross-language contract schemas | 24 | all are reachable from 20 positive and 22 negative parity roots |
 | versioned policies | 11 | every discovered version/source pair has named positive and negative tests |
 | governed projection families | 12 | every submitted JSON and exported projection symbol is registered with both test directions |
 | submitted JSON artifacts | 7 | every fingerprint field is a SHA-256 or explicit null; private keys are absent |
@@ -43,8 +42,8 @@ OpenAI artifacts, OpenAI replay, and worker-offline fallback.
 
 The registered negative tests preserve the project-wide boundaries:
 
-- digest mutation, unknown vocabulary, schema mutation, and lineage drift fail
-  closed;
+- the retired fingerprint v1.0 version, digest mutation, unknown vocabulary,
+  schema mutation, and lineage drift fail closed;
 - provider assertion, machine score, geography, and a passed checkbox cannot
   create human or scientific authority;
 - targeted failure discovery cannot become a population-quality estimate;

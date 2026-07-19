@@ -91,9 +91,9 @@
       }
     },
     {
-      "case_id": "fingerprint-v1.0-new-kind-invalid",
+      "case_id": "fingerprint-v1.0-version-invalid",
       "valid": false,
-      "error": "kind is outside version vocabulary",
+      "error": "unsupported fingerprint version",
       "record": {
         "schema_version": "butterflylens-evidence-fingerprint:v1.0.0",
         "hash_algorithm": "sha256",
@@ -223,7 +223,6 @@
     { "constant": "PROJECT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "pointer": "/properties/schema_version/const" },
     { "constant": "RUN_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/schema_version/const" },
     { "constant": "CONTENT_CHECKSUM_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:content-checksum:v1.0.0", "pointer": "/properties/schema_version/const" },
-    { "constant": "EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0", "pointer": "/properties/schema_version/const" },
     { "constant": "EVIDENCE_FINGERPRINT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0", "pointer": "/properties/schema_version/const" },
     { "constant": "VERIFICATION_CAMPAIGN_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/campaign/properties/schema_version/const" },
     { "constant": "VERIFICATION_ASSIGNMENT_SCHEMA_VERSION", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/assignment/properties/schema_version/const" },
@@ -248,7 +247,6 @@
     { "constant": "RUN_MODES", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/mode/enum" },
     { "constant": "RUN_STATUSES", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/status/enum" },
     { "constant": "PIPELINE_STAGE_IDS", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "pointer": "/properties/stages/items/properties/stage_id/enum" },
-    { "constant": "FINGERPRINT_KINDS_V1_0", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0", "pointer": "/$defs/fingerprint_kind/enum" },
     { "constant": "FINGERPRINT_KINDS", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0", "pointer": "/$defs/fingerprint_kind/enum" },
     { "constant": "FINGERPRINT_PARENT_RELATIONSHIPS", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0", "pointer": "/$defs/parent_relationship/enum" },
     { "constant": "VERIFICATION_OUTCOMES", "schema_id": "urn:butterflylens:schema:verification-contracts:v1.0.0", "pointer": "/$defs/review_event/properties/outcome/enum" },
@@ -332,26 +330,6 @@
     },
     {
       "case_id": "evidence-fingerprint-valid",
-      "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0",
-      "document": {
-        "schema_version": "butterflylens-evidence-fingerprint:v1.0.0",
-        "hash_algorithm": "sha256",
-        "canonicalization": "RFC8785-JCS",
-        "preimage": {
-          "fingerprint_kind": "review_event",
-          "subject_id": "event:fixture",
-          "payload_schema_version": "butterflylens-verification-event:v1.0.0",
-          "payload": { "outcome": "yes" },
-          "parents": [
-            { "relationship": "reviews", "fingerprint_kind": "media_object", "digest": "{{sha256}}" }
-          ]
-        },
-        "digest": "{{sha256_b}}",
-        "recorded_at": "{{now}}"
-      }
-    },
-    {
-      "case_id": "evidence-fingerprint-v1.1-valid",
       "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0",
       "document": {
         "schema_version": "butterflylens-evidence-fingerprint:v1.1.0",
@@ -868,8 +846,9 @@
     { "case_id": "project-rejects-non-au", "base_case_id": "project-valid", "schema_id": "urn:butterflylens:schema:project:v1.0.0", "changes": [{ "op": "set", "path": "/geographic_scope/country_code", "value": "NZ" }] },
     { "case_id": "run-rejects-started-queued", "base_case_id": "run-valid", "schema_id": "urn:butterflylens:schema:run:v1.0.0", "changes": [{ "op": "set", "path": "/started_at", "value": "{{now}}" }] },
     { "case_id": "checksum-rejects-short-digest", "base_case_id": "content-checksum-valid", "schema_id": "urn:butterflylens:schema:content-checksum:v1.0.0", "changes": [{ "op": "set", "path": "/digest", "value": "bad" }] },
-    { "case_id": "fingerprint-rejects-unapproved-canonicalizer", "base_case_id": "evidence-fingerprint-valid", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.0.0", "changes": [{ "op": "set", "path": "/canonicalization", "value": "sorted-json" }] },
-    { "case_id": "fingerprint-v1.1-rejects-legacy-api-response", "base_case_id": "evidence-fingerprint-v1.1-valid", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0", "changes": [{ "op": "set", "path": "/preimage/fingerprint_kind", "value": "api_response" }] },
+    { "case_id": "fingerprint-rejects-unapproved-canonicalizer", "base_case_id": "evidence-fingerprint-valid", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0", "changes": [{ "op": "set", "path": "/canonicalization", "value": "sorted-json" }] },
+    { "case_id": "fingerprint-rejects-retired-v1.0-version", "base_case_id": "evidence-fingerprint-valid", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0", "changes": [{ "op": "set", "path": "/schema_version", "value": "butterflylens-evidence-fingerprint:v1.0.0" }] },
+    { "case_id": "fingerprint-v1.1-rejects-legacy-api-response", "base_case_id": "evidence-fingerprint-valid", "schema_id": "urn:butterflylens:schema:evidence-fingerprint:v1.1.0", "changes": [{ "op": "set", "path": "/preimage/fingerprint_kind", "value": "api_response" }] },
     { "case_id": "campaign-rejects-scientific-claim", "base_case_id": "verification-campaign-valid", "schema_id": "urn:butterflylens:schema:verification-campaign:v1.0.0", "changes": [{ "op": "set", "path": "/scientific_claim_allowed", "value": true }] },
     { "case_id": "assignment-rejects-public-visibility", "base_case_id": "verification-assignment-valid", "schema_id": "urn:butterflylens:schema:verification-assignment:v1.0.0", "changes": [{ "op": "set", "path": "/visibility", "value": "public" }] },
     { "case_id": "adjudication-rejects-failed-independence", "base_case_id": "verification-adjudication-valid", "schema_id": "urn:butterflylens:schema:verification-adjudication:v1.0.0", "changes": [{ "op": "set", "path": "/independence_check", "value": "failed" }] },

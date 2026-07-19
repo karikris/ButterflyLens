@@ -1,43 +1,10 @@
 export const CONTENT_CHECKSUM_SCHEMA_VERSION =
   'butterflylens-content-checksum:v1.0.0' as const
-export const EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION =
-  'butterflylens-evidence-fingerprint:v1.0.0' as const
 export const EVIDENCE_FINGERPRINT_SCHEMA_VERSION =
   'butterflylens-evidence-fingerprint:v1.1.0' as const
 export const FINGERPRINT_CANONICALIZATION = 'RFC8785-JCS' as const
 export const FINGERPRINT_HASH_ALGORITHM = 'sha256' as const
 export const I_JSON_MAX_INTEGER = 9_007_199_254_740_991 as const
-
-export const FINGERPRINT_KINDS_V1_0 = [
-  'project_definition',
-  'run_input_set',
-  'taxon_concept',
-  'name_assertion',
-  'query_definition',
-  'physical_api_request',
-  'provider_snapshot',
-  'api_response',
-  'source_flickr_record',
-  'downloaded_image',
-  'media_object',
-  'perceptual_duplicate_group',
-  'model_artifact',
-  'preprocessing',
-  'yoloe_route',
-  'full_frame_visual_input',
-  'bioclip_embedding',
-  'reference_bank',
-  'prototype',
-  'candidate_score',
-  'review_event',
-  'consensus',
-  'quality_snapshot',
-  'geographic_impact_cell',
-  'map_snapshot',
-  'release_candidate',
-  'artifact_manifest',
-  'export_manifest',
-] as const
 
 export const FINGERPRINT_KINDS = [
   'project_definition',
@@ -83,7 +50,6 @@ export const FINGERPRINT_PARENT_RELATIONSHIPS = [
 ] as const
 
 export type FingerprintKind = (typeof FINGERPRINT_KINDS)[number]
-export type LegacyFingerprintKind = (typeof FINGERPRINT_KINDS_V1_0)[number]
 export type FingerprintParentRelationship =
   (typeof FINGERPRINT_PARENT_RELATIONSHIPS)[number]
 
@@ -101,26 +67,12 @@ export interface EvidenceFingerprintParent {
   readonly digest: string
 }
 
-export interface LegacyEvidenceFingerprintParent {
-  readonly relationship: FingerprintParentRelationship
-  readonly fingerprint_kind: LegacyFingerprintKind
-  readonly digest: string
-}
-
 export interface EvidenceFingerprintPreimage {
   readonly fingerprint_kind: FingerprintKind
   readonly subject_id: string
   readonly payload_schema_version: string
   readonly payload: Readonly<Record<string, unknown>>
   readonly parents: readonly EvidenceFingerprintParent[]
-}
-
-export interface LegacyEvidenceFingerprintPreimage {
-  readonly fingerprint_kind: LegacyFingerprintKind
-  readonly subject_id: string
-  readonly payload_schema_version: string
-  readonly payload: Readonly<Record<string, unknown>>
-  readonly parents: readonly LegacyEvidenceFingerprintParent[]
 }
 
 export interface EvidenceFingerprint {
@@ -131,19 +83,6 @@ export interface EvidenceFingerprint {
   readonly digest: string
   readonly recorded_at: string
 }
-
-export interface LegacyEvidenceFingerprint {
-  readonly schema_version: typeof EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION
-  readonly hash_algorithm: typeof FINGERPRINT_HASH_ALGORITHM
-  readonly canonicalization: typeof FINGERPRINT_CANONICALIZATION
-  readonly preimage: LegacyEvidenceFingerprintPreimage
-  readonly digest: string
-  readonly recorded_at: string
-}
-
-export type EvidenceFingerprintRecord =
-  | EvidenceFingerprint
-  | LegacyEvidenceFingerprint
 
 export class FingerprintCanonicalizationError extends Error {
   constructor(message: string) {
@@ -210,11 +149,9 @@ export function canonicalizeEvidencePreimage(
 }
 
 export function semanticFingerprintDigest(
-  preimage: EvidenceFingerprintPreimage | LegacyEvidenceFingerprintPreimage,
+  preimage: EvidenceFingerprintPreimage,
 ): string {
-  return sha256Hex(utf8Bytes(canonicalizeEvidencePreimage(
-    preimage as EvidenceFingerprintPreimage,
-  )))
+  return sha256Hex(utf8Bytes(canonicalizeEvidencePreimage(preimage)))
 }
 
 export function assertSameFingerprintIdentity(
@@ -245,18 +182,13 @@ export function assertSameFingerprintIdentity(
 
 export function validateEvidenceFingerprint(
   candidate: unknown,
-): asserts candidate is EvidenceFingerprintRecord {
+): asserts candidate is EvidenceFingerprint {
   const value = expectObject(candidate, '$')
   expectExactKeys(value, [
     'schema_version', 'hash_algorithm', 'canonicalization',
     'preimage', 'digest', 'recorded_at',
   ], '$')
-  let kinds: readonly string[]
-  if (value.schema_version === EVIDENCE_FINGERPRINT_SCHEMA_VERSION) {
-    kinds = FINGERPRINT_KINDS
-  } else if (value.schema_version === EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION) {
-    kinds = FINGERPRINT_KINDS_V1_0
-  } else {
+  if (value.schema_version !== EVIDENCE_FINGERPRINT_SCHEMA_VERSION) {
     validationError('$.schema_version', 'unsupported fingerprint version')
   }
   if (value.hash_algorithm !== FINGERPRINT_HASH_ALGORITHM) {
@@ -270,8 +202,8 @@ export function validateEvidenceFingerprint(
     'fingerprint_kind', 'subject_id', 'payload_schema_version', 'payload', 'parents',
   ], '$.preimage')
   if (typeof preimage.fingerprint_kind !== 'string' ||
-      !kinds.includes(preimage.fingerprint_kind)) {
-    validationError('$.preimage.fingerprint_kind', 'kind is outside version vocabulary')
+      !(FINGERPRINT_KINDS as readonly string[]).includes(preimage.fingerprint_kind)) {
+    validationError('$.preimage.fingerprint_kind', 'kind is outside vocabulary')
   }
   if (typeof preimage.subject_id !== 'string' || preimage.subject_id.length > 160 ||
       !/^[a-z0-9][a-z0-9._:-]*$/.test(preimage.subject_id)) {
@@ -295,8 +227,8 @@ export function validateEvidenceFingerprint(
       validationError(`${path}.relationship`, 'relationship is outside vocabulary')
     }
     if (typeof parent.fingerprint_kind !== 'string' ||
-        !kinds.includes(parent.fingerprint_kind)) {
-      validationError(`${path}.fingerprint_kind`, 'kind is outside version vocabulary')
+        !(FINGERPRINT_KINDS as readonly string[]).includes(parent.fingerprint_kind)) {
+      validationError(`${path}.fingerprint_kind`, 'kind is outside vocabulary')
     }
     expectSha256(parent.digest, `${path}.digest`)
   }
@@ -359,7 +291,7 @@ function isRfc3339DateTime(value: string): boolean {
 }
 
 export class EvidenceLineageGraph {
-  private readonly records = new Map<string, EvidenceFingerprintRecord>()
+  private readonly records = new Map<string, EvidenceFingerprint>()
   private readonly parents = new Map<string, readonly string[]>()
   private readonly children = new Map<string, readonly string[]>()
 
@@ -417,7 +349,7 @@ export class EvidenceLineageGraph {
     return [...this.records.keys()].sort()
   }
 
-  record(digest: string): EvidenceFingerprintRecord {
+  record(digest: string): EvidenceFingerprint {
     return cloneFingerprint(this.requireRecord(digest))
   }
 
@@ -519,7 +451,7 @@ export class EvidenceLineageGraph {
     }
   }
 
-  private requireRecord(digest: string): EvidenceFingerprintRecord {
+  private requireRecord(digest: string): EvidenceFingerprint {
     const record = this.records.get(digest)
     if (record === undefined) {
       throw new FingerprintIntegrityError(`unknown fingerprint digest: ${digest}`)
@@ -528,8 +460,8 @@ export class EvidenceLineageGraph {
   }
 }
 
-function cloneFingerprint(record: EvidenceFingerprintRecord): EvidenceFingerprintRecord {
-  return JSON.parse(canonicalizeJson(record)) as EvidenceFingerprintRecord
+function cloneFingerprint(record: EvidenceFingerprint): EvidenceFingerprint {
+  return JSON.parse(canonicalizeJson(record)) as EvidenceFingerprint
 }
 
 function insertSorted(values: string[], value: string): void {

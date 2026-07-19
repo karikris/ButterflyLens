@@ -16,45 +16,12 @@ import rfc8785
 
 
 CONTENT_CHECKSUM_SCHEMA_VERSION = "butterflylens-content-checksum:v1.0.0"
-EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION = (
-    "butterflylens-evidence-fingerprint:v1.0.0"
-)
 EVIDENCE_FINGERPRINT_SCHEMA_VERSION = (
     "butterflylens-evidence-fingerprint:v1.1.0"
 )
 FINGERPRINT_CANONICALIZATION = "RFC8785-JCS"
 FINGERPRINT_HASH_ALGORITHM = "sha256"
 
-FINGERPRINT_KINDS_V1_0 = (
-    "project_definition",
-    "run_input_set",
-    "taxon_concept",
-    "name_assertion",
-    "query_definition",
-    "physical_api_request",
-    "provider_snapshot",
-    "api_response",
-    "source_flickr_record",
-    "downloaded_image",
-    "media_object",
-    "perceptual_duplicate_group",
-    "model_artifact",
-    "preprocessing",
-    "yoloe_route",
-    "full_frame_visual_input",
-    "bioclip_embedding",
-    "reference_bank",
-    "prototype",
-    "candidate_score",
-    "review_event",
-    "consensus",
-    "quality_snapshot",
-    "geographic_impact_cell",
-    "map_snapshot",
-    "release_candidate",
-    "artifact_manifest",
-    "export_manifest",
-)
 FINGERPRINT_KINDS = (
     "project_definition",
     "run_input_set",
@@ -291,11 +258,7 @@ def _validate_recorded_at(value: object) -> None:
 
 
 def validate_evidence_fingerprint(record: Mapping[str, object]) -> None:
-    """Validate structure, vocabulary, and recomputed semantic identity.
-
-    Both immutable v1.0 records and current v1.1 records are accepted. New
-    writers use v1.1; each version is checked against its own closed kind set.
-    """
+    """Validate a current v1.1 record and recompute its semantic identity."""
 
     value = _expect_mapping(record, "$")
     _expect_exact_keys(
@@ -311,12 +274,7 @@ def validate_evidence_fingerprint(record: Mapping[str, object]) -> None:
         "$",
     )
     version = value["schema_version"]
-    kinds: tuple[str, ...]
-    if version == EVIDENCE_FINGERPRINT_SCHEMA_VERSION:
-        kinds = FINGERPRINT_KINDS
-    elif version == EVIDENCE_FINGERPRINT_LEGACY_SCHEMA_VERSION:
-        kinds = FINGERPRINT_KINDS_V1_0
-    else:
+    if version != EVIDENCE_FINGERPRINT_SCHEMA_VERSION:
         _validation_error("$.schema_version", "unsupported fingerprint version")
     if value["hash_algorithm"] != FINGERPRINT_HASH_ALGORITHM:
         _validation_error("$.hash_algorithm", "expected sha256")
@@ -330,8 +288,8 @@ def validate_evidence_fingerprint(record: Mapping[str, object]) -> None:
         "$.preimage",
     )
     kind = preimage["fingerprint_kind"]
-    if not isinstance(kind, str) or kind not in kinds:
-        _validation_error("$.preimage.fingerprint_kind", "kind is outside version vocabulary")
+    if not isinstance(kind, str) or kind not in FINGERPRINT_KINDS:
+        _validation_error("$.preimage.fingerprint_kind", "kind is outside vocabulary")
     subject_id = preimage["subject_id"]
     if (
         not isinstance(subject_id, str)
@@ -358,10 +316,10 @@ def validate_evidence_fingerprint(record: Mapping[str, object]) -> None:
                 f"$.preimage.parents[{index}].relationship",
                 "relationship is outside vocabulary",
             )
-        if parent["fingerprint_kind"] not in kinds:
+        if parent["fingerprint_kind"] not in FINGERPRINT_KINDS:
             _validation_error(
                 f"$.preimage.parents[{index}].fingerprint_kind",
-                "kind is outside version vocabulary",
+                "kind is outside vocabulary",
             )
         digest = parent["digest"]
         if not isinstance(digest, str) or _SHA256_PATTERN.fullmatch(digest) is None:
@@ -559,10 +517,7 @@ class EvidenceFingerprintPreimage(TypedDict):
 
 
 class EvidenceFingerprint(TypedDict):
-    schema_version: Literal[
-        "butterflylens-evidence-fingerprint:v1.0.0",
-        "butterflylens-evidence-fingerprint:v1.1.0",
-    ]
+    schema_version: Literal["butterflylens-evidence-fingerprint:v1.1.0"]
     hash_algorithm: Literal["sha256"]
     canonicalization: Literal["RFC8785-JCS"]
     preimage: EvidenceFingerprintPreimage
