@@ -4,9 +4,9 @@ Status: complete.
 
 Starting SHA: `3163e777686fbeba3a63e7c96da8a117aef50400`
 
-Ending SHA: `TBD`
+Ending SHA: `2e24db4c86a0951684af82b97b5de6b56a224758`
 
-Remote SHA: `TBD`
+Remote SHA: `2e24db4c86a0951684af82b97b5de6b56a224758`
 
 Task ID: `butterflylens-1.2.1`
 
@@ -32,4 +32,3 @@ Task result:
 
 Known follow-up:
 - remove analyst component/tests and Supabase runtime in upcoming subtasks 1.2.2 and 1.3.x
-
