@@ -293,7 +293,7 @@ It does not own:
 - consensus;
 - release decisions.
 
-The deterministic orchestrator continues when ChatGPT is closed.
+The deterministic orchestrator continues when bounded inference contracts are no longer active.
 
 ---
 
