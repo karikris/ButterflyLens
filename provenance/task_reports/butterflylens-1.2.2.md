@@ -4,9 +4,9 @@ Status: complete.
 
 Starting SHA: `2f7d43b0d3fbe5bf7f991d0985e73dc1f08fcfbd`
 
-Ending SHA: `TBD`
+Ending SHA: `7cdac5e1ef4bb6ea34bdcf182817c8a1c1bfcae1`
 
-Remote SHA: `TBD`
+Remote SHA: `7cdac5e1ef4bb6ea34bdcf182817c8a1c1bfcae1`
 
 Task ID: `butterflylens-1.2.2`
 
