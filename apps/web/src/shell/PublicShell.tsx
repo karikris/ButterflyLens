@@ -17,8 +17,13 @@ export function PublicShell({ children }: { readonly children: ReactNode }) {
 
   useEffect(() => {
     const updateActiveHash = () => {
-      setActiveHash(window.location.hash || '#explore')
+      const nextHash = window.location.hash || '#explore'
+      setActiveHash(nextHash)
+      window.requestAnimationFrame(() => {
+        document.getElementById('main-content')?.focus()
+      })
     }
+    updateActiveHash()
     window.addEventListener('hashchange', updateActiveHash)
     return () => {
       window.removeEventListener('hashchange', updateActiveHash)
