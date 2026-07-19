@@ -33,7 +33,7 @@ GPU, model download, or M5 availability. A compact route is:
 3. Open **Live Map** to inspect 213,310 rights-screened ALA rows across 630
    selectable coarse H3 cells, exact-count drilldowns, and the snapshot
    fingerprint. Flickr remains unavailable—not zero.
-4. Ask ButterflyLens what the submitted artifacts support. The visible answer is
+4. Open the submitted GPT-5.6 answer replay section. The visible answer is
    the fingerprinted, model-free replay—not a hidden live model response.
 5. Inspect quality and export surfaces to see which claims remain unavailable or
    release-blocked instead of being rendered as zero.

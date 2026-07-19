@@ -250,11 +250,6 @@ def verify() -> None:
                 f"Edge Function direct dependency set changed: {sorted(direct_deno)}"
             )
 
-        require_text(
-            "supabase/config.toml",
-            ("[functions.ask-butterflylens]", "verify_jwt = true"),
-        )
-
     model_files = {
         path
         for path in tracked

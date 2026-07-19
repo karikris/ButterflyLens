@@ -34,18 +34,15 @@ EXPECTED_PYTHON_NETWORK_FILES = {
     "scripts/crosswalk_butterfly_taxonomy.py",
 }
 EXPECTED_BROWSER_NETWORK_FILES = {
-    "apps/web/src/analyst/analystModel.ts",
     "apps/web/src/operations/monitoringTransport.ts",
 }
 EXPECTED_EDGE_SUPABASE_FILES = {
-    "supabase/functions/ask-butterflylens/index.ts",
     "supabase/functions/control-butterflylens/index.ts",
     "supabase/functions/operations-status/index.ts",
     "supabase/functions/sign-b2-object/index.ts",
 }
 EXPECTED_OPENAI_FILES = {
     "scripts/run_openai_live_evaluation.ts",
-    "supabase/functions/ask-butterflylens/index.ts",
 }
 
 

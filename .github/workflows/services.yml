@@ -29,7 +29,6 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
       SUPABASE_PROJECT_ID: ujfsrohgsrmssmfqgdsp
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       B2_S3_ENDPOINT: ${{ vars.B2_S3_ENDPOINT }}
       B2_PRIVATE_BUCKET: ${{ vars.B2_PRIVATE_BUCKET }}
       B2_KEY_ID: ${{ secrets.B2_KEY_ID }}
@@ -49,7 +48,6 @@ jobs:
         run: |
           test -n "$SUPABASE_ACCESS_TOKEN"
           test -n "$SUPABASE_DB_PASSWORD"
-          test -n "$OPENAI_API_KEY"
           test -n "$B2_S3_ENDPOINT"
           test -n "$B2_PRIVATE_BUCKET"
           test -n "$B2_KEY_ID"
@@ -63,7 +61,6 @@ jobs:
       - name: Install scoped Edge secrets
         run: |
           supabase secrets set --project-ref "$SUPABASE_PROJECT_ID" \
-            "OPENAI_API_KEY=$OPENAI_API_KEY" \
             "B2_S3_ENDPOINT=$B2_S3_ENDPOINT" \
             "B2_PRIVATE_BUCKET=$B2_PRIVATE_BUCKET" \
             "B2_KEY_ID=$B2_KEY_ID" \
@@ -73,7 +70,7 @@ jobs:
       - name: Deploy exact governed Edge Functions
         run: |
           supabase functions deploy \
-            ask-butterflylens sign-b2-object control-butterflylens operations-status \
+            sign-b2-object control-butterflylens operations-status \
             --project-ref "$SUPABASE_PROJECT_ID" --use-api
       - name: Verify remote migration history
         run: supabase migration list --linked --password "$SUPABASE_DB_PASSWORD"

@@ -140,7 +140,7 @@ class ServiceDeploymentTests(unittest.TestCase):
         self.assertIn("supabase db push", services)
         self.assertNotIn("--include-seed", services)
         self.assertIn(
-            "ask-butterflylens sign-b2-object control-butterflylens operations-status",
+            "sign-b2-object control-butterflylens operations-status",
             services,
         )
         for workflow in (pages, services):

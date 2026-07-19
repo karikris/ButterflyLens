@@ -100,11 +100,6 @@ api_url = "http://127.0.0.1"
 # Keep the optional Studio assistant separate from the application function key.
 openai_api_key = "env(SUPABASE_STUDIO_OPENAI_API_KEY)"
 
-# Ask ButterflyLens requires both the platform JWT gate and the authenticated
-# @supabase/server user wrapper. Publishable-key-only calls are rejected.
-[functions.ask-butterflylens]
-verify_jwt = true
-
 [functions.sign-b2-object]
 verify_jwt = true
 

@@ -12,11 +12,6 @@
     "seed_production": false
   },
   "edge_functions": {
-    "ask-butterflylens": {
-      "authentication": "user",
-      "verify_jwt": true,
-      "secret_names": ["OPENAI_API_KEY"]
-    },
     "sign-b2-object": {
       "authentication": "user",
       "verify_jwt": true,

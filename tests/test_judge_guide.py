@@ -65,7 +65,6 @@ class JudgeGuideTests(unittest.TestCase):
         for anchor in (
             "#live",
             "#operations",
-            "#ask-butterflylens",
             "#verify",
             "#contributors",
             "#quality",

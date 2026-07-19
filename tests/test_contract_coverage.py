@@ -107,7 +107,7 @@ SCHEMA_GROUPS = {
         ),
         "negative": (
             "tests/test_openai_evaluations.py#test_grader_rejects_wrong_tool_citation_and_incomplete_direct_claim",
-            "apps/web/src/analyst/analystModel.test.ts#exact public shape",
+            "tests/test_openai_replay.py#test_catalogue_has_only_the_three_explicit_judge_questions",
         ),
     },
     "storage": {
@@ -343,14 +343,12 @@ PROJECTION_COVERAGE = {
     },
     "openai-replay": {
         "json": ("packages/openai/submitted-replays.v1.json",),
-        "symbols": (
-            "apps/web/src/analyst/analystModel.ts#submittedAnalystClient",
-        ),
+        "symbols": (),
         "positive": (
             "tests/test_openai_replay.py#test_stored_calls_and_outputs_exactly_replay_deterministic_tools",
         ),
         "negative": (
-            "apps/web/src/analyst/analystModel.test.ts#exact public shape",
+            "tests/test_openai_replay.py#test_replay_claims_preserve_exact_trace_citations",
         ),
     },
     "operations": {
