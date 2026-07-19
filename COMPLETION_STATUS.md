@@ -55,10 +55,12 @@ geographic impact or overall release readiness.
 
 ## Binding unfinished work
 
-1. BioMiner is still fetching Flickr metadata. ButterflyLens has not copied its
-   partial outputs and has not made a Flickr API call. A complete immutable,
-   fingerprinted, rights-reviewed handoff is required before Flickr artifacts,
-   impact cells, live metrics, or downstream evidence can be admitted.
+1. BioMiner is currently in metadata-only Flickr polling mode. ButterflyLens is
+   not consuming that partial run output; only the completed GBIF source/dataset
+   handoff (`0004170-260715120105164`) remains the wrapped evidence boundary.
+   A complete immutable, fingerprinted, rights-reviewed handoff is still required
+   before Flickr artifacts, impact cells, live metrics, or downstream evidence
+   can be admitted.
 2. YOLOE and BioCLIP execution remains `unfinished_not_run` by user direction.
    Their routes, full-frame inputs, embeddings, prototypes, scores, persistent
    model workers, and unchanged-embedding proof remain incomplete.
