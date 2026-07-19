@@ -85,7 +85,7 @@ describe('public application shell', () => {
   })
 
   it('falls back to explore for unknown hash targets', () => {
-    window.location.hash = '#removed-runtime-analyst'
+    window.location.hash = '#unknown-route'
     render(<App />)
     fireEvent(window, new HashChangeEvent('hashchange'))
 
