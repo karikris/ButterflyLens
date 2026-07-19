@@ -1,0 +1,257 @@
+{
+  "schemaVersion": "butterflylens-redesign-baseline-captures/v1",
+  "sourceCommit": "056fe3563f6282a8bce4ea61ab1da3d96323e526",
+  "capturedAt": "2026-07-19T05:35:37.000Z",
+  "baseUrl": "http://127.0.0.1:4173/",
+  "applicationOrigin": "http://127.0.0.1:4173",
+  "browser": "chromium",
+  "browserVersion": "149.0.7827.55",
+  "playwrightVersion": "1.61.1",
+  "locale": "en-AU",
+  "timezoneId": "Australia/Sydney",
+  "colorScheme": "light",
+  "serviceWorkers": "blocked",
+  "externalNetworkPolicy": "all non-application origins aborted",
+  "screenshots": [
+    {
+      "filename": "explore-desktop-1440x900.png",
+      "fragment": "explore",
+      "capturePosition": "document-start",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pixelSize": {
+        "width": 1440,
+        "height": 900
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 115292,
+      "sha256": "60481d8c9adf1fe7b1fdb4adcbb903b15d4904b647f55ce31e74dd287a51bffa",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "explore-desktop-1280x720.png",
+      "fragment": "explore",
+      "capturePosition": "document-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 99119,
+      "sha256": "b8836880ac9db481499c7f1c7d989270089d0b9b6c9dd89c8172036bc70b1519",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "explore-mobile-390x844.png",
+      "fragment": "explore",
+      "capturePosition": "document-start",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pixelSize": {
+        "width": 390,
+        "height": 844
+      },
+      "hasTouch": true,
+      "isMobile": true,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 64503,
+      "sha256": "24a78aa75c782ffc3ba5a7fdd74a19da0ede390592a8aad9cc21210af5363cec",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "explore-reduced-motion-1280x720.png",
+      "fragment": "explore",
+      "capturePosition": "document-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "reduce",
+      "forcedColors": "none",
+      "byteCount": 99119,
+      "sha256": "b8836880ac9db481499c7f1c7d989270089d0b9b6c9dd89c8172036bc70b1519",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "explore-forced-colors-1280x720.png",
+      "fragment": "explore",
+      "capturePosition": "document-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "active",
+      "byteCount": 80195,
+      "sha256": "3d301d6573423cf78f553bce836789a1f896fa425913adcb6c967d02f97a9d20",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "map-desktop-1280x720.png",
+      "fragment": "live",
+      "capturePosition": "fragment-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 100424,
+      "sha256": "e6eb6ecd7c6f40642c9149a8503e976192133c455dcf6586df05f8dcf403994d",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "verify-desktop-1280x720.png",
+      "fragment": "verify",
+      "capturePosition": "fragment-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 235170,
+      "sha256": "c0f5e7896c5f518cb36abe8ea1e413ca3655e6162af136e1aeecd9dcda066237",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "species-desktop-1280x720.png",
+      "fragment": "species",
+      "capturePosition": "fragment-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 95392,
+      "sha256": "1b4195e2078a1af599a3fc2aded9fee9e8934b6ecea333e878f3d43b5b46bdeb",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "operations-desktop-1280x720.png",
+      "fragment": "operations",
+      "capturePosition": "fragment-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 115970,
+      "sha256": "889d07619c33c6a5d843ff196a7c687d3f6200b80fefd35ffacbf1809121ab46",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "quality-desktop-1280x720.png",
+      "fragment": "quality",
+      "capturePosition": "fragment-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 113413,
+      "sha256": "1f1d0355d826448e5cb31640efb9d8f77052e49c6ff6574b6565a439712b15ee",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "community-desktop-1280x720.png",
+      "fragment": "contributors",
+      "capturePosition": "fragment-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 75647,
+      "sha256": "e2cc08787a3f3fc13a3eada7b12538f7ddfc07312363bf50ad49abf853213b52",
+      "externalRequestCount": 0
+    },
+    {
+      "filename": "analyst-desktop-1280x720.png",
+      "fragment": "ask-butterflylens",
+      "capturePosition": "fragment-start",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "pixelSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "hasTouch": false,
+      "isMobile": false,
+      "reducedMotion": "no-preference",
+      "forcedColors": "none",
+      "byteCount": 95881,
+      "sha256": "25f5b9069e97ddbe6b0acc215310311813fccd6a910598ac8b7225895e8a2c85",
+      "externalRequestCount": 0
+    }
+  ]
+}
