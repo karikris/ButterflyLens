@@ -85,11 +85,13 @@ describe('public application shell', () => {
   })
 
   it('falls back to explore for unknown hash targets', () => {
-    window.location.hash = '#ask-butterflylens'
+    window.location.hash = '#removed-runtime-analyst'
     render(<App />)
     fireEvent(window, new HashChangeEvent('hashchange'))
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Look closer. Strengthen what we know.' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Look closer. Strengthen what we know.' }),
+    ).toBeInTheDocument()
   })
 
   it('shows the route root for each primary navigation hash', () => {
