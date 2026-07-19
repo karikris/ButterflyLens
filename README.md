@@ -18,7 +18,11 @@
 | --- | --- | --- |
 | Available · credential-free and immutable | **Unavailable** · no authenticated heartbeat is attached | **213,310 ALA rows · 630 coarse H3 cells** in the rights-screened public map |
 
-**GPT-5.6:** the evidence analyst is constrained to tool-returned records and explicit uncertainty. The Submitted route is a stored replay and makes no model call. **Codex:** designed, implemented, tested, and documented the evidence system; it does not identify butterflies or cast community reviews.
+**GPT-5.6 was used through Codex to develop and test ButterflyLens.**
+Butterfly identification and scientific evidence are produced by BioMiner,
+YOLOE, BioCLIP, and independent human review.
+ButterflyLens does **not** ship a general-purpose chat interface.
+The Submitted replay is immutable, credential-free, and does not invoke live models.
 
 **Architecture:** `authoritative ALA baseline + unsent Flickr query plan → fingerprinted evidence → optional M5 screening → blind human review → committed map/export`. GitHub Pages serves the worker-independent replay; governed Supabase/B2 live stores and the optional worker are not required to judge it.
 
@@ -33,8 +37,8 @@ GPU, model download, or M5 availability. A compact route is:
 3. Open **Explore** to inspect 213,310 rights-screened ALA rows across 630
    selectable coarse H3 cells, exact-count drilldowns, and the snapshot
    fingerprint. Flickr remains unavailable—not zero.
-4. Open the model and reference evidence surface for the submitted replay. The visible answer is
-   the fingerprinted, model-free replay—not a hidden live model response.
+4. Open the evidence surface for the submitted replay and reference evidence.
+   The visible answer is the fingerprinted replay—not a hidden live model response.
 5. Inspect quality and export surfaces to see which claims remain unavailable or
    release-blocked instead of being rendered as zero.
 
@@ -99,7 +103,7 @@ ALA evidence ───────────────┐
 Flickr discovery candidates┘             │
                                          ├─ optional M5 screening
                                          ├─ independent human review
-                                         └─ GPT-5.6 evidence tools
+                                         └─ non-chat review evidence workflow
 
 GitHub Pages ─ immutable Submitted replay
 Supabase     ─ governed metadata/review contracts (live writes blocked)
