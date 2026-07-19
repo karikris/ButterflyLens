@@ -150,10 +150,11 @@ method, and provenance**.
 
 ### 8. `01:59–02:20` — GPT-5.6 analysis
 
-**Product action:** Open `#ask-butterflylens`, choose **Can ALA and Flickr
-counts be compared yet?**, and replay. Show the 213,310-row cited ALA claim, the
-unavailable Flickr count and difference, stored tool trace, artifact citations,
-and **Model not invoked** footer.
+**Product action:** Open the local submitted replay artifact view (submitted
+replay is model-free and detached from live routes), choose **Can ALA and Flickr
+counts be compared yet?**, and replay. Show the 213,310-row cited ALA claim,
+the unavailable Flickr count and difference, stored tool trace, artifact
+citations, and **Model not invoked** footer.
 
 **Narration:**
 

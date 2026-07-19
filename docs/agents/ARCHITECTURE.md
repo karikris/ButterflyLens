@@ -45,7 +45,7 @@ Owns:
 - species pages;
 - live M5 worker presentation;
 - submitted/live snapshots;
-- public GPT-5.6 analyst;
+- stored evidence replay tools;
 - contributor experience.
 
 Do not duplicate upstream scientific algorithms unless no stable artifact,
@@ -63,7 +63,7 @@ Public web application
     ├── Live
     ├── Quality
     ├── Contributors
-    └── Ask ButterflyLens
+    └── About
 
 Supabase PostgreSQL/Auth/RLS
     ├── projects/runs/work items

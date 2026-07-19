@@ -255,9 +255,8 @@
       "start_ms": 119000,
       "end_ms": 140000,
       "working_product": true,
-      "route": "#ask-butterflylens",
+      "route": "submitted replay artifact",
       "capture_source_paths": [
-        "apps/web/src/analyst/AskButterflyLens.tsx",
         "packages/openai/submitted-replays.v1.json",
         "packages/openai/submitted-artifacts.v1.json"
       ],
