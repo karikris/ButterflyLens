@@ -4,9 +4,9 @@ Status: complete.
 
 Starting SHA: `5209ff7f5da564965419870c7a4703b86bafd6a8`
 
-Ending SHA: `5209ff7f5da564965419870c7a4703b86bafd6a8`
+Ending SHA: `3d8370d779f68aeaffc209964103f053dc366541`
 
-Remote SHA: `5209ff7f5da564965419870c7a4703b86bafd6a8`
+Remote SHA: `3d8370d779f68aeaffc209964103f053dc366541`
 
 Task ID: `butterflylens-1.1.1`
 
@@ -25,6 +25,7 @@ Valyu records:
 Files changed:
 - `provenance/task_plans/butterflylens-1.1.1.md`
 - `docs/reports/butterflylens_redesign_1_1_1_openai_runtime_audit.md`
+- `provenance/githits.jsonl`
 
 Contract boundaries:
 - runtime analyst modules inventoried for full removal
@@ -43,4 +44,3 @@ Task results:
 - confirmed OpenAI runtime dependency chain remains active in Edge runtime path
 - confirmed shared provenance/evaluation packages and scripts must be preserved in
   order to keep Codex development evidence intact
-
