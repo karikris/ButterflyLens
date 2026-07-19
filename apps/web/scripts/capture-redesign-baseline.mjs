@@ -50,7 +50,6 @@ const configurations = [
   capture('operations-desktop-1280x720', 'operations', 1280, 720),
   capture('quality-desktop-1280x720', 'quality', 1280, 720),
   capture('community-desktop-1280x720', 'contributors', 1280, 720),
-  capture('analyst-desktop-1280x720', 'ask-butterflylens', 1280, 720),
 ]
 
 await mkdir(captureRoot, { recursive: true })

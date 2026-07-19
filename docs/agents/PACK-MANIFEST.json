@@ -1,0 +1,46 @@
+{
+  "AGENTS.md": {
+    "bytes": 8329,
+    "lines": 239,
+    "sha256": "ddd6ccd050291f00c66e505209a93d62ae23779d17f78abc839c61e69b9d8f87"
+  },
+  "docs/agents/ARCHITECTURE.md": {
+    "bytes": 5968,
+    "lines": 308,
+    "sha256": "030c9e6acaa19cc3629a7aa2d366ca59323ce4c9152e8e73f84e4fb205b91555"
+  },
+  "docs/agents/GIT_AND_PROVENANCE.md": {
+    "bytes": 4946,
+    "lines": 236,
+    "sha256": "460c9f47f50eb4ec7971bf43f0d8739c07743a86df73d2458238f341e2962ac2"
+  },
+  "docs/agents/README.md": {
+    "bytes": 1249,
+    "lines": 50,
+    "sha256": "323a185d1d174485169f30c1be835255edf4bc614941112a0d2a23f4d6926f8d"
+  },
+  "docs/agents/SCIENCE_AND_DATA.md": {
+    "bytes": 9230,
+    "lines": 459,
+    "sha256": "6b2a39d95d656ad52df817d10d50dfa76aaa992a5b27d37030ebdc70f9bf9e7c"
+  },
+  "docs/agents/TASK_TEMPLATE.md": {
+    "bytes": 1293,
+    "lines": 78,
+    "sha256": "d02af0ba5f994abb5b5bf2f6d982c1bc349b75bec10e30460025a8c3fb4fc2e4"
+  },
+  "docs/agents/TESTING_AND_RELEASE.md": {
+    "bytes": 4667,
+    "lines": 229,
+    "sha256": "413d7378ea20caac5859c6ebceadbbb3c8cfb5817f37a195e2fedffafff5d0c7"
+  },
+  "docs/agents/TOOLS.md": {
+    "bytes": 6578,
+    "lines": 254,
+    "sha256": "4e89b9ea69ed60941c8e4a2bfbd43fe25b4636ce70f9ca8e8b0b3dda16aa65a4"
+  },
+  "original": {
+    "bytes": 48769,
+    "lines": 2323
+  }
+}

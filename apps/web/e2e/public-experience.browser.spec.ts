@@ -45,7 +45,6 @@ test('renders the complete public fallback without browser or network errors', a
   await expect(page.getByText('Aggregate layer available').first()).toBeVisible()
   await expect(page.getByText('213,310').first()).toBeVisible()
   await expect(page.getByText('Worker status unavailable')).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Ask ButterflyLens' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Evidence strength, without guesswork.' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Darwin Core export' })).toHaveAttribute(
     'href',
@@ -53,7 +52,7 @@ test('renders the complete public fallback without browser or network errors', a
   )
 
   const navigationLinks = page.getByRole('navigation', { name: 'Primary' }).getByRole('link')
-  await expect(navigationLinks).toHaveCount(8)
+  await expect(navigationLinks).toHaveCount(7)
   const fragments = await navigationLinks.evaluateAll((links) =>
     links.map((link) => link.getAttribute('href')),
   )
@@ -64,7 +63,6 @@ test('renders the complete public fallback without browser or network errors', a
     '#live',
     '#quality',
     '#contributors',
-    '#ask-butterflylens',
     '#about',
   ])
   expect(

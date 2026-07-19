@@ -7,7 +7,7 @@ import { App } from './App'
 describe('credential-free community judge journey', () => {
   afterEach(() => vi.unstubAllGlobals())
 
-  it('covers landing, review, map, species, pipeline, GPT, quality, and export', async () => {
+  it('covers landing, review, map, species, pipeline, quality, and export', async () => {
     const network = vi.fn(() => {
       throw new Error('the submitted judge journey must not use fetch')
     })
@@ -110,31 +110,7 @@ describe('credential-free community judge journey', () => {
       operationsView.getByRole('link', { name: 'Open committed species snapshot' }),
     ).toHaveAttribute('href', '#species')
 
-    // 6. Ask GPT-5.6 through the exact stored, model-free evidence replay.
-    const analyst = requiredElement('#ask-butterflylens')
-    const analystView = within(analyst)
-    fireEvent.click(
-      analystView.getByRole('button', {
-        name: 'What evidence is available for Acraea andromacha?',
-      }),
-    )
-    fireEvent.click(
-      analystView.getByRole('button', { name: 'Replay stored evidence' }),
-    )
-    expect(await analystView.findByText('Replayed · completed')).toBeVisible()
-    expect(analystView.getByText(/Model not invoked · replayed/)).toBeVisible()
-    expect(analystView.getByText('1 stored tool call')).toBeVisible()
-    fireEvent.click(analystView.getByText('Stored tool trace (1)'))
-    expect(analystView.getByText('inspect_species')).toBeVisible()
-    expect(analystView.getByText(/sha256:4402e9fd/)).toBeVisible()
-    fireEvent.click(analystView.getByText('Artifact citations (3)'))
-    expect(
-      analystView.getByText(
-        'apps/web/src/species/submittedSpeciesCatalogue.json',
-      ),
-    ).toBeVisible()
-
-    // 7. Inspect quality without turning an absent sample into a zero estimate.
+    // 6. Inspect quality without turning an absent sample into a zero estimate.
     const quality = requiredElement('#quality')
     const qualityView = within(quality)
     expect(
@@ -149,7 +125,7 @@ describe('credential-free community judge journey', () => {
     expect(qualityView.getByText('ButterflyLens rebuilt baseline')).toBeVisible()
     expect(qualityView.getByText(/model votes are excluded/i)).toBeVisible()
 
-    // 8. Inspect the governed evidence-export path; no public archive is invented.
+    // 7. Inspect the governed evidence-export path; no public archive is invented.
     const footer = requiredElement('#about')
     const footerView = within(footer)
     expect(footerView.getByRole('link', { name: 'Darwin Core export' })).toHaveAttribute(

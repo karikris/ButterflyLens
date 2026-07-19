@@ -17,7 +17,6 @@ EXPECTED_NAVIGATION = [
     ("Live", "#live"),
     ("Quality", "#quality"),
     ("Contributors", "#contributors"),
-    ("Ask ButterflyLens", "#ask-butterflylens"),
     ("About", "#about"),
 ]
 
@@ -47,7 +46,6 @@ class PublicShellTests(unittest.TestCase):
                 WEB / "map/SubmittedEvidenceMap.tsx",
                 WEB / "operations/OperationsDashboard.tsx",
                 WEB / "community/ContributorExperience.tsx",
-                WEB / "analyst/AskButterflyLens.tsx",
                 SHELL,
             )
         )

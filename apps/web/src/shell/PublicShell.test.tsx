@@ -83,6 +83,8 @@ describe('public application shell', () => {
     expect(
       screen.getByRole('heading', { name: 'Live when available. Committed when not.' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Ask ButterflyLens' })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: 'Ask ButterflyLens' }),
+    ).not.toBeInTheDocument()
   })
 })
