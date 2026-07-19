@@ -1,14 +1,11 @@
 import { ReviewLanding } from './review/ReviewLanding'
 import { submittedReviewItem } from './review/reviewLandingModel'
-import { QualityDashboard } from './quality/QualityDashboard'
-import { submittedQualityDashboard } from './quality/qualityDashboardModel'
 import { PublicShell } from './shell/PublicShell'
-import { SpeciesDirectory } from './species/SpeciesDirectory'
-import { FlickrDisplayBoundary } from './flickr/FlickrDisplayBoundary'
+import { HowItWorks } from './HowItWorks'
+import { MoreSurface } from './MoreSurface'
+import { SubmittedEvidenceMap } from './map/SubmittedEvidenceMap'
 import { ContributorExperience } from './community/ContributorExperience'
 import { submittedContributorImpact } from './community/contributorImpactModel'
-import { OperationsDashboard } from './operations/OperationsDashboard'
-import { SubmittedEvidenceMap } from './map/SubmittedEvidenceMap'
 
 export function App() {
   const monitoringUrl = import.meta.env.VITE_BUTTERFLYLENS_MONITORING_URL || null
@@ -38,13 +35,12 @@ export function App() {
           </div>
         </dl>
       </section>
+
       <SubmittedEvidenceMap />
       <ReviewLanding item={submittedReviewItem} qualifiedReviewer={false} />
-      <SpeciesDirectory />
-      <OperationsDashboard monitoringUrl={monitoringUrl} />
-      <FlickrDisplayBoundary />
-      <QualityDashboard snapshot={submittedQualityDashboard} />
+      <HowItWorks />
       <ContributorExperience snapshot={submittedContributorImpact} />
+      <MoreSurface monitoringUrl={monitoringUrl} />
     </PublicShell>
   )
 }

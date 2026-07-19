@@ -190,7 +190,7 @@ export function SubmittedEvidenceMap({
   }
 
   return (
-    <section className="submitted-map" id="live" aria-labelledby="submitted-map-heading">
+    <section className="submitted-map" aria-labelledby="submitted-map-heading">
       <header className="submitted-map__intro">
         <div>
           <p className="eyebrow">Rights-screened submitted map</p>

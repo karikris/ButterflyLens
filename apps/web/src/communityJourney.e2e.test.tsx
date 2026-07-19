@@ -57,7 +57,7 @@ describe('credential-free community judge journey', () => {
     expect(
       reviewView.getByRole('img', { name: 'Australia location unavailable' }),
     ).toBeVisible()
-    const map = within(requiredElement('#live'))
+    const map = within(requiredElement('.submitted-map'))
     expect(map.getByText('Map-eligible baseline')).toBeVisible()
     expect(map.getByText('213,310')).toBeVisible()
     expect(map.getByText('630')).toBeVisible()

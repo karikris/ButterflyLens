@@ -5,10 +5,9 @@ import { StateBadge } from '../design-system/EvidencePrimitives'
 export const primaryNavigation = [
   { label: 'Explore', href: '#explore', current: true },
   { label: 'Verify', href: '#verify' },
-  { label: 'Species', href: '#species' },
-  { label: 'Live', href: '#live' },
-  { label: 'Quality', href: '#quality' },
-  { label: 'Contributors', href: '#contributors' },
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'Community', href: '#community' },
+  { label: 'More', href: '#more' },
   { label: 'About', href: '#about' },
 ] as const
 

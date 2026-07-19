@@ -20,11 +20,11 @@ export function ContributorExperience({
 }) {
   const available = snapshot.snapshotState === 'available'
   return (
-    <section id="contributors" className="contributor-experience" aria-labelledby="contributors-heading">
+    <section id="community" className="contributor-experience" aria-labelledby="community-heading">
       <header className="contributor-experience__intro">
         <div>
           <p className="eyebrow">Your evidence contribution</p>
-          <h2 id="contributors-heading">Careful work leaves a meaningful trace.</h2>
+          <h2 id="community-heading">Careful work leaves a meaningful trace.</h2>
           <p>
             Celebrate the records, species, and places your evidence work has
             strengthened—without turning community science into a race.
