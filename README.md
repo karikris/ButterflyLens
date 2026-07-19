@@ -3,7 +3,7 @@
 **Australia’s live butterfly evidence map—where a search result stays a hypothesis until the evidence earns a stronger claim.**
 
 <p align="center">
-  <a href="https://karikris.github.io/ButterflyLens/#live">
+  <a href="https://karikris.github.io/ButterflyLens/#explore">
     <img
       src="assets/readme/butterflylens-live-map.gif"
       width="560"
@@ -12,7 +12,7 @@
   </a>
 </p>
 
-[**Help Verify →**](https://karikris.github.io/ButterflyLens/#verify) · [**Open Live Map →**](https://karikris.github.io/ButterflyLens/#live) · [**Run Submitted Replay →**](https://karikris.github.io/ButterflyLens/) · [**Judge Guide →**](JUDGE_GUIDE.md) · [**Video Script →**](DEMO_VIDEO.md)
+[**Help Verify →**](https://karikris.github.io/ButterflyLens/#verify) · [**Open Explore →**](https://karikris.github.io/ButterflyLens/#explore) · [**Explore advanced evidence →**](https://karikris.github.io/ButterflyLens/#more) · [**Judge Guide →**](JUDGE_GUIDE.md) · [**Video Script →**](DEMO_VIDEO.md)
 
 | Submitted replay | Current worker status | Measured result |
 | --- | --- | --- |
@@ -30,17 +30,17 @@ GPU, model download, or M5 availability. A compact route is:
 1. Open **Help Verify** and inspect the rights-cleared image, blind evidence
    controls, uncertainty language, and local draft boundary.
 2. Search the submitted catalogue of 463 accepted Australian butterfly species.
-3. Open **Live Map** to inspect 213,310 rights-screened ALA rows across 630
+3. Open **Explore** to inspect 213,310 rights-screened ALA rows across 630
    selectable coarse H3 cells, exact-count drilldowns, and the snapshot
    fingerprint. Flickr remains unavailable—not zero.
-4. Open the submitted GPT-5.6 answer replay section. The visible answer is
+4. Open the model and reference evidence surface for the submitted replay. The visible answer is
    the fingerprinted, model-free replay—not a hidden live model response.
 5. Inspect quality and export surfaces to see which claims remain unavailable or
    release-blocked instead of being rendered as zero.
 
 The GIF above is an eight-frame local capture of that real Submitted map surface,
 including its aggregate heatmap and selected-cell evidence.
-It contains no third-party photograph and made no external request. “Live Map” is
+It contains no third-party photograph and made no external request. “Explore” is
 the product route; its current public data mode remains the Submitted replay.
 
 Competition materials: [90-second judge guide](JUDGE_GUIDE.md) ·

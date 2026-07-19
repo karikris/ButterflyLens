@@ -97,8 +97,6 @@ enabled = true
 port = 54323
 # External URL of the API server that frontend connects to.
 api_url = "http://127.0.0.1"
-# Keep the optional Studio assistant separate from the application function key.
-openai_api_key = "env(SUPABASE_STUDIO_OPENAI_API_KEY)"
 
 [functions.sign-b2-object]
 verify_jwt = true
