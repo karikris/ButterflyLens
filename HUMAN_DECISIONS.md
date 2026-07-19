@@ -177,3 +177,16 @@ This append-oriented record captures product or governance decisions made by Kri
   storage, or production mutation. The current client session requires an MCP
   reload before Supabase tools can appear, so no live-state or deployment claim
   may be inferred from OAuth success.
+
+## 2026-07-19 — BioMiner overlap wrap-up
+
+- Confirmed from repository state and user feedback: BioMiner is still performing
+  only Flickr metadata fetching, not producing the immutable candidate model handoff.
+- Record the overlap as non-blocking: do not wait for the running Flickr metadata
+  stream; continue remaining ButterflyLens subtasks.
+- Use the already-checksummed GBIF complementary evidence already present under
+  `data/packs/australian_butterflies/v1/gbif` as the GBIF boundary input while
+  keeping ALA as authoritative for core occurrence claims.
+- Keep the GBIF boundary as `blocked_pending_record_and_dataset_rights_review` and
+  keep provider assertions labeled as such until downstream rights, quality, and
+  human-review gates pass.
