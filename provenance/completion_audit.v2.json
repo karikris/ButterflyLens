@@ -35,7 +35,7 @@
   "authoritative_boundaries": {
     "ala": "The rebuilt ButterflyLens ALA baseline remains authoritative; the public map is a separate conservative rights-screened aggregate.",
     "gbif": "The fingerprinted GBIF Parquet pack is complementary and is not silently merged into or substituted for the ALA baseline.",
-    "biominer": "BioMiner is still fetching Flickr metadata; no partial output was inspected or copied.",
+    "biominer": "BioMiner is currently metadata-only (no scoring/media/model stages) and no partial output was inspected or copied.",
     "flickr": "No Flickr API call was made by this goal.",
     "models": "YOLOE and BioCLIP remain unfinished_not_run by explicit user direction."
   },
@@ -179,7 +179,7 @@
         "packages/contracts/python/butterflylens/flickr/evidence_ledger.py",
         "provenance/task_reports/butterflylens-10.4.md"
       ],
-      "rationale": "The ledger fails closed on request identity, but the active BioMiner stream has no admitted immutable request artifact.",
+      "rationale": "The ledger fails closed on request identity, and the active overlap is metadata-only with no admitted immutable request artifact.",
       "next_action": "Admit a completed BioMiner Flickr handoff and verify every physical request against the ledger without making new Flickr calls in this goal."
     },
     {
@@ -1345,7 +1345,7 @@
       "evidence": [
         "provenance/task_reports/butterflylens-10.4.md"
       ],
-      "note": "BioMiner metadata fetch is active; no immutable handoff exists."
+      "note": "BioMiner metadata fetch is active metadata-only and no immutable handoff exists."
     },
     {
       "category": "flickr",
