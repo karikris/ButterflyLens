@@ -270,7 +270,7 @@ percentage.
 
 [Open ButterflyLens](https://karikris.github.io/ButterflyLens/) ·
 [Help verify](https://karikris.github.io/ButterflyLens/#verify) ·
-[Open the map](https://karikris.github.io/ButterflyLens/#live) ·
+[Open the map](https://karikris.github.io/ButterflyLens/#explore) ·
 [Judge guide](JUDGE_GUIDE.md) ·
 [Source](https://github.com/karikris/ButterflyLens)
 

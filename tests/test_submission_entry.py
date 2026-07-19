@@ -127,7 +127,7 @@ class SubmissionEntryTests(unittest.TestCase):
         for url in (
             "https://karikris.github.io/ButterflyLens/",
             "https://karikris.github.io/ButterflyLens/#verify",
-            "https://karikris.github.io/ButterflyLens/#live",
+            "https://karikris.github.io/ButterflyLens/#explore",
             "https://github.com/karikris/ButterflyLens",
         ):
             self.assertIn(url, self.devpost)

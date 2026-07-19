@@ -29,7 +29,7 @@ class CompetitionReadmeTests(unittest.TestCase):
             "assets/readme/butterflylens-live-map.gif",
             'width="560"',
             "Help Verify",
-            "Open Live Map",
+            "Open Explore",
             "Submitted replay",
             "Current worker status",
             "Unavailable",
@@ -45,8 +45,7 @@ class CompetitionReadmeTests(unittest.TestCase):
     def test_hero_buttons_link_to_the_public_judge_routes(self) -> None:
         public = "https://karikris.github.io/ButterflyLens/"
         self.assertIn(f"[**Help Verify →**]({public}#verify)", self.hero)
-        self.assertIn(f"[**Open Live Map →**]({public}#live)", self.hero)
-        self.assertIn(f"[**Run Submitted Replay →**]({public})", self.hero)
+        self.assertIn(f"[**Open Explore →**]({public}#explore)", self.hero)
 
     def test_measured_result_and_worker_state_match_the_frozen_snapshot(self) -> None:
         self.assertEqual(self.map["counts"]["mapEligible"], 213_310)

@@ -63,11 +63,11 @@ class JudgeGuideTests(unittest.TestCase):
 
     def test_route_uses_real_public_anchors_and_exact_stored_questions(self) -> None:
         for anchor in (
-            "#live",
-            "#operations",
+            "#explore",
+            "#more-live-ops",
             "#verify",
-            "#contributors",
-            "#quality",
+            "#community",
+            "#more-data-quality",
         ):
             with self.subTest(anchor=anchor):
                 self.assertIn(

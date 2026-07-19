@@ -4,7 +4,7 @@
 **measured result:** 213,310 rights-screened ALA rows in 630 coarse H3 cells.
 
 [Open the public replay](https://karikris.github.io/ButterflyLens/) ·
-[Open the Australia map](https://karikris.github.io/ButterflyLens/#live) ·
+[Open the Australia map](https://karikris.github.io/ButterflyLens/#explore) ·
 [Help verify](https://karikris.github.io/ButterflyLens/#verify)
 
 The primary route needs no login, private key, Supabase or B2 account, GPU,
@@ -20,14 +20,14 @@ worker observation.
 
 | Step | Time | Action | Expected evidence |
 | ---: | :--- | --- | --- |
-| 1 | 0:00–0:10 | **View the Australia map.** Open [Live](https://karikris.github.io/ButterflyLens/#live) and find **Rights-screened submitted map**. | The aggregate heatmap loads with 213,310 map-eligible ALA rows and 630 coarse H3 cells. Flickr is unavailable. |
-| 2 | 0:10–0:20 | **Compare ALA and Flickr.** Open [Live](https://karikris.github.io/ButterflyLens/#live), then confirm the immutable ALA count against the replayed boundary notes for the archived comparison question “Can ALA and Flickr counts be compared yet?”. | The stored trace cites the national ALA count directly, while the immutable Flickr count and two-source difference remain unavailable—not zero. |
-| 3 | 0:20–0:30 | **Inspect one submitted ALA cell.** Return to the [map](https://karikris.github.io/ButterflyLens/#live), select a blue H3 cell, and inspect its evidence card. | The exact aggregate count, fingerprint, and coordinate-free provider-record sample update. The cell is evidence coverage, not a coverage-gap, presence, absence, abundance, or identification claim. |
+| 1 | 0:00–0:10 | **View the Australia map.** Open [Explore](https://karikris.github.io/ButterflyLens/#explore) and find **Rights-screened submitted map**. | The aggregate heatmap loads with 213,310 map-eligible ALA rows and 630 coarse H3 cells. Flickr is unavailable. |
+| 2 | 0:10–0:20 | **Compare ALA and Flickr.** Open [Explore](https://karikris.github.io/ButterflyLens/#explore), then confirm the immutable ALA count against the replayed boundary notes for the archived comparison question “Can ALA and Flickr counts be compared yet?”. | The stored trace cites the national ALA count directly, while the immutable Flickr count and two-source difference remain unavailable—not zero. |
+| 3 | 0:20–0:30 | **Inspect one submitted ALA cell.** Return to the [map](https://karikris.github.io/ButterflyLens/#explore), select a blue H3 cell, and inspect its evidence card. | The exact aggregate count, fingerprint, and coordinate-free provider-record sample update. The cell is evidence coverage, not a coverage-gap, presence, absence, abundance, or identification claim. |
 | 4 | 0:30–0:45 | **Review a butterfly image.** Open [Verify](https://karikris.github.io/ButterflyLens/#verify), choose **Can’t tell** when the image cannot support a stronger decision, then lock the draft to reveal permitted context. | The decision is blind, the integrity-checked CC BY-SA 4.0 fixture is visible, and the interface labels the decision **Draft only**. Nothing is submitted. |
-| 5 | 0:45–0:55 | **Watch community evidence update.** Observe **Current contribution** change to the selected draft, then open [Contributors](https://karikris.github.io/ButterflyLens/#contributors). | Only local draft state changes. The authenticated contribution snapshot and all stored community totals remain unavailable; no consensus or occurrence is fabricated. |
-| 6 | 0:55–1:05 | **Inspect quality.** Open [Quality](https://karikris.github.io/ButterflyLens/#quality). | Reviewed sample 0 and decisive reviews 0 are workflow counts, not 0% precision. Precision and agreement remain unavailable. Reference diagnostics show 463 accepted species, 2,906 valid decodes, and 0 human-verified species. |
+| 5 | 0:45–0:55 | **Watch community evidence update.** Observe **Current contribution** change to the selected draft, then open [Community](https://karikris.github.io/ButterflyLens/#community). | Only local draft state changes. The authenticated contribution snapshot and all stored community totals remain unavailable; no consensus or occurrence is fabricated. |
+| 6 | 0:55–1:05 | **Inspect quality.** Open [Quality and blockers](https://karikris.github.io/ButterflyLens/#more-data-quality). | Reviewed sample 0 and decisive reviews 0 are workflow counts, not 0% precision. Precision and agreement remain unavailable. Reference diagnostics show 463 accepted species, 2,906 valid decodes, and 0 human-verified species. |
 | 7 | 1:05–1:20 | **Ask the GPT-5.6 evidence route what is missing.** Open the replay artifact entry for “Which species should receive the next reference review?” and replay it. | The deterministic gap queue names *Hypochrysops sandrae*, *Lacturnea lacturnus*, then *Charaxes andrewsi*. The footer says **Model not invoked**; this is targeted workflow order, not rarity or distribution. |
-| 8 | 1:20–1:30 | **Inspect the live M5 worker.** Open [operational monitoring](https://karikris.github.io/ButterflyLens/#operations). | **Worker status unavailable**, heartbeat unavailable, stage/queue/resource values unavailable, and YOLOE/BioCLIP unfinished. The site and Submitted artifacts remain usable. |
+| 8 | 1:20–1:30 | **Inspect the live M5 worker.** Open [operational monitoring](https://karikris.github.io/ButterflyLens/#more-live-ops). | **Worker status unavailable**, heartbeat unavailable, stage/queue/resource values unavailable, and YOLOE/BioCLIP unfinished. The site and Submitted artifacts remain usable. |
 
 ## What the judge should conclude
 

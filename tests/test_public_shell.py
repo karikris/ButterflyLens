@@ -13,10 +13,9 @@ SHELL_CSS = WEB / "shell/publicShell.css"
 EXPECTED_NAVIGATION = [
     ("Explore", "#explore"),
     ("Verify", "#verify"),
-    ("Species", "#species"),
-    ("Live", "#live"),
-    ("Quality", "#quality"),
-    ("Contributors", "#contributors"),
+    ("How it works", "#how-it-works"),
+    ("Community", "#community"),
+    ("More", "#more"),
     ("About", "#about"),
 ]
 
@@ -41,11 +40,13 @@ class PublicShellTests(unittest.TestCase):
             for path in (
                 WEB / "App.tsx",
                 WEB / "review/ReviewLanding.tsx",
-                WEB / "quality/QualityDashboard.tsx",
-                WEB / "species/SpeciesDirectory.tsx",
+                WEB / "HowItWorks.tsx",
                 WEB / "map/SubmittedEvidenceMap.tsx",
-                WEB / "operations/OperationsDashboard.tsx",
+                WEB / "MoreSurface.tsx",
                 WEB / "community/ContributorExperience.tsx",
+                WEB / "operations/OperationsDashboard.tsx",
+                WEB / "species/SpeciesDirectory.tsx",
+                WEB / "quality/QualityDashboard.tsx",
                 SHELL,
             )
         )

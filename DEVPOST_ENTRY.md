@@ -210,7 +210,7 @@ external until its immutable handoff is complete.
 
 - Working product: https://karikris.github.io/ButterflyLens/
 - Help verify: https://karikris.github.io/ButterflyLens/#verify
-- Australia map and worker state: https://karikris.github.io/ButterflyLens/#live
+- Australia map and worker state: https://karikris.github.io/ButterflyLens/#explore
 - GPT-5.6 Submitted replay artifact: https://karikris.github.io/ButterflyLens/
 - Judge guide: https://github.com/karikris/ButterflyLens/blob/main/JUDGE_GUIDE.md
 - Source: https://github.com/karikris/ButterflyLens
