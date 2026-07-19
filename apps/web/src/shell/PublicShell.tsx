@@ -9,7 +9,6 @@ export const primaryNavigation = [
   { label: 'Live', href: '#live' },
   { label: 'Quality', href: '#quality' },
   { label: 'Contributors', href: '#contributors' },
-  { label: 'Ask ButterflyLens', href: '#ask-butterflylens' },
   { label: 'About', href: '#about' },
 ] as const
 

@@ -7,7 +7,6 @@ import { SpeciesDirectory } from './species/SpeciesDirectory'
 import { FlickrDisplayBoundary } from './flickr/FlickrDisplayBoundary'
 import { ContributorExperience } from './community/ContributorExperience'
 import { submittedContributorImpact } from './community/contributorImpactModel'
-import { AskButterflyLens } from './analyst/AskButterflyLens'
 import { OperationsDashboard } from './operations/OperationsDashboard'
 import { SubmittedEvidenceMap } from './map/SubmittedEvidenceMap'
 
@@ -46,7 +45,6 @@ export function App() {
       <FlickrDisplayBoundary />
       <QualityDashboard snapshot={submittedQualityDashboard} />
       <ContributorExperience snapshot={submittedContributorImpact} />
-      <AskButterflyLens />
     </PublicShell>
   )
 }
