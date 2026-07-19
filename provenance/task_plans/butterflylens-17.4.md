@@ -70,7 +70,7 @@ test, and task provenance; the product and Submitted snapshot remain unchanged.
 ## Patch plan
 
 1. Build a 10-slide narrative from problem through working product, evidence
-   discipline, architecture, measured Submitted proof, GPT-5.6/Codex roles,
+   discipline, architecture, measured Submitted proof, Bounded model/Codex roles,
    limitations, and ask.
 2. Write reusable Devpost blocks with exact public routes, technology roles,
    accomplishments, lessons, next steps, and credits.

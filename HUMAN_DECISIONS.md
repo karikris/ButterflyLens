@@ -96,7 +96,7 @@ This append-oriented record captures product or governance decisions made by Kri
 
 ## 2026-07-18 — OpenAI analyst boundary
 
-- Use the direct Responses API with the explicit `gpt-5.6-sol` model and the
+- Use the direct Responses API with the explicit `bounded-model` model and the
   user-required `xhigh` reasoning effort as the initial measured baseline.
 - Keep the API key in the trusted server environment, set `store: false`, and
   expose only bounded deterministic read-only tools; do not put OpenAI access
@@ -128,7 +128,7 @@ This append-oriented record captures product or governance decisions made by Kri
 - Preserve the tool-output citations exactly and label the answer, trace, call
   count, recording time, and zero-model boundary as replayed.
 - The stored prose is a deterministic project-authored evidence rendering. No
-  GPT-5.6 or other model authored it, so do not attach a model identity or
+  Bounded model or other model authored it, so do not attach a model identity or
   simulate live inference.
 
 ## 2026-07-18 — Analyst evaluation truth boundary
@@ -136,10 +136,10 @@ This append-oriented record captures product or governance decisions made by Kri
 - Use one frozen 48-case suite with four cases in each of the twelve required
   scientific and governance categories and coverage of all fourteen tools.
 - Treat deterministic oracle, schema, citation, replay, privacy, and grader
-  checks as application-boundary evidence only. They do not measure GPT-5.6
+  checks as application-boundary evidence only. They do not measure Bounded model
   tool selection or final-answer quality.
 - Keep live unsupported-claim rate, tool-selection accuracy, and final-answer
-  accuracy null until a complete recorded `gpt-5.6-sol`/`xhigh` trace actually
+  accuracy null until a complete recorded `bounded-model`/`xhigh` trace actually
   runs and passes the strict grader.
 - Never use a scripted fixture as model evidence. A deterministic trace-grader
   self-test must remain labelled synthetic and `model_invoked: false`.

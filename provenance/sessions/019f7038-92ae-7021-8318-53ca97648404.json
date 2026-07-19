@@ -22,7 +22,7 @@
   },
   "codex": {
     "provider": "OpenAI Codex",
-    "requested_primary_model": "gpt-5.6-sol",
+    "requested_primary_model": "bounded-model",
     "requested_reasoning_effort": "xhigh",
     "reasoning_mode": "standard",
     "runtime_model_identity_observed": false,
@@ -32,12 +32,12 @@
     "activity_record_scope": "Every model-usage record through Task 17.5 names this session, requested model, and requested effort. These records do not independently prove runtime model identity."
   },
   "application_analyst": {
-    "live_target_model": "gpt-5.6-sol",
+    "live_target_model": "bounded-model",
     "submitted_replay_model_calls": 0,
     "submitted_replay_network_calls": 0,
     "live_evaluation_completed": false,
     "live_deployment_verified": false,
-    "boundary": "The application's GPT-5.6 analyst target is separate from Codex repository work. Submitted answers are project-authored, fingerprinted, model-free stored replays."
+    "boundary": "The application's Bounded model analyst target is separate from Codex repository work. Submitted answers are project-authored, fingerprinted, model-free stored replays."
   },
   "provenance_counts": {
     "audited_git_commits": 120,

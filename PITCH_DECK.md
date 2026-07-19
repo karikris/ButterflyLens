@@ -68,7 +68,7 @@ Avoid a heat map implying released occurrence or absence data.
 4. Review an image blind; choose uncertainty when evidence is weak.
 5. Require repeated, independent review before stronger claims.
 6. Inspect representative quality and geographic impact.
-7. Ask GPT-5.6 to explain what the artifacts support.
+7. Ask Bounded model to explain what the artifacts support.
 8. Export only reviewed, rights-cleared occurrence evidence.
 
 [Follow the 90-second judge route](JUDGE_GUIDE.md)
@@ -126,7 +126,7 @@ Flickr discovery candidates ───────┘              │
                                                   ├─ quality + geographic impact
                                                   └─ governed export
 
-GPT-5.6 ─ read-only evidence explanation
+Bounded model ─ read-only evidence explanation
 Codex   ─ product + contracts + tests + provenance
 ```
 
@@ -176,11 +176,11 @@ exists without pretending that consensus is truth.
 Use the actual blind-review and Quality surfaces. The current replay contains no
 stored reviews, consensus, reviewer reliability, or representative interval.
 
-## Slide 7 — GPT-5.6 explains; Codex makes the system inspectable
+## Slide 7 — Bounded model explains; Codex makes the system inspectable
 
 ### On slide
 
-| GPT-5.6 live target | Codex Build Week role |
+| Bounded model live target | Codex Build Week role |
 | --- | --- |
 | Strict read-only evidence tools | Product architecture and implementation |
 | Claims bound to current tool output | Versioned schemas and fail-closed contracts |
@@ -193,7 +193,7 @@ invoked**
 
 ### Speaker note
 
-GPT-5.6 is the bounded evidence analyst target, not a butterfly oracle. Codex
+Bounded model is the bounded evidence analyst target, not a butterfly oracle. Codex
 built the surrounding product and verification system. Neither supplies human
 review or scientific ground truth. The replay lets judges inspect exact traces
 without credentials or a provider call.
@@ -299,7 +299,7 @@ absent until an approved public YouTube upload exists.
 - Call Flickr results discovery candidates, never occurrences.
 - Call ALA authoritative baseline evidence for this build, never complete ground
   truth.
-- State that the submitted analyst is a model-free replay and GPT-5.6 is the
+- State that the submitted analyst is a model-free replay and Bounded model is the
   bounded live target.
 - State that the public video is unfinished until recorded, approved, and
   uploaded to public YouTube.

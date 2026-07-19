@@ -32,7 +32,7 @@ provenance, and an optional live-worker path.
   calls it absence.
 - The review demonstrates a local blind draft; no stored event, contributor
   metric, consensus, or occurrence update is claimed.
-- The GPT-5.6 step uses an exact stored question and labels the Submitted result
+- The Bounded model step uses an exact stored question and labels the Submitted result
   model-free. The optional worker route stops unless the UI proves a fresh
   authenticated heartbeat, identity, committed artifact, and model receipts.
 - The active external Flickr fetch and incomplete BioMiner work remain excluded.

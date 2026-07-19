@@ -28,9 +28,9 @@ four kinds of evidence that must not be collapsed:
 
 - Kris Kari's product and execution decisions;
 - Codex-authored repository work and deterministic verification;
-- the requested `gpt-5.6-sol` / `xhigh` configuration, recorded 105 times but
+- the requested `bounded-model` / `xhigh` configuration, recorded 105 times but
   never separately exposed as observed runtime identity; and
-- the application's uninvoked live GPT-5.6 target and model-free Submitted
+- the application's uninvoked live Bounded model target and model-free Submitted
   replay.
 
 The exact non-secret `/feedback` Session ID is

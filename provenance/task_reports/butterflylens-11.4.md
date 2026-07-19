@@ -11,7 +11,7 @@ The submitted Ask ButterflyLens surface now replays three exact judge
 questions with no login, API key, Supabase account, worker, model, or network
 dependency. Each case stores the deterministic Task 11.2 tool name, exact
 arguments, complete validated tool-result envelope, and a project-authored
-structured evidence rendering. It is not represented as GPT-5.6 output.
+structured evidence rendering. It is not represented as Bounded model output.
 
 The browser strictly parses the catalogue and recomputes RFC 8785 SHA-256 over
 every stored result, complete trace, and catalogue before displaying evidence.
@@ -44,7 +44,7 @@ mode and the server function was not changed.
 
 ## Evidence and limitations
 
-No OpenAI Responses request, GPT-5.6 output, Supabase request, Flickr API call,
+No OpenAI Responses request, Bounded model output, Supabase request, Flickr API call,
 provider lookup, database operation, YOLOE run, or BioCLIP run occurred. The
 three replay responses are deterministic project-authored renderings of stored
 tool evidence. Questions outside the exact catalogue are unavailable, and the

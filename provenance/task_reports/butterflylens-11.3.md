@@ -12,7 +12,7 @@ SDK and server secret; the browser contract can carry only a Supabase
 publishable key and signed-in user's JWT. The committed submitted experience
 injects no live client and truthfully reports that no model call was made.
 
-The Responses loop sends explicit `gpt-5.6-sol`, `xhigh`, `current_turn`,
+The Responses loop sends explicit `bounded-model`, `xhigh`, `current_turn`,
 `store: false`, serial custom tools, strict JSON Schema output, a hashed Auth
 safety identifier, and no stored-response chaining. The pinned SDK confirmed
 that `max_tool_calls` is not a supported Responses request field, so the

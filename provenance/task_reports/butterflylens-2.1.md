@@ -8,7 +8,7 @@ Remote SHA: must equal the ending SHA after the Task 2.1 push; the push receipt 
 BioMiner SHA: `d71bceabf75748a25df39d0025e8da907f295f8c`
 TaxaLens SHA: `95f9081567d6c96abdc5b5614d7e401d15ad4f03`
 
-Primary model: `gpt-5.6-sol`
+Primary model: `bounded-model`
 Reasoning effort: `xhigh`
 Codex session: `019f7038-92ae-7021-8318-53ca97648404`
 Skill used: none matched taxonomy-pack construction; the previously loaded GitHub skill was not needed for local implementation

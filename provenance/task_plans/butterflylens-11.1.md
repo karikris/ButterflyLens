@@ -3,7 +3,7 @@
 Task ID: `butterflylens-11.1`
 
 Objective: verify and freeze the current official OpenAI requirements for the
-ButterflyLens GPT-5.6 evidence analyst before implementing tools or transport.
+ButterflyLens Bounded model evidence analyst before implementing tools or transport.
 
 Starting and remote SHA:
 `e83cdd2711f7b22415b60c1c4e0c7eeef1f7ec38`.

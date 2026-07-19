@@ -14,7 +14,7 @@ Maintain as relevant:
 - model smoke tests;
 - review/consensus/reliability tests;
 - statistical estimator tests;
-- GPT-5.6 tool/evaluation tests;
+- Bounded model tool/evaluation tests;
 - browser E2E;
 - accessibility;
 - visual regression;
@@ -64,7 +64,7 @@ Hero journey:
 5. Compare ALA and Flickr.
 6. Drill into a region/cell.
 7. Inspect evidence.
-8. Ask GPT-5.6.
+8. Ask Bounded model.
 9. Inspect quality.
 10. Export.
 11. Switch snapshots.
@@ -168,7 +168,7 @@ README first screen:
 - Submitted Replay;
 - worker state;
 - one measured result;
-- Codex/GPT-5.6 roles;
+- Codex/Bounded model roles;
 - concise architecture.
 
 Judge Guide:
@@ -194,7 +194,7 @@ Video:
 - target 2:45–2:50;
 - at least two-thirds working product;
 - clear audio;
-- explicitly explain Codex and GPT-5.6.
+- explicitly explain Codex and Bounded model.
 
 Required sequence:
 
@@ -204,7 +204,7 @@ Required sequence:
 4. community review.
 5. map update.
 6. repeated/qualified review and quality.
-7. GPT-5.6 evidence analysis.
+7. Bounded model evidence analysis.
 8. export/provenance.
 
 Every public number must come from a fingerprinted artifact or measured study.
@@ -222,7 +222,7 @@ A release is ready only when:
 - live site works without worker;
 - review and map work;
 - quality states are honest;
-- GPT-5.6 replay is credential-free;
+- Bounded model replay is credential-free;
 - browser/a11y/security/rights gates pass;
 - README/Judge Guide/video/deck are complete;
 - primary `/feedback` Session ID is recorded;

@@ -363,7 +363,7 @@ def build_catalog() -> dict[str, Any]:
                     },
                 ],
                 limitations=[
-                    "No GPT-5.6 or other model was invoked to generate or display this replay.",
+                    "No Bounded model or other model was invoked to generate or display this replay.",
                     "Accepted taxonomy and provisional references do not identify a photograph or establish an occurrence.",
                 ],
             ),
@@ -410,7 +410,7 @@ def build_catalog() -> dict[str, Any]:
                     },
                 ],
                 limitations=[
-                    "No GPT-5.6 or other model was invoked to generate or display this replay.",
+                    "No Bounded model or other model was invoked to generate or display this replay.",
                     "The replay does not inspect the active Flickr fetch or any partial BioMiner output.",
                 ],
             ),
@@ -458,7 +458,7 @@ def build_catalog() -> dict[str, Any]:
                     },
                 ],
                 limitations=[
-                    "No GPT-5.6 or other model was invoked to generate or display this replay.",
+                    "No Bounded model or other model was invoked to generate or display this replay.",
                     "Reference-gap priorities are provisional diagnostics and cannot establish photo identity or occurrence.",
                 ],
             ),

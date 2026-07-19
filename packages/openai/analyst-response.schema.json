@@ -140,7 +140,7 @@
       "required": ["id", "reasoning_effort"],
       "properties": {
         "id": {
-          "const": "gpt-5.6-sol"
+          "const": "bounded-model"
         },
         "reasoning_effort": {
           "const": "xhigh"

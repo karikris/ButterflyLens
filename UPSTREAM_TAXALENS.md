@@ -51,7 +51,7 @@ implemented national map.
 | Quality estimates | Implemented and offline-tested, current pilot estimates unavailable | Wilson simple-random intervals, stratified Hajek estimates, grouped percentile bootstrap intervals, coverage, aggregate agreement, nominal Krippendorff alpha, controls, milestones, and release gates preserve sampling and unavailable states. No current human-quality result is adopted here. |
 | Geographic impact | Partial | The accepted architecture, typed sources, query builder, DuckDB-Wasm analytics, cache/controller, and bounded GeoJSON feature projection exist. The Geographic Impact Lens UI and its final hosted map bundle do not. |
 | Map | Operational fixture map implemented; impact map absent | `FlickrWorkloadMap.tsx` is an accessible SVG coordinate-plane view of candidate clusters. MapLibre and a React wrapper are pinned at the newest audited commit, but no MapLibre React map component exists. |
-| GPT-5.6 tools | Implemented and offline-tested; live model quality not measured | TaxaLens defines 12 general research tools and 8 verification tools, exact `gpt-5.6-sol` analyst contracts, strict structured outputs, budgets, citations, and stored replay. Its deterministic evaluation explicitly sets `liveApiCalls: false` and `modelOutputEvaluated: false`. |
+| Bounded model tools | Implemented and offline-tested; live model quality not measured | TaxaLens defines 12 general research tools and 8 verification tools, exact `bounded-model` analyst contracts, strict structured outputs, budgets, citations, and stored replay. Its deterministic evaluation explicitly sets `liveApiCalls: false` and `modelOutputEvaluated: false`. |
 | Public replay | Implemented for a static fixture | The public GitHub Pages root and build fingerprint were independently reachable on the audit date. The deployed snapshot is a credential-free, backend-free, resettable Papilio fixture, not live acquisition or inference. |
 
 ## Verification contracts
@@ -178,7 +178,7 @@ The required synchronized table, keyboard interaction, non-colour state cues,
 exact counts, and non-WebGL path are accepted architecture. Their presence in
 the architecture document does not establish end-to-end UI conformance.
 
-## GPT-5.6 analyst boundary
+## Bounded model analyst boundary
 
 TaxaLens exposes two read-only tool sets:
 
@@ -197,7 +197,7 @@ schemas, bounded arrays, exact artifact IDs and SHA-256 values, and source
 repository, commit, and path citations. Tool results always carry
 `scientificClaimAllowed: false`.
 
-The verification analyst contract names exact model `gpt-5.6-sol`, output and
+The verification analyst contract names exact model `bounded-model`, output and
 run version `v1.2.0`, bounded response turns and tool calls, no external
 actions, unsupported-claim rejection, and no causal claim for quality-change
 explanations. The default judge path replays checksum-bound stored output. The

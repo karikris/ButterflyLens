@@ -148,7 +148,7 @@ method, and provenance**.
 > valid decodes are reference diagnostics, and zero species are human-verified
 > in this snapshot.
 
-### 8. `01:59–02:20` — GPT-5.6 analysis
+### 8. `01:59–02:20` — Bounded model analysis
 
 **Product action:** Open the local submitted replay artifact view (submitted
 replay is model-free and detached from live routes), choose **Can ALA and Flickr
@@ -158,7 +158,7 @@ citations, and **Model not invoked** footer.
 
 **Narration:**
 
-> GPT-5.6 is the bounded live analyst target: it can explain deterministic
+> Bounded model is the bounded live analyst target: it can explain deterministic
 > evidence through read-only tools, never identify from memory. The model-free
 > Submitted replay cites the ALA aggregate, refuses a Flickr difference without
 > evidence, and preserves its tool trace. The footer proves no model ran here.
@@ -189,7 +189,7 @@ candidates — Unavailable—not zero**.
 ### 11. `02:40–02:48` — Codex provenance
 
 **Product action:** Cut once to a clean end card listing the exact source
-commit, both snapshot fingerprints, GPT-5.6 role, and Codex role. Do not obscure
+commit, both snapshot fingerprints, Bounded model role, and Codex role. Do not obscure
 the identifiers.
 
 **Narration:**
@@ -206,7 +206,7 @@ Discover, review, and strengthen Australia’s butterfly data.
 Submitted source  45fb5ac07dcd51852c9e92217667f3f5052868fe
 Snapshot          sha256:27a256934a1ac1a9fb0d27b75a0fe805bf12224df42d7e6b7d235991d26fb9de
 Map               sha256:d39a73ae0b41677a2e557c89a72237d90d0e1e6cd2019cfbf091b41e85bae446
-GPT-5.6           bounded live evidence analyst target; model-free Submitted replay
+Bounded model           bounded live evidence analyst target; model-free Submitted replay
 Codex             product, contracts, tests, documentation, and provenance
 
 Search results are hypotheses—not biodiversity records.

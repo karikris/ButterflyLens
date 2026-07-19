@@ -32,7 +32,7 @@ and uses the coordinate-free provider-record sample. The geographic-impact
 shot now demonstrates the available state/territory, IBRA, LGA approximation,
 and H3 drilldowns while retaining unavailable Flickr and cross-source impact.
 
-The GPT-5.6 shot now uses the map-grounded stored question “Can ALA and Flickr
+The Bounded model shot now uses the map-grounded stored question “Can ALA and Flickr
 counts be compared yet?”. Its deterministic replay cites the 213,310-row ALA
 aggregate, preserves a null Flickr count and null difference, records zero
 model calls, and explicitly excludes active BioMiner output.

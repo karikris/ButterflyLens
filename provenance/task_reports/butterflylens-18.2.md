@@ -71,7 +71,7 @@ reporting its own pass and still emits release_ready=false.
 3. The public impact map and its national/state/IBRA/LGA/H3 interactions remain
    blocked by missing Flickr/model/review cells and unresolved ALA
    public-product rights.
-4. The bounded GPT-5.6 server path and deterministic tools exist, but no
+4. The bounded Bounded model server path and deterministic tools exist, but no
    credentialed live model evaluation is claimed. The stored judge replay
    remains explicitly labelled Model not invoked.
 5. M5 heartbeat, restart, and append-only live update contracts are tested, but

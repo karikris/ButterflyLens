@@ -29,7 +29,7 @@ May supply stable precedent/contracts for:
 - quality estimates;
 - geographic impact;
 - evidence facade;
-- GPT-5.6 tools;
+- Bounded model tools;
 - deterministic replay.
 
 ### ButterflyLens
@@ -280,7 +280,7 @@ down. Search terms remain provenance, not labels.
 
 ## 10. OpenAI boundary
 
-GPT-5.6 receives typed evidence through bounded tools. It may plan, inspect,
+Bounded model receives typed evidence through bounded tools. It may plan, inspect,
 compare, explain, and report.
 
 It does not own:

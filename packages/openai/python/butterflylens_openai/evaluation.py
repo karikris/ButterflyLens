@@ -18,7 +18,7 @@ from .tools import EvidenceToolbox
 SUITE_SCHEMA_VERSION = "butterflylens-analyst-eval-suite:v1.0.0"
 RESULT_SCHEMA_VERSION = "butterflylens-analyst-eval-result:v1.0.0"
 TRACE_SCHEMA_VERSION = "butterflylens-analyst-eval-trace:v1.0.0"
-MODEL_ID = "gpt-5.6-sol"
+MODEL_ID = "bounded-model"
 REASONING_EFFORT = "xhigh"
 
 PROHIBITED_CLAIM_CLASSES = (
@@ -322,7 +322,7 @@ def build_offline_result(
         },
         "case_results": cases,
         "limitations": [
-            "No GPT-5.6 or other model was invoked; live final-answer quality and tool selection were not measured.",
+            "No Bounded model or other model was invoked; live final-answer quality and tool selection were not measured.",
             "The unsupported-claim rate is null until a complete recorded live-model trace is graded.",
             "Deterministic oracle success tests the evidence and grader boundary, not nondeterministic model behaviour.",
         ],

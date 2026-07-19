@@ -53,7 +53,7 @@ its own SHA without circular mutation.
 - Models: YOLOE remains `blocked_not_executed`; BioCLIP remains
   `skipped_unfinished_by_goal_instruction`. Both have null IDs/revisions/weight
   fingerprints and zero execution claims. The analyst is configured for
-  `gpt-5.6-sol`, but Submitted mode is a stored replay with no model invocation,
+  `bounded-model`, but Submitted mode is a stored replay with no model invocation,
   no network call, and no live-model evaluation.
 - Review: the CC BY-SA 4.0 Wikimedia Commons fixture is available for a local
   blind draft. The Submitted snapshot records zero stored review events, zero

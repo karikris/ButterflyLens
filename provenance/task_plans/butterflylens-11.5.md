@@ -2,7 +2,7 @@
 
 Task ID: `butterflylens-11.5`
 
-Objective: add a versioned, deterministic GPT-5.6 analyst evaluation suite with
+Objective: add a versioned, deterministic Bounded model analyst evaluation suite with
 at least forty representative cases, a strict trace grader, an offline oracle
 result, and explicit separation between tested application boundaries and
 unrun live-model behaviour.
@@ -44,7 +44,7 @@ Truth boundary: the committed offline run may pass deterministic oracle,
 schema, citation, privacy-policy, replay-integrity, and grader self-tests. It
 must label final-answer correctness and model tool selection as not run, set
 live unsupported-claim rate to null, and never portray scripted fixtures as
-GPT-5.6 output.
+Bounded model output.
 
 Tests: strict schema and byte-identical generation; all 48 deterministic tool
 re-invocations; positive and adversarial synthetic trace-grader tests; exact

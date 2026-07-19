@@ -7,7 +7,7 @@ Date: 2026-07-19
 Starting and ending ButterflyLens SHA:
 `5209ff7f5da564965419870c7a4703b86bafd6a8`.
 
-Objective: audit runtime GPT-5.6 analyst surface and identify shared contracts so
+Objective: audit runtime Bounded model analyst surface and identify shared contracts so
 only runtime analyst behavior can be removed in later subtasks.
 
 ## Current evidence from local implementation

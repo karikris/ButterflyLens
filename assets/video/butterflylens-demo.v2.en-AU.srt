@@ -70,7 +70,7 @@ The 2,906 valid decodes are diagnostics; zero species are human-verified here.
 
 15
 00:01:59,000 --> 00:02:09,500
-GPT-5.6 is the bounded live analyst target. It explains deterministic evidence
+Bounded model is the bounded live analyst target. It explains deterministic evidence
 through read-only tools and never identifies from memory.
 
 16

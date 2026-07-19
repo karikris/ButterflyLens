@@ -47,7 +47,7 @@ calls and explicitly excludes BioMiner's active metadata fetch.
 
 All 48 deterministic evaluation cases pass. Live-model status remains
 `not_run`; the evaluation therefore reports
-`deterministic_gate_passed_live_model_not_run`, not a live GPT-5.6 result.
+`deterministic_gate_passed_live_model_not_run`, not a live Bounded model result.
 
 ## Public judge experience
 
@@ -99,7 +99,7 @@ BioMiner is still fetching Flickr metadata only. Its mutable partial output was
 not inspected, copied, or counted, and ButterflyLens made no Flickr API call.
 The immutable Flickr handoff, ALA/Flickr comparison, YOLOE, BioCLIP, human
 review, representative quality estimates, observed live worker evidence, live
-GPT-5.6 evaluation, video recording, human approval, and public release remain
+Bounded model evaluation, video recording, human approval, and public release remain
 unfinished.
 
 GitHits remained unavailable and was not called. No connected Supabase project,

@@ -76,7 +76,7 @@ trace, and catalogue fingerprints.
 
 The catalogue is labelled `replayed`, records zero network and Responses calls,
 and says `model_invoked: false`. Its response shape deliberately has no model
-identity field: GPT-5.6 did not author these stored answers. The public replay
+identity field: Bounded model did not author these stored answers. The public replay
 only matches the three exact questions and never falls through to live
 inference, re-executes a tool, or simulates a conversation.
 
@@ -101,7 +101,7 @@ final-answer accuracy, tool-selection accuracy, and unsupported-claim rate are
 therefore `null`, not zero.
 
 `analyst-live-eval-trace.schema.json` defines a complete recorded-trace input
-for a later credentialed run. The grader verifies exact `gpt-5.6-sol`/`xhigh`
+for a later credentialed run. The grader verifies exact `bounded-model`/`xhigh`
 provenance, all case IDs, tool selection and arguments, reproduced tool
 outputs, strict response schema, complete unmodified citations, unavailable
 states, budgets, privacy, scientific-language prohibitions, and numeric/taxon-ID
@@ -136,7 +136,7 @@ deno run --config supabase/functions/deno.json \
 ```
 
 The command runs the 48 frozen questions in order. It hashes the private
-subject before any request, retains `gpt-5.6-sol`, `xhigh`, `store: false`, the
+subject before any request, retains `bounded-model`, `xhigh`, `store: false`, the
 six-response/eight-tool budgets, and counts every Responses request. After each
 case it atomically fingerprints and replaces the checkpoint. Re-running the
 same command resumes only the unrecorded suffix and never silently repeats a
@@ -156,4 +156,4 @@ Keep both files outside the repository until the trace passes the strict
 grader and receives privacy, scientific-language, cost, and human review. The
 recorder prints only paths and aggregate request counts, never model content,
 the API key, or the private subject. A runner implementation or synthetic test
-is not evidence that GPT-5.6 ran.
+is not evidence that Bounded model ran.

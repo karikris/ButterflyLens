@@ -4,7 +4,7 @@ Task ID: `butterflylens-17.3`
 Objective: produce a truth-safe, production-ready 2:48 demonstration script,
 caption file, and shot manifest for the public ButterflyLens video.
 Competition criterion improved: sub-three-minute product demonstration with an
-explicit Codex/GPT-5.6 explanation and artifact-backed public claims.
+explicit Codex/Bounded model explanation and artifact-backed public claims.
 Starting SHA: `c6037ca37871c3db819f7fd780158ef352e85e51`
 Remote main SHA: `c6037ca37871c3db819f7fd780158ef352e85e51`
 BioMiner SHA: `143687e6ced5d4a65de80601042cc4ba79bec721`

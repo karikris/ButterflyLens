@@ -18,8 +18,8 @@ class OpenAIImplementationRequirementsTests(unittest.TestCase):
 
     def test_current_model_and_responses_api_are_exact(self) -> None:
         model = self.requirements["model"]
-        self.assertEqual(model["explicit_id"], "gpt-5.6-sol")
-        self.assertEqual(model["family_alias"], "gpt-5.6")
+        self.assertEqual(model["explicit_id"], "bounded-model")
+        self.assertEqual(model["family_alias"], "Bounded model")
         self.assertEqual(model["reasoning_effort"], "xhigh")
         self.assertEqual(model["response_api"], "/v1/responses")
         self.assertEqual(

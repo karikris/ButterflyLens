@@ -123,10 +123,10 @@ this goal.
 The machine-readable session receipt is
 [`provenance/sessions/019f7038-92ae-7021-8318-53ca97648404.json`](provenance/sessions/019f7038-92ae-7021-8318-53ca97648404.json).
 
-## GPT-5.6 runtime boundary
+## Bounded model runtime boundary
 
 The model-usage ledger contains 105 activity records through Task 17.5. Every
-record names the same session, requested model `gpt-5.6-sol`, requested effort
+record names the same session, requested model `bounded-model`, requested effort
 `xhigh`, and `runtime_model_identity_observed: false`. These records document
 the required Codex configuration; they do not independently prove the runtime
 model identity.
@@ -134,7 +134,7 @@ model identity.
 The application's analyst is a separate bounded target. Its Submitted answers
 are project-authored, fingerprinted stored replays with zero model calls and
 zero network calls. The 48-case offline suite tests deterministic contracts and
-replay behaviour, not live GPT-5.6 answer quality. No live GPT-5.6 evaluation or
+replay behaviour, not live Bounded model answer quality. No live Bounded model evaluation or
 production analyst deployment is claimed.
 
 ## Human decisions and review
@@ -186,7 +186,7 @@ unfinished or outside this goal:
 - YOLOE detection/routing and BioCLIP embeddings, prototypes, or scores;
 - live Apple M5 Pro worker execution and observed throughput;
 - live Supabase/B2 data operation, production secrets, and operator smoke test;
-- live GPT-5.6 evaluation and production analyst deployment;
+- live Bounded model evaluation and production analyst deployment;
 - real community reviews, expert adjudications, reliability estimates,
   representative quality estimates, released impact cells, and public
   occurrence evidence;

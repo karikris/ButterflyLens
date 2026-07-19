@@ -34,7 +34,7 @@ class CompetitionReadmeTests(unittest.TestCase):
             "Current worker status",
             "Unavailable",
             "Measured result",
-            "GPT-5.6",
+            "Bounded model",
             "Codex",
             "Architecture",
         )

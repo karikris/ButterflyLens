@@ -5,7 +5,7 @@ Task ID: `butterflylens-18.5`
 Objective: publish and enforce a second immutable 100-criterion completion
 audit at the pushed Task 18.4 boundary, crediting only the map implementation
 and artifacts now directly proven while retaining every Flickr, model, live
-worker, live GPT-5.6, human-review, video, and release blocker.
+worker, live Bounded model, human-review, video, and release blocker.
 
 Competition criterion improved: repository provenance and displayed-metric
 proof (criteria 3–8 and 99), plus exact current evidence for map criteria 19,

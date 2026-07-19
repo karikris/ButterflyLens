@@ -29,7 +29,7 @@ screening and live-data stages remain explicitly unfinished.
 
 ButterflyLens is a public evidence workspace that brings Australia’s rebuilt
 ALA butterfly baseline, Flickr discovery candidates, optional M5 screening,
-blind community review, quality estimation, geographic impact, and GPT-5.6
+blind community review, quality estimation, geographic impact, and Bounded model
 evidence analysis into one inspectable workflow. It keeps every search result a
 hypothesis until rights, independent review, provenance, and release evidence
 support a stronger claim.
@@ -76,7 +76,7 @@ Missing evidence remains unavailable rather than becoming a favourable zero.
 The public product is a TypeScript/React application built with Vite and served
 from GitHub Pages. Python builds and validates the taxonomy, ALA baseline,
 reference, review, quality, worker, and export evidence contracts. Deno Edge
-Functions define strict live boundaries for the GPT-5.6 analyst, private object
+Functions define strict live boundaries for the Bounded model analyst, private object
 access, public monitoring, and governed control actions. Supabase and B2 are
 live-service boundaries, not dependencies of the Submitted judge replay.
 
@@ -97,9 +97,9 @@ become public product evidence. TaxaLens supplied a versioned verification
 precedent and the attributed local review fixture through already recorded
 upstream provenance.
 
-## How we used GPT-5.6
+## How we used Bounded model
 
-GPT-5.6 is designed as a bounded evidence analyst, not a species oracle. Its
+Bounded model is designed as a bounded evidence analyst, not a species oracle. Its
 strict read-only tools return small deterministic records. Completed claims
 must cite the current tool output; refusal and incomplete states are first-class
 results. The model may explain what evidence is missing or what workflow review
@@ -211,7 +211,7 @@ external until its immutable handoff is complete.
 - Working product: https://karikris.github.io/ButterflyLens/
 - Help verify: https://karikris.github.io/ButterflyLens/#verify
 - Australia map and worker state: https://karikris.github.io/ButterflyLens/#explore
-- GPT-5.6 Submitted replay artifact: https://karikris.github.io/ButterflyLens/
+- Bounded model Submitted replay artifact: https://karikris.github.io/ButterflyLens/
 - Judge guide: https://github.com/karikris/ButterflyLens/blob/main/JUDGE_GUIDE.md
 - Source: https://github.com/karikris/ButterflyLens
 - Demonstration video: **not yet available — public YouTube upload required**
@@ -220,7 +220,7 @@ external until its immutable handoff is complete.
 
 TypeScript · React · Vite · Python · Deno · JSON Schema · Parquet · ALA ·
 Flickr discovery planning · GitHub Pages · Supabase contracts · Backblaze B2
-boundary · OpenAI Responses architecture · GPT-5.6 analyst target · Apple M5
+boundary · OpenAI Responses architecture · Bounded model analyst target · Apple M5
 worker contracts · BioMiner evidence engine · Codex
 
 The technology list describes implemented code and governed boundaries; it does
@@ -253,7 +253,7 @@ See `DATA_RIGHTS.md`, `MEDIA_RIGHTS.md`, `THIRD_PARTY_LICENSES.md`,
 - 2,906 valid reference decodes and 0 human-verified species;
 - measured test, schema, browser, and build results from the current release
   gate;
-- the exact GPT-5.6 target role, model-free replay state, and Codex engineering
+- the exact Bounded model target role, model-free replay state, and Codex engineering
   role; and
 - current unavailable, unfinished, withheld, and release-blocked states.
 
@@ -267,7 +267,7 @@ See `DATA_RIGHTS.md`, `MEDIA_RIGHTS.md`, `THIRD_PARTY_LICENSES.md`,
 - precision, agreement, confidence interval, or species-quality estimate;
 - M5 liveness, throughput, queue, recovery, committed live artifact, YOLOE
   result, or BioCLIP result;
-- a live GPT-5.6 run in the Submitted replay;
+- a live Bounded model run in the Submitted replay;
 - a downloadable released occurrence archive;
 - a completed public video or YouTube URL; or
 - overall scientific/data release readiness.

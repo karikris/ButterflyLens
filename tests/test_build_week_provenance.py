@@ -92,14 +92,14 @@ class BuildWeekProvenanceTests(unittest.TestCase):
             "2,906 valid decodes",
             "zero human-verified species",
             "release_ready: false",
-            "No live GPT-5.6 evaluation or production analyst deployment is claimed.",
+            "No live Bounded model evaluation or production analyst deployment is claimed.",
         ):
             self.assertIn(phrase, normalized)
         for heading in (
             "New ButterflyLens work",
             "Imported and adapted components",
             "Codex activity and task evidence",
-            "GPT-5.6 runtime boundary",
+            "Bounded model runtime boundary",
             "Human decisions and review",
             "Test and deployment evidence",
             "Incomplete and excluded work",
@@ -119,7 +119,7 @@ class BuildWeekProvenanceTests(unittest.TestCase):
     def test_model_ledger_records_configuration_not_runtime_identity(self) -> None:
         self.assertEqual(len(self.models), 105)
         self.assertEqual({record["session_id"] for record in self.models}, {SESSION_ID})
-        self.assertEqual({record["requested_model"] for record in self.models}, {"gpt-5.6-sol"})
+        self.assertEqual({record["requested_model"] for record in self.models}, {"bounded-model"})
         self.assertEqual(
             {record["requested_reasoning_effort"] for record in self.models}, {"xhigh"}
         )

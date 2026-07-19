@@ -8,7 +8,7 @@
   "audited_tree": "aa93a6abf058d15c0ef80c7bde241a3355cfe024",
   "source_goal_sha256": "898dbe5ec3520d1425bf5d0f891c49d6f7615318ed28b35b16f7513684a3fa40",
   "primary_session_id": "019f7038-92ae-7021-8318-53ca97648404",
-  "requested_model": "gpt-5.6-sol",
+  "requested_model": "bounded-model",
   "requested_reasoning_effort": "xhigh",
   "goal_complete": false,
   "completion_rule": "goal_complete may be true only when all 100 criteria are satisfied and every minimum artifact is present or an explicitly accepted equivalent",
@@ -125,7 +125,7 @@
     {
       "id": 8,
       "category": "repository_and_provenance",
-      "criterion": "Primary GPT-5.6 Codex Session ID is recorded.",
+      "criterion": "Primary Bounded model Codex Session ID is recorded.",
       "status": "satisfied",
       "evidence": [
         "provenance/sessions/019f7038-92ae-7021-8318-53ca97648404.json",
@@ -911,19 +911,19 @@
     {
       "id": 73,
       "category": "openai",
-      "criterion": "GPT-5.6 is a meaningful runtime component.",
+      "criterion": "Bounded model is a meaningful runtime component.",
       "status": "blocked_external",
       "evidence": [
         "packages/openai/implementation-requirements.v1.json",
         "provenance/task_reports/butterflylens-11.5.md"
       ],
-      "rationale": "A bounded server runtime exists, but no credentialed live GPT-5.6 invocation or deployment receipt is claimed.",
+      "rationale": "A bounded server runtime exists, but no credentialed live Bounded model invocation or deployment receipt is claimed.",
       "next_action": "Run the bounded representative live evaluation with approved credentials, retain the trace, and obtain human review."
     },
     {
       "id": 74,
       "category": "openai",
-      "criterion": "GPT-5.6 uses deterministic evidence tools.",
+      "criterion": "Bounded model uses deterministic evidence tools.",
       "status": "satisfied",
       "evidence": [
         "packages/openai/tool_contracts.json",
@@ -935,7 +935,7 @@
     {
       "id": 75,
       "category": "openai",
-      "criterion": "GPT-5.6 cites artifacts.",
+      "criterion": "Bounded model cites artifacts.",
       "status": "satisfied",
       "evidence": [
         "packages/openai/analyst-response.schema.json",
@@ -947,7 +947,7 @@
     {
       "id": 76,
       "category": "openai",
-      "criterion": "GPT-5.6 does not identify species from memory.",
+      "criterion": "Bounded model does not identify species from memory.",
       "status": "satisfied",
       "evidence": [
         "packages/openai/implementation-requirements.v1.json",
@@ -959,7 +959,7 @@
     {
       "id": 77,
       "category": "openai",
-      "criterion": "GPT-5.6 cannot fabricate map counts.",
+      "criterion": "Bounded model cannot fabricate map counts.",
       "status": "satisfied",
       "evidence": [
         "packages/openai/implementation-requirements.v1.json",
@@ -971,7 +971,7 @@
     {
       "id": 78,
       "category": "openai",
-      "criterion": "GPT-5.6 can explain community impact.",
+      "criterion": "Bounded model can explain community impact.",
       "status": "satisfied",
       "evidence": [
         "packages/openai/tool_contracts.json",
@@ -983,7 +983,7 @@
     {
       "id": 79,
       "category": "openai",
-      "criterion": "GPT-5.6 can recommend the next review batch.",
+      "criterion": "Bounded model can recommend the next review batch.",
       "status": "satisfied",
       "evidence": [
         "packages/openai/tool_contracts.json",
@@ -1014,7 +1014,7 @@
         "provenance/task_reports/butterflylens-11.5.md"
       ],
       "rationale": "All deterministic grader cases pass, but every live_model_status remains not_run.",
-      "next_action": "Run and grade the representative live GPT-5.6 traces before claiming the agent evaluation complete."
+      "next_action": "Run and grade the representative live Bounded model traces before claiming the agent evaluation complete."
     },
     {
       "id": 82,
@@ -1127,13 +1127,13 @@
     {
       "id": 91,
       "category": "competition",
-      "criterion": "README clearly explains Codex and GPT-5.6.",
+      "criterion": "README clearly explains Codex and Bounded model.",
       "status": "satisfied",
       "evidence": [
         "README.md",
         "CODEX_COLLABORATION.md"
       ],
-      "rationale": "The README separates Codex engineering from the bounded GPT-5.6 analyst.",
+      "rationale": "The README separates Codex engineering from the bounded Bounded model analyst.",
       "next_action": null
     },
     {
@@ -1212,7 +1212,7 @@
     {
       "id": 98,
       "category": "competition",
-      "criterion": "Judges can use GPT-5.6 replay.",
+      "criterion": "Judges can use Bounded model replay.",
       "status": "satisfied",
       "evidence": [
         "packages/openai/submitted-replays.v1.json",

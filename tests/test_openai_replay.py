@@ -149,7 +149,7 @@ class OpenAIReplayTests(unittest.TestCase):
             ],
         )
         text = CATALOGUE_PATH.read_text(encoding="utf-8")
-        self.assertIn("No GPT-5.6 or other model was invoked", text)
+        self.assertIn("No Bounded model or other model was invoked", text)
         self.assertNotIn("mode\": \"live", text)
 
 

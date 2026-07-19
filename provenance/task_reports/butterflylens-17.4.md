@@ -17,13 +17,13 @@ TaxaLens SHA: `e845dd98493979f37b04dbb6538e0d7b8758ca11`.
 
 `PITCH_DECK.md` is a ten-slide, 16:9, evidence-first competition narrative. It
 moves from the evidence-workflow problem through the working product, journey,
-architecture, community quality design, GPT-5.6/Codex roles, exact Submitted
+architecture, community quality design, Bounded model/Codex roles, exact Submitted
 measurements, current boundaries, and public ask. Every slide includes concise
 on-slide copy, speaker notes, and visual/proof instructions that favour real
 product footage over decorative or generated imagery.
 
 `DEVPOST_ENTRY.md` contains paste-ready project name, tagline, category, winning
-line, short description, inspiration, product journey, implementation, GPT-5.6
+line, short description, inspiration, product journey, implementation, Bounded model
 and Codex roles, challenges, accomplishments, lessons, next steps, links,
 technology, credits/licences, public claims ledger, and submission preflight.
 The README now links the deck, entry copy, judge guide, and video script.
@@ -63,7 +63,7 @@ finished video, or overall release readiness.
 
 - Seven focused submission tests pass: exact winning-line preservation, exactly
   ten ordered complete slides, paste-ready Devpost sections, frozen artifact
-  numbers, GPT-5.6/Codex and fail-closed language, exact public links and README
+  numbers, Bounded model/Codex and fail-closed language, exact public links and README
   discovery, and explicit unfinished-output boundaries.
 - The combined competition-document suite passes all 26 focused README, guide,
   video-packet, deck, and entry checks.

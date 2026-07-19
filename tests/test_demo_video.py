@@ -280,7 +280,7 @@ class DemoVideoTests(unittest.TestCase):
             "Map update boundary",
             "Repeated reviewers",
             "Quality interval",
-            "GPT-5.6 analysis",
+            "Bounded model analysis",
             "Geographic impact",
             "Evidence export",
             "Codex provenance",

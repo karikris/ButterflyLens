@@ -285,7 +285,7 @@ def verify_payload(payload: Any) -> dict[str, Any]:
         "audited_tree": EXPECTED_TREE,
         "source_goal_sha256": EXPECTED_GOAL_SHA256,
         "primary_session_id": EXPECTED_SESSION_ID,
-        "requested_model": "gpt-5.6-sol",
+        "requested_model": "bounded-model",
         "requested_reasoning_effort": "xhigh",
         "completion_rule": (
             "goal_complete may be true only when all 100 criteria are satisfied "

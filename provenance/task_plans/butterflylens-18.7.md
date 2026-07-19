@@ -48,7 +48,7 @@ artifacts. No current provider term, API behavior, or external fact changes.
   `838c23fffffffff` drilldown.
 - Keep Flickr unavailable, partial BioMiner output excluded, the M5 heartbeat
   unavailable, YOLOE/BioCLIP unfinished, local review unsubmitted, precision
-  unavailable, live GPT-5.6 not invoked, and occurrence export blocked.
+  unavailable, live Bounded model not invoked, and occurrence export blocked.
 - Use the map-grounded stored analyst replay that cites the ALA aggregate and
   refuses an unsupported Flickr difference.
 - Keep the target runtime at 2:48 with 2:40 of working-product footage.

@@ -70,7 +70,7 @@ geographic impact or overall release readiness.
    Flickr/model/review impact comparisons remain incomplete, so coverage-gap,
    human-supported-additional, and release-ready-additional values remain
    unavailable and the complete cross-layer impact map is not finished.
-4. GPT-5.6 has a bounded live implementation and deterministic evidence tools,
+4. Bounded model has a bounded live implementation and deterministic evidence tools,
    but no credentialed live model evaluation is claimed. The public replay is
    deliberately credential-free and labelled `Model not invoked`.
 5. Worker heartbeat, restart, append-only live updates, and public inspection

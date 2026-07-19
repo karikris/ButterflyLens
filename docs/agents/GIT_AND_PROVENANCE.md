@@ -211,7 +211,7 @@ provenance/sessions/
 
 Before submission:
 
-- run `/feedback` in the primary GPT-5.6 Codex session;
+- run `/feedback` in the primary Bounded model Codex session;
 - record the exact Session ID;
 - separate pre-existing BioMiner/TaxaLens work from ButterflyLens work;
 - list imported contracts and origin SHAs;

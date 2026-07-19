@@ -26,7 +26,7 @@ worker observation.
 | 4 | 0:30–0:45 | **Review a butterfly image.** Open [Verify](https://karikris.github.io/ButterflyLens/#verify), choose **Can’t tell** when the image cannot support a stronger decision, then lock the draft to reveal permitted context. | The decision is blind, the integrity-checked CC BY-SA 4.0 fixture is visible, and the interface labels the decision **Draft only**. Nothing is submitted. |
 | 5 | 0:45–0:55 | **Watch community evidence update.** Observe **Current contribution** change to the selected draft, then open [Community](https://karikris.github.io/ButterflyLens/#community). | Only local draft state changes. The authenticated contribution snapshot and all stored community totals remain unavailable; no consensus or occurrence is fabricated. |
 | 6 | 0:55–1:05 | **Inspect quality.** Open [Quality and blockers](https://karikris.github.io/ButterflyLens/#more-data-quality). | Reviewed sample 0 and decisive reviews 0 are workflow counts, not 0% precision. Precision and agreement remain unavailable. Reference diagnostics show 463 accepted species, 2,906 valid decodes, and 0 human-verified species. |
-| 7 | 1:05–1:20 | **Ask the GPT-5.6 evidence route what is missing.** Open the replay artifact entry for “Which species should receive the next reference review?” and replay it. | The deterministic gap queue names *Hypochrysops sandrae*, *Lacturnea lacturnus*, then *Charaxes andrewsi*. The footer says **Model not invoked**; this is targeted workflow order, not rarity or distribution. |
+| 7 | 1:05–1:20 | **Ask the Bounded model evidence route what is missing.** Open the replay artifact entry for “Which species should receive the next reference review?” and replay it. | The deterministic gap queue names *Hypochrysops sandrae*, *Lacturnea lacturnus*, then *Charaxes andrewsi*. The footer says **Model not invoked**; this is targeted workflow order, not rarity or distribution. |
 | 8 | 1:20–1:30 | **Inspect the live M5 worker.** Open [operational monitoring](https://karikris.github.io/ButterflyLens/#more-live-ops). | **Worker status unavailable**, heartbeat unavailable, stage/queue/resource values unavailable, and YOLOE/BioCLIP unfinished. The site and Submitted artifacts remain usable. |
 
 ## What the judge should conclude
@@ -38,7 +38,7 @@ worker observation.
   ground truth; non-detection cannot prove absence.
 - Machine screening may prioritize work, while independent human evidence and
   explicit release receipts govern stronger claims.
-- GPT-5.6 is the bounded live evidence-analyst target. The Submitted judge path
+- Bounded model is the bounded live evidence-analyst target. The Submitted judge path
   is a stored, fingerprinted, model-free replay.
 - Codex built and verified the application, contracts, tests, documentation, and
   provenance; it does not supply butterfly identities or community votes.
@@ -68,7 +68,7 @@ worker observation.
 | Map | Rights-screened ALA aggregate with selectable coarse H3 cells and exact state/IBRA/LGA/H3 drilldowns | A live replacement must retain rights, sensitivity, artifact, attribution, and release receipts. |
 | Flickr | Unsent plan and blocked display surface | Only fully received, deduplicated, rights-eligible candidates may be displayed; they still are not occurrences. |
 | Community | Local demo draft; writes blocked | Authenticated append-only reviews, independent overlap, privacy policy acceptance, and release gates are required. |
-| GPT-5.6 | Stored tool trace; no model or network call | A server-side authenticated Responses run must use strict read-only tools and preserve exact citations. |
+| Bounded model | Stored tool trace; no model or network call | A server-side authenticated Responses run must use strict read-only tools and preserve exact citations. |
 | M5 | No heartbeat, identity, batch, model fingerprint, or resource snapshot | A fresh authenticated heartbeat, worker identity, model revisions, committed batch, and recovery receipt must all validate. |
 | Failure behaviour | Submitted artifacts remain queryable | A stale, malformed, or unavailable live observation falls back to Submitted. |
 
@@ -154,7 +154,7 @@ This route verifies the evidence chain rather than repeating the visual tour.
 - No completed immutable Flickr candidate dataset is attached.
 - No stored community review, consensus, representative audit, or quality
   estimate exists.
-- No live GPT-5.6 evaluation is claimed; Submitted answers are stored replays.
+- No live Bounded model evaluation is claimed; Submitted answers are stored replays.
 - No authenticated M5 worker ID, heartbeat, model fingerprint, first committed
   batch, queue, resource observation, or recovery receipt is attached.
 - YOLOE and BioCLIP remain explicitly unfinished for this goal.

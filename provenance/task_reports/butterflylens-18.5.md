@@ -93,7 +93,7 @@ video-generation mutation occurred.
 The immutable completed Flickr handoff and ALA/Flickr comparison remain
 external blockers. YOLOE and BioCLIP remain explicitly unfinished by user
 instruction. Human review, representative quality estimates, observed live
-worker evidence, representative live GPT-5.6 evaluation, real community
+worker evidence, representative live Bounded model evaluation, real community
 evidence, video recording, human approval, and public release are also
 unfinished.
 

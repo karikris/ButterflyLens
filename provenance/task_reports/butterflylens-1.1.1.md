@@ -10,7 +10,7 @@ Remote SHA: `3d8370d779f68aeaffc209964103f053dc366541`
 
 Task ID: `butterflylens-1.1.1`
 
-Primary model: `gpt-5.6-sol`
+Primary model: `bounded-model`
 
 Reasoning effort: `xhigh`
 

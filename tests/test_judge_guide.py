@@ -47,7 +47,7 @@ class JudgeGuideTests(unittest.TestCase):
             "Review a butterfly image",
             "Watch community evidence update",
             "Inspect quality",
-            "Ask the GPT-5.6 evidence route what is missing",
+            "Ask the Bounded model evidence route what is missing",
             "Inspect the live M5 worker",
         )
         previous_end = 0

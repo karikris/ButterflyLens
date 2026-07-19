@@ -152,7 +152,7 @@ The broader product/release state is intentionally not upgraded:
 - no Flickr API call or image fetch may be started from ButterflyLens;
 - YOLOE and BioCLIP execution remain skipped and unfinished by user
   instruction;
-- the representative live GPT-5.6 evaluation remains `not_run` and requires a
+- the representative live Bounded model evaluation remains `not_run` and requires a
   separately authorized credentialed run, cost acceptance, and human review;
 - Supabase OAuth approval, client reload, and read-only remote comparison
   remain external operator work; configuration is not remote evidence;

@@ -8,7 +8,7 @@ Starting SHA: `e83cdd2711f7b22415b60c1c4e0c7eeef1f7ec38`.
 
 The repository now has a versioned machine-readable implementation policy and
 a cited human guide for Tasks 11.2–11.5. Current official OpenAI documentation
-was used to verify the explicit `gpt-5.6-sol` model, direct Responses API,
+was used to verify the explicit `bounded-model` model, direct Responses API,
 strict function calling, strict final Structured Outputs, server-only secret,
 privacy-preserving safety identifier, `store: false`, response-state handling,
 and agent-evaluation boundaries.

@@ -4,7 +4,7 @@ Task ID: `butterflylens-17.5`
 
 Objective: replace the Phase 0-only delta with an evidence-backed final Build
 Week account of the new repository baseline, imported/adapted components, new
-ButterflyLens work, Codex tasks, GPT-5.6 runtime boundary, human decisions,
+ButterflyLens work, Codex tasks, Bounded model runtime boundary, human decisions,
 test evidence, and primary `/feedback` Session ID.
 
 Competition criterion improved: transparent Build Week authorship, origin,
@@ -62,7 +62,7 @@ source-image collections, and unfinished model outputs remain outside the
 delta's completed artifacts.
 
 Scientific risks: provenance could overcount upstream capability as new work,
-equate Codex configuration with observed runtime identity, imply GPT-5.6 authored
+equate Codex configuration with observed runtime identity, imply Bounded model authored
 stored replays, call product decisions human review, or call blocked outputs
 complete. The final delta must preserve every distinction.
 
@@ -86,7 +86,7 @@ ledgers remain the underlying evidence.
 2. Separate ButterflyLens-owned work from BioMiner/TaxaLens contracts,
    interface precedents, and the one copied attributed review fixture.
 3. Record Codex activity and requested model configuration separately from the
-   app's uninvoked live GPT-5.6 target and model-free Submitted replays.
+   app's uninvoked live Bounded model target and model-free Submitted replays.
 4. Add a non-secret session receipt with the exact environment-observed
    `/feedback` Session ID and explicit no-feedback-invocation boundary.
 5. Preserve human decisions separately from the still-empty human-review

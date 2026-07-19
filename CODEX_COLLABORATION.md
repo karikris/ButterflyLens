@@ -10,7 +10,7 @@ evidence.
 | Field | Value |
 | --- | --- |
 | Codex thread ID | `019f7038-92ae-7021-8318-53ca97648404` |
-| Requested primary model | `gpt-5.6-sol` |
+| Requested primary model | `bounded-model` |
 | Requested reasoning effort | `xhigh` |
 | Reasoning mode trailer | `standard` |
 | Human product owner | Kris Kari |
@@ -42,7 +42,7 @@ At the Task 17.5 audit boundary:
 | Commit receipts / task push receipts | 120 / 77 |
 | Model-usage activity records | 105, including Task 17.5 |
 | Session IDs in model ledger | 105 records use the one ID above |
-| Requested model / effort | 105 × `gpt-5.6-sol` / `xhigh` |
+| Requested model / effort | 105 × `bounded-model` / `xhigh` |
 | Runtime model identity observed | 0 records; all 105 are `false` |
 | Supporting models or subagents | none |
 | Human post-change attestations | 0 |
@@ -66,9 +66,9 @@ steps. It did not supply butterfly identities, provider rights, community
 reviews, expert decisions, scientific ground truth, live-worker observations,
 or human approval.
 
-The application-level GPT-5.6 analyst is a separate bounded runtime target. The
+The application-level Bounded model analyst is a separate bounded runtime target. The
 Submitted experience contains project-authored, fingerprinted stored replays
-with zero model and network calls. No live GPT-5.6 evaluation or production
+with zero model and network calls. No live Bounded model evaluation or production
 analyst deployment is claimed.
 
 The user required exact commit subjects. That explicit instruction took
@@ -93,7 +93,7 @@ These are the tracked engineering instructions for core ButterflyLens work. They
 
 ### Models and evidence
 
-- Use the requested `gpt-5.6-sol` model with `xhigh` reasoning effort for core work when that configuration is available. If runtime identity is not exposed, record the limitation; never invent model metadata.
+- Use the requested `bounded-model` model with `xhigh` reasoning effort for core work when that configuration is available. If runtime identity is not exposed, record the limitation; never invent model metadata.
 - Run GitHits before every numbered task and subtask. If one attempt establishes that it is unavailable, record the failed attempt, use official documentation and committed local upstreams, and do not repeatedly retry or invent results.
 - Fingerprint every material input, semantic contract, source response, media object, model artifact, review event, map projection, quality snapshot, release candidate, and export at the layer where it becomes evidence.
 - Raw model similarity is raw model evidence, never a calibrated probability unless an independent calibrator exists and is versioned.

@@ -50,7 +50,7 @@ class SubmissionEntryTests(unittest.TestCase):
             "The evidence gap is a workflow problem",
             "The working product fails closed",
             "Architecture: evidence before inference",
-            "GPT-5.6 explains; Codex makes the system inspectable",
+            "Bounded model explains; Codex makes the system inspectable",
             "Measured Submitted evidence",
             "What is real, and what remains to earn",
         ):
@@ -66,7 +66,7 @@ class SubmissionEntryTests(unittest.TestCase):
             "Inspiration",
             "What it does",
             "How we built it",
-            "How we used GPT-5.6",
+            "How we used Bounded model",
             "How we used Codex",
             "Challenges we ran into",
             "Accomplishments we are proud of",
@@ -119,7 +119,7 @@ class SubmissionEntryTests(unittest.TestCase):
                 "public YouTube",
             ):
                 self.assertIn(phrase, normalized)
-            self.assertIn("GPT-5.6", document)
+            self.assertIn("Bounded model", document)
             self.assertIn("Codex", document)
             self.assertIn("unfinished", document.lower())
 

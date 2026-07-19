@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | Available · credential-free and immutable | **Unavailable** · no authenticated heartbeat is attached | **213,310 ALA rows · 630 coarse H3 cells** in the rights-screened public map |
 
-**GPT-5.6 was used through Codex to develop and test ButterflyLens.**
+**Bounded model was used through Codex to develop and test ButterflyLens.**
 Butterfly identification and scientific evidence are produced by BioMiner,
 YOLOE, BioCLIP, and independent human review.
 ButterflyLens does **not** ship a general-purpose chat interface.

@@ -6,13 +6,13 @@ document governs Tasks 11.2–11.5. The machine-readable source is
 
 ## Verified decision
 
-Use the direct Responses API with explicit model `gpt-5.6-sol`. OpenAI's current
-model guide identifies Sol as the flagship GPT-5.6 model and says the
-`gpt-5.6` alias routes to it. The explicit slug is retained for replay and model
+Use the direct Responses API with explicit model `bounded-model`. OpenAI's current
+model guide identifies Sol as the flagship Bounded model model and says the
+`Bounded model` alias routes to it. The explicit slug is retained for replay and model
 provenance. The user-required `xhigh` effort is the first baseline; it may be
 changed only after representative ButterflyLens evals show a better measured
 trade-off. [Model guidance](https://developers.openai.com/api/docs/guides/latest-model)
-and [upgrade guidance](https://developers.openai.com/api/docs/guides/upgrading-to-gpt-5p6-sol).
+and [upgrade guidance](https://developers.openai.com/api/docs/guides/upgrading-to-bounded-model-sol).
 
 ButterflyLens is one bounded evidence analyst with deterministic local tools,
 so the direct Responses API is sufficient. Do not add Agents SDK, multi-agent,
@@ -30,7 +30,7 @@ and [deployment checklist](https://developers.openai.com/api/docs/guides/deploym
   Never return it, persist it in Supabase, include it in a browser bundle, or
   accept it from browser input. OpenAI explicitly classifies API keys as secrets
   and prohibits client-side exposure. [API authentication](https://developers.openai.com/api/reference/overview#authentication).
-- Send `model: "gpt-5.6-sol"`, `reasoning: { effort: "xhigh", context:
+- Send `model: "bounded-model"`, `reasoning: { effort: "xhigh", context:
   "current_turn" }`, `store: false`, `parallel_tool_calls: false`,
   `max_output_tokens: 1800`, and `tool_choice: "auto"`. The application
   independently enforces eight total custom-tool calls, six continuation loops,
@@ -94,7 +94,7 @@ The prompt and schema must require the analyst to:
 
 The prompt should be short and outcome-first, with explicit success, evidence,
 permission, tool-routing, stopping, and output rules. Remove repeated
-instructions only after the same eval set passes. [GPT-5.6 prompting guidance](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6).
+instructions only after the same eval set passes. [Bounded model prompting guidance](https://developers.openai.com/api/docs/guides/prompt-guidance-bounded-model).
 
 ## Live, replay, and evaluation
 
@@ -131,10 +131,10 @@ the frozen suite without repeating completed cases. The transport schema
 allows a zero-tool case so refusal or failure can be preserved and rejected by
 the grader instead of being omitted. The runner does not weaken any pass rule.
 
-This is not a live model benchmark. No GPT-5.6 output, Responses request, or
+This is not a live model benchmark. No Bounded model output, Responses request, or
 scripted substitute was used to produce `agent_evaluation.json`. Consequently,
 live final-answer accuracy, tool-selection accuracy, and unsupported-claim rate
-are null. Only a complete recorded `gpt-5.6-sol`/`xhigh` trace may populate
+are null. Only a complete recorded `bounded-model`/`xhigh` trace may populate
 those fields.
 
 ## Current repository state

@@ -190,7 +190,7 @@
     {
       "sequence": 8,
       "id": "gpt_5_6_analysis",
-      "label": "GPT-5.6 analysis",
+      "label": "Bounded model analysis",
       "start_ms": 119000,
       "end_ms": 140000,
       "working_product": true,
@@ -202,7 +202,7 @@
         "Charaxes andrewsi",
         "Model not invoked"
       ],
-      "truth_boundary": "The Submitted answer is a deterministic stored replay; GPT-5.6 is the bounded live analyst target and did not run for this replay."
+      "truth_boundary": "The Submitted answer is a deterministic stored replay; Bounded model is the bounded live analyst target and did not run for this replay."
     },
     {
       "sequence": 9,

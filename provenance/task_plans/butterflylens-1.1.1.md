@@ -2,7 +2,7 @@
 
 Task ID: `butterflylens-1.1.1`
 
-Objective: inventory all runtime GPT-5.6 analyst dependencies, mark shared
+Objective: inventory all runtime Bounded model analyst dependencies, mark shared
 contracts, and record the exact removal boundary before changing runtime behavior.
 
 Starting SHA: `5209ff7f5da564965419870c7a4703b86bafd6a8`

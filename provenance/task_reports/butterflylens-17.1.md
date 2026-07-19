@@ -11,7 +11,7 @@ Starting SHA:
 The README now opens with the ButterflyLens name, evidence-safe live-map
 tagline, real working-product GIF, Help Verify, Open Live Map, and Submitted
 Replay actions, current unavailable worker state, the frozen measured result of
-463 accepted species, explicit GPT-5.6 and Codex roles, and compact architecture.
+463 accepted species, explicit Bounded model and Codex roles, and compact architecture.
 The 960×540 source GIF is displayed at 560 pixels wide so the complete hero
 remains compact; its eight frames and 327,789 bytes are pinned by SHA-256
 `223e3f21d0a82b41d801ef470edfe31b999ff21457d1949885ab56f5444ebc1d`.

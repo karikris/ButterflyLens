@@ -11,7 +11,7 @@ Starting SHA: `dc0dbe8b11a3621b6494e8fe43d15aebfcc00e9d`
 Make the first README screen a truthful, working-product entry point containing
 the ButterflyLens name and tagline, a real animated map capture, Help Verify and
 Open Live Map actions, Submitted replay and worker state, one frozen measured
-result, explicit GPT-5.6 and Codex roles, and concise architecture.
+result, explicit Bounded model and Codex roles, and concise architecture.
 
 ## Files and contracts
 
@@ -33,7 +33,7 @@ result, explicit GPT-5.6 and Codex roles, and concise architecture.
 - The GIF contains only project-owned interface pixels from a local build. It
   includes no review photograph, provider payload, credential, model result, or
   network response.
-- GPT-5.6 is described as the evidence analyst while the Submitted route remains
+- Bounded model is described as the evidence analyst while the Submitted route remains
   a stored, model-free replay. Codex is credited for engineering, testing, and
   documentation rather than butterfly identification or review.
 - BioMiner's active work and the external Flickr fetch remain outside this task;

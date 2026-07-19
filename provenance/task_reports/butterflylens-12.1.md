@@ -15,7 +15,7 @@ of every live service.
 
 The Supabase deployment adds authenticated `sign-b2-object` and
 `control-butterflylens` Edge Functions alongside the existing authenticated
-GPT-5.6 analyst route. B2 signing authorizes through caller-scoped RLS before a
+Bounded model analyst route. B2 signing authorizes through caller-scoped RLS before a
 service-only storage lookup, admits only committed and rights-displayable
 objects, signs only `GET` or `HEAD` for 300 seconds by default and at most 900
 seconds, and records a URL-free append-only receipt. The server-action boundary

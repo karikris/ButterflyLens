@@ -3,11 +3,11 @@
 Task ID: `butterflylens-18.6`
 
 Objective: add the missing explicit-opt-in, resumable recorder for the existing
-48-case GPT-5.6 analyst suite so a later credentialed run can produce an exact
+48-case Bounded model analyst suite so a later credentialed run can produce an exact
 schema-valid trace for the fail-closed grader without exposing secrets or
 silently repeating completed cases.
 
-Competition criteria improved: 73, meaningful GPT-5.6 runtime evidence, and 81,
+Competition criteria improved: 73, meaningful Bounded model runtime evidence, and 81,
 representative agent evaluation. This task makes the credentialed run possible
 and verifiable; it does not claim either criterion is satisfied until a real
 complete trace runs, grades successfully, and receives the required review.
@@ -32,7 +32,7 @@ Skills used:
 - Headroom to inspect the exact source goal under receipt
   `898dbe5ec3520d1425bf5d0f` and the updated agent pack under receipt
   `2352c8911e640d981278d8bc`;
-- OpenAI docs to verify the current `gpt-5.6-sol`, Responses API, strict
+- OpenAI docs to verify the current `bounded-model`, Responses API, strict
   function-calling, Structured Outputs, and `/v1/responses` contract;
 - Supabase to launch the user-requested project-scoped MCP OAuth flow. OAuth is
   read-only setup for this task; no project mutation is authorised or planned.
@@ -41,7 +41,7 @@ GitHits: unavailable and disabled by direct user instruction for the rest of
 the goal. No call will be made; the exact disabled status will be recorded.
 
 External documentation: current official OpenAI documentation confirms that
-`gpt-5.6-sol` supports the Responses API, structured outputs, and function
+`bounded-model` supports the Responses API, structured outputs, and function
 calling. Strict tools require every property and
 `additionalProperties: false`. Supabase's current changelog records the remote
 MCP OAuth flow and the June 2026 successful-token response change from HTTP 201

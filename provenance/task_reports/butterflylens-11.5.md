@@ -1,7 +1,7 @@
 # ButterflyLens 11.5 — Representative analyst evaluations
 
 Status: **deterministic evaluation boundary implemented and verified; live
-GPT-5.6 evaluation not run**.
+Bounded model evaluation not run**.
 
 Starting SHA:
 `69a102cc31253e7d3eb84c91d92de2a0c266b7c8`.
@@ -34,7 +34,7 @@ OpenAI.
 passes, zero model and network calls, and a passing submitted-replay boundary.
 It does not report a model benchmark. Live final-answer accuracy,
 tool-selection accuracy, and unsupported-claim rate are null because no
-GPT-5.6 output exists. Synthetic trace fixtures exercise only the grader and
+Bounded model output exists. Synthetic trace fixtures exercise only the grader and
 remain explicitly `model_invoked: false`.
 
 This separation follows the frozen Task 11.1 official evaluation guidance
@@ -64,7 +64,7 @@ changed, so no new documentation lookup was needed.
 
 Passing deterministic and synthetic-grader checks is necessary application
 evidence, not proof of nondeterministic model behaviour or complete semantic
-correctness. A later credentialed, bounded, recorded GPT-5.6 run plus human
+correctness. A later credentialed, bounded, recorded Bounded model run plus human
 review is required before changing the prompt/model/effort or reporting live
 agent accuracy.
 

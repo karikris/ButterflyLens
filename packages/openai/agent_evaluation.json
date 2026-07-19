@@ -689,14 +689,14 @@
   "execution": {
     "mode": "deterministic_oracle_no_model",
     "model_invoked": false,
-    "model_target": "gpt-5.6-sol",
+    "model_target": "bounded-model",
     "network_calls": 0,
     "reasoning_effort_target": "xhigh",
     "response_calls": 0,
     "scripted_model_output_used": false
   },
   "limitations": [
-    "No GPT-5.6 or other model was invoked; live final-answer quality and tool selection were not measured.",
+    "No Bounded model or other model was invoked; live final-answer quality and tool selection were not measured.",
     "The unsupported-claim rate is null until a complete recorded live-model trace is graded.",
     "Deterministic oracle success tests the evidence and grader boundary, not nondeterministic model behaviour."
   ],

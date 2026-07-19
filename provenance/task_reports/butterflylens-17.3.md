@@ -15,7 +15,7 @@ TaxaLens SHA: `e845dd98493979f37b04dbb6538e0d7b8758ca11`.
 `DEMO_VIDEO.md` is the exact 2:48 production script for the public ButterflyLens
 demonstration. Its 11 contiguous shots follow the required sequence: ALA
 baseline, Flickr live stream, M5 pipeline, butterfly verification, map update,
-repeated reviewers, quality interval, GPT-5.6 analysis, geographic impact,
+repeated reviewers, quality interval, Bounded model analysis, geographic impact,
 evidence export, and Codex provenance.
 
 The cut assigns 160 of 168 seconds (95.2%) to real working-product surfaces,
@@ -43,13 +43,13 @@ the actual product boundaries instead of manufacturing footage:
 - the map-update and repeated-reviewer shots explain the receipts required for
   a later committed update;
 - the quality shot says the representative interval is unavailable, not zero;
-- the GPT-5.6 shot visibly retains `Model not invoked` for the stored replay;
+- the Bounded model shot visibly retains `Model not invoked` for the stored replay;
 - the geographic shot does not equate withheld coverage with biological
   absence; and
 - the export shot links governed documentation rather than inventing a public
   occurrence download.
 
-The final end card distinguishes GPT-5.6's bounded live analyst target from
+The final end card distinguishes Bounded model's bounded live analyst target from
 Codex's product, contract, test, documentation, and provenance work. Codex is
 explicitly not a source of butterfly identities, community votes, or scientific
 ground truth.

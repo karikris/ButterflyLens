@@ -3,7 +3,7 @@
 Task ID: `butterflylens-12.1`
 
 Objective: provision the public ButterflyLens service boundary using Supabase
-PostgreSQL/Auth/RLS, authenticated Supabase Edge Functions for the GPT-5.6
+PostgreSQL/Auth/RLS, authenticated Supabase Edge Functions for the Bounded model
 analyst, rights-gated short-lived B2 URLs, narrow audited run controls, and a
 static React deployment.
 
@@ -33,7 +33,7 @@ GitHub Pages, and Vite deployment guidance is recorded in
 Artifacts: add one migration for append-only B2 signing receipts and
 compare-and-swap run-control receipts; add authenticated `sign-b2-object` and
 `control-butterflylens` Edge Functions; retain the authenticated
-`ask-butterflylens` GPT-5.6 boundary; add a credential-free B2 provisioning
+`ask-butterflylens` Bounded model boundary; add a credential-free B2 provisioning
 contract and a manually gated production-services workflow; add a pinned
 GitHub Pages workflow and configure the Vite base path.
 
@@ -68,7 +68,7 @@ deployment, and remote-SHA verification.
 
 Rights/privacy: introduce no provider data, image, model output, account key,
 signed URL fixture, private reviewer record, or precise coordinate. This task
-makes no Flickr API, GPT-5.6, YOLOE, BioCLIP, or scientific-model call.
+makes no Flickr API, Bounded model, YOLOE, BioCLIP, or scientific-model call.
 
 Rollback: disable GitHub Pages, remove the two deployment workflows and Vite
 base configuration, undeploy the two new Edge Functions, remove their secrets,

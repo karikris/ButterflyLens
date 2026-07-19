@@ -4,14 +4,14 @@ Task ID: `butterflylens-11.4`
 
 Objective: add a credential-free judge replay that loads stored deterministic
 tool calls and outputs, preserves exact artifact citations, is visibly labelled
-replayed, and never simulates or claims live GPT-5.6 inference.
+replayed, and never simulates or claims live Bounded model inference.
 
 Starting and remote SHA:
 `efcf45890d6da5e958f4d46240d3e8c00be8e68b`.
 
 OpenAI boundary: retain the frozen Task 11.1 policy and Task 11.3 live route
 unchanged. The replay performs zero Responses calls, zero network calls, and
-zero runtime tool calls. It does not claim that `gpt-5.6-sol` authored a stored
+zero runtime tool calls. It does not claim that `bounded-model` authored a stored
 answer when no such invocation occurred.
 
 Artifact: generate a strict versioned replay catalogue from the Python authority

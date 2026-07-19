@@ -3,7 +3,7 @@
 Task ID: `butterflylens-11.3`
 
 Objective: add the authenticated server-side Ask ButterflyLens experience using
-the exact frozen GPT-5.6 Responses API policy and the fourteen deterministic
+the exact frozen Bounded model Responses API policy and the fourteen deterministic
 Task 11.2 evidence tools.
 
 Starting and remote SHA:
@@ -20,7 +20,7 @@ JavaScript SDK and `OPENAI_API_KEY`. The static React browser may hold only a
 Supabase publishable key and user session token; it never receives or accepts an
 OpenAI key. The function performs no database or service-role operation.
 
-OpenAI policy: explicit `gpt-5.6-sol`, `xhigh`, `current_turn`, Responses API,
+OpenAI policy: explicit `bounded-model`, `xhigh`, `current_turn`, Responses API,
 `store: false`, no built-in tools, no remote MCP, `parallel_tool_calls: false`,
 eight total tool calls, six response loops, 1,800 output tokens, ten-second tool
 timeout, one transient tool retry, finite overall deadline, no implicit SDK

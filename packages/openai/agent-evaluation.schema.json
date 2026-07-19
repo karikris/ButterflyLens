@@ -177,7 +177,7 @@
           "const": false
         },
         "model_target": {
-          "const": "gpt-5.6-sol"
+          "const": "bounded-model"
         },
         "network_calls": {
           "const": 0

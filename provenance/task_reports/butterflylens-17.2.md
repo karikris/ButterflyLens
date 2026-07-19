@@ -11,7 +11,7 @@ Starting SHA:
 `JUDGE_GUIDE.md` now gives one contiguous route from 0:00 through 1:30 across
 the eight exact competition steps: Australia map, ALA/Flickr comparison,
 coverage-gap cell, blind image review, community evidence update, quality,
-GPT-5.6 evidence analysis, and M5 worker inspection. It links the exact public
+Bounded model evidence analysis, and M5 worker inspection. It links the exact public
 anchors and exact stored analyst questions, and the competition README links the
 guide from its first screen.
 
@@ -41,7 +41,7 @@ model, and analyst values only from fingerprinted committed artifacts.
 The technical route explains that the analyst registry reads the exact Git
 objects at its cited Task 11.1 commit, expands stored trace/citation evidence,
 and separates targeted reference-gap prioritization from representative quality
-estimation. The GPT-5.6 route is described as the live target; the Submitted
+estimation. The Bounded model route is described as the live target; the Submitted
 answer visibly says `Model not invoked` and performs no provider call.
 
 ## Verification

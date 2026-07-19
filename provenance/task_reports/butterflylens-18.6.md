@@ -1,6 +1,6 @@
 # ButterflyLens 18.6 — representative live analyst recorder
 
-Status: **credentialed recorder complete; the live GPT-5.6 evaluation, overall
+Status: **credentialed recorder complete; the live Bounded model evaluation, overall
 ButterflyLens goal, and public release remain unfinished**.
 
 Starting and remote SHA:
@@ -30,7 +30,7 @@ accepted on the command line, written to a trace/checkpoint, or printed.
 
 Every completed case is atomically checkpointed with its actual selected tool
 name, arguments, deterministic output, final structured response, exact suite
-fingerprint, model `gpt-5.6-sol`, reasoning effort `xhigh`, and cumulative
+fingerprint, model `bounded-model`, reasoning effort `xhigh`, and cumulative
 Responses request count. Resume accepts only an integrity-checked exact prefix
 of the same 48-case suite and does not repeat checkpointed cases.
 
@@ -67,7 +67,7 @@ of being discarded before grading.
 
 ## Current external contracts
 
-The OpenAI Developer Docs MCP confirms that `gpt-5.6-sol` is the current Sol
+The OpenAI Developer Docs MCP confirms that `bounded-model` is the current Sol
 snapshot and supports Responses, Structured Outputs, and function calling.
 The official strict-mode guide retains the all-fields-required and
 `additionalProperties: false` requirements used by ButterflyLens. No request
