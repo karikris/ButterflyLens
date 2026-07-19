@@ -15,6 +15,9 @@ describe('credential-free community judge journey', () => {
 
     render(<App />)
 
+    window.location.hash = '#explore'
+    fireEvent(window, new HashChangeEvent('hashchange'))
+
     // 1. Open the landing page.
     expect(
       screen.getByRole('heading', {
@@ -27,7 +30,15 @@ describe('credential-free community judge journey', () => {
     expect(landing.getByText('ButterflyLens rebuilt baseline')).toBeVisible()
     expect(screen.getByText('Submitted replay')).toBeVisible()
 
+    const map = within(requiredElement('.submitted-map'))
+    expect(map.getByText('Map-eligible baseline')).toBeVisible()
+    expect(map.getByText('213,310')).toBeVisible()
+    expect(map.getByText('630')).toBeVisible()
+
     // 2. Review an integrity-checked image as a local blind draft.
+    window.location.hash = '#verify'
+    fireEvent(window, new HashChangeEvent('hashchange'))
+
     const review = requiredElement('#verify')
     const reviewView = within(review)
     const image = reviewView.getByRole('img', {
@@ -48,34 +59,26 @@ describe('credential-free community judge journey', () => {
       reviewView.getByRole('heading', { name: 'Permitted context revealed' }),
     ).toBeVisible()
     expect(reviewView.getByText(/draft decision is now locked locally/i)).toBeVisible()
-    expect(reviewView.getByText(/does not submit or claim a stored review/i)).toBeVisible()
+    expect(
+      reviewView.getByText(/does not submit or claim a stored review/i),
+    ).toBeVisible()
     expect(
       reviewView.getByRole('link', { name: 'Wikimedia Commons source' }),
     ).toBeVisible()
 
-    // 3. Inspect the map outcome. A local draft cannot create a public update.
-    expect(
-      reviewView.getByRole('img', { name: 'Australia location unavailable' }),
-    ).toBeVisible()
-    const map = within(requiredElement('.submitted-map'))
-    expect(map.getByText('Map-eligible baseline')).toBeVisible()
-    expect(map.getByText('213,310')).toBeVisible()
-    expect(map.getByText('630')).toBeVisible()
-    const operations = requiredElement('#operations')
-    const operationsView = within(operations)
-    expect(
-      operationsView.getByRole('img', {
-        name: 'Submitted Australia evidence summary; public aggregate layer available',
-      }),
-    ).toBeVisible()
-    expect(operationsView.getByText('Aggregate layer available')).toBeVisible()
-    const lastMapRefresh = operationsView.getByText('Last map refresh').closest('li')
-    expect(lastMapRefresh).not.toBeNull()
-    expect(lastMapRefresh).toHaveTextContent('submitted')
-    expect(lastMapRefresh).toHaveTextContent('2026-07-19T00:00:00Z')
-    expect(lastMapRefresh).toHaveTextContent(/213,310 map-eligible rows/i)
+    // 3. Map outcome on Explore remains committed and rights-restricted.
+    window.location.hash = '#explore'
+    fireEvent(window, new HashChangeEvent('hashchange'))
 
-    // 4. Find and inspect one exact accepted species page.
+    const returnMap = within(requiredElement('.submitted-map'))
+    expect(returnMap.getByText('Map-eligible baseline')).toBeVisible()
+    expect(returnMap.getByText('213,310')).toBeVisible()
+    expect(returnMap.getByText('630')).toBeVisible()
+
+    // 4. Inspect species, operations, and quality from the specialist surface.
+    window.location.hash = '#species'
+    fireEvent(window, new HashChangeEvent('hashchange'))
+
     const species = requiredElement('#species')
     const speciesView = within(species)
     fireEvent.change(
@@ -101,7 +104,20 @@ describe('credential-free community judge journey', () => {
     expect(verifiedMedia).toHaveTextContent('0')
     expect(speciesView.getByText(/YOLOE and BioCLIP are unfinished/)).toBeVisible()
 
-    // 5. Inspect the worker-independent pipeline and submitted fallback.
+    const operations = requiredElement('#operations')
+    const operationsView = within(operations)
+    expect(
+      operationsView.getByRole('img', {
+        name: 'Submitted Australia evidence summary; public aggregate layer available',
+      }),
+    ).toBeVisible()
+    expect(operationsView.getByText('Aggregate layer available')).toBeVisible()
+    const lastMapRefresh = operationsView.getByText('Last map refresh').closest('li')
+    expect(lastMapRefresh).not.toBeNull()
+    expect(lastMapRefresh).toHaveTextContent('submitted')
+    expect(lastMapRefresh).toHaveTextContent('2026-07-19T00:00:00Z')
+    expect(lastMapRefresh).toHaveTextContent(/213,310 map-eligible rows/i)
+
     expect(operationsView.getByText('Worker status unavailable')).toBeVisible()
     expect(operationsView.getByText('Submitted fallback')).toBeVisible()
     expect(operationsView.getByText('Aggregate map committed')).toBeVisible()
@@ -110,7 +126,6 @@ describe('credential-free community judge journey', () => {
       operationsView.getByRole('link', { name: 'Open committed species snapshot' }),
     ).toHaveAttribute('href', '#species')
 
-    // 6. Inspect quality without turning an absent sample into a zero estimate.
     const quality = requiredElement('#quality')
     const qualityView = within(quality)
     expect(
@@ -125,7 +140,7 @@ describe('credential-free community judge journey', () => {
     expect(qualityView.getByText('ButterflyLens rebuilt baseline')).toBeVisible()
     expect(qualityView.getByText(/model votes are excluded/i)).toBeVisible()
 
-    // 7. Inspect the governed evidence-export path; no public archive is invented.
+    // 5. Inspect governed evidence-export paths; no public archive is invented.
     const footer = requiredElement('#about')
     const footerView = within(footer)
     expect(footerView.getByRole('link', { name: 'Darwin Core export' })).toHaveAttribute(

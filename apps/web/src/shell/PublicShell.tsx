@@ -12,12 +12,34 @@ export const primaryNavigation = [
   { label: 'About', href: '#about' },
 ] as const
 
+export type PrimaryRouteHash = (typeof primaryNavigation)[number]['href']
+
+const routeAlias: Readonly<Record<string, PrimaryRouteHash>> = {
+  '#live': '#explore',
+  '#species': '#more',
+  '#operations': '#more',
+  '#quality': '#more',
+  '#flickr-display-policy': '#more',
+  '#contributors': '#community',
+  '#ask-butterflylens': '#community',
+} as const
+
+export function normalizeRouteHash(hash: string): PrimaryRouteHash {
+  const normalizedHash = hash || '#explore'
+  if (primaryNavigation.some((item) => item.href === normalizedHash)) {
+    return normalizedHash
+  }
+  return routeAlias[normalizedHash] ?? '#explore'
+}
+
 export function PublicShell({ children }: { readonly children: ReactNode }) {
-  const [activeHash, setActiveHash] = useState<string>(window.location.hash || '#explore')
+  const [activeHash, setActiveHash] = useState<PrimaryRouteHash>(
+    normalizeRouteHash(window.location.hash),
+  )
 
   useEffect(() => {
     const updateActiveHash = () => {
-      const nextHash = window.location.hash || '#explore'
+      const nextHash = normalizeRouteHash(window.location.hash)
       setActiveHash(nextHash)
       window.requestAnimationFrame(() => {
         document.getElementById('main-content')?.focus()

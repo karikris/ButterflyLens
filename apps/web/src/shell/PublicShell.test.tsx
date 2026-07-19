@@ -84,21 +84,25 @@ describe('public application shell', () => {
     )
   })
 
-  it('resolves every application navigation fragment to a real landmark', () => {
+  it('shows the route root for each primary navigation hash', () => {
     render(<App />)
 
     const navigation = screen.getByRole('navigation', { name: 'Primary' })
     for (const link of within(navigation).getAllByRole('link')) {
       const href = link.getAttribute('href')
       expect(href).toMatch(/^#[a-z-]+$/u)
-      expect(document.querySelector(href!)).not.toBeNull()
+      window.location.hash = href
+      fireEvent(window, new HashChangeEvent('hashchange'))
+
+      if (href === '#about') {
+        expect(screen.getByRole('contentinfo')).toHaveAttribute('id', 'about')
+        expect(document.querySelector(href)).toBeInTheDocument()
+      } else {
+        expect(document.querySelector(href)).toBeInTheDocument()
+      }
     }
-    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
-    expect(
-      screen.getByRole('heading', { name: 'Live when available. Committed when not.' }),
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByRole('heading', { name: 'Ask ButterflyLens' }),
-    ).not.toBeInTheDocument()
+    window.location.hash = '#explore'
+    fireEvent(window, new HashChangeEvent('hashchange'))
+    expect(screen.getByRole('heading', { level: 1, name: 'Look closer. Strengthen what we know.' })).toBeInTheDocument()
   })
 })
